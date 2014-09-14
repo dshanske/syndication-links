@@ -6,7 +6,7 @@ function get_syndication_links() {
    $gplus =  get_post_meta(get_the_ID(), 'sc_gplus_url', true);
    $instagram =  get_post_meta(get_the_ID(), 'sc_insta_url', true);
    $display = get_option('webmention_syndication_display_text');
-   $synlinks = "";
+   $synlinks = get_option('webmention_syndication_text');
         if ( ! empty($facebook) )
             {
               $synlinks .=  '<a title="Facebook" class="u-syndication fb" href="' . esc_url($facebook) . '" rel="syndication">';

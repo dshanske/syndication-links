@@ -1,4 +1,4 @@
-?php
+<?php
 /**
  * Plugin Name: Syndication Links
  * Plugin URI: http://david.shanske.com

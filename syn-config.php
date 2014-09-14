@@ -1,10 +1,10 @@
 <?php
 
-function webmention_syndication_options()
+function syndication_links_options()
 {
 ?>
     <div class="wrap">
-        <h2>Webmention Syndication</h2>
+        <h2>Syndication Links</h2>
 	<p>Adds optional syndication links for various sites. Syndication is the act of posting your content on other sites.</p>
 	<hr />
         <form method="post" action="options.php">
@@ -25,16 +25,19 @@ function webmention_syndication_options()
             </p>
 
 
-            <p><input type="submit" name="Submit" value="Store Options" /></p>
+          <p><strong>Text Before Links:</strong> - Display text before the links <br />
+                <input type="text" name="webmention_syndication_text" size="45" value="<?php echo get_option('webmention_syndication_text'); ?>"/><br>
+    </p>
+ <p><input type="submit" name="Submit" value="Store Options" /></p>
             <input type="hidden" name="action" value="update" />
-            <input type="hidden" name="page_options" value="webmention_syndication_content_filter, webmention_syndication_content-top, webmention_syndication_display_text" />
+            <input type="hidden" name="page_options" value="webmention_syndication_content_filter, webmention_syndication_content-top, webmention_syndication_display_text, webmention_syndication_text" />
         </form>
     </div>
 <?php
 }
 
 function add_webmention_syndication_options_to_menu(){
-	add_options_page( '', 'Webmention Syndication', 'manage_options', 'webmention_syndication', 'webmention_syndication_options');
+	add_options_page( '', 'Syndication Links', 'manage_options', 'syndication_links', 'syndication_links_options');
 }
 
 add_action('admin_menu', 'add_webmention_syndication_options_to_menu');
