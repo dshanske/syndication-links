@@ -1,0 +1,106 @@
+   .syn-links a, .webactions a{
+	text-decoration: none;
+	font-size: 16px;
+	} 
+   .syn-links a:hover, .webactions a:hover {
+	  background: #eee;
+          padding: 5px;
+          cursor: pointer;
+	}  
+   .syn-links:before {
+         content: '\f415';
+         padding:        0 5px;
+         font-family:    'Genericons';
+         font-size:      16px;
+         vertical-align: middle;
+         -webkit-font-smoothing: antialiased;
+	
+        }
+
+   .comment-links a {
+        text-decoration: none;
+        font-size: 32px;
+        }
+   .comment-links a:hover {
+          background: #eee;
+          padding: 5px;
+          cursor: pointer;
+        }
+   .comment-links h3 {
+	  display: inline;
+	}
+
+    a.fb:before {
+         content: '\f203';
+         color:   #3b5998;
+         padding:        0 5px;
+         font-family:    'Genericons';
+         vertical-align: middle;
+         -webkit-font-smoothing: antialiased;
+        }
+
+    .twitter:before {
+         content: '\f202';
+         color:   #33ccff;
+         padding:        0 5px;
+         font-family:    'Genericons';
+         vertical-align: middle;
+         -webkit-font-smoothing: antialiased;
+        }
+
+    .gplus:before {
+         content: '\f206';
+         color: #dd4b39;
+         padding:        0 5px;
+         font-family:    'Genericons';
+         vertical-align: middle;
+         -webkit-font-smoothing: antialiased;
+        }
+
+    .instagram:before {
+         content: '\f215';
+         color: #3f729b;
+         padding:        0 5px;
+         font-family:    'Genericons';
+         vertical-align: middle;
+         -webkit-font-smoothing: antialiased;
+        }
+    .webactions li {
+	list-style-type: none;
+	display: inline;
+	font-size: 18px;
+       }
+    span.webaction-reply:before {
+      content: '\f412';
+         padding:        0 5px;
+         font-family:    'Genericons';
+         vertical-align: middle;
+         -webkit-font-smoothing: antialiased;
+        }
+
+    span.webaction-post:before {
+         content: '\f467';
+         padding:        0 5px;
+         font-family:    'Genericons';
+         vertical-align: middle;
+         -webkit-font-smoothing: antialiased;
+        }
+
+    span.webaction-repost:before {
+         content: '\f466';
+         padding:        0 5px;
+         font-family:    'Genericons';
+         vertical-align: middle;
+         -webkit-font-smoothing: antialiased;
+        }
+
+
+    span.webaction-props:before {
+         content: '\f408';
+         padding:        0 5px;
+         font-family:    'Genericons';
+         vertical-align: middle;
+         -webkit-font-smoothing: antialiased;
+        }
+
+
