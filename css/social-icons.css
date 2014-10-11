@@ -1,0 +1,111 @@
+	   li a::before {
+                                display:        inline-block;
+                                padding:        0 5px;
+                                font-family:    'Genericons';
+                                vertical-align: middle;
+
+                                -webkit-font-smoothing: antialiased;
+                        }
+
+
+
+ 			li a[href*="facebook.com"]::before, .fb::before {
+                                content: '\f203';
+                                color:   #3b5998;
+                        }
+                        li a[href*="feed"]::before {
+                                content: '\f413';
+                                color:   #ff6600;
+                        }
+                        li a[href*="twitter.com"]::before, .twitter::before {
+                                content: '\f202';
+                                color:   #55ACEE;
+                        }
+                        li a[href*="dribbble.com"]::before {
+                                content: '\f201';
+                                color:   #ea4c89;
+                        }
+                        li a[href*="plus.google.com"]::before, .gplus::before {
+                                content: '\f206';
+                                color: #dd4b39;
+                        }
+                        li a[href*="pinterest.com"]::before {
+                                content: '\f210';
+                                color:   #c8232c;
+                        }
+                        li a[href*="github.com"]::before {
+                                content: '\f200';
+                                color:   #171515;
+                        }
+                        li a[href*="tumblr.com"]::before {
+                                content: '\f214';
+                                color:   #34526f;
+                        }
+
+		        li a[href*="youtube.com"]::before {
+                                content: '\f213';
+                                color:   #c4302b;
+                        }
+                        li a[href*="flickr.com"]::before {
+                                content: '\f211';
+                                color:   #ff0084;
+                        }
+                        li a[href*="vimeo.com"]::before {
+                                content: '\f212';
+                                color:   #1AB7EA;
+                        }
+                        li a[href*="instagram.com"]::before, .instagram::before {
+                                content: '\f215';
+                                color:   #3f729b;
+                        }
+                        li a[href*="codepen.io"]::before {
+                                content: '\f216';
+                                color:   #000;
+                        }
+                        li a[href*="linkedin.com"]::before {
+                                content: '\f208';
+                                color:   #0e76a8;
+                        }
+			li a[href*="skype.com"]::before, li a[href*="skype:"]::before {
+                                content: '\f220';
+                                color:   #12A5F4;
+                        }
+                	li a[href*="reddit.com"]::before {
+                                content: '\f222';
+       				color: #000;
+                        }
+                        li a[href*="foursquare.com"]::before {
+                                content: '\f226';
+                                color: #000;
+                        }
+                        li a[href*="getpocket.com"]::before {
+                                content: '\f224';
+                                color: #e61010;
+                        }
+                        li a[href*="dropbox.com"]::before {
+                                content: '\f225';
+                                color: #007ee5;
+                        }
+
+			li a[href*="contact"]::before, li a[href*="mailto:"]::before {
+				content: '\f410';
+			} 
+			li a[href*="subscribe"]::before {
+                                content: '\f463';
+                        }
+                       	li a[href*="sms:"]::before {
+                                content: '\f108';
+                        }
+                       	li a[href*="tel:"]::before {
+                                content: '\f50c';
+                        }
+                        li a[href*="wordpress.org"]::before, li a[href*="wordpress.com"]::before {
+                                content: '\f205';
+				color: #464646;
+                        }
+
+
+			li a.search-button::before {
+                                content: '\f400';
+				font-weight: bold;
+                        }
