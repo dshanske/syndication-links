@@ -27,35 +27,20 @@ function synbox_add_postmeta_boxes() {
   );
 }
 
-function syn_metabox( $object, $box ) { ?>
 
-  <?php wp_nonce_field( 'syn_metabox', 'syn_metabox_nonce' ); ?>
 
-  <p>
-    <label for="sc_tw_url"><?php _e( "Syndication URL for Twitter", 'semantic' ); ?></label>
-    <br />
-    <input type="text" name="sc_tw_url" id="sc_tw_url" value="<?php echo esc_attr( get_post_meta( $object->ID, 'sc_tw_url', true ) ); ?>" size="70" />
-  </p>
-
-  <p>
-    <label for="sc_facebook_url"><?php _e( "Syndication URL for Facebook", 'semantic' ); ?></label>
-    <br />
-    <input type="text" name="sc_fb_url" id="sc_fb_url" value="<?php echo esc_attr( get_post_meta( $object->ID, 'sc_fb_url', true ) ); ?>" size="70" />
-  </p>
-
-  <p>
-    <label for="sc_gplus_url"><?php _e( "Syndication URL for Google Plus", 'semantic' ); ?></label>
-    <br />
-    <input type="text" name="sc_gplus_url" id="sc_gplus_url" value="<?php echo esc_attr( get_post_meta( $object->ID, 'sc_gplus_url', true ) ); ?>" size="70" />
-  </p>
-
-  <p>
-    <label for="sc_insta_url"><?php _e( "Syndication URL for Instagram", 'semantic' ); ?></label>
-    <br />
-    <input type="text" name="sc_insta_url" id="sc_insta_url" value="<?php echo esc_attr( get_post_meta( $object->ID, 'sc_insta_url', true ) ); ?>" size="70" />
-  </p>
-<?php }
-
+function syn_metabox( $object, $box ) { 
+	wp_nonce_field( 'syn_metabox', 'syn_metabox_nonce' );
+        $network = get_option('syndication_network_options');
+	$meta = get_post_meta( $object->ID, 'synlinks', true );
+        foreach( $network as $key => $value){
+	   if ($value==1)
+ 	      {
+            	echo '<p> Syndication URL for: ' . $key . '</label>';
+	    	echo '<input type="text" name="' . $key . '" value="' . esc_attr($meta[$key]) . '" size ="70" /></p>';
+	      }
+            }
+}
 
 /* Save the meta box's post metadata. */
 function synbox_save_post_meta( $post_id ) {
@@ -93,24 +78,16 @@ function synbox_save_post_meta( $post_id ) {
 			return;
 		}
 	}
-
-	/* OK, its safe for us to save the data now. */
-	if( isset( $_POST[ 'sc_tw_url' ] ) ) {
-        update_post_meta( $post_id, 'sc_tw_url', esc_url_raw( $_POST[ 'sc_tw_url' ] ) );
-    }
-
-        if( isset( $_POST[ 'sc_fb_url' ] ) ) {
-        update_post_meta( $post_id, 'sc_fb_url', esc_url_raw( $_POST[ 'sc_fb_url' ] ) );
-    }
-
-        if( isset( $_POST[ 'sc_gplus_url' ] ) ) {
-        update_post_meta( $post_id, 'sc_gplus_url', esc_url_raw( $_POST[ 'sc_gplus_url' ] ) );
-    }
-
-        if( isset( $_POST[ 'sc_tw_url' ] ) ) {
-        update_post_meta( $post_id, 'sc_insta_url', esc_url_raw( $_POST[ 'sc_insta_url' ] ) );
-    }
-
+	$network = get_option('syndication_network_options');
+        foreach( $network as $key => $value){
+           if ($value==1)
+              {
+                 if( isset( $_POST[ $key ] ) ) {
+                     $meta[$key] = esc_url_raw( $_POST[ $key ] );
+		   }
+              }
+            }
+	update_post_meta( $post_id, 'synlinks', $meta);
 
 }
 

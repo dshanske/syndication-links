@@ -1,40 +1,19 @@
- #menu-social ul {
-                list-style: none;
-                margin:     5px 20px 2px 0;
-                text-align: bottom;
-        }
-
-                #menu-social ul li {
-                        display:  inline-block;
-                        position: relative;
-                        margin: 2px;
-                        background-color: #F8F8F8;
-                        box-shadow: 0 0 5px #BBB;
-                        border-radius: 3px;
-                }
-               #menu-social ul li:hover {
-                        background-color: #E8ECF4;
-                }
-                        #menu-social li a::before {
-                                content:        '\f475';
-                                display:        inline-block;
-                                padding:        0 5px;
-                                font-family:    'Genericons';
-                                font-size:      24px;
-                                vertical-align: top;
-
-                                -webkit-font-smoothing: antialiased;
-                        }
-
-
-
-   .syn-links {
+   .relsyn {
 	text-decoration: none;
-	font-size: 16px;
 	} 
-   .syn-links a:hover {
+   .relsyn ul {
+	display: inline-block;
+	list-style: none;
+	vertical-align: top;
+	}
+   .relsyn ul li {
+        display: inline-block;
+	padding-right: 5px;
+        }
+   .relsyn a:hover {
 	  background: #eee;
           padding: 5px;
+	  text-decoration: none;
           cursor: pointer;
 	}  
 

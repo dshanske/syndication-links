@@ -1,56 +1,33 @@
 <?php
 
 function get_syndication_links() {
-   $facebook =  get_post_meta(get_the_ID(), 'sc_fb_url', true);
-   $twitter =  get_post_meta(get_the_ID(), 'sc_tw_url', true);
-   $gplus =  get_post_meta(get_the_ID(), 'sc_gplus_url', true);
-   $instagram =  get_post_meta(get_the_ID(), 'sc_insta_url', true);
    $options = get_option ('syndication_content_options');
- 
-   if(empty($twitter) && empty($facebook) && empty($gplus) && empty($instagram))
-      {  
+   $network = get_option('syndication_network_options');
+   $meta = get_post_meta(get_the_ID(), 'synlinks', true );  
+   if (empty($meta))
+	{
 	   $synlinks = '';
-       }
-   else {   
-	   $synlinks = $options['text_before']; }
-        if ( ! empty($facebook) )
-            {
-              $synlinks .=  '<a title="Facebook" class="u-syndication fb" href="' . esc_url($facebook) . '" rel="syndication">';
- 	      if ($options['just_icons'] == "1" )
-		 {
-		     $synlinks .= 'Facebook';
-		 }
-	      $synlinks .= '</a>';
+ 	}
+   else{
+	   $synlinks = '<div class="relsyn">' . $options['text_before'] . '<ul>'; 
+           foreach( $network as $key => $value){
+               if ($value==1)
+                  {
+                     if ( ! empty($meta[$key]) )
+            	         {
+              		    $synlinks .=  '<li><a title="' . $key . '" class="u-syndication" href="' . esc_url($meta[$key]) . '" rel="syndication">'; 
+             		    if ($options['just_icons'] == "1" )
+                 		{ 
+                   		  $synlinks .= $key;
+                 		}
+           		    $synlinks .= '</a></li>';
+                         }
+
+                  }
             }
+          $synlinks .= '</ul></div>';
+	}
 
-         if ( ! empty($twitter) )
-                {
-              $synlinks .= '<a title="Twitter" class="u-syndication twitter" href="' . esc_url($twitter) . '" rel="syndication">';
-              if ($options['just_icons'] =="1" )
-                 {
-                     $synlinks .= 'Twitter';
-                 }
-
-	      $synlinks .= '</a>';
-                }
-        if ( ! empty($gplus) )
-                {
-              $synlinks .= '<a title="Google Plus" class="u-syndication gplus" href="' . esc_url($gplus) . '" rel="syndication">';
-              if ($options['just_icons'] == "1" )
-                 {
-                     $synlinks .= 'Google Plus';
-                 }
-	      $synlinks .= '</a>';
-                }
-        if ( ! empty($instagram) )
-                {
-              $synlinks .= '<a title="Instagram" class="u-syndication instagram" href="' . esc_url($instagram) . '" rel="syndication">';
-              if ($options['just_icons'] == "1" )
-                 {   
-                     $synlinks .= 'Instagram';
-                 }
-	      $synlinks .= '</a>';
-                }
    return $synlinks;
 }
 
