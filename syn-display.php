@@ -9,7 +9,7 @@ function get_syndication_links() {
 	   $synlinks = '';
  	}
    else{
-	   $synlinks = '<div class="relsyn">' . $options['text_before'] . '<ul>'; 
+	   $synlinks = '<span class="relsyn social-icon"><ul>' . $options['text_before']; 
            foreach( $network as $key => $value){
                if ($value==1)
                   {
@@ -25,7 +25,7 @@ function get_syndication_links() {
 
                   }
             }
-          $synlinks .= '</ul></div>';
+          $synlinks .= '</ul></span>';
 	}
 
    return $synlinks;

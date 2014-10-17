@@ -4,7 +4,7 @@
    .relsyn ul {
 	display: inline-block;
 	list-style: none;
-	vertical-align: top;
+	text-align: top;
 	}
    .relsyn ul li {
         display: inline-block;
