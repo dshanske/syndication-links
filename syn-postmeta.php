@@ -37,7 +37,11 @@ function syn_metabox( $object, $box ) {
 	   if ($value==1)
  	      {
             	echo '<p> Syndication URL for: ' . $key . '</label>';
-	    	echo '<input type="text" name="' . $key . '" value="' . esc_attr($meta[$key]) . '" size ="70" /></p>';
+	    	echo '<input type="text" name="' . $key . '" value="';
+		if (isset($meta[$key])) {
+			echo esc_attr($meta[$key]);
+		  }
+		echo '" size ="70" /></p>';
 	      }
             }
 }
