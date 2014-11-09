@@ -86,6 +86,10 @@
                                 content: '\f225';
                                 color: #007ee5;
                         }
+                        .social-icon li a[href*="news.indiewebcamp.com"]::before {
+                                content: '\f508';
+                                color: #000000;
+                        }
 
 			.social-icon li a[href*="contact"]::before, .social-icon li a[href*="mailto:"]::before {
 				content: '\f410';

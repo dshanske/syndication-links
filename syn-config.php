@@ -38,6 +38,9 @@ function syndication_options_init() {
    add_settings_field( 'wordpress', 'WordPress', 'syndication_network_callback', 'syndication_links_options', 'syndication-networks',
                 array( 'name' => 'WordPress')
         );
+   add_settings_field( 'indiewebcampnews', 'IndieNews', 'syndication_network_callback', 'syndication_links_options', 'syndication-networks',
+                array( 'name' => 'IndieNews')
+        );
   // Syndication Content Options
     register_setting( 'syndication_options', 'syndication_content_options' );
     add_settings_section( 'syndication-content', 'Content Options', 'syndication_content_options_callback', 'syndication_links_options' );
