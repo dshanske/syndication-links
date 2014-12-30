@@ -86,7 +86,7 @@ function synbox_save_post_meta( $post_id ) {
         foreach( $network as $key => $value){
            if ($value==1)
               {
-                 if( isset( $_POST[ $key ] ) ) {
+                 if( (isset( $_POST[ $key ]))&& !(empty($_POST[ $key ])) ) {
                      $meta[$key] = esc_url_raw( $_POST[ $key ] );
 		   }
               }
