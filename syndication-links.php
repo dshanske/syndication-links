@@ -16,12 +16,9 @@ require_once( plugin_dir_path( __FILE__ ) . '/bridgy.php');
 
 
 function syndication_scripts() {
- // Add Genericons font, for use in the main stylesheet.
-	wp_enqueue_style( 'genericons', plugin_dir_url( __FILE__ ) . '/genericons/genericons.css', array(), null );
-        wp_enqueue_style( 'syndication-style', plugin_dir_url( __FILE__ ) . 'css/syndication-style.css');	
-        wp_enqueue_style( 'social-icons', plugin_dir_url( __FILE__ ) . 'css/social-icons.css');
-
+ 	wp_enqueue_style( 'syndication-style', plugin_dir_url( __FILE__ ) . 'syn.min.css');	
 }
 
 add_action( 'wp_enqueue_scripts', 'syndication_scripts' );
+
 ?>
