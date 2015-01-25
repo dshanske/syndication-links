@@ -3,7 +3,7 @@
  * Plugin Name: Communication and Syndication Links
  * Plugin URI: http://david.shanske.com
  * Description: Add and display Syndication Links and Communication/rel-me Links
- * Version: 0.3
+ * Version: 0.4
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  * License: CCO
