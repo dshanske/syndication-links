@@ -44,8 +44,6 @@ if($option['the_content']=="1"){
          add_filter( 'the_content', 'syndication_links_after', 20 );
    }
 
-  add_filter('footer_entry_meta', 'syndication_links_before'); 
-
 function get_share_links () {
   
        $share = '<div>Share this on:';

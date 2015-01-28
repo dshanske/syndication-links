@@ -649,10 +649,6 @@
 /*--------------------------------------------------------------
 2.0 Link Style
 --------------------------------------------------------------*/
-.relsyn {
-  text-decoration: none;
-}
-
 .relsyn ul {
   display: inline-block;
   list-style: none;
@@ -664,8 +660,11 @@
   padding-right: 5px;
 }
 
+.relsyn ul li a {
+  text-decoration: none;
+}
+
 .relsyn a:hover {
-  background: #eee;
   padding: 5px;
   text-decoration: none;
   cursor: pointer;
