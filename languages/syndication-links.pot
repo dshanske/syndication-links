@@ -2,9 +2,9 @@
 # This file is distributed under the CCO.
 msgid ""
 msgstr ""
-"Project-Id-Version: Communication and Syndication Links 0.4\n"
+"Project-Id-Version: Communication and Syndication Links 0.5\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2015-01-28 03:11:57+00:00\n"
+"POT-Creation-Date: 2015-02-15 15:23:29+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,50 +13,38 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 
-#: rel-display.php:24
-msgid "Also on:"
-msgstr ""
-
-#: syn-config.php:30
-msgid "Syndication Networks"
-msgstr ""
-
-#: syn-config.php:63
+#: syn-config.php:32
 msgid "Content Options"
 msgstr ""
 
-#: syn-config.php:64
+#: syn-config.php:33
 msgid "Add Syndication Links to the Content"
 msgstr ""
 
-#: syn-config.php:65
+#: syn-config.php:34
 msgid "Display Text"
 msgstr ""
 
-#: syn-config.php:67
+#: syn-config.php:36
 msgid "Text Before Links"
 msgstr ""
 
-#: syn-config.php:74
+#: syn-config.php:43
 msgid "Options for Presenting Syndication Links in Posts."
 msgstr ""
 
-#: syn-config.php:79
-msgid "Networks to Syndicate To:"
-msgstr ""
-
-#: syn-config.php:110 syn-postmeta.php:22
+#: syn-config.php:66 syn-postmeta.php:22
 msgid "Syndication Links"
 msgstr ""
 
-#: syn-config.php:112
+#: syn-config.php:68
 msgid ""
 "Adds optional syndication links for various sites. Syndication is the act "
 "of posting your content on other sites."
 msgstr ""
 
-#: syn-postmeta.php:40
-msgid "Syndication URL for:"
+#: syn-postmeta.php:36
+msgid "One URL per line."
 msgstr ""
 
 #. Plugin Name of the plugin/theme
