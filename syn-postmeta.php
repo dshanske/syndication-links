@@ -19,7 +19,7 @@ function synbox_add_postmeta_boxes() {
 
   add_meta_box(
     'synbox-meta',      // Unique ID
-    esc_html__( 'Syndication Links', 'semantic' ),    // Title
+    esc_html__( 'Syndication Links', 'Syn Links' ),    // Title
     'syn_metabox',   // Callback function
     'post',         // Admin page (or post type)
     'normal',         // Context
@@ -31,19 +31,13 @@ function synbox_add_postmeta_boxes() {
 
 function syn_metabox( $object, $box ) { 
 	wp_nonce_field( 'syn_metabox', 'syn_metabox_nonce' );
-        $network = get_option('syndication_network_options');
-	$meta = get_post_meta( $object->ID, 'synlinks', true );
-        foreach( $network as $key => $value){
-	   if ($value==1)
- 	      {
-            	echo '<p> Syndication URL for: ' . $key . '</label>';
-	    	echo '<input type="text" name="' . $key . '" value="';
-		if (isset($meta[$key])) {
-			echo esc_attr($meta[$key]);
-		  }
-		echo '" size ="70" /></p>';
-	      }
-            }
+	$meta = get_post_meta( $object->ID, 'syndication_urls', true );
+        echo '<p><label>';
+        _e('One URL per line.', 'Syn Links');
+	echo '</label></p>';
+        echo "<textarea name='syndication_urls' rows='4' cols='70'>";
+        if (!empty($meta)) {echo $meta; }
+        echo "</textarea>";
 }
 
 /* Save the meta box's post metadata. */
@@ -82,17 +76,19 @@ function synbox_save_post_meta( $post_id ) {
 			return;
 		}
 	}
-	$network = get_option('syndication_network_options');
-        foreach( $network as $key => $value){
-           if ($value==1)
-              {
-                 if( (isset( $_POST[ $key ]))&& !(empty($_POST[ $key ])) ) {
-                     $meta[$key] = esc_url_raw( $_POST[ $key ] );
-		   }
+        if( (isset( $_POST[ 'syndication_urls' ]))&& !(empty($_POST[ 'syndication_urls' ])) ) {
+                     $urls = explode("\n", $_POST[ 'syndication_urls' ]);
+    		     $array=array();
+		     foreach ( (array) $urls as $url ) {
+				$url = trim($url);
+				if(!filter_var($url, FILTER_VALIDATE_URL))
+				         { continue; }
+                                $url = esc_url_raw($url);
+				$array[] = $url;
+                  	}
               }
-            }
-	update_post_meta( $post_id, 'synlinks', $meta);
-
+	$meta = implode("\n", $array);
+	update_post_meta( $post_id, 'syndication_urls', $meta);
 }
 
 add_action( 'save_post', 'synbox_save_post_meta' );
