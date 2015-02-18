@@ -26,6 +26,12 @@ it will display the appropriate one if available. This allows the setup to be ex
 1. Upload the folder `syndication-links' to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
+== Credits ==
+
+1. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2)
+design.
+2. Ryan Barrett for the initial version of the Bridgy code.
+
 == Changelog ==
 
 Version 0.5.0 - Clean up the plugin for initial release to WordPress repository.

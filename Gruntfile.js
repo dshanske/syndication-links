@@ -4,7 +4,7 @@ module.exports = function(grunt) {
     wp_readme_to_markdown: {
       target: {
         files: {
-          'README.md': 'readme.txt'
+          'readme.md': 'readme.txt'
         }
       }
      },
@@ -67,5 +67,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-copy');
 
   // Default task(s).
-  grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'sass', 'copy']);
+  grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'sass']);
 };
