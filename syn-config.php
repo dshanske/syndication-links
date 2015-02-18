@@ -14,7 +14,7 @@ function syndication_options_init() {
   // Syndication Content Options
     register_setting( 'syndication_options', 'syndication_content_options' );
     add_settings_section( 'syndication-content', __('Content Options', 'Syn Links'), 'syndication_content_options_callback', 'syndication_links_options' );
-    add_settings_field( 'the_content', __('Add Syndication Links to the Content', 'Syn Links'), 'syndication_content_callback', 'syndication_links_options', 'syndication-content' ,  array( 'name' => 'the_content') );
+    add_settings_field( 'the_content', __('Disable Syndication Links in the Content', 'Syn Links'), 'syndication_content_callback', 'syndication_links_options', 'syndication-content' ,  array( 'name' => 'the_content') );
     add_settings_field( 'just_icons', __('Display Text', 'Syn Links'), 'syndication_content_callback', 'syndication_links_options', 'syndication-content',  array( 'name' => 'just_icons')
  );
     add_settings_field( 'text_before', __('Text Before Links', 'Syn Links'), 'syndication_text_before_callback', 'syndication_links_options', 'syndication-content' );

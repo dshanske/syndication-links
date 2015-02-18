@@ -51,7 +51,7 @@ function syndication_links_after($meta = "" ) {
    }
 
 $option = get_option('syndication_content_options');
-if($option['the_content']=="1"){
+if($option['the_content']=="0"){
          add_filter( 'the_content', 'syndication_links_after', 20 );
    }
 
