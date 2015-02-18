@@ -76,19 +76,10 @@ function synbox_save_post_meta( $post_id ) {
 			return;
 		}
 	}
-        if( (isset( $_POST[ 'syndication_urls' ]))&& !(empty($_POST[ 'syndication_urls' ])) ) {
-                     $urls = explode("\n", $_POST[ 'syndication_urls' ]);
-    		     $array=array();
-		     foreach ( (array) $urls as $url ) {
-				$url = trim($url);
-				if(!filter_var($url, FILTER_VALIDATE_URL))
-				         { continue; }
-                                $url = esc_url_raw($url);
-				$array[] = $url;
-                  	}
-              }
-	$meta = implode("\n", $array);
-	update_post_meta( $post_id, 'syndication_urls', $meta);
+    if( (isset( $_POST[ 'syndication_urls' ]))&& !(empty($_POST[ 'syndication_urls' ])) ) {
+        $meta = syn_clean_urls($_POST[ 'syndication_urls' ]);
+	   	  update_post_meta( $post_id, 'syndication_urls', $meta);
+    }
 }
 
 add_action( 'save_post', 'synbox_save_post_meta' );

@@ -15,6 +15,8 @@ This plugin adds relational links to various parts of your site.
 1. It supports adding rel-syndication links to your posts, indicating where
 a syndicated copy is.
 2. It supports a menu of links to other services to indicate a rel-me relationship
+3. It adds CSS that will, if the class 'social-icon' is attached to a link,
+it will display the appropriate one if available.
 
 ## Future Plans ##
 

@@ -1,21 +1,5 @@
 <?php
 
-function get_syn_network_strings() {
-        $strings = array(
-                'twitter.com' => _x( 'Twitter', 'Syn Links' ),
-                'facebook.com' => _x( 'Facebook', 'Syn Links' ),
-                'plus.google.com' => _x( 'Google+', 'Syn Links' ),
-                'instagram.com' => _x( 'Instagram', 'Syn Links' ),
-                'flickr.com' => _x( 'Flickr', 'Syn Links' ),
-                'youtube.com' => _x( 'YouTube', 'Syn Links' ),
-                'linkedin.com' => _x( 'LinkedIn', 'Syn Links' ),
-                'tumblr.com' => _x( 'Tumblr', 'Syn Links' ),
-                'wordpress.com' => _x( 'WordPress', 'Syn Links' ),
-                'news.indiewebcamp.com' => _x( 'IndieNews', 'Syn Links' )
-                );
-                return apply_filters( 'syn_network_strings', $strings );
-        }
-
 function add_syndication_options_to_menu(){
 	add_options_page( '', 'Syndication Links', 'manage_options', 'syndication_links', 'syndication_links_options');
 }
@@ -90,9 +74,9 @@ function migrate_synlinks()   {
 			$the_query->the_post();
 			$meta = get_post_meta( $post->ID, 'synlinks', true);
 			$urls = array();
-			foreach($meta as $value)
+			foreach($meta as $key => $value)
 				{
-				   $urls[] = $value;
+				   $urls[] = $meta[$key];
 				}
 			$final = implode("\n", $urls);
 			update_post_meta($post->ID, 'syndication_urls', $final);

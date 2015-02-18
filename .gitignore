@@ -1,5 +1,3 @@
-
+build/*
 node_modules/*
 sass/.sass-cache/*
-syn.css.map 
-syn.min.css.map 
