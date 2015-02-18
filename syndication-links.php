@@ -1,12 +1,11 @@
 <?php
 /**
- * Plugin Name: Communication and Syndication Links
+ * Plugin Name: Syndication Links
  * Plugin URI: http://david.shanske.com
- * Description: Add and display Syndication Links and Communication/rel-me Links
+ * Description: Add and display Syndication Links
  * Version: 0.5.0
  * Author: David Shanske
  * Author URI: http://david.shanske.com
- * License: CCO
  */
 
 require_once( plugin_dir_path( __FILE__ ) . '/syn-postmeta.php');
