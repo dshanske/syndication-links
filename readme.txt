@@ -1,9 +1,9 @@
-=== Syndication Links ==
+=== Syndication Links ===
 Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE
 Requires at least: 4.1
 Tested up to: 4.1
-Stable tag: 0.5.0
+Stable tag: 0.6.0
 License: GPLv2 or later
 
 Simple way to link to copies of your post elsewhere.
@@ -15,7 +15,7 @@ This plugin adds relational links to various parts of your site.
 1. It supports adding rel-syndication links to your posts, indicating where
 a syndicated copy is.
 2. It adds CSS that will, if the class 'social-icon' is attached to a link,
-it will display the appropriate one if available. This allows the setup to be extended very easily.
+it will display the appropriate one if available. This allows the setup to be extended very easily. You can use this with a WordPress menu to create some social icons.
 
 == Future Plans ==
 
@@ -34,6 +34,8 @@ design.
 
 == Changelog ==
 
+Version 0.6.0 - Add hooks and functions to allow additional urls to 
+be added
 Version 0.5.0 - Clean up the plugin for initial release to WordPress repository.
 Version 0.5 - Moved to simplified data structure. Hidden migration function
 Version 0.4 - Rewriting using Grunt/SASS for more flexibility
@@ -49,6 +51,10 @@ options.
 
 The plugin supports pulling data from plugins that syndicate your content.
 Right now, it has experimental support for the Bridgy service.
+
+For anything not built in, it supports a filter 'syn_add_links' to add URLs,
+for potential use with any other plugin.
+
 
 * Bridgy Publish (https://www.brid.gy/about#publish). Requires the
   wordpress-webmention plugin (https://wordpress.org/plugins/webmention/).

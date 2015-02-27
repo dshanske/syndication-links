@@ -3,7 +3,7 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://david.shanske.com
  * Description: Add and display Syndication Links
- * Version: 0.5.0
+ * Version: 0.6.0
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  */
@@ -49,5 +49,17 @@ function syn_clean_urls($string) {
   $array = array_unique($array);
   return(implode("\n", $array));
  }
+
+// Return Syndication URLs as part of the JSON Rest API
+add_filter("json_prepare_post",'json_rest_add_synmeta',10,3);
+
+function json_rest_add_synmeta($_post,$post,$context) {
+  $syn = get_post_meta( $post["ID"], 'syndication_urls');
+  if (!empty($syn)) { 
+      $urls = explode("\n", $syn);
+      $_post['syndication'] = $urls; 
+    }  
+  return $_post;
+}
 
 ?>

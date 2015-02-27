@@ -19,6 +19,8 @@ function get_syndication_links() {
  	}
    else{
 	   $urls = explode("\n", $meta);
+     // Allow URLs to be added by other plugins
+     $urls = apply_filters('syn_add_links', $urls);
 	   $strings = get_syn_network_strings();
 	   $synlinks = '<span class="relsyn social-icon"><ul>' . $options['text_before']; 
            foreach( $urls as $url){
