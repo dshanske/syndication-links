@@ -11,37 +11,32 @@ function extract_domain_name($url) {
 }
 
 function get_syndication_links() {
-   $options = get_option ('syndication_content_options');
-   $meta = get_post_meta(get_the_ID(), 'syndication_urls', true );  
-   if (empty($meta))
-	{
-	   $synlinks = '';
- 	}
-   else{
-	   $urls = explode("\n", $meta);
-     // Allow URLs to be added by other plugins
-     $urls = apply_filters('syn_add_links', $urls);
-	   $strings = get_syn_network_strings();
-	   $synlinks = '<span class="relsyn social-icon"><ul>' . $options['text_before']; 
-           foreach( $urls as $url){
-			    $domain = extract_domain_name($url);
-			    if (array_key_exists($domain, $strings))
-				{ 
-					$name = $strings[$domain];
-				}
-			    else {
-					$name = $domain;
-				 }
-              		    $synlinks .=  '<li><a title="' . $name . '" class="u-syndication" href="' . esc_url($url) . '" rel="syndication">'; 
-             		    if ($options['just_icons'] == "1" )
-                 		{ 
-                   		  $synlinks .= $name;
-                 		}
-           		    $synlinks .= '</a></li>';
-                         }
-          $synlinks .= '</ul></span>';
-       }
-   return $synlinks;
+    $options = get_option('syndication_content_options');
+    $urls = explode("\n", get_post_meta(get_the_ID(), 'syndication_urls', true));
+    // Allow URLs to be added by other plugins
+    $urls = apply_filters('syn_add_links', $urls);
+    if (!empty($urls)) {
+        $strings = get_syn_network_strings();
+        $synlinks = '<span class="relsyn social-icon"><ul>' . $options['text_before'];
+        foreach ($urls as $url) {
+            $domain = extract_domain_name($url);
+            if (array_key_exists($domain, $strings))
+            {
+                $name = $strings[$domain];
+            }
+            else {
+                $name = $domain;
+            }
+            $synlinks .=  '<li><a title="' . $name . '" class="u-syndication" href="' . esc_url($url) . '" rel="syndication">'; 
+            if ($options['just_icons'] == "1")
+            {
+                $synlinks .= $name;
+            }
+            $synlinks .= '</a></li>';
+        }
+        $synlinks .= '</ul></span>';
+    }
+    return (empty($synlinks)) ? '' : $synlinks;
 }
 
 function syndication_links_before($meta = "" ) {
