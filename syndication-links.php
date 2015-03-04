@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: Syndication Links
- * Plugin URI: http://david.shanske.com
+ * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add and display Syndication Links
- * Version: 0.6.0
+ * Version: 1.0.0
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  */
@@ -13,6 +13,9 @@ require_once( plugin_dir_path( __FILE__ ) . '/syn-display.php');
 require_once( plugin_dir_path( __FILE__ ) . '/syn-config.php');
 require_once( plugin_dir_path( __FILE__ ) . '/bridgy.php');
 
+// User/H-Card Functions
+require_once( plugin_dir_path( __FILE__ ) . '/user-config.php');
+require_once( plugin_dir_path( __FILE__ ) . '/hcard-widget.php');
 
 function syndication_scripts() {
  	wp_enqueue_style( 'syndication-style', plugin_dir_url( __FILE__ ) . 'syn.min.css');	
@@ -21,23 +24,22 @@ function syndication_scripts() {
 add_action( 'wp_enqueue_scripts', 'syndication_scripts' );
 
 function get_syn_network_strings() {
-        $strings = array(
-                'twitter.com' => _x( 'Twitter', 'Syn Links' ),
-                'facebook.com' => _x( 'Facebook', 'Syn Links' ),
-                'plus.google.com' => _x( 'Google+', 'Syn Links' ),
-                'instagram.com' => _x( 'Instagram', 'Syn Links' ),
-                'flickr.com' => _x( 'Flickr', 'Syn Links' ),
-                'youtube.com' => _x( 'YouTube', 'Syn Links' ),
-                'linkedin.com' => _x( 'LinkedIn', 'Syn Links' ),
-                'tumblr.com' => _x( 'Tumblr', 'Syn Links' ),
-                'wordpress.com' => _x( 'WordPress', 'Syn Links' ),
-                'news.indiewebcamp.com' => _x( 'IndieNews', 'Syn Links' )
-                );
-                return apply_filters( 'syn_network_strings', $strings );
-        }
+  $strings = array(
+    'twitter.com' => _x( 'Twitter', 'Syn Links' ),
+    'facebook.com' => _x( 'Facebook', 'Syn Links' ),
+    'plus.google.com' => _x( 'Google+', 'Syn Links' ),
+    'instagram.com' => _x( 'Instagram', 'Syn Links' ),
+    'flickr.com' => _x( 'Flickr', 'Syn Links' ),
+    'youtube.com' => _x( 'YouTube', 'Syn Links' ),
+    'linkedin.com' => _x( 'LinkedIn', 'Syn Links' ),
+    'tumblr.com' => _x( 'Tumblr', 'Syn Links' ),
+    'wordpress.com' => _x( 'WordPress', 'Syn Links' ),
+    'news.indiewebcamp.com' => _x( 'IndieNews', 'Syn Links' )
+  );
+  return apply_filters( 'syn_network_strings', $strings );
+}
 
-function syn_clean_urls($string) {
-  $urls = explode("\n", $string);
+function syn_clean_urls($urls) {
   $array=array();
   foreach ( (array) $urls as $url ) {
     $url = trim($url);
@@ -46,9 +48,12 @@ function syn_clean_urls($string) {
     $url = esc_url_raw($url);
     $array[] = $url;
    }
-  $array = array_unique($array);
-  return(implode("\n", $array));
- }
+  return array_unique($array);
+}
+
+function syn_clean_urls_string($string) {
+  return implode("\n", syn_clean_urls( explode("\n", $string) ) );
+}
 
 // Return Syndication URLs as part of the JSON Rest API
 add_filter("json_prepare_post",'json_rest_add_synmeta',10,3);

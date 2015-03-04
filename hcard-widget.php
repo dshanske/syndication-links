@@ -52,29 +52,29 @@ public function widget( $args, $instance ) {
 	?>
 
 	<div id="hcard_widget" class="h-card vcard">
-		<a rel="me" class="u-url" href="<?php echo $user_info->user_url; ?>"><?php echo get_avatar( $user_info->user_email, $avatar_size ); ?></a>
-		<h2 class="p-name"><?php  echo $user_info->display_name; ?></h2>
+		<a rel="me" class="u-url url fn" href="<?php echo $user_info->user_url; ?>"><?php echo get_avatar( $user_info->user_email, $avatar_size ); ?></a>
+		<h2 class="p-name n"><?php  echo $user_info->display_name; ?></h2>
 		<?php
- 		   echo '<p>'; 
+ 		   echo '<p class="h-adr adr">'; 
                    if(!empty($user_meta['locality'])) {
-                        echo '<span class="p-locality">' . $user_meta['locality'] . '</span>, '; 
+                        echo '<span class="p-locality locality">' . $user_meta['locality'] . '</span>, '; 
                    }
                    if(!empty($user_meta['region'])) {
-                        echo '<span class="p-region">' . $user_meta['region'] . '</span> '; 
+                        echo '<span class="p-region region">' . $user_meta['region'] . '</span> '; 
                    }
                    if(!empty($user_meta['country-name'])) {
-                        echo '<span class="p-country-name">' . $user_meta['country-name'] . '</span>'; 
+                        echo '<span class="p-country-name country-name">' . $user_meta['country-name'] . '</span>'; 
 		  }
 		   echo '</p>'; ?>	
 		  <div class="hcard_contact"> 
 		    <?php
                    if(!empty($user_meta['tel'])) {
- 		        echo '<a class="p-tel" href="tel:' . $user_meta['tel'] . '">' . $user_meta['tel'] . '</a>'; 
+ 		        echo '<a class="p-tel tel" href="tel:' . $user_meta['tel'] . '">' . $user_meta['tel'] . '</a>'; 
 		   }
                    
 		?>
 		</div>
-		<p class="p-note"><?php echo $user_meta['description']; ?></p>
+		<p class="p-note note"><?php echo $user_meta['description']; ?></p>
 
 	</div>
 
