@@ -24,6 +24,7 @@ function get_syndication_links() {
     $strings = get_syn_network_strings();
     $synlinks = '<span class="relsyn social-icon"><ul>' . $options['text_before'];
     foreach ($urls as $url) {
+      if (empty($url)) { continue; }
       $domain = extract_domain_name($url);
       if (array_key_exists($domain, $strings)) {
         $name = $strings[$domain];

@@ -14,8 +14,8 @@ function syn_bridgy_publish_link($response, $source, $target, $post_ID) {
 		preg_match('~https?://(?:www\.)?(brid.gy|localhost:8080)/publish/(.*)~', $target, $matches)) {
       $urls = get_post_meta($post_id, 'syndication_urls',true);
       $urls .= '\n' . $json->url;    
-      $meta = syn_clean_urls($_POST[ 'syndication_urls' ]);  
-      update_post_meta( $post_id, 'syndication_urls', $meta);
+      $meta = syn_clean_urls( implode("\n", $_POST[ 'syndication_urls' ]) );
+      update_post_meta( $post_id, 'syndication_urls', explode("\n", $meta) );
 	}
 }
 add_action('webmention_post_send', 'syn_bridgy_publish_link', 10, 4);
