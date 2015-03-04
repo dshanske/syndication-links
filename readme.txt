@@ -3,10 +3,10 @@ Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE
 Requires at least: 4.1
 Tested up to: 4.1
-Stable tag: 0.6.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 
-Simple way to link to copies of your post elsewhere.
+Simple way to link to copies of your post or presence elsewhere.
 
 == Description == 
 
@@ -14,8 +14,10 @@ This plugin adds relational links to various parts of your site.
 
 1. It supports adding rel-syndication links to your posts, indicating where
 a syndicated copy is.
-2. It adds CSS that will, if the class 'social-icon' is attached to a link,
-it will display the appropriate one if available. This allows the setup to be extended very easily. You can use this with a WordPress menu to create some social icons.
+2. It adds CSS that will, if the class 'social-icon' is attached to a link in
+a list, it will display the appropriate one if available. This allows the setup to be extended very easily. You can use this with a WordPress menu to create some social icons.
+3. Adds an h-card/vcard widget for a specific site author with optional rel-me/social icons.
+4. Adds a widget for sitewide rel-me social icons
 
 == Future Plans ==
 
@@ -28,12 +30,15 @@ it will display the appropriate one if available. This allows the setup to be ex
 
 == Credits ==
 
-1. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2)
+1. [Meitar Moscovitz](https://github.com/meitar) for fixes and code contributions
+2. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2)
 design.
-2. Ryan Barrett for the initial version of the Bridgy code.
+3. Ryan Barrett for the initial version of the Bridgy code.
+
 
 == Changelog ==
 
+Version 1.0.0 - Refinements - Addition of h-card widget support and additional communications options
 Version 0.6.0 - Add hooks and functions to allow additional urls to 
 be added
 Version 0.5.0 - Clean up the plugin for initial release to WordPress repository.
