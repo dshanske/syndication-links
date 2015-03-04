@@ -76,9 +76,13 @@ function synbox_save_post_meta( $post_id ) {
 			return;
 		}
 	}
-    if( (isset( $_POST[ 'syndication_urls' ]))&& !(empty($_POST[ 'syndication_urls' ])) ) {
-        $meta = syn_clean_urls_string($_POST[ 'syndication_urls' ]);
-	   	  update_post_meta( $post_id, 'syndication_urls', $meta);
+    if ( isset( $_POST[ 'syndication_urls' ]) ) {
+        if ( empty($_POST['syndication_urls']) ) {
+            delete_post_meta($post_id, 'syndication_urls');
+        } else {
+            $meta = syn_clean_urls( explode("\n", $_POST[ 'syndication_urls' ]) );
+            update_post_meta( $post_id, 'syndication_urls', implode("\n", $meta) );
+        }
     }
 }
 
