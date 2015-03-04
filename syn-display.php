@@ -12,7 +12,9 @@ function extract_domain_name($url) {
 
 function get_syndication_links() {
    $options = get_option ('syndication_content_options');
-   $meta = get_post_meta(get_the_ID(), 'syndication_urls', true );  
+   $syn = get_post_meta(get_the_ID(), 'syndication_urls', true ); 
+   $mf2 = get_post_meta(get_the_ID(), 'mf2_syndication', true );
+   $meta = $syn . $mf2;
    if (empty($meta))
 	{
 	   $synlinks = '';
