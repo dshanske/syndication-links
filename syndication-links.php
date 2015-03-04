@@ -36,19 +36,32 @@ function get_syn_network_strings() {
                 return apply_filters( 'syn_network_strings', $strings );
         }
 
-function syn_clean_urls($string) {
-  $urls = explode("\n", $string);
-  $array=array();
-  foreach ( (array) $urls as $url ) {
-    $url = trim($url);
-    if(!filter_var($url, FILTER_VALIDATE_URL))
-      { continue; }
-    $url = esc_url_raw($url);
-    $array[] = $url;
-   }
-  $array = array_unique($array);
-  return(implode("\n", $array));
- }
+/**
+ * Filters incoming URLs.
+ *
+ * @param array $urls An array of URLs to filter.
+ * @return array A filtered array of unique URLs.
+ * @uses syn_clean_url
+ */
+function syn_clean_urls($urls) {
+  $array = array_map('syn_clean_url', $urls);
+  return array_filter(array_unique($array));
+}
+
+/**
+ * Filters a single syndication URL.
+ *
+ * @param string $string A string that is expected to be a syndication URL.
+ * @return string|bool The filtered and escaped URL string, or FALSE if invalid.
+ * @used-by syn_clean_urls
+ */
+function syn_clean_url($string) {
+  $url = trim($string);
+  if ( !filter_var($url, FILTER_VALIDATE_URL) )
+    { return false ; }
+  $url = esc_url_raw($url);
+  return $url;
+}
 
 // Return Syndication URLs as part of the JSON Rest API
 add_filter("json_prepare_post",'json_rest_add_synmeta',10,3);
