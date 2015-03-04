@@ -77,7 +77,7 @@ function synbox_save_post_meta( $post_id ) {
 		}
 	}
     if( (isset( $_POST[ 'syndication_urls' ]))&& !(empty($_POST[ 'syndication_urls' ])) ) {
-        $meta = syn_clean_urls($_POST[ 'syndication_urls' ]);
+        $meta = syn_clean_urls_string($_POST[ 'syndication_urls' ]);
 	   	  update_post_meta( $post_id, 'syndication_urls', $meta);
     }
 }

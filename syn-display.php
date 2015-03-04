@@ -15,9 +15,10 @@ function get_syndication_links() {
     $urls = explode("\n", get_post_meta(get_the_ID(), 'syndication_urls', true));
     // Mf2_syndication is used by the Micropub plugin
     $mf2 = explode("\n", get_post_meta(get_the_ID(), 'mf2_syndication', true ));
-    $urls = $urls . $mf2;
-    // Allow URLs to be added by other plugins
+    $urls = syn_clean_urls(array_merge($urls, $mf2));
+    // Allow URLs to be added by other plugins and dedupe
     $urls = apply_filters('syn_add_links', $urls);
+    
     if (!empty($urls)) {
         $strings = get_syn_network_strings();
         $synlinks = '<span class="relsyn social-icon"><ul>' . $options['text_before'];

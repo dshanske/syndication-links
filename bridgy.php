@@ -4,7 +4,7 @@ Function Adapted from wordpress syndication plugin
 */
 
 if (class_exists("WebMentionPlugin")) {
-function store_bridgy_publish_link($response, $source, $target, $post_ID) {
+function syn_bridgy_publish_link($response, $source, $target, $post_ID) {
 	if (!$post_ID) {
 		return;
 	}
@@ -18,7 +18,7 @@ function store_bridgy_publish_link($response, $source, $target, $post_ID) {
       update_post_meta( $post_id, 'syndication_urls', $meta);
 	}
 }
-add_action('webmention_post_send', 'store_bridgy_publish_link', 10, 4);
+add_action('webmention_post_send', 'syn_bridgy_publish_link', 10, 4);
 }
 
 ?>
