@@ -16,12 +16,9 @@ This plugin adds relational links to various parts of your site.
 a syndicated copy is.
 2. It adds CSS that will, if the class 'social-icon' is attached to a link in
 a list, it will display the appropriate one if available. This allows the setup to be extended very easily. You can use this with a WordPress menu to create some social icons.
+**3. Offers two icon sets:** [Genericons](http://genericons.com) or [Font Awesome](http://fortawesome.github.io/Font-Awesome/icons/)  
 3. Adds an h-card/vcard widget for a specific site author with optional rel-me/social icons.
 4. Adds a widget for sitewide rel-me social icons
-
-## Future Plans ##
-
-1. Add different display options.
 
 ## Installation ##
 
@@ -34,11 +31,13 @@ a list, it will display the appropriate one if available. This allows the setup 
 2. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2)
 design.
 3. Ryan Barrett for the initial version of the Bridgy code.
+4. Jihaise and Peter Molnar for the SNAP and Social Import, courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
 
 
 ## Changelog ##
 
-Version 1.0.0 - Refinements - Addition of h-card widget support and additional communications options
+Version 1.0.0 - Refinements - Addition of h-card widget support and additional communications options. Improvements to hooks, addition of automatic information
+from SNAP and Social(courtesy WordPress Syndication). Now supports second font choice and choice of color or black.
 Version 0.6.0 - Add hooks and functions to allow additional urls to 
 be added
 Version 0.5.0 - Clean up the plugin for initial release to WordPress repository.
@@ -64,3 +63,5 @@ for potential use with any other plugin.
 * Bridgy Publish (https://www.brid.gy/about#publish). Requires the
   wordpress-webmention plugin (https://wordpress.org/plugins/webmention/).
   (Credit to Ryan Barrett for the initial code)
+* [Social](https://wordpress.org/plugins/social/) - Supports Twitter URL import
+* [Social Networks Autoposter](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) - Supports Twitter, Facebook, and Tumblr

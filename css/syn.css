@@ -4,6 +4,7 @@
 1.0 Genericons
 2.0 Link Style
 3.0 Social Icons
+4.0 Widgets
 --------------------------------------------------------------*/
 /*--------------------------------------------------------------
 1.0 Genericons
@@ -680,83 +681,63 @@
 }
 .social-icon li a[href*="facebook.com"]::before {
   content: '\f203';
-  color: #3b5998;
 }
 .social-icon li a[href*="feed"]::before {
   content: '\f413';
-  color: #ff6600;
 }
 .social-icon li a[href*="twitter.com"]::before {
   content: '\f202';
-  color: #55ACEE;
 }
-.social-icon li a[href*="dribble.com"]::before {
+.social-icon li a[href*="dribbble.com"]::before {
   content: '\f201';
-  color: #ea4c89;
 }
 .social-icon li a[href*="plus.google.com"]::before, .social-icon li .gplus::before {
   content: '\f206';
-  color: #dd4b39;
 }
 .social-icon li a[href*="pinterest.com"]::before {
   content: '\f210';
-  color: #c8232c;
 }
 .social-icon li a[href*="github.com"]::before {
   content: '\f200';
-  color: #171515;
 }
 .social-icon li a[href*="tumblr.com"]::before {
   content: '\f214';
-  color: #34526f;
 }
 .social-icon li a[href*="youtube.com"]::before {
   content: '\f213';
-  color: #c4302b;
 }
 .social-icon li a[href*="flickr.com"]::before {
   content: '\f211';
-  color: #ff0084;
 }
 .social-icon li a[href*="vimeo.com"]::before {
   content: '\f212';
-  color: #1AB7EA;
 }
 .social-icon li a[href*="instagram.com"]::before, .social-icon li .instagram::before {
   content: '\f215';
-  color: #3f729b;
 }
 .social-icon li a[href*="codepen.io"]::before {
   content: '\f216';
-  color: #000;
 }
 .social-icon li a[href*="linkedin.com"]::before {
   content: '\f208';
-  color: #0e76a8;
 }
 .social-icon li a[href*="skype.com"]::before, .social-icon li li a[href*="skype:"]::before {
   content: '\f220';
-  color: #12A5F4;
 }
 .social-icon li a[href*="reddit.com"]::before {
   content: '\f222';
-  color: #000;
 }
 .social-icon li a[href*="foursquare.com"]::before {
   content: '\f226';
-  color: #000;
 }
 .social-icon li a[href*="getpocket.com"]::before {
   content: '\f224';
-  color: #e61010;
 }
 .social-icon li a[href*="dropbox.com"]::before {
   content: '\f225';
-  color: #007ee5;
 }
 .social-icon li a[href*="news.indiewebcamp.com"]::before {
   content: '\f508';
-  color: #000000;
 }
 .social-icon li a[href*="contact"]::before, .social-icon li .social-icon li a[href*="mailto:"]::before {
   content: '\f410';
@@ -772,7 +753,80 @@
 }
 .social-icon li a[href*="wordpress.org"]::before, .social-icon li .social-icon li a[href*="wordpress.com"]::before {
   content: '\f205';
+}
+
+.social-icon li a[href*="facebook.com"]::before {
+  color: #3b5998;
+}
+.social-icon li a[href*="feed"]::before {
+  color: #ff6600;
+}
+.social-icon li a[href*="twitter.com"]::before {
+  color: #55ACEE;
+}
+.social-icon li a[href*="dribbble.com"]::before {
+  color: #ea4c89;
+}
+.social-icon li a[href*="plus.google.com"]::before, .social-icon li .gplus::before {
+  color: #dd4b39;
+}
+.social-icon li a[href*="pinterest.com"]::before {
+  color: #c8232c;
+}
+.social-icon li a[href*="github.com"]::before {
+  color: #171515;
+}
+.social-icon li a[href*="tumblr.com"]::before {
+  color: #34526f;
+}
+.social-icon li a[href*="youtube.com"]::before {
+  color: #c4302b;
+}
+.social-icon li a[href*="flickr.com"]::before {
+  color: #ff0084;
+}
+.social-icon li a[href*="vimeo.com"]::before {
+  color: #1AB7EA;
+}
+.social-icon li a[href*="instagram.com"]::before, .social-icon li .instagram::before {
+  color: #3f729b;
+}
+.social-icon li a[href*="codepen.io"]::before {
+  color: #000;
+}
+.social-icon li a[href*="linkedin.com"]::before {
+  color: #0e76a8;
+}
+.social-icon li a[href*="skype.com"]::before, .social-icon li li a[href*="skype:"]::before {
+  color: #12A5F4;
+}
+.social-icon li a[href*="reddit.com"]::before {
+  color: #000;
+}
+.social-icon li a[href*="foursquare.com"]::before {
+  color: #000;
+}
+.social-icon li a[href*="getpocket.com"]::before {
+  color: #e61010;
+}
+.social-icon li a[href*="dropbox.com"]::before {
+  color: #007ee5;
+}
+.social-icon li a[href*="news.indiewebcamp.com"]::before {
+  color: #000000;
+}
+.social-icon li a[href*="wordpress.org"]::before, .social-icon li .social-icon li a[href*="wordpress.com"]::before {
   color: #464646;
+}
+
+/*--------------------------------------------------------------
+4.0 Widgets
+--------------------------------------------------------------*/
+#hcard_widget {
+  text-align: center;
+}
+#hcard_widget img {
+  display: inline;
 }
 
 /*# sourceMappingURL=syn.css.map */

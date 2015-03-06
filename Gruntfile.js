@@ -14,7 +14,7 @@ module.exports = function(grunt) {
              style: 'expanded'
              },
           files: {                         // Dictionary of files
-        'syn.css': 'sass/main.scss',       // 'destination': 'source'
+        'css/syn.css': 'sass/main.scss',       // 'destination': 'source'
          }
 	},
        dist: {                            // Target
@@ -22,7 +22,12 @@ module.exports = function(grunt) {
              style: 'compressed'
              },
           files: {                         // Dictionary of files
-        'syn.min.css': 'sass/main.scss',       // 'destination': 'source'
+        'css/syn.min.css': 'sass/main.scss',       // 'destination': 'source'
+        'css/syn-bw.min.css': 'sass/main-bw.scss',
+        'css/minimal.min.css': 'sass/minimal.scss',
+        'css/minimal-bw.min.css': 'sass/minimal-bw.scss',
+        'css/awesome.min.css': 'sass/main-awesome.scss',
+        'css/awesome-bw.min.css': 'sass/main-awesome-bw.scss',
          }
 	}
   },
@@ -40,6 +45,7 @@ module.exports = function(grunt) {
                    '!Gruntfile.js',
                    '!package.json',
                    '!.gitignore',
+                   '!sass/.sass-cache/**',
        '!syn.css.map',
        '!syn.min.css.map'
                ],
@@ -64,7 +70,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-wp-readme-to-markdown');
   grunt.loadNpmTasks( 'grunt-wp-i18n' );
   grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-copy');
+  grunt.loadNpmTasks('grunt-contrib-copy');
 
   // Default task(s).
   grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'sass']);

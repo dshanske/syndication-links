@@ -2,84 +2,81 @@
   a::before {
     display:        inline-block;
     padding:        0 5px;
-    font-family:    'Genericons';
+    font-family:    'FontAwesome';
     vertical-align: middle;
-    content: '\f475';
+    content: $fa-var-globe;
     -webkit-font-smoothing: antialiased;
   }
   a[href*="facebook.com"]::before {
-    content: '\f203';
+    content: $fa-var-facebook;
   }
   a[href*="feed"]::before {
-    content: '\f413';
+    content: $fa-var-rss;
   }
   a[href*="twitter.com"]::before {
-    content: '\f202';
+    content: $fa-var-twitter;
   }
   a[href*="dribbble.com"]::before {
-    content: '\f201';
+    content: $fa-var-dribbble;
   }
   a[href*="plus.google.com"]::before, .gplus::before {
-    content: '\f206';
+    content: $fa-var-google-plus;
   }
   a[href*="pinterest.com"]::before {
-    content: '\f210';
+    content: $fa-var-pinterest;
   }
   a[href*="github.com"]::before {
-    content: '\f200';
+    content: $fa-var-github;
   }
   a[href*="tumblr.com"]::before {
-    content: '\f214';
+    content: $fa-var-tumblr;
   }
 	a[href*="youtube.com"]::before {
-    content: '\f213';
+    content: $fa-var-youtube;
   }
   a[href*="flickr.com"]::before {
-    content: '\f211';
+    content: $fa-var-flickr;
   }
   a[href*="vimeo.com"]::before {
-    content: '\f212';
+    content: $fa-var-vimeo-square;
   }
   a[href*="instagram.com"]::before, .instagram::before {
-    content: '\f215';
+    content: $fa-var-instagram;
   }
   a[href*="codepen.io"]::before {
-    content: '\f216';
+    content: $fa-var-codepen;
   }
   a[href*="linkedin.com"]::before {
-    content: '\f208';
+    content: $fa-var-linkedin;
   }
   a[href*="skype.com"]::before, li a[href*="skype:"]::before {
-    content: '\f220';
+    content: $fa-var-skype;
   }
   a[href*="reddit.com"]::before {
-    content: '\f222';
+    content: $fa-var-reddit;
   }
   a[href*="foursquare.com"]::before {
-    content: '\f226';
-  }
-  a[href*="getpocket.com"]::before {
-    content: '\f224';
+    content: $fa-var-foursquare;
   }
   a[href*="dropbox.com"]::before {
-    content: '\f225';
+    content: $fa-var-dropbox;
   }
   a[href*="news.indiewebcamp.com"]::before {
-    content: '\f508';
+    content: $fa-var-newspaper-o;
   }
   a[href*="contact"]::before, .social-icon li a[href*="mailto:"]::before {
-	  content: '\f410';
+	  content: $fa-var-envelope;
 	} 
   a[href*="subscribe"]::before {
-    content: '\f463';
+    content: $fa-var-envelope-o;
   }
   a[href*="sms:"]::before {
-    content: '\f108';
+    content: $fa-var-comment-o;
   }
   a[href*="tel:"]::before {
-    content: '\f50c';
+    content: $fa-var-phone;
   }
   a[href*="wordpress.org"]::before, .social-icon li a[href*="wordpress.com"]::before {
-    content: '\f205';
+    content: $fa-var-wordpress;
   }
 }

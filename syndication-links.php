@@ -12,13 +12,30 @@ require_once( plugin_dir_path( __FILE__ ) . '/syn-postmeta.php');
 require_once( plugin_dir_path( __FILE__ ) . '/syn-display.php');
 require_once( plugin_dir_path( __FILE__ ) . '/syn-config.php');
 require_once( plugin_dir_path( __FILE__ ) . '/bridgy.php');
+require_once( plugin_dir_path( __FILE__ ) . '/social-plugins.php');
 
 // User/H-Card Functions
 require_once( plugin_dir_path( __FILE__ ) . '/user-config.php');
 require_once( plugin_dir_path( __FILE__ ) . '/hcard-widget.php');
 
 function syndication_scripts() {
- 	wp_enqueue_style( 'syndication-style', plugin_dir_url( __FILE__ ) . 'syn.min.css');	
+ 	$options = get_option('syndication_content_options');
+  if ($options['fontawesome'] == 1) {
+    if ($options['bw']==1) {
+      wp_enqueue_style( 'syndication-style', plugin_dir_url( __FILE__ ) . 'css/awesome-bw.min.css');
+    }
+    else {
+      wp_enqueue_style( 'syndication-style', plugin_dir_url( __FILE__ ) . 'css/awesome.min.css');
+    }
+  }
+  else {
+    if ($options['bw']==1) {
+      wp_enqueue_style( 'syndication-style', plugin_dir_url( __FILE__ ) . 'css/syn-bw.min.css');	
+    }
+    else { 
+      wp_enqueue_style( 'syndication-style', plugin_dir_url( __FILE__ ) . 'css/syn.min.css');
+    }
+  }
 }
 
 add_action( 'wp_enqueue_scripts', 'syndication_scripts' );
