@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Syndication Links 1.0.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2015-03-04 05:38:52+00:00\n"
+"POT-Creation-Date: 2015-03-06 02:10:29+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -14,27 +14,27 @@ msgstr ""
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 
 #: build/trunk/build/trunk/syn-config.php:16 build/trunk/syn-config.php:16
-#: syn-config.php:16
+#: syn-config.php:14
 msgid "Content Options"
 msgstr ""
 
 #: build/trunk/build/trunk/syn-config.php:17 build/trunk/syn-config.php:17
-#: syn-config.php:17
+#: syn-config.php:15
 msgid "Disable Syndication Links in the Content"
 msgstr ""
 
 #: build/trunk/build/trunk/syn-config.php:18 build/trunk/syn-config.php:18
-#: syn-config.php:18
+#: syn-config.php:16
 msgid "Display Text"
 msgstr ""
 
 #: build/trunk/build/trunk/syn-config.php:20 build/trunk/syn-config.php:20
-#: syn-config.php:20
+#: syn-config.php:19
 msgid "Text Before Links"
 msgstr ""
 
 #: build/trunk/build/trunk/syn-config.php:27 build/trunk/syn-config.php:27
-#: syn-config.php:27
+#: syn-config.php:24
 msgid "Options for Presenting Syndication Links in Posts."
 msgstr ""
 
@@ -43,7 +43,7 @@ msgid "Syndication Links"
 msgstr ""
 
 #: build/trunk/build/trunk/syn-config.php:52 build/trunk/syn-config.php:52
-#: syn-config.php:52
+#: syn-config.php:46
 msgid ""
 "Adds optional syndication links for various sites. Syndication is the act "
 "of posting your content on other sites."
@@ -66,6 +66,14 @@ msgstr ""
 msgid "Avatar Size:"
 msgstr ""
 
+#: syn-config.php:17
+msgid "Black Icons"
+msgstr ""
+
+#: syn-config.php:18
+msgid "Use Alternate Fontset"
+msgstr ""
+
 #. Plugin URI of the plugin/theme
 msgid "http://wordpress.org/plugins/syndication-links"
 msgstr ""
@@ -83,61 +91,61 @@ msgid "http://david.shanske.com"
 msgstr ""
 
 #: build/trunk/build/trunk/syndication-links.php:25
-#: build/trunk/syndication-links.php:25 syndication-links.php:28
+#: build/trunk/syndication-links.php:25 syndication-links.php:45
 msgctxt "Syn Links"
 msgid "Twitter"
 msgstr ""
 
 #: build/trunk/build/trunk/syndication-links.php:26
-#: build/trunk/syndication-links.php:26 syndication-links.php:29
+#: build/trunk/syndication-links.php:26 syndication-links.php:46
 msgctxt "Syn Links"
 msgid "Facebook"
 msgstr ""
 
 #: build/trunk/build/trunk/syndication-links.php:27
-#: build/trunk/syndication-links.php:27 syndication-links.php:30
+#: build/trunk/syndication-links.php:27 syndication-links.php:47
 msgctxt "Syn Links"
 msgid "Google+"
 msgstr ""
 
 #: build/trunk/build/trunk/syndication-links.php:28
-#: build/trunk/syndication-links.php:28 syndication-links.php:31
+#: build/trunk/syndication-links.php:28 syndication-links.php:48
 msgctxt "Syn Links"
 msgid "Instagram"
 msgstr ""
 
 #: build/trunk/build/trunk/syndication-links.php:29
-#: build/trunk/syndication-links.php:29 syndication-links.php:32
+#: build/trunk/syndication-links.php:29 syndication-links.php:49
 msgctxt "Syn Links"
 msgid "Flickr"
 msgstr ""
 
 #: build/trunk/build/trunk/syndication-links.php:30
-#: build/trunk/syndication-links.php:30 syndication-links.php:33
+#: build/trunk/syndication-links.php:30 syndication-links.php:50
 msgctxt "Syn Links"
 msgid "YouTube"
 msgstr ""
 
 #: build/trunk/build/trunk/syndication-links.php:31
-#: build/trunk/syndication-links.php:31 syndication-links.php:34
+#: build/trunk/syndication-links.php:31 syndication-links.php:51
 msgctxt "Syn Links"
 msgid "LinkedIn"
 msgstr ""
 
 #: build/trunk/build/trunk/syndication-links.php:32
-#: build/trunk/syndication-links.php:32 syndication-links.php:35
+#: build/trunk/syndication-links.php:32 syndication-links.php:52
 msgctxt "Syn Links"
 msgid "Tumblr"
 msgstr ""
 
 #: build/trunk/build/trunk/syndication-links.php:33
-#: build/trunk/syndication-links.php:33 syndication-links.php:36
+#: build/trunk/syndication-links.php:33 syndication-links.php:53
 msgctxt "Syn Links"
 msgid "WordPress"
 msgstr ""
 
 #: build/trunk/build/trunk/syndication-links.php:34
-#: build/trunk/syndication-links.php:34 syndication-links.php:37
+#: build/trunk/syndication-links.php:34 syndication-links.php:54
 msgctxt "Syn Links"
 msgid "IndieNews"
 msgstr ""
