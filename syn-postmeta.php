@@ -16,15 +16,18 @@ function synbox_setup() {
 
 /* Create one or more meta boxes to be displayed on the post editor screen. */
 function synbox_add_postmeta_boxes() {
-
-  add_meta_box(
-    'synbox-meta',      // Unique ID
-    esc_html__( 'Syndication Links', 'Syn Links' ),    // Title
-    'syn_metabox',   // Callback function
-    'post',         // Admin page (or post type)
-    'normal',         // Context
-    'default'         // Priority
-  );
+  $screens = array( 'post', 'page' );
+  $screens = apply_filters('syn_post_types', $screens);
+  foreach ( $screens as $screen ) {
+    add_meta_box(
+      'synbox-meta',      // Unique ID
+      esc_html__( 'Syndication Links', 'Syn Links' ),    // Title
+      'syn_metabox',   // Callback function
+      $screen,         // Admin page (or post type)
+      'normal',         // Context
+      'default'         // Priority
+    );
+  }
 }
 
 

@@ -7,6 +7,7 @@
     "grunt-contrib-sass": "~0.8.1",
     "grunt-wp-i18n": "~0.4.9",
     "grunt-wp-readme-to-markdown": "~0.8.0",
-    "grunt-copy": "~0.1.0"
+    "grunt-copy": "~0.1.0",
+    "grunt-contrib-copy": "~0.7.0"
   }
 }

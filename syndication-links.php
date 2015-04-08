@@ -3,7 +3,7 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add and display Syndication Links
- * Version: 1.0.0
+ * Version: 1.0.2
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  */
@@ -79,6 +79,11 @@ function syn_clean_url($string) {
   $url = trim($string);
   if ( !filter_var($url, FILTER_VALIDATE_URL) )
   { return false ; }
+  // Rewrite these to https as needed
+  $secure = apply_filters('syn_rewrite_secure', array('facebook.com', 'twitter.com'));
+  if (in_array(extract_domain_name($url), $secure) ) {
+    $url = preg_replace("/^http:/i", "https:", $url);
+  }
   $url = esc_url_raw($url);
   return $url;
 }

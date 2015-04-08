@@ -823,7 +823,7 @@
 4.0 Widgets
 --------------------------------------------------------------*/
 #hcard_widget {
-  text-align: center;
+  text-align: left;
 }
 #hcard_widget img {
   display: inline;

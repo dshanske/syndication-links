@@ -1,13 +1,11 @@
 <?php
 add_action( 'widgets_init', create_function( '', 'register_widget("hcard_widget");' ) );
 
-class hcard_widget extends WP_Widget
-{
-	/**
-	 * Register widget with WordPress.
-	 */
-	public function __construct() {
-
+class hcard_widget extends WP_Widget {
+  /**
+    * Register widget with WordPress.
+	  */
+  public function __construct() {
 		parent::__construct(
 			'hcard_widget',				// Base ID
 			'H-Card Widget',		// Name
@@ -52,7 +50,7 @@ public function widget( $args, $instance ) {
 	?>
 
 	<div id="hcard_widget" class="h-card vcard">
-		<a rel="me" class="u-url url fn" href="<?php echo $user_info->user_url; ?>"><?php echo get_avatar( $user_info->user_email, $avatar_size ); ?></a>
+		<a class="u-url url fn" href="<?php echo $user_info->user_url; ?>"><?php echo get_avatar( $user_info->user_email, $avatar_size ); ?></a>
 		<h2 class="p-name n"><?php  echo $user_info->display_name; ?></h2>
 		<?php
  		   echo '<p class="h-adr adr">'; 
