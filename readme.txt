@@ -43,6 +43,7 @@ design.
 
 =Version 2.0.0= 
 	* Rewritten to remove global scoping
+	* Option to add URLs to the head of the home page for rel-me auth
 
 =Version 1.0.3= 
 	* Security Fix. Nothing new

@@ -11,6 +11,9 @@ class syn_config {
 		if($option['the_content']!="1"){
 			add_filter( 'the_content', array('syn_config', 'the_content') , 20 );
    	}
+		if($option['head']==1) { 
+			add_action( 'wp_head', array('syn_config', 'head_relme_links'), 99);
+		}
 	add_action( 'admin_menu', array('syn_config', 'admin_menu') );
 	add_action( 'admin_init', array('syn_config', 'admin_init') );
 	}
@@ -44,7 +47,18 @@ class syn_config {
 		add_settings_field( 'bw', __('Black Icons', 'Syn Links'), array('syn_config', 'content_callback'), 'links_options', 'syndication-content',  array( 'name' => 'bw') );
 		add_settings_field( 'fontawesome', __('Use Alternate Fontset', 'Syn Links'), array('syn_config', 'content_callback'), 'links_options', 'syndication-content',  array( 'name' => 'fontawesome') );
 		add_settings_field( 'text_before', __('Text Before Links', 'Syn Links'), array('syn_config', 'text_before_callback'), 'links_options', 'syndication-content' );
-	}
+    add_settings_field( 'head', __('Add rel-me links to the Header', 'Syn Links'), array('syn_config', 'content_callback'), 'links_options', 'syndication-content',  array( 'name' => 'head') );
+  	add_settings_field( 'relme_links', __('List of Rel-Me Links for This Site'), array('syn_config', 'relme_input'), 'links_options', 'syndication-content');
+}
+
+	public static function relme_input() {
+    $options = get_option('syndication_content_options');
+  	$name = "relme_links";
+  	echo "<p><label for='relme_links'> One URL per line.</label></p>";
+  	echo "<textarea name='syndication_content_options[$name]' rows='10' cols='50' class='large-text code'>";
+  	if (!empty($options['relme_links'])) {echo $options['relme_links']; }
+    echo "</textarea>";
+  }
 
 	public static function admin_menu(){
 		add_options_page( '', 'Syndication Links', 'manage_options', 'syndication_links', array('syn_config', 'links_options') );
@@ -94,6 +108,22 @@ class syn_config {
    return $meta . get_syndication_links();
    }
 
+	public static function head_relme_links() {
+		global $post;	
+    if ((!is_front_page()||!is_home()) ) { return; }
+		/* get options */          		
+		$options = get_option('syndication_content_options'); 	
+		$urls = explode("\n", $options['relme_links']);
+		$urls = syn_meta::clean_urls($urls);
+		// Allow URLs to be added by other plugins
+		$urls = apply_filters('syn_head_links', $urls);
+		if (!empty($urls)) {
+			foreach ($urls as $url) {
+				if (empty($url)) { continue; }
+				echo '<link rel="me" href="' . $url . '" />' . "\n";
+			}
+		}
+	}
 
 } // End Class
 
