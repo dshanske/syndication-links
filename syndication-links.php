@@ -3,42 +3,28 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add and display Syndication Links
- * Version: 1.0.2
+ * Version: 2.0.0
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  */
 
-require_once( plugin_dir_path( __FILE__ ) . '/syn-postmeta.php');
-require_once( plugin_dir_path( __FILE__ ) . '/syn-display.php');
-require_once( plugin_dir_path( __FILE__ ) . '/syn-config.php');
-require_once( plugin_dir_path( __FILE__ ) . '/bridgy.php');
-require_once( plugin_dir_path( __FILE__ ) . '/social-plugins.php');
-
-// User/H-Card Functions
-require_once( plugin_dir_path( __FILE__ ) . '/user-config.php');
-require_once( plugin_dir_path( __FILE__ ) . '/hcard-widget.php');
-
-function syndication_scripts() {
- 	$options = get_option('syndication_content_options');
-  if ($options['fontawesome'] == 1) {
-    if ($options['bw']==1) {
-      wp_enqueue_style( 'syndication-style', plugin_dir_url( __FILE__ ) . 'css/awesome-bw.min.css');
-    }
-    else {
-      wp_enqueue_style( 'syndication-style', plugin_dir_url( __FILE__ ) . 'css/awesome.min.css');
-    }
-  }
-  else {
-    if ($options['bw']==1) {
-      wp_enqueue_style( 'syndication-style', plugin_dir_url( __FILE__ ) . 'css/syn-bw.min.css');	
-    }
-    else { 
-      wp_enqueue_style( 'syndication-style', plugin_dir_url( __FILE__ ) . 'css/syn.min.css');
-    }
+function syndication_links_activation() {
+  if (version_compare(phpversion(), 5.3, '<')) {
+    die("The minimum PHP version required for this plugin is 5.3");
   }
 }
 
-add_action( 'wp_enqueue_scripts', 'syndication_scripts' );
+register_activation_hook(__FILE__, 'syndication_links_activation');
+
+
+require_once( plugin_dir_path( __FILE__ ) . '/includes/class-syn-meta.php');
+require_once( plugin_dir_path( __FILE__ ) . '/includes/class-syn-config.php');
+// Social Plugin Add-Ons
+require_once( plugin_dir_path( __FILE__ ) . '/includes/class-social-plugins.php');
+
+// User/H-Card Functions
+require_once( plugin_dir_path( __FILE__ ) . '/includes/class-syn-user.php');
+require_once( plugin_dir_path( __FILE__ ) . '/includes/class-hcard-widget.php');
 
 function get_syn_network_strings() {
   $strings = array(
@@ -56,48 +42,12 @@ function get_syn_network_strings() {
   return apply_filters( 'syn_network_strings', $strings );
 }
 
-/**
-* Filters incoming URLs.
-*
-* @param array $urls An array of URLs to filter.
-* @return array A filtered array of unique URLs.
-* @uses syn_clean_url
-*/
-function syn_clean_urls($urls) {
-  $array = array_map('syn_clean_url', $urls);
-  return array_filter(array_unique($array));
-}
-
-/**
-* Filters a single syndication URL.
-*
-* @param string $string A string that is expected to be a syndication URL.
-* @return string|bool The filtered and escaped URL string, or FALSE if invalid.
-* @used-by syn_clean_urls
-*/
-function syn_clean_url($string) {
-  $url = trim($string);
-  if ( !filter_var($url, FILTER_VALIDATE_URL) )
-  { return false ; }
-  // Rewrite these to https as needed
-  $secure = apply_filters('syn_rewrite_secure', array('facebook.com', 'twitter.com'));
-  if (in_array(extract_domain_name($url), $secure) ) {
-    $url = preg_replace("/^http:/i", "https:", $url);
-  }
-  $url = esc_url_raw($url);
-  return $url;
-}
-
-// Return Syndication URLs as part of the JSON Rest API
-add_filter("json_prepare_post",'json_rest_add_synmeta',10,3);
-
-function json_rest_add_synmeta($_post,$post,$context) {
-  $syn = get_post_meta( $post["ID"], 'syndication_urls');
-  if (!empty($syn)) { 
-      $urls = explode("\n", $syn);
-      $_post['syndication'] = $urls; 
-    }  
-  return $_post;
-}
+if (!function_exists('extract_domain_name')) {
+	function extract_domain_name($url) {
+		$host = parse_url($url, PHP_URL_HOST);
+		$host = preg_replace("/^www\./", "", $host);
+		return $host;
+	}
+} 
 
 ?>
