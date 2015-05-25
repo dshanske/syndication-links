@@ -25,6 +25,7 @@ require_once( plugin_dir_path( __FILE__ ) . '/includes/class-social-plugins.php'
 // User/H-Card Functions
 require_once( plugin_dir_path( __FILE__ ) . '/includes/class-syn-user.php');
 require_once( plugin_dir_path( __FILE__ ) . '/includes/class-hcard-widget.php');
+require_once( plugin_dir_path( __FILE__ ) . '/includes/class-relme-widget.php');
 
 function get_syn_network_strings() {
   $strings = array(

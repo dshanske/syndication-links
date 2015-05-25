@@ -126,7 +126,7 @@ $defaults = array(
 	'background' => '#ffffff',
 	'font_color' => '#000000',
 	'avatar_size' => '125',
-	'icon_color' => 'black'
+	'relme' => 'false'
 );
 
 $instance = wp_parse_args( (array) $instance, $defaults ); ?>

@@ -650,19 +650,19 @@
 /*--------------------------------------------------------------
 2.0 Link Style
 --------------------------------------------------------------*/
-.relsyn ul {
+.relsyn ul, .relmewidget ul {
   display: inline-block;
   list-style: none;
   text-align: top;
 }
-.relsyn ul li {
+.relsyn ul li, .relmewidget ul li {
   display: inline-block;
   padding-right: 5px;
 }
-.relsyn ul li a {
+.relsyn ul li a, .relmewidget ul li a {
   text-decoration: none;
 }
-.relsyn ul li a:hover {
+.relsyn ul li a:hover, .relmewidget ul li a:hover {
   padding: 5px;
   text-decoration: none;
   cursor: pointer;
@@ -827,6 +827,11 @@
 }
 #hcard_widget img {
   display: inline;
+}
+
+#relme_widget {
+  font-size: 24px;
+  text-align: center;
 }
 
 /*# sourceMappingURL=syn.css.map */

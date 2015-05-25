@@ -17,13 +17,12 @@ a syndicated copy is.
 2. It adds CSS that will, if the class 'social-icon' is attached to a link in
 a list, it will display the appropriate one if available. This allows the setup to be extended very easily. You can use this with a WordPress menu to create some social icons.
 **3. Offers two icon sets:** [Genericons](http://genericons.com) or [Font Awesome](http://fortawesome.github.io/Font-Awesome/icons/)  
-3. Adds an h-card/vcard widget for a specific site author. (Under Development)
+4. Adds an h-card/vcard widget for a specific site author. (Under Development)
+5. Allows rel-me links to be placed in the head of the home page or in a widget to support RelMeAuth/IndieAuth
 
 ## Future Plans ##
 
 3. Style the h-card/vcard widget with better design and optional rel-me/social icons.
-4. Adds a widget for sitewide rel-me social icons
-
 
 ## Installation ##
 
@@ -44,6 +43,7 @@ design.
 ###Version 2.0.0###
 	* Rewritten to remove global scoping
 	* Option to add URLs to the head of the home page for rel-me auth
+	* Option to add URLs as a widget for rel-me auth
 
 ###Version 1.0.3###
 	* Security Fix. Nothing new
