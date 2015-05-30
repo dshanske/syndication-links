@@ -3,7 +3,7 @@
 add_action( 'init', array('syn_config', 'init') );
 
 class syn_config {
-	public function init() {
+	public static function init() {
 		add_action( 'wp_enqueue_scripts', array('syn_config', 'enqueue_scripts') );
 		// Return Syndication URLs as part of the JSON Rest API
 		add_filter("json_prepare_post", array('syn_config', 'json_rest_add_synmeta'),10,3);
@@ -18,7 +18,7 @@ class syn_config {
 	add_action( 'admin_init', array('syn_config', 'admin_init') );
 	}
 
-	public function enqueue_scripts() {
+	public static function enqueue_scripts() {
 		$options = get_option('syndication_content_options');
 		if ($options['fontawesome'] == 1) {
 			if ($options['bw']==1) {
