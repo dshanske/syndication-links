@@ -3,7 +3,7 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add and display Syndication Links
- * Version: 2.0.0
+ * Version: 2.0.1
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  */

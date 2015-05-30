@@ -5,9 +5,6 @@ add_action( 'init' , array('social_plugins', 'init') );
 class social_plugins {
 	public static function init() {
 		add_filter('syn_add_links', array('social_plugins', 'add_syn_plugins') );
-		if (class_exists("WebMentionPlugin")) {
-			add_action('webmention_post_send', array('social_plugins', 'bridgy_publish_link'), 10, 4);
-		}
 	}
 
 	public static function add_syn_plugins($urls) {
@@ -134,19 +131,6 @@ class social_plugins {
 			}
 		}
   	return $broadcasts;
-	}
-
-	public static function bridgy_publish_link($response, $source, $target, $post_ID) {
-		if (!$post_ID) {
-			return;
-		}
-		$meta = $json = json_decode(wp_remote_retrieve_body($response));
-		if (!is_wp_error($response) && $json && $json->url && preg_match('~https?://(?:www\.)?(brid.gy|localhost:8080)/publish/(.*)~', $target, $matches)) {
-			$urls = get_post_meta($post_id, 'syndication_urls',true);
-			$urls .= '\n' . $json->url;    
-			$meta = syn_clean_urls( implode("\n", $_POST[ 'syndication_urls' ]) );
-			update_post_meta( $post_id, 'syndication_urls', explode("\n", $meta) );
-		}
 	}
 
 } // End Class 
