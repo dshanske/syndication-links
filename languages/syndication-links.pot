@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Syndication Links package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Syndication Links 1.0.1\n"
+"Project-Id-Version: Syndication Links 2.0.1\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2015-03-15 15:04:00+00:00\n"
+"POT-Creation-Date: 2015-05-31 00:03:10+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,43 +13,68 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 
-#: build/trunk/hcard-widget.php:16 hcard-widget.php:14
+#: build/trunk/includes/class-hcard-widget.php:14
+#: includes/class-hcard-widget.php:14
 msgid "A widget that allows you to display h-cards for a specific author"
 msgstr ""
 
-#: build/trunk/hcard-widget.php:137 hcard-widget.php:135
+#: build/trunk/includes/class-hcard-widget.php:135
+#: includes/class-hcard-widget.php:135
 msgid "Display Author:"
 msgstr ""
 
-#: build/trunk/hcard-widget.php:145 hcard-widget.php:143
+#: build/trunk/includes/class-hcard-widget.php:143
+#: includes/class-hcard-widget.php:143
 msgid "Avatar Size:"
 msgstr ""
 
-#: build/trunk/syn-config.php:14 syn-config.php:14
+#: build/trunk/includes/class-relme-widget.php:14
+#: includes/class-relme-widget.php:14
+msgid "A widget that allows you to display rel-me links as icons for a site"
+msgstr ""
+
+#: build/trunk/includes/class-syn-config.php:44
+#: includes/class-syn-config.php:44
 msgid "Content Options"
 msgstr ""
 
-#: build/trunk/syn-config.php:15 syn-config.php:15
+#: build/trunk/includes/class-syn-config.php:45
+#: includes/class-syn-config.php:45
 msgid "Disable Syndication Links in the Content"
 msgstr ""
 
-#: build/trunk/syn-config.php:16 syn-config.php:16
+#: build/trunk/includes/class-syn-config.php:46
+#: includes/class-syn-config.php:46
 msgid "Display Text"
 msgstr ""
 
-#: build/trunk/syn-config.php:17 syn-config.php:17
+#: build/trunk/includes/class-syn-config.php:47
+#: includes/class-syn-config.php:47
 msgid "Black Icons"
 msgstr ""
 
-#: build/trunk/syn-config.php:18 syn-config.php:18
+#: build/trunk/includes/class-syn-config.php:48
+#: includes/class-syn-config.php:48
 msgid "Use Alternate Fontset"
 msgstr ""
 
-#: build/trunk/syn-config.php:19 syn-config.php:19
+#: build/trunk/includes/class-syn-config.php:49
+#: includes/class-syn-config.php:49
 msgid "Text Before Links"
 msgstr ""
 
-#: build/trunk/syn-config.php:24 syn-config.php:24
+#: build/trunk/includes/class-syn-config.php:50
+#: includes/class-syn-config.php:50
+msgid "Add rel-me links to the Header"
+msgstr ""
+
+#: build/trunk/includes/class-syn-config.php:51
+#: includes/class-syn-config.php:51
+msgid "List of Rel-Me Links for This Site"
+msgstr ""
+
+#: build/trunk/includes/class-syn-config.php:68
+#: includes/class-syn-config.php:68
 msgid "Options for Presenting Syndication Links in Posts."
 msgstr ""
 
@@ -57,13 +82,14 @@ msgstr ""
 msgid "Syndication Links"
 msgstr ""
 
-#: build/trunk/syn-config.php:46 syn-config.php:46
+#: build/trunk/includes/class-syn-config.php:89
+#: includes/class-syn-config.php:89
 msgid ""
 "Adds optional syndication links for various sites. Syndication is the act "
 "of posting your content on other sites."
 msgstr ""
 
-#: build/trunk/syn-postmeta.php:36 syn-postmeta.php:36
+#: build/trunk/includes/class-syn-meta.php:73 includes/class-syn-meta.php:73
 msgid "One URL per line."
 msgstr ""
 
@@ -83,52 +109,52 @@ msgstr ""
 msgid "http://david.shanske.com"
 msgstr ""
 
-#: build/trunk/syndication-links.php:45 syndication-links.php:45
+#: build/trunk/syndication-links.php:32 syndication-links.php:32
 msgctxt "Syn Links"
 msgid "Twitter"
 msgstr ""
 
-#: build/trunk/syndication-links.php:46 syndication-links.php:46
+#: build/trunk/syndication-links.php:33 syndication-links.php:33
 msgctxt "Syn Links"
 msgid "Facebook"
 msgstr ""
 
-#: build/trunk/syndication-links.php:47 syndication-links.php:47
+#: build/trunk/syndication-links.php:34 syndication-links.php:34
 msgctxt "Syn Links"
 msgid "Google+"
 msgstr ""
 
-#: build/trunk/syndication-links.php:48 syndication-links.php:48
+#: build/trunk/syndication-links.php:35 syndication-links.php:35
 msgctxt "Syn Links"
 msgid "Instagram"
 msgstr ""
 
-#: build/trunk/syndication-links.php:49 syndication-links.php:49
+#: build/trunk/syndication-links.php:36 syndication-links.php:36
 msgctxt "Syn Links"
 msgid "Flickr"
 msgstr ""
 
-#: build/trunk/syndication-links.php:50 syndication-links.php:50
+#: build/trunk/syndication-links.php:37 syndication-links.php:37
 msgctxt "Syn Links"
 msgid "YouTube"
 msgstr ""
 
-#: build/trunk/syndication-links.php:51 syndication-links.php:51
+#: build/trunk/syndication-links.php:38 syndication-links.php:38
 msgctxt "Syn Links"
 msgid "LinkedIn"
 msgstr ""
 
-#: build/trunk/syndication-links.php:52 syndication-links.php:52
+#: build/trunk/syndication-links.php:39 syndication-links.php:39
 msgctxt "Syn Links"
 msgid "Tumblr"
 msgstr ""
 
-#: build/trunk/syndication-links.php:53 syndication-links.php:53
+#: build/trunk/syndication-links.php:40 syndication-links.php:40
 msgctxt "Syn Links"
 msgid "WordPress"
 msgstr ""
 
-#: build/trunk/syndication-links.php:54 syndication-links.php:54
+#: build/trunk/syndication-links.php:41 syndication-links.php:41
 msgctxt "Syn Links"
 msgid "IndieNews"
 msgstr ""
