@@ -3,7 +3,7 @@ Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE
 Requires at least: 4.1
 Tested up to: 4.2
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: GPLv2 or later
 
 Simple way to link to copies of your post or presence elsewhere.
@@ -39,9 +39,12 @@ design.
 
 == Changelog ==
 
+= Version 2.0.2 =
+	* CSS fixes
+
 = Version 2.0.1 = 
 	* Misc. Bug Fixes
-	* Bridgy Support removed - new Bridgy plugin will handle that
+	* Bridgy Publish Support removed - new Bridgy plugin will handle that
 
 = Version 2.0.0 = 
 	* Rewritten to remove global scoping
