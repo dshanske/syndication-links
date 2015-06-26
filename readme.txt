@@ -41,6 +41,7 @@ design.
 
 = Version 2.0.2 =
 	* CSS fixes
+	* Version number added to CSS import to avoid caching on update
 
 = Version 2.0.1 = 
 	* Misc. Bug Fixes

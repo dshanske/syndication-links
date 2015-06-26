@@ -22,18 +22,18 @@ class syn_config {
 		$options = get_option('syndication_content_options');
 		if ($options['fontawesome'] == 1) {
 			if ($options['bw']==1) {
-				wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname(__FILE__) ) . 'css/awesome-bw.min.css');
+				wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname(__FILE__) ) . 'css/awesome-bw.min.css', array(), SYNDICATION_LINKS_VERSION);
     	}
 			else {
-				wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname(__FILE__) ) . 'css/awesome.min.css');
+				wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname(__FILE__) ) . 'css/awesome.min.css', array(), SYNDICATION_LINKS_VERSION);
 			}
 		}
   	else {
 			if ($options['bw']==1) {
-				wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname(__FILE__) ) . 'css/syn-bw.min.css');
+				wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname(__FILE__) ) . 'css/syn-bw.min.css', array(), SYNDICATION_LINKS_VERSION);
 			}
 			else {
-				wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname(__FILE__) ) . 'css/syn.min.css');
+				wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname(__FILE__) ) . 'css/syn.min.css', array(), SYNDICATION_LINKS_VERSION);
 			}
 		}
 	}

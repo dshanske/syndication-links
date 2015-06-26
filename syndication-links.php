@@ -8,6 +8,8 @@
  * Author URI: http://david.shanske.com
  */
 
+define ("SYNDICATION_LINKS_VERSION", "2.0.2");
+
 function syndication_links_activation() {
   if (version_compare(phpversion(), 5.3, '<')) {
     die("The minimum PHP version required for this plugin is 5.3");
