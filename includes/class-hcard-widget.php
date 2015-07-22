@@ -49,8 +49,8 @@ public function widget( $args, $instance ) {
 		echo $before_title . $title . $after_title;
 	?>
 
-	<div id="hcard_widget" class="h-card vcard">
-		<a class="u-url url fn" href="<?php echo $user_info->user_url; ?>"><?php echo get_avatar( $user_info->user_email, $avatar_size ); ?></a>
+	<div id="hcard_widget" class="h-card vcard p-author">
+		<a class="u-url url fn" href="<?php echo $user_info->user_url; ?>" rel="author"><?php echo get_avatar( $user_info->user_email, $avatar_size ); ?></a>
 		<h2 class="p-name n"><?php  echo $user_info->display_name; ?></h2>
 		<?php
  		   echo '<p class="h-adr adr">'; 
