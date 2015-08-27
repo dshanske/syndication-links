@@ -665,7 +665,6 @@
   text-decoration: none;
 }
 .relsyn ul li a:hover, .relmewidget ul li a:hover {
-  padding: 5px;
   text-decoration: none;
   cursor: pointer;
 }
