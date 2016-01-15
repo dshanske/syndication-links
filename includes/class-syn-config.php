@@ -110,7 +110,7 @@ class syn_config {
 
 	public static function head_relme_links() {
 		global $post;
-		if ( ( ! is_front_page() ) { return; }
+		if ( ! is_front_page() ) { return; }
 		/* get options */
 		$options = get_option( 'syndication_content_options' );
 		$urls = explode( "\n", $options['relme_links'] );
