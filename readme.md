@@ -2,8 +2,8 @@
 **Contributors:** dshanske  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE  
 **Requires at least:** 4.1  
-**Tested up to:** 4.2  
-**Stable tag:** 2.0.2  
+**Tested up to:** 4.4  
+**Stable tag:** 2.0.3  
 **License:** GPLv2 or later  
 
 Simple way to link to copies of your post or presence elsewhere.
@@ -38,6 +38,9 @@ design.
 
 
 ## Changelog ##
+
+### Version 2.0.3 ###
+	* Minor Tweaks and Cleanup
 
 ### Version 2.0.2 ###
 	* CSS fixes

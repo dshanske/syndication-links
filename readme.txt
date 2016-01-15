@@ -39,6 +39,8 @@ design.
 
 == Changelog ==
 
+= Version 2.0.3 = 
+	* Minor Tweaks and Cleanup
 
 = Version 2.0.2 =
 	* CSS fixes
