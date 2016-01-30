@@ -14,7 +14,7 @@ class syn_config {
 		if ( $option['head'] == 1 ) {
 			add_action( 'wp_head', array( 'syn_config', 'head_relme_links' ), 99 );
 		}
-		add_action( 'admin_menu', array( 'syn_config', 'admin_menu' ) );
+		add_action( 'admin_menu', array( 'syn_config', 'admin_menu' ), 11 );
 		add_action( 'admin_init', array( 'syn_config', 'admin_init' ) );
 	}
 
@@ -58,7 +58,20 @@ class syn_config {
 	}
 
 	public static function admin_menu() {
-		add_options_page( '', 'Syndication Links', 'manage_options', 'syndication_links', array( 'syn_config', 'links_options' ) );
+		// If the IndieWeb Plugin is installed use its menu.
+		if ( class_exists('IndieWebPlugin') ) {
+ 	    add_submenu_page(
+  	    'indieweb',
+    	  __( 'Syndication Links', 'Syn Links' ), // page title
+  	    __( 'Syndication Links', 'Syn Links' ), // menu title
+   	   'manage_options', // access capability
+  	    'syndication_links',
+      	array('syn_config', 'links_options')
+	    );
+		}
+		else{ 
+			add_options_page( '', 'Syndication Links', 'manage_options', 'syndication_links', array( 'syn_config', 'links_options' ) );
+		}
 	}
 
 	public static function options_callback() {
