@@ -59,7 +59,7 @@ class syn_config {
 
 	public static function admin_menu() {
 		// If the IndieWeb Plugin is installed use its menu.
-		if ( class_exists('IndieWebPlugin') ) {
+		if ( class_exists('IndieWeb_Plugin') ) {
  	    add_submenu_page(
   	    'indieweb',
     	  __( 'Syndication Links', 'Syn Links' ), // page title
