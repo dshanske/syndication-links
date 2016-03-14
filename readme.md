@@ -26,7 +26,7 @@ a list, it will display the appropriate one if available. This allows the setup 
 
 ## Installation ##
 
-1. Upload the folder `syndication-links' to the `/wp-content/plugins/` directory
+1. Upload the folder `syndication-links` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 ## Credits ##
