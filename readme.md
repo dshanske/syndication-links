@@ -26,8 +26,28 @@ a list, it will display the appropriate one if available. This allows the setup 
 
 ## Installation ##
 
-1. Upload the folder `syndication-links' to the `/wp-content/plugins/` directory
+1. Upload the folder `syndication-links` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
+
+## Settings ##
+
+Settings for the Syndication Links plugin can be found in the main WordPress "Settings" tab in the admin dashboard. The options provided allow for various ways of presenting the syndication links in posts. Syndication Links by default will add links to the content, but you can disable this for theme support. It also provides support for rel-me links, either through a widget or invisibly adding them to the page.
+
+The settings include the following options as follows with either a check box (with a check indicating that the feature is "on") or an optional text field:
+
+* **Disable Syndication Links in the Content**	- When this option is checked, the icons with/without text as links to syndicated copies of the content are not displayed on your page.
+* **Display Text** - Checking the box includes the written text for each of the social media silo names following their icons. The verion just below has checkmarks for Display Text, Black Icons, Alternate Fontset, and uses custom Text Before Links (see other options below).
+![text version](https://cloud.githubusercontent.com/assets/5882943/13897158/fe1494e8-ed63-11e5-82cf-34fd34db380a.PNG)
+* **Black Icons** - Checking the box defaults to a "black" social media icon set seen below, with one being hovered over for contrast.  
+![black icons](https://cloud.githubusercontent.com/assets/5882943/13897132/216a6680-ed63-11e5-94af-df628e4ff24f.PNG)
+* **Use Alternate Fontset** - There are two slightly different fontsets for the social media icons.  The default is
+![non-alternate font set](https://cloud.githubusercontent.com/assets/5882943/13897112/192fc984-ed62-11e5-90ba-299689c48cda.PNG)  
+Checking only the box for using the Alternate Fontset gives the following:
+![syndicatedto](https://cloud.githubusercontent.com/assets/5882943/13897081/e17f6bf8-ed60-11e5-990e-cb8a3965a818.PNG)
+* **Text Before Links** - This is the text that appears before the Display Text/Icons (as indicated above). The default text is "Syndicated to:" but can be modified if desired as seen in various forms in the pictures above.
+**Note**: some of the pictures above include WordPress's Share this iconography as well as their "Like this" functionality to help indicate where some of the above discussed functionality is found within the page. The particular CSS of your theme may change the display and output of the text and some of the icons.
+* **Add rel-me links to the Header** - Adds the rel-me links (in the field that follows) to the header of the page.
+* **List of Rel-Me Links for This Site** - List the URLS for the siloed social media accounts for the admin/author/site. Example: http://facebook.com/USERPROFILE. These can be used for setting up [Web Sign in on Your Own Domain](https://indiewebcamp.com/How_to_set_up_web_sign-in_on_your_own_domain).
 
 ## Credits ##
 
