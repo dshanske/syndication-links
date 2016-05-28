@@ -81,34 +81,31 @@
 .relsyn li a .svg-vimeo {
   color: #1AB7EA;
 }
-.relsyn li a a[href*="instagram.com"]::before, .relsyn li a .instagram::before {
+.relsyn li a .svg-instagram {
   color: #3f729b;
 }
-.relsyn li a a[href*="codepen.io"]::before {
+.relsyn li a .svg-codepen {
   color: #000;
 }
-.relsyn li a a[href*="linkedin.com"]::before {
+.relsyn li a .svg-linkedin, .relsyn li a .svg-linkedin-alt {
   color: #0e76a8;
 }
-.relsyn li a a[href*="skype.com"]::before, .relsyn li a li a[href*="skype:"]::before {
+.relsyn li a .svg-skype {
   color: #12A5F4;
 }
-.relsyn li a a[href*="reddit.com"]::before {
+.relsyn li a .svg-reddit {
   color: #000;
 }
-.relsyn li a a[href*="foursquare.com"]::before {
+.relsyn li a .svg-foursquare {
   color: #000;
 }
-.relsyn li a a[href*="getpocket.com"]::before {
+.relsyn li a .svg-pocket {
   color: #e61010;
 }
-.relsyn li a a[href*="dropbox.com"]::before {
+.relsyn li a .svg-dropbox {
   color: #007ee5;
 }
-.relsyn li a a[href*="news.indiewebcamp.com"]::before {
-  color: #000000;
-}
-.relsyn li a a[href*="wordpress.org"]::before, .relsyn li a .social-icon li a[href*="wordpress.com"]::before {
+.relsyn li a .svg-wordpress {
   color: #464646;
 }
 

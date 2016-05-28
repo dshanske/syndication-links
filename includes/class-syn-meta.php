@@ -137,8 +137,9 @@ class Syn_Meta {
   }
 
 	public static function get_icon( $domain ) {
-		// Supported social icons.
-			$social_icons =  array(
+		// Supportedicons.
+			$icons =  array(
+				'default'         => 'share',
 				'amazon.com'      => 'amazon', 
 				'behance.net'     => 'behance',
 				'blogspot.com'    => 'blogger',
@@ -154,11 +155,11 @@ class Syn_Meta {
 				'plus.google.com' => 'googleplus',
 				'github.com'      => 'github',
 				'instagram.com'   => 'instagram',
-				'linkedin.com'    => 'linkedin-alt',
+				'linkedin.com'    => 'linkedin',
 				'mailto:'         => 'mail',
 				'medium.com'      => 'medium',
 				'path.com'        => 'path',
-				'pinterest.com'   => 'pinterest-alt',
+				'pinterest.com'   => 'pinterest',
 				'getpocket.com'   => 'pocket',
 				'polldaddy.com'   => 'polldaddy',
 				// print
@@ -173,19 +174,22 @@ class Syn_Meta {
 				'telegram.org'    => 'telegram',
 				'tumblr.com'      => 'tumblr',
 				'twitch.tv'       => 'twitch',
-				'twitter.com'     => 'twitter-alt',
+				'twitter.com'     => 'twitter',
 				'vimeo.com'       => 'vimeo',
 				'whatsapp.com'    => 'whatsapp',
 				'wordpress.org'   => 'wordpress',
 				'wordpress.com'   => 'wordpress',
-				'youtube.com'     => 'youtube',
+				'youtube.com'     => 'youtube'
 			);
-		$social_icons = apply_filters( 'syndication_social_icons', $social_icons );
-		$icon = 'share';
-		if ( array_key_exists( $domain, $social_icons ) ) {
-				$icon = $social_icons[ $domain ];
+		// Substitute another domain to sprite map
+		$icons = apply_filters( 'syndication_domain_icons', $icons );
+		$icon = $icons['default'];
+		if ( array_key_exists( $domain, $icons ) ) {
+				$icon = $icons[ $domain ];
 		}
-    return '<svg class="svg-icon ' . 'svg-' . $icon . '" aria-hidden="true"><use xlink:href="' . plugin_dir_url( __FILE__ ) . 'social-logos.svg#' . $icon . '"></use><svg>';
+		// Substitute another svg sprite file
+		$sprite = apply_filters( 'syndication_icon_sprite', plugin_dir_url( __FILE__ ) . 'social-logos.svg', $domain );
+    return '<svg class="svg-icon ' . 'svg-' . $icon . '" aria-hidden="true"><use xlink:href="' . $sprite . '#' . $icon . '"></use><svg>';
 	}
 	
 
