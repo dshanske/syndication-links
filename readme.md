@@ -14,7 +14,7 @@ It supports adding rel-syndication/u-syndication links to your posts and pages, 
 
 ## Installation ##
 
-1. Upload the folder `syndication-links' to the `/wp-content/plugins/` directory
+1. Upload the folder `syndication-links` to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
 
 ## Upgrade Notice ##
