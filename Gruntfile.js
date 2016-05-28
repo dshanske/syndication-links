@@ -24,10 +24,6 @@ module.exports = function(grunt) {
           files: {                         // Dictionary of files
         'css/syn.min.css': 'sass/main.scss',       // 'destination': 'source'
         'css/syn-bw.min.css': 'sass/main-bw.scss',
-        'css/minimal.min.css': 'sass/minimal.scss',
-        'css/minimal-bw.min.css': 'sass/minimal-bw.scss',
-        'css/awesome.min.css': 'sass/main-awesome.scss',
-        'css/awesome-bw.min.css': 'sass/main-awesome-bw.scss',
          }
 	}
   },

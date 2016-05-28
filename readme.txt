@@ -14,8 +14,23 @@ It supports adding rel-syndication/u-syndication links to your posts and pages, 
 
 == Installation == 
 
-1. Upload the folder `syndication-links' to the `/wp-content/plugins/` directory
+1. Upload the folder 'syndication-links' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
+
+
+
+## Settings ##
+
+Settings for the Syndication Links plugin can be found in the main WordPress "Settings" tab in the admin dashboard, or if the Indieweb plugin is installed, under the Indieweb tab. The options provided allow for various ways of presenting the syndication links in posts. Syndication Links by default will add links to the content, but you can disable this for theme support.
+
+The settings include the following options as follows with either a check box (with a check indicating that the feature is "on") or an optional text field:
+
+* **Disable Syndication Links in the Content**	- When this option is checked, the icons with/without text as links to syndicated copies of the content are not displayed on your page.
+* **Display Text** - Checking the box includes the written text for each of the social media silo names following their icons.
+* **Black Icons** - Checking the box defaults to a "black" social media icon set. 
+* **Text Before Links** - This is the text that appears before the Display Text/Icons (as indicated above). The default text is "Syndicated to:" but can be modified if desired.
+
+**Note**: The particular CSS of your theme may change the display and output of the text and some of the icons.
 
 == Upgrade Notice == 
 
@@ -29,7 +44,7 @@ rel-me and h-card support from this plugin as this support is being built into t
 1. [Meitar Moscovitz](https://github.com/meitar) for fixes and code contributions
 2. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2)
 design.
-3. Jihaisse and Peter Molnar for the SNAP and Social Import, courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
+3. Jihaisse and Peter Molnar for the [SNAP](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) and [Social](https://github.com/crowdfavorite/wp-social) Import, courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
 4. Automattic for their [Social Logos](https://github.com/Automattic/social-logos/) icon library.
 
 == Changelog ==
