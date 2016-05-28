@@ -2,32 +2,27 @@
 Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE
 Requires at least: 4.1
-Tested up to: 4.4
-Stable tag: 2.0.3
+Tested up to: 4.5
+Stable tag: 3.0.0
 License: GPLv2 or later
 
-Simple way to link to copies of your post or presence elsewhere.
+Simple way to link to copies of your post elsewhere.
 
 == Description == 
 
-This plugin adds relational links to various parts of your site.
-
-1. It supports adding rel-syndication/u-syndication links to your posts, indicating where
-a syndicated copy is.
-2. It adds CSS that will, if the class 'social-icon' is attached to a link in
-a list, it will display the appropriate one if available. This allows the setup to be extended very easily. You can use this with a WordPress menu to create some social icons.
-3. Offers two icon sets: [Genericons](http://genericons.com) or [Font Awesome](http://fortawesome.github.io/Font-Awesome/icons/)
-4. Adds an h-card/vcard widget for a specific site author. (Under Development)
-5. Allows rel-me links to be placed in the head of the home page or in a widget to support RelMeAuth/IndieAuth
-
-== Future Plans ==
-
-3. Style the h-card/vcard widget with better design and optional rel-me/social icons.
+It supports adding rel-syndication/u-syndication links to your posts and pages, indicating where a syndicated copy is.
 
 == Installation == 
 
 1. Upload the folder `syndication-links' to the `/wp-content/plugins/` directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
+
+== Upgrade Notice == 
+
+= Version 3.0 =
+
+Version 3.0 removes the two sets of icon fonts in favor of SVG icons. If this is a concern, do not upgrade at this time. Version 3.0 also removes
+rel-me and h-card support from this plugin as this support is being built into the Indieweb plugin.
 
 == Credits ==
 
@@ -35,9 +30,18 @@ a list, it will display the appropriate one if available. This allows the setup 
 2. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2)
 design.
 3. Jihaisse and Peter Molnar for the SNAP and Social Import, courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
-
+4. Automattic for their [Social Logos](https://github.com/Automattic/social-logos/) icon library.
 
 == Changelog ==
+
+= Version 3.0.0 =
+	* Remove icon fonts in favor of SVG
+	* Remove rel-me support to move to implementation in Indieweb plugin
+	* Remove h-card support to move to implementation in Indieweb plugin (it wasn't very good anyway)
+	* Introduce new get_syndication_data function to abstract out storage
+
+= Version 2.1.0 = 
+	* Removed user meta code
 
 = Version 2.0.3 = 
 	* Minor Tweaks and Cleanup
@@ -88,13 +92,12 @@ design.
 = Supported POSSE plugins and implementations =
 
 The plugin supports pulling data from plugins that syndicate your content.
-Right now, it has experimental support for the Bridgy service.
 
 For anything not built in, it supports a filter 'syn_add_links' to add URLs,
 for potential use with any other plugin.
 
 
-* [Bridgy Publish](https://github.com/dshanske/bridgy-publish) - Coming to a Plugin Directory near you soon
+* [Bridgy Publish](https://wordpress.org/plugins/bridgy-publish) - Simple interface for Bridgy Publish
 * [Social](https://wordpress.org/plugins/social/) - Supports Twitter URL import
 * [Social Networks Autoposter](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) - Supports Twitter, Facebook, and Tumblr
 * [Tumblr Crosspostr](https://wordpress.org/plugins/tumblr-crosspostr) - Supports Syndication Links since version 0.8.1

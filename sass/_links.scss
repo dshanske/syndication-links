@@ -9,11 +9,17 @@
 	  padding-right: 5px;
     a {
 	    text-decoration: none;
+			color: black;
     }
     a:hover {
 	    text-decoration: none;
       cursor: pointer;
+			color: black;
 	  }
+		a:visited { 
+			text-decoration: none;
+			color: black;
+		}
   }
 }  
 

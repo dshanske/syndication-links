@@ -10,13 +10,13 @@ class Social_Plugins {
 	public static function add_syn_plugins($urls) {
 		$see_on = array();
 		if ( class_exists( 'Social' ) ) {
-			$see_on = self::getURLsFromSocial();
+			$see_on = self::add_links_from_social();
 		} elseif ( defined( 'NextScripts_SNAP_Version' ) ) {
-			$see_on = self::getURLsFromSNAP();
+			$see_on = self::add_links_from_SNAP();
 		}
 		return array_merge( $see_on, $urls );
 	}
-	public static function getURLsFromSocial() {
+	public static function add_links_from_social() {
 		$Social = new Social();
 		$ids = get_post_meta( get_the_ID(), '_social_broadcasted_ids', true );
 		$services = $Social->instance()->services();
@@ -29,10 +29,10 @@ class Social_Plugins {
 					foreach ( $ids[ $key ] as $user_id => $broadcasted ) {
 						$account = $service->account( $user_id );
 						foreach ( $broadcasted as $broadcasted_id => $data ) {
-							if ( $account === false ) {
+							if ( false === $account ) {
 								$class = 'Social_Service_'.$key.'_Account';
 								$account = new $class($data['account']);
-								if ( ! $account->has_user() and $key == 'twitter' ) {
+								if ( ! $account->has_user() and 'twitter' == $key ) {
 									$recovered = $service->recover_broadcasted_tweet_data( $broadcasted_id, $post->ID );
 									if ( isset( $recovered->user ) ) {
 										$data['account']->user = $recovered->user;
@@ -42,7 +42,7 @@ class Social_Plugins {
 							}
 							$broadcasted = esc_html( $service->title() );
 							if ( isset( $broadcasted_id ) ) {
-								if ( $account->has_user() or $service->key() != 'twitter' ) {
+								if ( $account->has_user() or 'twitter' !== $service->key() ) {
 									$url = $service->status_url( $account->username(), $broadcasted_id );
 									if ( ! empty( $url ) ) {
 										$broadcasts[]  = esc_url( $url );
@@ -57,7 +57,7 @@ class Social_Plugins {
 		return $broadcasts;
 	}
 
-	public static function getURLsFromSNAP() {
+	public static function add_links_from_SNAP() {
 		global $nxs_snapAvNts;
 		global $post;
 		$broadcasts = array();
@@ -97,7 +97,7 @@ class Social_Plugins {
 			if ( ! empty( $metas ) && is_array( $metas ) ) {
 				foreach ( $metas as $cntr => $m ) {
 					$url = false;
-					if ( isset( $m['isPosted'] ) && $m['isPosted'] == 1 ) {
+					if ( isset( $m['isPosted'] ) && 1 == $m['isPosted'] ) {
 						/*
 						this should be available for some services, for example Tumblr,
 						* but buggy and misses slashes so URL ends up invalid
@@ -109,9 +109,9 @@ class Social_Plugins {
 						$base = (isset( $urlmap[ $serv['code'] ]['url'] )) ? $urlmap[ $serv['code'] ]['url'] : false;
 						if ( $base != false ) {
 							/* Facebook exception, why not */
-							if ( $serv['code'] == 'FB' ) {
+							if ( 'FB' == $serv['code'] ) {
 								$pos = strpos( $m['pgID'],'_' );
-								$pgID = ( $pos == false ) ? $m['pgID'] : substr( $m['pgID'], $pos + 1 );
+								$pgID = ( false == $pos ) ? $m['pgID'] : substr( $m['pgID'], $pos + 1 );
 							} else {
 								$pgID = $m['pgID'];
 							}
@@ -121,7 +121,7 @@ class Social_Plugins {
 							$url = str_replace( $search, $replace, $base );
 						}
 						/* } */
-						if ( $url != false ) {
+						if ( false != $url ) {
 							$url = preg_replace( '~(^|[^:])//+~', '\\1/', $url );
 							$broadcasts[] = $url;
 						}

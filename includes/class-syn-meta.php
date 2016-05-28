@@ -1,14 +1,14 @@
 <?php
 // Adds Post Meta Box for Syndication URLs
-add_action( 'init' , array( 'syn_meta', 'init' ) );
+add_action( 'init' , array( 'Syn_Meta', 'init' ) );
 
-// The syn_meta class sets up post meta boxes for data associated with Syndication
-class syn_meta {
+// The Syn_Meta class sets up post meta boxes for data associated with Syndication
+class Syn_Meta {
 	public static function init() {
 		// Add meta box to new post/post pages only
-		add_action( 'load-post.php', array( 'syn_meta', 'setup' ) );
-		add_action( 'load-post-new.php', array( 'syn_meta', 'setup' ) );
-		add_action( 'save_post', array( 'syn_meta', 'save_post_meta' ) );
+		add_action( 'load-post.php', array( 'Syn_Meta', 'setup' ) );
+		add_action( 'load-post-new.php', array( 'Syn_Meta', 'setup' ) );
+		add_action( 'save_post', array( 'Syn_Meta', 'save_post_meta' ) );
 	}
 
 	/*
@@ -19,7 +19,7 @@ class syn_meta {
 	 * @uses clean_url
 	 */
 	public static function clean_urls($urls) {
-		$array = array_map( array( 'syn_meta', 'clean_url' ), $urls );
+		$array = array_map( array( 'Syn_Meta', 'clean_url' ), $urls );
 		return array_filter( array_unique( $array ) );
 	}
 
@@ -47,7 +47,7 @@ class syn_meta {
 	/* Meta box setup function. */
 	public static function setup() {
 		/* Add meta boxes on the 'add_meta_boxes' hook. */
-		add_action( 'add_meta_boxes', array( 'syn_meta', 'add_meta_boxes' ) );
+		add_action( 'add_meta_boxes', array( 'Syn_Meta', 'add_meta_boxes' ) );
 	}
 
 	/* Create one or more meta boxes to be displayed on the post editor screen. */
@@ -58,7 +58,7 @@ class syn_meta {
 			add_meta_box(
 				'synbox-meta',      // Unique ID
 				esc_html__( 'Syndication Links', 'Syn Links' ),    // Title
-				array( 'syn_meta', 'metabox' ),   // Callback function
+				array( 'Syn_Meta', 'metabox' ),   // Callback function
 				$screen,         // Admin page (or post type)
 				'normal',         // Context
 				'default'         // Priority
@@ -96,7 +96,7 @@ class syn_meta {
 			return;
 		}
 		// Check the user's permissions.
-		if ( isset( $_POST['post_type'] ) && 'page' == $_POST['post_type'] ) {
+		if ( isset( $_POST['post_type'] ) && 'page' === $_POST['post_type'] ) {
 			if ( ! current_user_can( 'edit_page', $post_id ) ) {
 				return;
 			}
@@ -114,42 +114,140 @@ class syn_meta {
 			}
 		}
 	}
-} // End Class
 
-function get_syndication_links() {
-	$options = get_option( 'syndication_content_options' );
-	$urls = explode( "\n", get_post_meta( get_the_ID(), 'syndication_urls', true ) );
-	// Mf2_syndication is used by the Micropub plugin
-	$mf2 = explode( "\n", get_post_meta( get_the_ID(), 'mf2_syndication', true ) );
-	// Clean and dudupe
-	$urls = syn_meta::clean_urls( array_merge( $urls, $mf2 ) );
-	// Allow URLs to be added by other plugins
-	$urls = apply_filters( 'syn_add_links', $urls );
-	if ( ! empty( $urls ) ) {
-		$strings = get_syn_network_strings();
-		$synlinks = '<span class="relsyn social-icon"><ul>' . $options['text_before'];
+	public static function get_network_strings() {
+		$strings = array(
+			'twitter.com' => _x( 'Twitter', 'Syn Links' ),
+			'facebook.com' => _x( 'Facebook', 'Syn Links' ),
+			'plus.google.com' => _x( 'Google+', 'Syn Links' ),
+			'instagram.com' => _x( 'Instagram', 'Syn Links' ),
+			'flickr.com' => _x( 'Flickr', 'Syn Links' ),
+			'youtube.com' => _x( 'YouTube', 'Syn Links' ),
+			'linkedin.com' => _x( 'LinkedIn', 'Syn Links' ),
+			'tumblr.com' => _x( 'Tumblr', 'Syn Links' ),
+			'wordpress.com' => _x( 'WordPress', 'Syn Links' ),
+			'news.indiewebcamp.com' => _x( 'IndieNews', 'Syn Links' ),
+		);
+		return apply_filters( 'syn_network_strings', $strings );
+	}
+
+	public static function extract_domain_name($url) {
+		$parse = wp_parse_url( $url );
+		return preg_replace( '/^www\./', '', $parse['host'] );
+  }
+
+	public static function get_icon( $domain ) {
+		// Supported social icons.
+			$social_icons =  array(
+				'amazon.com'      => 'amazon', 
+				'behance.net'     => 'behance',
+				'blogspot.com'    => 'blogger',
+				'codepen.io'      => 'codepen',
+				'dribbble.com'    => 'dribbble',
+				'dropbox.com'     => 'dropbox',
+				'eventbrite.com'  => 'eventbrite',
+				'facebook.com'    => 'facebook',
+				'flickr.com'      => 'flickr',
+				// feed
+				'foursquare.com'  => 'foursquare',
+				'ghost.org' 					=> 'ghost',
+				'plus.google.com' => 'googleplus',
+				'github.com'      => 'github',
+				'instagram.com'   => 'instagram',
+				'linkedin.com'    => 'linkedin-alt',
+				'mailto:'         => 'mail',
+				'medium.com'      => 'medium',
+				'path.com'        => 'path',
+				'pinterest.com'   => 'pinterest-alt',
+				'getpocket.com'   => 'pocket',
+				'polldaddy.com'   => 'polldaddy',
+				// print
+				'reddit.com'      => 'reddit',
+				'squarespace.com' => 'squarespace',
+				'skype.com'       => 'skype',
+				'skype:'          => 'skype',
+				// share
+				'soundcloud.com'  => 'cloud',
+				'spotify.com'     => 'spotify',
+				'stumbleupon.com' => 'stumbleupon',
+				'telegram.org'    => 'telegram',
+				'tumblr.com'      => 'tumblr',
+				'twitch.tv'       => 'twitch',
+				'twitter.com'     => 'twitter-alt',
+				'vimeo.com'       => 'vimeo',
+				'whatsapp.com'    => 'whatsapp',
+				'wordpress.org'   => 'wordpress',
+				'wordpress.com'   => 'wordpress',
+				'youtube.com'     => 'youtube',
+			);
+		$social_icons = apply_filters( 'syndication_social_icons', $social_icons );
+		$icon = 'share';
+		if ( array_key_exists( $domain, $social_icons ) ) {
+				$icon = $social_icons[ $domain ];
+		}
+    return '<svg class="svg-icon ' . 'svg-' . $icon . '" aria-hidden="true"><use xlink:href="' . plugin_dir_url( __FILE__ ) . 'social-logos.svg#' . $icon . '"></use><svg>';
+	}
+	
+
+
+
+	public static function get_syndication_links_data( $post_ID = null ) {
+		if ( ! $post_ID ) {
+			$post_ID = get_the_ID();
+		}
+		$urls = explode( "\n", get_post_meta( $post_ID, 'syndication_urls', true ) );
+		// Mf2_syndication is used by the Micropub plugin
+		$mf2 = explode( "\n", get_post_meta( $post_ID, 'mf2_syndication', true ) );
+		// Clean and dudupe
+		$urls = Syn_Meta::clean_urls( array_merge( $urls, $mf2 ) );
+		// Allow URLs to be added by other plugins
+		return apply_filters( 'syn_add_links', $urls, $post_ID );
+	}
+
+
+	public static function get_syndication_links( $post_ID = null ) {
+		$options = get_option( 'syndication_content_options' );
+		if ( ! $post_ID ) {
+			$post_ID = get_the_ID();
+		}
+		$urls = self::get_syndication_links_data( $post_ID );
+		if ( empty( $urls ) ) {
+			return '';
+		}
+		$strings = self::get_network_strings();
+		$single = is_single( $post_ID );
+		$synlinks = '<span class="relsyn"><ul>' . $options['text_before'];
 		foreach ( $urls as $url ) {
 			if ( empty( $url ) ) { continue; }
-			$domain = extract_domain_name( $url );
+			$domain = self::extract_domain_name( $url );
 			if ( array_key_exists( $domain, $strings ) ) {
 				$name = $strings[ $domain ];
 			} else {
 				$name = $domain;
 			}
 			$synlinks .= '<li><a title="' . $name . '" class="u-syndication" href="' . esc_url( $url ) . '"';
-			if ( is_single() ) {
+			if ( $single ) {
 				$synlinks .= ' rel="syndication">';
+        $synlinks .= self::get_icon( $domain );
 			} else {
 				$synlinks .= '>';
+        $synlinks .= self::get_icon( $domain );
+//				if ( '1' === $options['just_icons'] ) {
+					$synlinks .= $name;
+//				}
+				$synlinks .= '</a></li>';
 			}
-			if ( $options['just_icons'] == '1' ) {
-				$synlinks .= $name;
-			}
-			$synlinks .= '</a></li>';
 		}
-		$synlinks .= '</ul></span>';
+    $synlinks .= '</ul></span>';
+		return $synlinks;
+
 	}
-		return (empty( $synlinks )) ? '' : $synlinks;
+
+} // End Class
+
+
+function get_syndication_links( $post_ID = null ) {
+	return Syn_Meta::get_syndication_links( $post_ID );
 }
 
 ?>
