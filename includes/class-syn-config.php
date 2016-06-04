@@ -9,9 +9,6 @@ class Syn_Config {
 		if ( $option['the_content'] != '1' ) {
 			add_filter( 'the_content', array( 'Syn_Config', 'the_content' ) , 20 );
 		}
-		if ( $option['head'] == 1 ) {
-			add_action( 'wp_head', array( 'Syn_Config', 'head_relme_links' ), 99 );
-		}
 		add_action( 'admin_menu', array( 'Syn_Config', 'admin_menu' ), 11 );
 		add_action( 'admin_init', array( 'Syn_Config', 'admin_init' ) );
 	}
