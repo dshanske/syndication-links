@@ -164,7 +164,7 @@ class Syn_Meta {
 				// feed
 				'foursquare.com'  => 'foursquare',
 				'ghost.org' 					=> 'ghost',
-				'plus.google.com' => 'googleplus',
+				'plus.google.com' => 'google-plus',
 				'github.com'      => 'github',
 				'instagram.com'   => 'instagram',
 				'linkedin.com'    => 'linkedin',
