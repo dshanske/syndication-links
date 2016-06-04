@@ -9,7 +9,19 @@ class Syn_Meta {
 		add_action( 'load-post.php', array( 'Syn_Meta', 'setup' ) );
 		add_action( 'load-post-new.php', array( 'Syn_Meta', 'setup' ) );
 		add_action( 'save_post', array( 'Syn_Meta', 'save_post_meta' ) );
+
+    // Return Syndication URLs as part of the JSON Rest API
+    add_filter( 'json_prepare_post', array( 'Syn_Meta', 'json_rest_add_synmeta' ),10,3 );
 	}
+
+  public static function json_rest_add_synmeta($_post,$post,$context) {
+		$syn = self::get_syndication_links_data( $post['ID'] );
+    if ( ! empty( $syn ) ) {
+      $urls = explode( "\n", $syn );
+      $_post['syndication'] = $urls;
+    }
+    return $_post;
+  }
 
 	/*
 	Filters incoming URLs.
@@ -134,13 +146,13 @@ class Syn_Meta {
 	public static function extract_domain_name($url) {
 		$parse = wp_parse_url( $url );
 		return preg_replace( '/^www\./', '', $parse['host'] );
-  }
+	}
 
 	public static function get_icon( $domain ) {
 		// Supportedicons.
-			$icons =  array(
+			$icons = array(
 				'default'         => 'share',
-				'amazon.com'      => 'amazon', 
+				'amazon.com'      => 'amazon',
 				'behance.net'     => 'behance',
 				'blogspot.com'    => 'blogger',
 				'codepen.io'      => 'codepen',
@@ -179,19 +191,19 @@ class Syn_Meta {
 				'whatsapp.com'    => 'whatsapp',
 				'wordpress.org'   => 'wordpress',
 				'wordpress.com'   => 'wordpress',
-				'youtube.com'     => 'youtube'
+				'youtube.com'     => 'youtube',
 			);
-		// Substitute another domain to sprite map
-		$icons = apply_filters( 'syndication_domain_icons', $icons );
-		$icon = $icons['default'];
-		if ( array_key_exists( $domain, $icons ) ) {
+			// Substitute another domain to sprite map
+			$icons = apply_filters( 'syndication_domain_icons', $icons );
+			$icon = $icons['default'];
+			if ( array_key_exists( $domain, $icons ) ) {
 				$icon = $icons[ $domain ];
-		}
-		// Substitute another svg sprite file
-		$sprite = apply_filters( 'syndication_icon_sprite', plugin_dir_url( __FILE__ ) . 'social-logos.svg', $domain );
-    return '<svg class="svg-icon ' . 'svg-' . $icon . '" aria-hidden="true"><use xlink:href="' . $sprite . '#' . $icon . '"></use><svg>';
+			}
+			// Substitute another svg sprite file
+			$sprite = apply_filters( 'syndication_icon_sprite', plugin_dir_url( __FILE__ ) . 'social-logos.svg', $domain );
+			return '<svg class="svg-icon ' . 'svg-' . $icon . '" aria-hidden="true"><use xlink:href="' . $sprite . '#' . $icon . '"></use><svg>';
 	}
-	
+
 
 
 
@@ -232,17 +244,17 @@ class Syn_Meta {
 			$synlinks .= '<li><a title="' . $name . '" class="u-syndication" href="' . esc_url( $url ) . '"';
 			if ( $single ) {
 				$synlinks .= ' rel="syndication">';
-        $synlinks .= self::get_icon( $domain );
+				$synlinks .= self::get_icon( $domain );
 			} else {
 				$synlinks .= '>';
-        $synlinks .= self::get_icon( $domain );
-//				if ( '1' === $options['just_icons'] ) {
+				$synlinks .= self::get_icon( $domain );
+				if ( '1' === $options['just_icons'] ) {
 					$synlinks .= $name;
-//				}
+				}
 				$synlinks .= '</a></li>';
 			}
 		}
-    $synlinks .= '</ul></span>';
+		$synlinks .= '</ul></span>';
 		return $synlinks;
 
 	}

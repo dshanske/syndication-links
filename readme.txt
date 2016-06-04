@@ -37,7 +37,8 @@ The settings include the following options as follows with either a check box (w
 = Version 3.0 =
 
 Version 3.0 removes the two sets of icon fonts in favor of SVG icons. If this is a concern, do not upgrade at this time. Version 3.0 also removes
-rel-me and h-card support from this plugin as this support is being built into the Indieweb plugin.
+rel-me support from this plugin as this support is being built into the Indieweb plugin. Please install that. H-Card support is no longer
+supported and will be removed in a future version.
 
 == Credits ==
 

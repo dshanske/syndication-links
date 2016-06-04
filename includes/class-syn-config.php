@@ -5,8 +5,6 @@ add_action( 'init', array( 'Syn_Config', 'init' ) );
 class Syn_Config {
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( 'Syn_Config', 'enqueue_scripts' ) );
-		// Return Syndication URLs as part of the JSON Rest API
-		add_filter( 'json_prepare_post', array( 'Syn_Config', 'json_rest_add_synmeta' ),10,3 );
 		$option = get_option( 'syndication_content_options' );
 		if ( $option['the_content'] != '1' ) {
 			add_filter( 'the_content', array( 'Syn_Config', 'the_content' ) , 20 );
@@ -35,17 +33,6 @@ class Syn_Config {
 		add_settings_field( 'just_icons', __( 'Display Text', 'Syn Links' ), array( 'Syn_Config', 'content_callback' ), 'links_options', 'syndication-content',  array( 'name' => 'just_icons' ) );
 		add_settings_field( 'bw', __( 'Black Icons', 'Syn Links' ), array( 'Syn_Config', 'content_callback' ), 'links_options', 'syndication-content',  array( 'name' => 'bw' ) );
 		add_settings_field( 'text_before', __( 'Text Before Links', 'Syn Links' ), array( 'Syn_Config', 'text_before_callback' ), 'links_options', 'syndication-content' );
-		add_settings_field( 'head', __( 'Add rel-me links to the Header', 'Syn Links' ), array( 'Syn_Config', 'content_callback' ), 'links_options', 'syndication-content',  array( 'name' => 'head' ) );
-		add_settings_field( 'relme_links', __( 'List of Rel-Me Links for This Site' ), array( 'Syn_Config', 'relme_input' ), 'links_options', 'syndication-content' );
-	}
-
-	public static function relme_input() {
-		$options = get_option( 'syndication_content_options' );
-		$name = 'relme_links';
-		echo "<p><label for='relme_links'> One URL per line.</label></p>";
-		echo "<textarea name='syndication_content_options[$name]' rows='10' cols='50' class='large-text code'>";
-		if ( ! empty( $options['relme_links'] ) ) {echo $options['relme_links']; }
-		echo '</textarea>';
 	}
 
 	public static function admin_menu() {
@@ -67,7 +54,7 @@ class Syn_Config {
 	public static function options_callback() {
 		esc_html_e( 'Options for Presenting Syndication Links in Posts.', 'Syn Links' );
 		echo '<p>';
-		esc_html_e( 'Syndication Links by default will add links to the content. You can disable this for theme support. It also provides support for rel-me links, either through a widget or invisibly adding them to the page.', 'Syn Links' );
+		esc_html_e( 'Syndication Links by default will add links to the content. You can disable this for theme support.', 'Syn Links' );
 		echo '</p>';
 	}
 
@@ -98,34 +85,8 @@ class Syn_Config {
 		echo '</form>' . '</div>';
 	}
 
-	public static function json_rest_add_synmeta($_post,$post,$context) {
-		$syn = get_post_meta( $post['ID'], 'syndication_urls' );
-		if ( ! empty( $syn ) ) {
-			$urls = explode( "\n", $syn );
-			$_post['syndication'] = $urls;
-		}
-		return $_post;
-	}
-
 	public static function the_content($meta = '' ) {
 		return $meta . get_syndication_links();
-	}
-
-	public static function head_relme_links() {
-		global $post;
-		if ( ! is_front_page() ) { return; }
-		/* get options */
-		$options = get_option( 'syndication_content_options' );
-		$urls = explode( "\n", $options['relme_links'] );
-		$urls = syn_meta::clean_urls( $urls );
-		// Allow URLs to be added by other plugins
-		$urls = apply_filters( 'syn_head_links', $urls );
-		if ( ! empty( $urls ) ) {
-			foreach ( $urls as $url ) {
-				if ( empty( $url ) ) { continue; }
-				echo '<link rel="me" href="' . $url . '" />' . "\n";
-			}
-		}
 	}
 
 } // End Class
