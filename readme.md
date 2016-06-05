@@ -3,7 +3,7 @@
 **Tags:** syndication, indieweb, indiewebcamp, POSSE  
 **Requires at least:** 4.1  
 **Tested up to:** 4.5  
-**Stable tag:** 3.0.0  
+**Stable tag:** 3.0.1  
 **License:** GPLv2 or later  
 
 Simple way to link to copies of your post elsewhere.

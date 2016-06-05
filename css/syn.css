@@ -19,6 +19,14 @@
   display: inline-block;
   padding-right: 5px;
 }
+.relsyn ul li .svg-icon, .relmewidget ul li .svg-icon {
+  fill: currentColor;
+  height: 1.2em;
+  width: 1.2em;
+  vertical-align: middle;
+  /*  position: relative;  Align more nicely with capital letters */
+  top: -0.0625em;
+}
 .relsyn ul li a, .relmewidget ul li a {
   text-decoration: none;
   color: black;
@@ -36,18 +44,6 @@
 /*--------------------------------------------------------------
 * SVG
 --------------------------------------------------------------*/
-.svg-icon {
-  fill: currentColor;
-  height: 1.2em;
-  width: 1.2em;
-  vertical-align: middle;
-  /*	position: relative;  Align more nicely with capital letters */
-  top: -0.0625em;
-}
-.svg-icon svg {
-  display: inline-block;
-}
-
 .relsyn li a .svg-facebook {
   color: #3b5998;
 }
@@ -60,7 +56,7 @@
 .relsyn li a .svg-dribbble {
   color: #ea4c89;
 }
-.relsyn li a .svg-googleplus, .relsyn li a .svg-googleplus-alt {
+.relsyn li a .svg-google-plus, .relsyn li a .svg-google-plus-alt {
   color: #dd4b39;
 }
 .relsyn li a .svg-pinterest, .relsyn li a .svg-pinterest-alt {
