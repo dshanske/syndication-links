@@ -27,6 +27,9 @@
   /*  position: relative;  Align more nicely with capital letters */
   top: -0.0625em;
 }
+.relsyn ul li .syn-name, .relmewidget ul li .syn-name {
+  font-size: .8em;
+}
 .relsyn ul li a, .relmewidget ul li a {
   text-decoration: none;
   color: black;

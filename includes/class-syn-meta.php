@@ -244,13 +244,13 @@ class Syn_Meta {
 			$synlinks .= '<li><a title="' . $name . '" class="u-syndication" href="' . esc_url( $url ) . '"';
 			if ( $single ) {
 				$synlinks .= ' rel="syndication">';
+				if ( '1' === $options['just_icons'] ) {
+					$synlinks .= '<span class="syn-name">' . $name . '</span>';
+				}
 				$synlinks .= self::get_icon( $domain );
 			} else {
 				$synlinks .= '>';
 				$synlinks .= self::get_icon( $domain );
-				if ( '1' === $options['just_icons'] ) {
-					$synlinks .= $name;
-				}
 				$synlinks .= '</a></li>';
 			}
 		}
