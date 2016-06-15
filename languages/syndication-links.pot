@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Syndication Links package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Syndication Links 3.0.0\n"
+"Project-Id-Version: Syndication Links 3.0.3\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2016-06-04 17:40:09+00:00\n"
+"POT-Creation-Date: 2016-06-15 05:59:42+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,93 +13,83 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 
+#: build/tags/3.0.2/includes/class-hcard-widget.php:14
 #: build/trunk/includes/class-hcard-widget.php:14
 #: includes/class-hcard-widget.php:14
 msgid "A widget that allows you to display h-cards for a specific author"
 msgstr ""
 
+#: build/tags/3.0.2/includes/class-hcard-widget.php:133
 #: build/trunk/includes/class-hcard-widget.php:133
 #: includes/class-hcard-widget.php:133
 msgid "Display Author:"
 msgstr ""
 
+#: build/tags/3.0.2/includes/class-hcard-widget.php:142
 #: build/trunk/includes/class-hcard-widget.php:142
 #: includes/class-hcard-widget.php:142
 msgid "Avatar Size:"
 msgstr ""
 
-#: build/trunk/includes/class-relme-widget.php:14
-msgid "A widget that allows you to display rel-me links as icons for a site"
-msgstr ""
-
-#: build/trunk/includes/class-syn-config.php:41
-#: includes/class-syn-config.php:31
+#: build/tags/3.0.2/includes/class-syn-config.php:28
+#: build/trunk/includes/class-syn-config.php:28
+#: includes/class-syn-config.php:28
 msgid "Content Options"
 msgstr ""
 
-#: build/trunk/includes/class-syn-config.php:42
-#: includes/class-syn-config.php:32
+#: build/tags/3.0.2/includes/class-syn-config.php:29
+#: build/trunk/includes/class-syn-config.php:29
+#: includes/class-syn-config.php:29
 msgid "Disable Syndication Links in the Content"
 msgstr ""
 
-#: build/trunk/includes/class-syn-config.php:43
-#: includes/class-syn-config.php:33
+#: build/tags/3.0.2/includes/class-syn-config.php:30
+#: build/trunk/includes/class-syn-config.php:30
+#: includes/class-syn-config.php:30
 msgid "Display Text"
 msgstr ""
 
-#: build/trunk/includes/class-syn-config.php:44
-#: includes/class-syn-config.php:34
+#: build/tags/3.0.2/includes/class-syn-config.php:31
+#: build/trunk/includes/class-syn-config.php:31
+#: includes/class-syn-config.php:31
 msgid "Black Icons"
 msgstr ""
 
-#: build/trunk/includes/class-syn-config.php:45
-msgid "Use Alternate Fontset"
-msgstr ""
-
-#: build/trunk/includes/class-syn-config.php:46
-#: includes/class-syn-config.php:35
+#: build/tags/3.0.2/includes/class-syn-config.php:32
+#: build/trunk/includes/class-syn-config.php:32
+#: includes/class-syn-config.php:32
 msgid "Text Before Links"
-msgstr ""
-
-#: build/trunk/includes/class-syn-config.php:47
-msgid "Add rel-me links to the Header"
-msgstr ""
-
-#: build/trunk/includes/class-syn-config.php:48
-msgid "List of Rel-Me Links for This Site"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
 msgid "Syndication Links"
 msgstr ""
 
-#: build/trunk/includes/class-syn-config.php:77
-#: includes/class-syn-config.php:55
+#: build/tags/3.0.2/includes/class-syn-config.php:52
+#: build/trunk/includes/class-syn-config.php:52
+#: includes/class-syn-config.php:52
 msgid "Options for Presenting Syndication Links in Posts."
 msgstr ""
 
-#: build/trunk/includes/class-syn-config.php:79
+#: build/tags/3.0.2/includes/class-syn-config.php:54
+#: build/trunk/includes/class-syn-config.php:54
+#: includes/class-syn-config.php:54
 msgid ""
 "Syndication Links by default will add links to the content. You can disable "
-"this for theme support. It also provides support for rel-me links, either "
-"through a widget or invisibly adding them to the page."
+"this for theme support."
 msgstr ""
 
-#: build/trunk/includes/class-syn-config.php:101
-#: includes/class-syn-config.php:79
+#: build/tags/3.0.2/includes/class-syn-config.php:76
+#: build/trunk/includes/class-syn-config.php:76
+#: includes/class-syn-config.php:76
 msgid ""
 "Adds optional syndication links for various sites. Syndication is the act "
 "of posting your content on other sites."
 msgstr ""
 
-#: build/trunk/includes/class-syn-meta.php:73 includes/class-syn-meta.php:85
+#: build/tags/3.0.2/includes/class-syn-meta.php:85
+#: build/trunk/includes/class-syn-meta.php:85 includes/class-syn-meta.php:85
 msgid "One URL per line."
-msgstr ""
-
-#: includes/class-syn-config.php:57
-msgid ""
-"Syndication Links by default will add links to the content. You can disable "
-"this for theme support."
 msgstr ""
 
 #. Plugin URI of the plugin/theme
@@ -118,52 +108,62 @@ msgstr ""
 msgid "http://david.shanske.com"
 msgstr ""
 
-#: build/trunk/includes/class-syn-meta.php:120 includes/class-syn-meta.php:132
+#: build/tags/3.0.2/includes/class-syn-meta.php:132
+#: build/trunk/includes/class-syn-meta.php:132 includes/class-syn-meta.php:132
 msgctxt "Syn Links"
 msgid "Twitter"
 msgstr ""
 
-#: build/trunk/includes/class-syn-meta.php:121 includes/class-syn-meta.php:133
+#: build/tags/3.0.2/includes/class-syn-meta.php:133
+#: build/trunk/includes/class-syn-meta.php:133 includes/class-syn-meta.php:133
 msgctxt "Syn Links"
 msgid "Facebook"
 msgstr ""
 
-#: build/trunk/includes/class-syn-meta.php:122 includes/class-syn-meta.php:134
+#: build/tags/3.0.2/includes/class-syn-meta.php:134
+#: build/trunk/includes/class-syn-meta.php:134 includes/class-syn-meta.php:134
 msgctxt "Syn Links"
 msgid "Google+"
 msgstr ""
 
-#: build/trunk/includes/class-syn-meta.php:123 includes/class-syn-meta.php:135
+#: build/tags/3.0.2/includes/class-syn-meta.php:135
+#: build/trunk/includes/class-syn-meta.php:135 includes/class-syn-meta.php:135
 msgctxt "Syn Links"
 msgid "Instagram"
 msgstr ""
 
-#: build/trunk/includes/class-syn-meta.php:124 includes/class-syn-meta.php:136
+#: build/tags/3.0.2/includes/class-syn-meta.php:136
+#: build/trunk/includes/class-syn-meta.php:136 includes/class-syn-meta.php:136
 msgctxt "Syn Links"
 msgid "Flickr"
 msgstr ""
 
-#: build/trunk/includes/class-syn-meta.php:125 includes/class-syn-meta.php:137
+#: build/tags/3.0.2/includes/class-syn-meta.php:137
+#: build/trunk/includes/class-syn-meta.php:137 includes/class-syn-meta.php:137
 msgctxt "Syn Links"
 msgid "YouTube"
 msgstr ""
 
-#: build/trunk/includes/class-syn-meta.php:126 includes/class-syn-meta.php:138
+#: build/tags/3.0.2/includes/class-syn-meta.php:138
+#: build/trunk/includes/class-syn-meta.php:138 includes/class-syn-meta.php:138
 msgctxt "Syn Links"
 msgid "LinkedIn"
 msgstr ""
 
-#: build/trunk/includes/class-syn-meta.php:127 includes/class-syn-meta.php:139
+#: build/tags/3.0.2/includes/class-syn-meta.php:139
+#: build/trunk/includes/class-syn-meta.php:139 includes/class-syn-meta.php:139
 msgctxt "Syn Links"
 msgid "Tumblr"
 msgstr ""
 
-#: build/trunk/includes/class-syn-meta.php:128 includes/class-syn-meta.php:140
+#: build/tags/3.0.2/includes/class-syn-meta.php:140
+#: build/trunk/includes/class-syn-meta.php:140 includes/class-syn-meta.php:140
 msgctxt "Syn Links"
 msgid "WordPress"
 msgstr ""
 
-#: build/trunk/includes/class-syn-meta.php:129 includes/class-syn-meta.php:141
+#: build/tags/3.0.2/includes/class-syn-meta.php:141
+#: build/trunk/includes/class-syn-meta.php:141 includes/class-syn-meta.php:141
 msgctxt "Syn Links"
 msgid "IndieNews"
 msgstr ""

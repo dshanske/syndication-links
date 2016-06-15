@@ -251,12 +251,11 @@ class Syn_Meta {
 			} else {
 				$synlinks .= '>';
 				$synlinks .= self::get_icon( $domain );
-				$synlinks .= '</a></li>';
+				}
+			$synlinks .= '</a></li>';
 			}
-		}
 		$synlinks .= '</ul></span>';
 		return $synlinks;
-
 	}
 
 } // End Class

@@ -3,7 +3,7 @@
 **Tags:** syndication, indieweb, indiewebcamp, POSSE  
 **Requires at least:** 4.1  
 **Tested up to:** 4.5.2  
-**Stable tag:** 3.0.2  
+**Stable tag:** 3.0.3  
 **License:** GPLv2 or later  
 
 Simple way to link to copies of your post elsewhere.
@@ -49,6 +49,9 @@ design.
 4. Automattic for their [Social Logos](https://github.com/Automattic/social-logos/) icon library.
 
 ## Changelog ##
+
+### Version 3.0.2 ###
+	* Adjust close bracket
 
 ### Version 3.0.1 ###
 	* Fix text display issue
