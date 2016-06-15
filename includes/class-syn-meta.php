@@ -248,6 +248,7 @@ class Syn_Meta {
 					$synlinks .= '<span class="syn-name">' . $name . '</span>';
 				}
 				$synlinks .= self::get_icon( $domain );
+				$synlinks .= '</a></li>';
 			} else {
 				$synlinks .= '>';
 				$synlinks .= self::get_icon( $domain );
