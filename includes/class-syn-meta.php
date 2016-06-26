@@ -10,18 +10,18 @@ class Syn_Meta {
 		add_action( 'load-post-new.php', array( 'Syn_Meta', 'setup' ) );
 		add_action( 'save_post', array( 'Syn_Meta', 'save_post_meta' ) );
 
-    // Return Syndication URLs as part of the JSON Rest API
-    add_filter( 'json_prepare_post', array( 'Syn_Meta', 'json_rest_add_synmeta' ),10,3 );
+		// Return Syndication URLs as part of the JSON Rest API
+		add_filter( 'json_prepare_post', array( 'Syn_Meta', 'json_rest_add_synmeta' ),10,3 );
 	}
 
-  public static function json_rest_add_synmeta($_post,$post,$context) {
+	public static function json_rest_add_synmeta($_post,$post,$context) {
 		$syn = self::get_syndication_links_data( $post['ID'] );
-    if ( ! empty( $syn ) ) {
-      $urls = explode( "\n", $syn );
-      $_post['syndication'] = $urls;
-    }
-    return $_post;
-  }
+		if ( ! empty( $syn ) ) {
+			$urls = explode( "\n", $syn );
+			$_post['syndication'] = $urls;
+		}
+		return $_post;
+	}
 
 	/*
 	Filters incoming URLs.
