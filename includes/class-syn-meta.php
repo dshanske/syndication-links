@@ -81,10 +81,10 @@ class Syn_Meta {
 	public static function metabox( $object, $box ) {
 		wp_nonce_field( 'syn_metabox', 'syn_metabox_nonce' );
 		$meta = get_post_meta( $object->ID, 'syndication_urls', true );
-		echo '<p><label>';
+		echo '<p><label for="syndication_urls">';
 		_e( 'One URL per line.', 'Syn Links' );
 		echo '</label></p>';
-		echo "<textarea name='syndication_urls' rows='4' cols='70'>";
+		echo '<textarea name="syndication_urls" id="syndication_urls" style="width:99%" rows="4" cols="40">';
 		if ( ! empty( $meta ) ) {echo $meta; }
 		echo '</textarea>';
 	}
