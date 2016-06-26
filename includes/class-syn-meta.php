@@ -10,18 +10,18 @@ class Syn_Meta {
 		add_action( 'load-post-new.php', array( 'Syn_Meta', 'setup' ) );
 		add_action( 'save_post', array( 'Syn_Meta', 'save_post_meta' ) );
 
-    // Return Syndication URLs as part of the JSON Rest API
-    add_filter( 'json_prepare_post', array( 'Syn_Meta', 'json_rest_add_synmeta' ),10,3 );
+		// Return Syndication URLs as part of the JSON Rest API
+		add_filter( 'json_prepare_post', array( 'Syn_Meta', 'json_rest_add_synmeta' ),10,3 );
 	}
 
-  public static function json_rest_add_synmeta($_post,$post,$context) {
+	public static function json_rest_add_synmeta($_post,$post,$context) {
 		$syn = self::get_syndication_links_data( $post['ID'] );
-    if ( ! empty( $syn ) ) {
-      $urls = explode( "\n", $syn );
-      $_post['syndication'] = $urls;
-    }
-    return $_post;
-  }
+		if ( ! empty( $syn ) ) {
+			$urls = explode( "\n", $syn );
+			$_post['syndication'] = $urls;
+		}
+		return $_post;
+	}
 
 	/*
 	Filters incoming URLs.
@@ -81,10 +81,10 @@ class Syn_Meta {
 	public static function metabox( $object, $box ) {
 		wp_nonce_field( 'syn_metabox', 'syn_metabox_nonce' );
 		$meta = get_post_meta( $object->ID, 'syndication_urls', true );
-		echo '<p><label>';
+		echo '<p><label for="syndication_urls">';
 		_e( 'One URL per line.', 'Syn Links' );
 		echo '</label></p>';
-		echo "<textarea name='syndication_urls' rows='4' cols='70'>";
+		echo '<textarea name="syndication_urls" id="syndication_urls" style="width:99%" rows="4" cols="40">';
 		if ( ! empty( $meta ) ) {echo $meta; }
 		echo '</textarea>';
 	}
