@@ -32,6 +32,19 @@ The settings include the following options as follows with either a check box (w
 
 **Note**: The particular CSS of your theme may change the display and output of the text and some of the icons.
 
+## Screenshots ##
+
+### Settings Page ###
+
+![syndication links](https://cloud.githubusercontent.com/assets/5882943/16855863/350354e8-49cc-11e6-92d3-b82bb4b4c7b7.PNG)
+
+### Output dispaly example ###
+The following is placed at the bottom of posts on which it's used:
+
+![syndication links example](https://cloud.githubusercontent.com/assets/5882943/16855866/3adc2f52-49cc-11e6-9753-571ffc2da14e.PNG)
+
+
+
 ## Upgrade Notice ##
 
 ### Version 3.0 ###
