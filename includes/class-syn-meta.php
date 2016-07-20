@@ -143,9 +143,12 @@ class Syn_Meta {
 		return apply_filters( 'syn_network_strings', $strings );
 	}
 
-	public static function extract_domain_name($url) {
+	public static function extract_domain_name($url, $subdomain = false) {
 		$parse = wp_parse_url( $url );
-		return preg_replace( '/^www\./', '', $parse['host'] );
+		if ( $subdomain ) {
+			return preg_replace( '/^www\./', '', $parse['host'] );
+		}
+		return preg_replace("/^([a-zA-Z0-9].*\.)?([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z.]{2,})$/", '$2', $parse['host']);
 	}
 
 	public static function get_icon( $domain ) {
