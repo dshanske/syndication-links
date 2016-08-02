@@ -1,6 +1,6 @@
 # Syndication Links #
 **Contributors:** dshanske  
-**Tags:** syndication, indieweb, indiewebcamp, POSSE  
+**Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, marketing, sharing, Facebook, Twitter, google plus, microformats  
 **Requires at least:** 4.1  
 **Tested up to:** 4.5.2  
 **Stable tag:** 3.0.3  
@@ -10,7 +10,12 @@ Simple way to link to copies of your post elsewhere.
 
 ## Description ##
 
-It supports adding rel-syndication/u-syndication links to your posts and pages, indicating where a syndicated copy is.
+Almost everyone uses social media to publicize their WordPress posts for greater reach and readership. Syndication Links provides a simple way to allow your posts to visually display where those copies of your posts are.
+
+A few simple settings allow you options to choose how the the visual display looks.
+
+For those supporting modern-facing <a href="http://indieweb.org/">IndieWeb</a> functionality, the plugin also supports automatically adding <a href="http://microformats.org/">microformats</a> 'rel-syndication' and 'u-syndication' classes on the links to your posts and pages. This plugin is also a part of the bigger <a href="https://wordpress.org/plugins/indieweb/">IndieWeb Plugin</a> for those who would like to add additional related functionality.
+
 
 ## Installation ##
 
@@ -21,7 +26,7 @@ It supports adding rel-syndication/u-syndication links to your posts and pages, 
 
 ## Settings ##
 
-Settings for the Syndication Links plugin can be found in the main WordPress "Settings" tab in the admin dashboard, or if the Indieweb plugin is installed, under the Indieweb tab. The options provided allow for various ways of presenting the syndication links in posts. Syndication Links by default will add links to the content, but you can disable this for theme support.
+Settings for the Syndication Links plugin can be found in the main WordPress "Settings" tab in the admin dashboard, or if the <a href="https://wordpress.org/plugins/indieweb/">Indieweb plugin</a> is installed, under the Indieweb tab. The options provided allow for various ways of presenting the syndication links in posts. Syndication Links by default will add links to the content, but you can disable this for theme support.
 
 The settings include the following options as follows with either a check box (with a check indicating that the feature is "on") or an optional text field:
 
