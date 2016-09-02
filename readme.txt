@@ -1,9 +1,9 @@
 === Syndication Links ===
 Contributors: dshanske
-Tags: syndication, indieweb, indiewebcamp, POSSE
-Requires at least: 4.1
-Tested up to: 4.5.2
-Stable tag: 3.0.3
+Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
+Requires at least: 4.6
+Tested up to: 4.6
+Stable tag: 3.0.4
 License: GPLv2 or later
 
 Simple way to link to copies of your post elsewhere.
@@ -21,7 +21,8 @@ It supports adding rel-syndication/u-syndication links to your posts and pages, 
 
 ## Settings ##
 
-Settings for the Syndication Links plugin can be found in the main WordPress "Settings" tab in the admin dashboard, or if the Indieweb plugin is installed, under the Indieweb tab. The options provided allow for various ways of presenting the syndication links in posts. Syndication Links by default will add links to the content, but you can disable this for theme support.
+Settings for the Syndication Links plugin can be found in the main WordPress "Settings" tab in the
+admin dashboard, or if the [Indieweb plugin](https://wordpress.org/plugins/indieweb) is installed, under the Indieweb tab. The options provided allow for various ways of presenting the syndication links in posts. Syndication Links by default will add links to the content, but you can disable this for theme support.
 
 The settings include the following options as follows with either a check box (with a check indicating that the feature is "on") or an optional text field:
 
@@ -49,6 +50,11 @@ design.
 4. Automattic for their [Social Logos](https://github.com/Automattic/social-logos/) icon library.
 
 == Changelog ==
+
+= Version 3.0.4 = 
+
+* Compatibility update
+* Add textdomain for language support
 
 = Version 3.0.2 = 
 	* Adjust close bracket
