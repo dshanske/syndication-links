@@ -10,9 +10,14 @@ class Social_Plugins {
 	public static function add_syn_plugins($urls) {
 		$see_on = array();
 		if ( class_exists( 'Social' ) ) {
-			$see_on = self::add_links_from_social();
+			$see_on = array_merge( $see_on, self::add_links_from_social() );
 		} elseif ( defined( 'NextScripts_SNAP_Version' ) ) {
-			$see_on = self::add_links_from_SNAP();
+			$see_on = array_merge( $see_on, self::add_links_from_SNAP() );
+		}
+		// Support for the Official Medium Plugin per request @chrisaldrich
+		if ( class_exists( 'Medium_Post' ) ) {
+			$medium_post = Medium_Post::get_by_wp_id( get_the_ID() );
+			$see_on[] = $medium_post->url;
 		}
 		return array_merge( $see_on, $urls );
 	}

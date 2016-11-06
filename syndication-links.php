@@ -10,7 +10,7 @@
  * Domain Path:  /languages
  */
 
-define( 'SYNDICATION_LINKS_VERSION', '3.0.4' );
+define( 'SYNDICATION_LINKS_VERSION', '3.0.5' );
 
 require_once( plugin_dir_path( __FILE__ ) . '/includes/class-syn-meta.php' );
 require_once( plugin_dir_path( __FILE__ ) . '/includes/class-syn-config.php' );

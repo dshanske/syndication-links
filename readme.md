@@ -61,6 +61,7 @@ design.
 * Change storage of syndication links in order to match Micropub plugin. Storage is now array
 * Remove old property once migrated to new
 * Remove JSON REST filter as deprecated
+* Add support for the official Medium plugin per request @chrisaldrich
 
 ### Version 3.0.4 ###
 
