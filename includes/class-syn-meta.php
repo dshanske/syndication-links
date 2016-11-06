@@ -9,18 +9,6 @@ class Syn_Meta {
 		add_action( 'load-post.php', array( 'Syn_Meta', 'setup' ) );
 		add_action( 'load-post-new.php', array( 'Syn_Meta', 'setup' ) );
 		add_action( 'save_post', array( 'Syn_Meta', 'save_post_meta' ) );
-
-		// Return Syndication URLs as part of the JSON Rest API
-		add_filter( 'json_prepare_post', array( 'Syn_Meta', 'json_rest_add_synmeta' ),10,3 );
-	}
-
-	public static function json_rest_add_synmeta($_post,$post,$context) {
-		$syn = self::get_syndication_links_data( $post['ID'] );
-		if ( ! empty( $syn ) ) {
-			$urls = explode( "\n", $syn );
-			$_post['syndication'] = $urls;
-		}
-		return $_post;
 	}
 
 	/*
@@ -31,6 +19,9 @@ class Syn_Meta {
 	 * @uses clean_url
 	 */
 	public static function clean_urls($urls) {
+		if ( ! is_array( $urls ) ) {
+			return $urls;
+		}
 		$array = array_map( array( 'Syn_Meta', 'clean_url' ), $urls );
 		return array_filter( array_unique( $array ) );
 	}
@@ -43,6 +34,9 @@ class Syn_Meta {
 	 * @used-by clean_urls
 	 */
 	public static function clean_url($string) {
+		if ( is_array( $string ) ) {
+			return $string;
+		}
 		$url = trim( $string );
 		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 			return false;
@@ -80,12 +74,17 @@ class Syn_Meta {
 
 	public static function metabox( $object, $box ) {
 		wp_nonce_field( 'syn_metabox', 'syn_metabox_nonce' );
-		$meta = get_post_meta( $object->ID, 'syndication_urls', true );
+		$meta = self::get_syndication_links_data( $object->ID );
+		if ( is_array( $meta ) ) {
+			$meta = implode( PHP_EOL, $meta );
+		}
 		echo '<p><label for="syndication_urls">';
 		_e( 'One URL per line.', 'Syn Links' );
 		echo '</label></p>';
 		echo '<textarea name="syndication_urls" id="syndication_urls" style="width:99%" rows="4" cols="40">';
-		if ( ! empty( $meta ) ) {echo $meta; }
+		if ( is_string( $meta ) ) {
+			echo $meta;
+		}
 		echo '</textarea>';
 	}
 
@@ -117,13 +116,12 @@ class Syn_Meta {
 				return;
 			}
 		}
-		if ( isset( $_POST['syndication_urls'] ) ) {
-			if ( empty( $_POST['syndication_urls'] ) ) {
-				delete_post_meta( $post_id, 'syndication_urls' );
-			} else {
-				$meta = self::clean_urls( explode( "\n", $_POST['syndication_urls'] ) );
-				update_post_meta( $post_id, 'syndication_urls', implode( "\n", $meta ) );
-			}
+		if ( empty( $_POST['syndication_urls'] ) ) {
+			delete_post_meta( $post_id, 'mf2_syndication' );
+		} else {
+			$meta = explode( PHP_EOL, $_POST['syndication_urls'] );
+			$meta = self::clean_urls( $meta );
+			update_post_meta( $post_id, 'mf2_syndication', $meta );
 		}
 	}
 
@@ -148,7 +146,7 @@ class Syn_Meta {
 		if ( $subdomain ) {
 			return preg_replace( '/^www\./', '', $parse['host'] );
 		}
-		return preg_replace("/^([a-zA-Z0-9].*\.)?([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z.]{2,})$/", '$2', $parse['host']);
+		return preg_replace( '/^([a-zA-Z0-9].*\.)?([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z.]{2,})$/', '$2', $parse['host'] );
 	}
 
 	public static function get_icon( $domain ) {
@@ -199,12 +197,12 @@ class Syn_Meta {
 			// Substitute another domain to sprite map
 			$icons = apply_filters( 'syndication_domain_icons', $icons );
 			$icon = $icons['default'];
-			if ( array_key_exists( $domain, $icons ) ) {
-				$icon = $icons[ $domain ];
-			}
+		if ( array_key_exists( $domain, $icons ) ) {
+			$icon = $icons[ $domain ];
+		}
 			// Substitute another svg sprite file
 			$sprite = apply_filters( 'syndication_icon_sprite', plugin_dir_url( __FILE__ ) . 'social-logos.svg', $domain );
-			return '<svg class="svg-icon ' . 'svg-' . $icon . '" aria-hidden="true"><use xlink:href="' . $sprite . '#' . $icon . '"></use><svg>';
+			return '<svg class="svg-icon svg-' . $icon . '" aria-hidden="true"><use xlink:href="' . $sprite . '#' . $icon . '"></use><svg>';
 	}
 
 
@@ -214,13 +212,27 @@ class Syn_Meta {
 		if ( ! $post_ID ) {
 			$post_ID = get_the_ID();
 		}
-		$urls = explode( "\n", get_post_meta( $post_ID, 'syndication_urls', true ) );
-		// Mf2_syndication is used by the Micropub plugin
-		$mf2 = explode( "\n", get_post_meta( $post_ID, 'mf2_syndication', true ) );
-		// Clean and dudupe
-		$urls = Syn_Meta::clean_urls( array_merge( $urls, $mf2 ) );
-		// Allow URLs to be added by other plugins
-		return apply_filters( 'syn_add_links', $urls, $post_ID );
+		$urls = get_post_meta( $post_ID, 'mf2_syndication', true );
+		if ( $urls ) {
+			if ( is_string( $urls ) ) {
+				$urls = explode( "\n", $urls );
+			}
+		} else {
+			$urls = array();
+		}
+		$old = get_post_meta( $post_ID, 'syndication_urls', true );
+		if ( $old ) {
+			$old = explode( "\n", $old );
+			if ( is_array( $old ) ) {
+				$urls = array_filter( array_unique( array_merge( $urls, $old ) ) );
+				update_post_meta( $post_ID, 'mf2_syndication', $urls );
+				delete_post_meta( $post_ID, 'syndication_urls' );
+			}
+		}
+		if ( empty( $urls ) ) {
+			return array();
+		}
+		return $urls;
 	}
 
 
@@ -230,6 +242,8 @@ class Syn_Meta {
 			$post_ID = get_the_ID();
 		}
 		$urls = self::get_syndication_links_data( $post_ID );
+		// Allow adding of additional links before display
+		$urls = apply_filters( 'syn_add_links', $urls, $post_ID );
 		if ( empty( $urls ) ) {
 			return '';
 		}
@@ -254,9 +268,9 @@ class Syn_Meta {
 			} else {
 				$synlinks .= '>';
 				$synlinks .= self::get_icon( $domain );
-				}
-			$synlinks .= '</a></li>';
 			}
+			$synlinks .= '</a></li>';
+		}
 		$synlinks .= '</ul></span>';
 		return $synlinks;
 	}

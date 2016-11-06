@@ -3,7 +3,7 @@
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.6  
 **Tested up to:** 4.6  
-**Stable tag:** 3.0.4  
+**Stable tag:** 3.0.5  
 **License:** GPLv2 or later  
 
 Simple way to link to copies of your post elsewhere.
@@ -35,6 +35,11 @@ The settings include the following options as follows with either a check box (w
 
 ## Upgrade Notice ##
 
+### Version 3.0.5 ###
+
+Upgrade to this version moves the location of stored syndication links to match the changes in the Micropub plugin. Recommend
+that all users back up prior to upgrade in the event of accidental corruption.
+
 ### Version 3.0 ###
 
 Version 3.0 removes the two sets of icon fonts in favor of SVG icons. If this is a concern, do not upgrade at this time. Version 3.0 also removes
@@ -50,6 +55,12 @@ design.
 4. Automattic for their [Social Logos](https://github.com/Automattic/social-logos/) icon library.
 
 ## Changelog ##
+
+### Version 3.0.5 ###
+
+* Change storage of syndication links in order to match Micropub plugin. Storage is now array
+* Remove old property once migrated to new
+* Remove JSON REST filter as deprecated
 
 ### Version 3.0.4 ###
 
