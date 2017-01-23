@@ -5,8 +5,7 @@ add_action( 'init', array( 'Syn_Config', 'init' ) );
 class Syn_Config {
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( 'Syn_Config', 'enqueue_scripts' ) );
-		$option = get_option( 'syndication_content_options' );
-		if ( $option['the_content'] != '1' ) {
+		if ( '1' !== get_option( 'syndication-links_the_content' ) ) {
 			add_filter( 'the_content', array( 'Syn_Config', 'the_content' ) , 20 );
 		}
 		add_action( 'admin_menu', array( 'Syn_Config', 'admin_menu' ), 11 );
@@ -14,22 +13,108 @@ class Syn_Config {
 	}
 
 	public static function enqueue_scripts() {
-		$options = get_option( 'syndication_content_options' );
-		if ( $options['bw'] == 1 ) {
-			wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname( __FILE__ ) ) . 'css/syn-bw.min.css', array(), SYNDICATION_LINKS_VERSION );
+		if ( '1' === get_option( 'syndication-links_bw' ) ) {
+			$css = 'css/syn-bw.min.css';
 		} else {
-			wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname( __FILE__ ) ) . 'css/syn.min.css', array(), SYNDICATION_LINKS_VERSION );
+			$css = 'css/syn.min.css';
 		}
+		wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname( __FILE__ ) ) . $css, array(), SYNDICATION_LINKS_VERSION );
 	}
 
 	public static function admin_init() {
 		// Syndication Content Options
-		register_setting( 'syndication_options', 'syndication_content_options' );
-		add_settings_section( 'syndication-content', __( 'Content Options', 'Syn Links' ), array( 'Syn_Config', 'options_callback' ), 'links_options' );
-		add_settings_field( 'the_content', __( 'Disable Syndication Links in the Content', 'Syn Links' ), array( 'Syn_Config', 'content_callback' ), 'links_options', 'syndication-content' ,  array( 'name' => 'the_content' ) );
-		add_settings_field( 'just_icons', __( 'Display Text', 'Syn Links' ), array( 'Syn_Config', 'content_callback' ), 'links_options', 'syndication-content',  array( 'name' => 'just_icons' ) );
-		add_settings_field( 'bw', __( 'Black Icons', 'Syn Links' ), array( 'Syn_Config', 'content_callback' ), 'links_options', 'syndication-content',  array( 'name' => 'bw' ) );
-		add_settings_field( 'text_before', __( 'Text Before Links', 'Syn Links' ), array( 'Syn_Config', 'text_before_callback' ), 'links_options', 'syndication-content' );
+		register_setting(
+			'syndication_options',
+			'syndication-links_bw',
+			array(
+				'type' => 'boolean',
+				'description' => 'Black and White Syndication Icons',
+				'show_in_rest' => true,
+				'default' => false,
+			)
+		);
+
+		register_setting(
+			'syndication_options',
+			'syndication-links_the_content',
+			array(
+				'type' => 'boolean',
+				'description' => 'Disable Syndication Links in the Content',
+				'show_in_rest' => true,
+				'default' => false,
+			)
+		);
+
+		register_setting(
+			'syndication_options',
+			'syndication-links_display',
+			array(
+				'type' => 'string',
+				'description' => 'How to Display Icons',
+				'show_in_rest' => true,
+				'default' => 'icons',
+			)
+		);
+
+		register_setting(
+			'syndication_options',
+			'syndication-links_text_before',
+			array(
+				'type' => 'string',
+				'description' => 'Text Before Syndication Links',
+				'show_in_rest' => true,
+				'default' => '',
+			)
+		);
+
+		add_settings_section(
+			'syndication-content',
+			__( 'Content Options', 'syndication-links' ),
+			array( 'Syn_Config', 'options_callback' ),
+			'links_options'
+		);
+		add_settings_field(
+			'syndication-links_display',
+			__( 'Display', 'syndication-links' ),
+			array( 'Syn_Config', 'radio_callback' ),
+			'links_options',
+			'syndication-content',
+			array(
+				'name' => 'syndication-links_display',
+			       'list' => self::display_options(),
+			)
+		);
+		add_settings_field(
+			'syndication-links_bw',
+			__( 'Black Icons', 'syndication-links' ),
+			array( 'Syn_Config', 'checkbox_callback' ),
+			'links_options',
+			'syndication-content',
+			array(
+				'name' => 'syndication-links_bw',
+			)
+		);
+		add_settings_field(
+			'syndication-links_text_before',
+			__( 'Text Before Links', 'syndication-links' ),
+			array( 'Syn_Config', 'text_callback' ),
+			'links_options',
+			'syndication-content',
+			array(
+				'name' => 'syndication-links_text_before',
+			)
+		);
+
+		add_settings_field(
+			'syndication-links_the_content',
+			__( 'Disable Syndication Links in the Content', 'syndication-links' ),
+			array( 'Syn_Config', 'checkbox_callback' ),
+			'links_options', 'syndication-content' ,
+			array(
+				'name' => 'syndication-links_the_content',
+			)
+		);
+
 	}
 
 	public static function admin_menu() {
@@ -37,8 +122,8 @@ class Syn_Config {
 		if ( class_exists( 'IndieWeb_Plugin' ) ) {
 		    add_submenu_page(
 				'indieweb',
-				__( 'Syndication Links', 'Syn Links' ), // page title
-				__( 'Syndication Links', 'Syn Links' ), // menu title
+				__( 'Syndication Links', 'syndication-links' ), // page title
+				__( 'Syndication Links', 'syndication-links' ), // menu title
 				'manage_options', // access capability
 				'syndication_links',
 				array( 'Syn_Config', 'links_options' )
@@ -49,37 +134,70 @@ class Syn_Config {
 	}
 
 	public static function options_callback() {
-		esc_html_e( 'Options for Presenting Syndication Links in Posts.', 'Syn Links' );
+		esc_html_e( 'Options for Presenting Syndication Links in Posts.', 'syndication-links' );
 		echo '<p>';
-		esc_html_e( 'Syndication Links by default will add links to the content. You can disable this for theme support.', 'Syn Links' );
+		esc_html_e( 'Syndication Links by default will add links to the content. You can disable this for theme support.', 'syndication-links' );
 		echo '</p>';
 	}
 
-	public static function content_callback(array $args) {
-		$options = get_option( 'syndication_content_options' );
+	public static function checkbox_callback(array $args) {
 		$name = $args['name'];
-		$checked = $options[ $name ];
-		echo "<input name='syndication_content_options[$name]' type='hidden' value='0' />";
-		echo "<input name='syndication_content_options[$name]' type='checkbox' value='1' " . checked( 1, $checked, false ) . ' /> ';
+		 $checked = get_option( $args['name'] );
+		echo "<input name='" . $name . "' type='hidden' value='0' />";
+		echo "<input name='" . $name . "' type='checkbox' value='1' " . checked( 1, $checked, false ) . ' /> ';
 	}
 
-	public static function text_before_callback() {
-		$options = get_option( 'syndication_content_options' );
-		$text = $options['text_before'];
-		echo "<input name='syndication_content_options[text_before]' type='text' value='" . $text . "' /> ";
+	public static function select_callback( array $args ) {
+		$name = $args['name'];
+		$select = get_option( $name );
+		$options = $args['list'];
+		echo "<select name='" . $name . "id='" . $name . "'>";
+		foreach ( $options as $key => $value ) {
+			echo '<option value="' . $key . '" ' . ( $select === $key ? 'selected>' : '>' ) . $value . '</option>';
+		}
+		echo '</select>';
 	}
+
+	public static function radio_callback( array $args ) {
+		$name = $args['name'];
+		$select = get_option( $name );
+		$options = $args['list'];
+		echo '<fieldset>';
+		foreach ( $options as $key => $value ) {
+			echo '<input type="radio" name="' . $name . '" id="' . $name . '" value="' . $key . '" ' . checked( $key, $select, false ) . ' />';
+			echo '<label for="' . $args['name'] . '">' . $value . '</label>';
+			echo '<br />';
+		}
+		echo '</fieldset>';
+	}
+
+
+	public static function text_callback( $args ) {
+		$name = $args['name']; 
+		echo "<input name='" . $name . "' type='text' value='" . get_option( $name ) . "' /> ";
+	}
+
+	public static function display_options() {
+		return array(
+			'icons' => _x( 'Only Show Icons', 'syndication-links' ),
+			'text' => _x( 'Only Show Text', 'syndication-links' ),
+			'iconstext'  => _x( 'Show Icons and Text', 'syndication-links' ),
+			'hidden' => _x( 'Hidden Links', 'syndication-links' ),
+		);
+	}
+
 
 	public static function links_options() {
 		echo '<div class="wrap">';
-		echo '<h2>' . __( 'Syndication Links', 'Syn Links' ) . '</h2>';
+		echo '<h2>' . __( 'Syndication Links', 'syndication-links' ) . '</h2>';
 		echo '<p>';
-		esc_html_e( 'Adds optional syndication links for various sites. Syndication is the act of posting your content on other sites.', 'Syn Links' );
+		esc_html_e( 'Adds optional syndication links for various sites. Syndication is the act of posting your content on other sites.', 'syndication-links' );
 		echo '</p><hr />';
 		echo '<form method="post" action="options.php">';
 		settings_fields( 'syndication_options' );
 		do_settings_sections( 'links_options' );
 		submit_button();
-		echo '</form>' . '</div>';
+		echo '</form></div>';
 	}
 
 	public static function the_content($meta = '' ) {

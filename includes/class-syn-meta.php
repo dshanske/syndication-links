@@ -9,6 +9,14 @@ class Syn_Meta {
 		add_action( 'load-post.php', array( 'Syn_Meta', 'setup' ) );
 		add_action( 'load-post-new.php', array( 'Syn_Meta', 'setup' ) );
 		add_action( 'save_post', array( 'Syn_Meta', 'save_post_meta' ) );
+		$args = array(
+			// 'sanitize_callback' => '',
+			'type' => 'array',
+			'description' => 'Syndication URLs',
+			'single' => false,
+			'show_in_rest' => true,
+		);
+		register_meta( 'post', 'mf2_syndication', $args );
 	}
 
 	/*
@@ -63,7 +71,7 @@ class Syn_Meta {
 		foreach ( $screens as $screen ) {
 			add_meta_box(
 				'synbox-meta',      // Unique ID
-				esc_html__( 'Syndication Links', 'Syn Links' ),    // Title
+				esc_html__( 'Syndication Links', 'syndication-links' ),    // Title
 				array( 'Syn_Meta', 'metabox' ),   // Callback function
 				$screen,         // Admin page (or post type)
 				'normal',         // Context
@@ -237,7 +245,6 @@ class Syn_Meta {
 
 
 	public static function get_syndication_links( $post_ID = null ) {
-		$options = get_option( 'syndication_content_options' );
 		if ( ! $post_ID ) {
 			$post_ID = get_the_ID();
 		}
@@ -249,9 +256,9 @@ class Syn_Meta {
 		}
 		$strings = self::get_network_strings();
 		$single = is_single( $post_ID );
-		$synlinks = '<span class="relsyn"><ul>' . $options['text_before'];
+		$synlinks = '<span class="relsyn"><ul>' . get_option( 'syndication-links_text_before' );
 		foreach ( $urls as $url ) {
-			if ( empty( $url ) ) { continue; }
+			if ( empty( $url ) || ! is_string( $url ) ) { continue; }
 			$domain = self::extract_domain_name( $url );
 			if ( array_key_exists( $domain, $strings ) ) {
 				$name = $strings[ $domain ];
@@ -261,7 +268,7 @@ class Syn_Meta {
 			$synlinks .= '<li><a title="' . $name . '" class="u-syndication" href="' . esc_url( $url ) . '"';
 			if ( $single ) {
 				$synlinks .= ' rel="syndication">';
-				if ( '1' === $options['just_icons'] ) {
+				if ( 'icons' !== get_option( 'syndication-links_display' ) ) {
 					$synlinks .= '<span class="syn-name">' . $name . '</span>';
 				}
 				$synlinks .= self::get_icon( $domain );
