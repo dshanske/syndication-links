@@ -1,9 +1,9 @@
 === Syndication Links ===
 Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
-Requires at least: 4.6
-Tested up to: 4.6
-Stable tag: 3.0.5
+Requires at least: 4.7
+Tested up to: 4.7.1
+Stable tag: 3.1.0
 License: GPLv2 or later
 
 Simple way to link to copies of your post elsewhere.
@@ -55,6 +55,11 @@ design.
 4. Automattic for their [Social Logos](https://github.com/Automattic/social-logos/) icon library.
 
 == Changelog ==
+
+= Version 3.1.0 = 
+
+* Cleanup of settings attributes using enhancements available in WordPress 4.7
+* Individual SVG icons and code to generate an SVG sprite now included in the plugin
 
 = Version 3.0.5 =
 
