@@ -172,7 +172,7 @@ class Syn_Meta {
 				'flickr.com'      => 'flickr',
 				// feed
 				'foursquare.com'  => 'foursquare',
-				'ghost.org' 					=> 'ghost',
+				'ghost.org' 	=> 'ghost',
 				'plus.google.com' => 'google-plus',
 				'github.com'      => 'github',
 				'instagram.com'   => 'instagram',
@@ -189,7 +189,7 @@ class Syn_Meta {
 				'skype.com'       => 'skype',
 				'skype:'          => 'skype',
 				// share
-				'soundcloud.com'  => 'cloud',
+				'soundcloud.com'  => 'soundcloud',
 				'spotify.com'     => 'spotify',
 				'stumbleupon.com' => 'stumbleupon',
 				'telegram.org'    => 'telegram',
