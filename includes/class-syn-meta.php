@@ -135,15 +135,40 @@ class Syn_Meta {
 
 	public static function get_network_strings() {
 		$strings = array(
-			'twitter.com' => _x( 'Twitter', 'Syn Links' ),
-			'facebook.com' => _x( 'Facebook', 'Syn Links' ),
-			'plus.google.com' => _x( 'Google+', 'Syn Links' ),
-			'instagram.com' => _x( 'Instagram', 'Syn Links' ),
-			'flickr.com' => _x( 'Flickr', 'Syn Links' ),
-			'youtube.com' => _x( 'YouTube', 'Syn Links' ),
-			'linkedin.com' => _x( 'LinkedIn', 'Syn Links' ),
-			'tumblr.com' => _x( 'Tumblr', 'Syn Links' ),
+			'amazon.com' => _x( 'Amazon', 'syndication-links' ),
+			'behance.net'=> _x( 'Behance', 'syndication-links' ),
+			'blogspot.com' => _x( 'Blogger', 'syndication-links' ),
+			'codepen.io' => _x( 'codepen', 'syndication-links' ),
+			'dribbble.com' => _x( 'Dribbble', 'syndication-links' ),
+			'dropbox.com' => _x( 'Dropbox', 'syndication-links',
+			'eventbrite.com' => _x( 'Eventbrite', 'syndication-links' ),
+			'facebook.com' => _x( 'Facebook', 'syndication-links' ),
+			'flickr.com' => _x( 'Flickr', 'syndication-links' ),
+			'foursquare.com'  => _x ( 'Foursquare', 'syndication-links' ), 
+			'ghost.org' => _x( 'Ghost', 'syndication-links'),
+			'plus.google.com' => _x( 'Google+', 'syndication-links' ),
+			'github.com' => _x( 'Github', 'syndication-links' ),
+			'instagram.com' => _x( 'Instagram', 'syndication-links' ),
+			'linkedin.com' => _x( 'LinkedIn', 'syndication-links' ),
+			'medium.com' => _x( 'Medium', 'syndication-links' ),
+			'path.com' => _x( 'Path', 'syndication-links' ),
+			'pinterest.com' => _x( 'Pinterest', 'syndication-links' ),
+			'getpocket.com' => _x( 'Pocket', 'syndication-links' ),
+			'polldaddy.com' => _x( 'PollDaddy', 'syndication-links' ),
+			'reddit.com' => _x( 'Reddit', 'syndication-links' ),
+			'squarespace.com' => _x( 'Squarespace', 'syndication-links' ),
+			'skype.com' => _x( 'Skype', 'syndication-links' ),
+			'soundcloud.com' => _x( 'SoundCloud', 'syndication-links' ),
+			'spotify.com' => _x( 'Spotify', 'syndication-links' ),
+			'stumbleupon.com' => _x( 'StumbleUpon', 'syndication-links' ),
+			'telegram.org' => _x( 'Telegram', 'syndication-links' ),
+			'tumblr.com' => _x( 'Tumblr', 'syndication-links' ),
+			'twitch.tv' => _x( 'Twitch', 'syndication-links' ),
+			'twitter.com' => _x( 'Twitter', 'syndication-links' ),
+
 			'wordpress.com' => _x( 'WordPress', 'Syn Links' ),
+			'youtube.com' => _x( 'YouTube', 'Syn Links' ),
+
 			'news.indiewebcamp.com' => _x( 'IndieNews', 'Syn Links' ),
 		);
 		return apply_filters( 'syn_network_strings', $strings );
@@ -160,7 +185,7 @@ class Syn_Meta {
 	public static function get_icon( $domain ) {
 		// Supportedicons.
 			$icons = array(
-				'default'         => 'share',
+				'default'         => 'website',
 				'amazon.com'      => 'amazon',
 				'behance.net'     => 'behance',
 				'blogspot.com'    => 'blogger',
