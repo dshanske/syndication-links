@@ -140,7 +140,7 @@ class Syn_Meta {
 			'blogspot.com' => _x( 'Blogger', 'syndication-links' ),
 			'codepen.io' => _x( 'codepen', 'syndication-links' ),
 			'dribbble.com' => _x( 'Dribbble', 'syndication-links' ),
-			'dropbox.com' => _x( 'Dropbox', 'syndication-links',
+			'dropbox.com' => _x( 'Dropbox', 'syndication-links' ),
 			'eventbrite.com' => _x( 'Eventbrite', 'syndication-links' ),
 			'facebook.com' => _x( 'Facebook', 'syndication-links' ),
 			'flickr.com' => _x( 'Flickr', 'syndication-links' ),
@@ -166,10 +166,10 @@ class Syn_Meta {
 			'twitch.tv' => _x( 'Twitch', 'syndication-links' ),
 			'twitter.com' => _x( 'Twitter', 'syndication-links' ),
 
-			'wordpress.com' => _x( 'WordPress', 'Syn Links' ),
-			'youtube.com' => _x( 'YouTube', 'Syn Links' ),
+			'wordpress.com' => _x( 'WordPress', 'syndication-links' ),
+			'youtube.com' => _x( 'YouTube', 'syndication-links' ),
 
-			'news.indiewebcamp.com' => _x( 'IndieNews', 'Syn Links' ),
+			'news.indiewebcamp.com' => _x( 'IndieNews', 'syndication-links' ),
 		);
 		return apply_filters( 'syn_network_strings', $strings );
 	}
@@ -239,6 +239,32 @@ class Syn_Meta {
 	}
 
 
+	public static function add_link( $post_id = null, $uri ) {
+		if ( ! $post_id ) {
+			$post_id = get_the_ID();
+		}
+		if ( empty( $uri ) ) {
+			return;
+		}
+		$links = get_post_meta( $post_id, 'mf2_syndication' );
+		if ( ! is_array( $links ) ) {
+			$links = array();
+		}
+		if ( is_string( $uri ) ) {
+			$links[] = $uri;
+		}
+		if ( is_array( $uri ) ) {
+			$links = array_merge( $links, $uri );
+		}
+		$links = self::clean_urls( $links );
+		if ( empty( $links ) ) {
+			return;
+		}
+		else { 
+			update_post_meta( $post_id, 'mf2_syndication', $links );
+		}
+	}
+		 
 
 
 	public static function get_syndication_links_data( $post_ID = null ) {
