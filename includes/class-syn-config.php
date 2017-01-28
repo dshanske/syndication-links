@@ -5,18 +5,35 @@ add_action( 'init', array( 'Syn_Config', 'init' ) );
 class Syn_Config {
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( 'Syn_Config', 'enqueue_scripts' ) );
-		if ( '1' !== get_option( 'syndication-links_the_content' ) ) {
-			add_filter( 'the_content', array( 'Syn_Config', 'the_content' ) , 20 );
-		}
+		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ) , 20 );
 		add_action( 'admin_menu', array( 'Syn_Config', 'admin_menu' ), 11 );
 		add_action( 'admin_init', array( 'Syn_Config', 'admin_init' ) );
 	}
 
 	public static function enqueue_scripts() {
+		$size = get_option( 'syndication-links_size' );
 		if ( '1' === get_option( 'syndication-links_bw' ) ) {
-			$css = 'css/syn-bw.min.css';
+			switch ( $size ) {
+				case 'large':
+					$css = 'css/syn-bw-large.min.css';
+					break;
+				case 'medium':
+					$css = 'css/syn-bw-medium.min.css';
+					break;
+				default:
+					$css = 'css/syn-bw.min.css';
+			}
 		} else {
-			$css = 'css/syn.min.css';
+			switch ( $size ) {
+				case 'large':
+					$css = 'css/syn-large.min.css';
+					break;
+				case 'medium':
+					$css = 'css/syn-medium.min.css';
+					break;
+				default:
+					$css = 'css/syn.min.css';
+			}
 		}
 		wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname( __FILE__ ) ) . $css, array(), SYNDICATION_LINKS_VERSION );
 	}
@@ -47,12 +64,34 @@ class Syn_Config {
 
 		register_setting(
 			'syndication_options',
+			'syndication-links_archives',
+			array(
+				'type' => 'boolean',
+				'description' => 'Show on Front Page, Archive Pages, and Search Results',
+				'show_in_rest' => true,
+				'default' => true,
+			)
+		);
+
+		register_setting(
+			'syndication_options',
 			'syndication-links_display',
 			array(
 				'type' => 'string',
 				'description' => 'How to Display Icons',
 				'show_in_rest' => true,
 				'default' => 'icons',
+			)
+		);
+
+		register_setting(
+			'syndication_options',
+			'syndication-links_size',
+			array(
+				'type' => 'string',
+				'description' => 'Icon Size',
+				'show_in_rest' => true,
+				'default' => 'small',
 			)
 		);
 
@@ -85,6 +124,17 @@ class Syn_Config {
 			)
 		);
 		add_settings_field(
+			'syndication-links_size',
+			__( 'Size', 'syndication-links' ),
+			array( 'Syn_Config', 'radio_callback' ),
+			'links_options',
+			'syndication-content',
+			array(
+				'name' => 'syndication-links_size',
+			       'list' => self::size_options(),
+			)
+		);
+		add_settings_field(
 			'syndication-links_bw',
 			__( 'Black Icons', 'syndication-links' ),
 			array( 'Syn_Config', 'checkbox_callback' ),
@@ -92,6 +142,16 @@ class Syn_Config {
 			'syndication-content',
 			array(
 				'name' => 'syndication-links_bw',
+			)
+		);
+		add_settings_field(
+			'syndication-links_archives',
+			__( 'Show on Front Page, Archive Pages, and Search Results', 'syndication-links' ),
+			array( 'Syn_Config', 'checkbox_callback' ),
+			'links_options',
+			'syndication-content',
+			array(
+				'name' => 'syndication-links_archives',
 			)
 		);
 		add_settings_field(
@@ -104,17 +164,6 @@ class Syn_Config {
 				'name' => 'syndication-links_text_before',
 			)
 		);
-
-		add_settings_field(
-			'syndication-links_the_content',
-			__( 'Disable Syndication Links in the Content', 'syndication-links' ),
-			array( 'Syn_Config', 'checkbox_callback' ),
-			'links_options', 'syndication-content' ,
-			array(
-				'name' => 'syndication-links_the_content',
-			)
-		);
-
 	}
 
 	public static function admin_menu() {
@@ -173,16 +222,24 @@ class Syn_Config {
 
 
 	public static function text_callback( $args ) {
-		$name = $args['name']; 
+		$name = $args['name'];
 		echo "<input name='" . $name . "' type='text' value='" . get_option( $name ) . "' /> ";
 	}
 
 	public static function display_options() {
 		return array(
-			'icons' => _x( 'Only Show Icons', 'syndication-links' ),
-			'text' => _x( 'Only Show Text', 'syndication-links' ),
-			'iconstext'  => _x( 'Show Icons and Text', 'syndication-links' ),
+			'icons' => _x( 'Icons Only', 'syndication-links' ),
+			'text' => _x( 'Text Only', 'syndication-links' ),
+			'iconstext'  => _x( 'Icons and Text', 'syndication-links' ),
 			'hidden' => _x( 'Hidden Links', 'syndication-links' ),
+		);
+	}
+
+	public static function size_options() {
+		return array(
+			'small' => _x( 'Small', 'syndication-links' ),
+			'medium' => _x( 'Medium', 'syndication-links' ),
+			'large'  => _x( 'Large', 'syndication-links' ),
 		);
 	}
 
@@ -191,7 +248,7 @@ class Syn_Config {
 		echo '<div class="wrap">';
 		echo '<h2>' . __( 'Syndication Links', 'syndication-links' ) . '</h2>';
 		echo '<p>';
-		esc_html_e( 'Adds optional syndication links for various sites. Syndication is the act of posting your content on other sites.', 'syndication-links' );
+		esc_html_e( 'Adds optional syndication links for various sites. Syndication is the act of posting your content on other sites. You can either manually add these to the box in the post editor or automatically. Several plugins support or are supported.', 'syndication-links' );
 		echo '</p><hr />';
 		echo '<form method="post" action="options.php">';
 		settings_fields( 'syndication_options' );
@@ -200,8 +257,26 @@ class Syn_Config {
 		echo '</form></div>';
 	}
 
-	public static function the_content($meta = '' ) {
-		return $meta . get_syndication_links();
+	public static function the_content( $content ) {
+		global $post, $wp_current_filter;
+		if ( empty( $post ) ) {
+			return $content;
+		}
+		if ( ( is_admin() ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+			return $content;
+		}
+
+		// Don't allow to be added to the_content more than once (prevent infinite loops)
+		$done = false;
+		foreach ( $wp_current_filter as $filter ) {
+			if ( 'the_content' == $filter ) {
+				if ( $done ) {
+					return $content;
+				} else { $done = true;
+				}
+			}
+		}
+		return $content . get_syndication_links();
 	}
 
 } // End Class

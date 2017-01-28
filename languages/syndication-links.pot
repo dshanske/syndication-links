@@ -1,14 +1,14 @@
-# Copyright (C) 2016 David Shanske
+# Copyright (C) 2017 David Shanske
 # This file is distributed under the same license as the Syndication Links package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Syndication Links 3.0.4\n"
+"Project-Id-Version: Syndication Links 3.1.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2016-09-02 02:29:33+00:00\n"
+"POT-Creation-Date: 2017-01-28 16:02:33+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2016-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
@@ -25,23 +25,27 @@ msgstr ""
 msgid "Avatar Size:"
 msgstr ""
 
-#: includes/class-syn-config.php:28
+#: includes/class-syn-config.php:111
 msgid "Content Options"
 msgstr ""
 
-#: includes/class-syn-config.php:29
-msgid "Disable Syndication Links in the Content"
+#: includes/class-syn-config.php:117
+msgid "Display"
 msgstr ""
 
-#: includes/class-syn-config.php:30
-msgid "Display Text"
+#: includes/class-syn-config.php:128
+msgid "Size"
 msgstr ""
 
-#: includes/class-syn-config.php:31
+#: includes/class-syn-config.php:139
 msgid "Black Icons"
 msgstr ""
 
-#: includes/class-syn-config.php:32
+#: includes/class-syn-config.php:149
+msgid "Show on Front Page, Archive Pages, and Search Results"
+msgstr ""
+
+#: includes/class-syn-config.php:159
 msgid "Text Before Links"
 msgstr ""
 
@@ -49,23 +53,25 @@ msgstr ""
 msgid "Syndication Links"
 msgstr ""
 
-#: includes/class-syn-config.php:52
+#: includes/class-syn-config.php:186
 msgid "Options for Presenting Syndication Links in Posts."
 msgstr ""
 
-#: includes/class-syn-config.php:54
+#: includes/class-syn-config.php:188
 msgid ""
 "Syndication Links by default will add links to the content. You can disable "
 "this for theme support."
 msgstr ""
 
-#: includes/class-syn-config.php:76
+#: includes/class-syn-config.php:251
 msgid ""
 "Adds optional syndication links for various sites. Syndication is the act "
-"of posting your content on other sites."
+"of posting your content on other sites. You can either manually add these "
+"to the box in the post editor or automatically. Several plugins support or "
+"are supported."
 msgstr ""
 
-#: includes/class-syn-meta.php:85
+#: includes/class-syn-meta.php:90
 msgid "One URL per line."
 msgstr ""
 
@@ -85,52 +91,197 @@ msgstr ""
 msgid "http://david.shanske.com"
 msgstr ""
 
-#: includes/class-syn-meta.php:132
-msgctxt "Syn Links"
-msgid "Twitter"
+#: includes/class-syn-config.php:231
+msgctxt "syndication-links"
+msgid "Icons Only"
 msgstr ""
 
-#: includes/class-syn-meta.php:133
-msgctxt "Syn Links"
-msgid "Facebook"
+#: includes/class-syn-config.php:232
+msgctxt "syndication-links"
+msgid "Text Only"
 msgstr ""
 
-#: includes/class-syn-meta.php:134
-msgctxt "Syn Links"
-msgid "Google+"
+#: includes/class-syn-config.php:233
+msgctxt "syndication-links"
+msgid "Icons and Text"
 msgstr ""
 
-#: includes/class-syn-meta.php:135
-msgctxt "Syn Links"
-msgid "Instagram"
+#: includes/class-syn-config.php:234
+msgctxt "syndication-links"
+msgid "Hidden Links"
 msgstr ""
 
-#: includes/class-syn-meta.php:136
-msgctxt "Syn Links"
-msgid "Flickr"
+#: includes/class-syn-config.php:240
+msgctxt "syndication-links"
+msgid "Small"
 msgstr ""
 
-#: includes/class-syn-meta.php:137
-msgctxt "Syn Links"
-msgid "YouTube"
+#: includes/class-syn-config.php:241 includes/class-syn-meta.php:153
+msgctxt "syndication-links"
+msgid "Medium"
+msgstr ""
+
+#: includes/class-syn-config.php:242
+msgctxt "syndication-links"
+msgid "Large"
 msgstr ""
 
 #: includes/class-syn-meta.php:138
-msgctxt "Syn Links"
-msgid "LinkedIn"
+msgctxt "syndication-links"
+msgid "Amazon"
 msgstr ""
 
 #: includes/class-syn-meta.php:139
-msgctxt "Syn Links"
-msgid "Tumblr"
+msgctxt "syndication-links"
+msgid "Behance"
 msgstr ""
 
 #: includes/class-syn-meta.php:140
-msgctxt "Syn Links"
-msgid "WordPress"
+msgctxt "syndication-links"
+msgid "Blogger"
 msgstr ""
 
 #: includes/class-syn-meta.php:141
-msgctxt "Syn Links"
+msgctxt "syndication-links"
+msgid "codepen"
+msgstr ""
+
+#: includes/class-syn-meta.php:142
+msgctxt "syndication-links"
+msgid "Dribbble"
+msgstr ""
+
+#: includes/class-syn-meta.php:143
+msgctxt "syndication-links"
+msgid "Dropbox"
+msgstr ""
+
+#: includes/class-syn-meta.php:144
+msgctxt "syndication-links"
+msgid "Eventbrite"
+msgstr ""
+
+#: includes/class-syn-meta.php:145
+msgctxt "syndication-links"
+msgid "Facebook"
+msgstr ""
+
+#: includes/class-syn-meta.php:146
+msgctxt "syndication-links"
+msgid "Flickr"
+msgstr ""
+
+#: includes/class-syn-meta.php:147
+msgctxt "syndication-links"
+msgid "Foursquare"
+msgstr ""
+
+#: includes/class-syn-meta.php:148
+msgctxt "syndication-links"
+msgid "Ghost"
+msgstr ""
+
+#: includes/class-syn-meta.php:149
+msgctxt "syndication-links"
+msgid "Google+"
+msgstr ""
+
+#: includes/class-syn-meta.php:150
+msgctxt "syndication-links"
+msgid "Github"
+msgstr ""
+
+#: includes/class-syn-meta.php:151
+msgctxt "syndication-links"
+msgid "Instagram"
+msgstr ""
+
+#: includes/class-syn-meta.php:152
+msgctxt "syndication-links"
+msgid "LinkedIn"
+msgstr ""
+
+#: includes/class-syn-meta.php:154
+msgctxt "syndication-links"
+msgid "Path"
+msgstr ""
+
+#: includes/class-syn-meta.php:155
+msgctxt "syndication-links"
+msgid "Pinterest"
+msgstr ""
+
+#: includes/class-syn-meta.php:156
+msgctxt "syndication-links"
+msgid "Pocket"
+msgstr ""
+
+#: includes/class-syn-meta.php:157
+msgctxt "syndication-links"
+msgid "PollDaddy"
+msgstr ""
+
+#: includes/class-syn-meta.php:158
+msgctxt "syndication-links"
+msgid "Reddit"
+msgstr ""
+
+#: includes/class-syn-meta.php:159
+msgctxt "syndication-links"
+msgid "Squarespace"
+msgstr ""
+
+#: includes/class-syn-meta.php:160
+msgctxt "syndication-links"
+msgid "Skype"
+msgstr ""
+
+#: includes/class-syn-meta.php:161
+msgctxt "syndication-links"
+msgid "SoundCloud"
+msgstr ""
+
+#: includes/class-syn-meta.php:162
+msgctxt "syndication-links"
+msgid "Spotify"
+msgstr ""
+
+#: includes/class-syn-meta.php:163
+msgctxt "syndication-links"
+msgid "StumbleUpon"
+msgstr ""
+
+#: includes/class-syn-meta.php:164
+msgctxt "syndication-links"
+msgid "Telegram"
+msgstr ""
+
+#: includes/class-syn-meta.php:165
+msgctxt "syndication-links"
+msgid "Tumblr"
+msgstr ""
+
+#: includes/class-syn-meta.php:166
+msgctxt "syndication-links"
+msgid "Twitch"
+msgstr ""
+
+#: includes/class-syn-meta.php:167
+msgctxt "syndication-links"
+msgid "Twitter"
+msgstr ""
+
+#: includes/class-syn-meta.php:169
+msgctxt "syndication-links"
+msgid "WordPress"
+msgstr ""
+
+#: includes/class-syn-meta.php:170
+msgctxt "syndication-links"
+msgid "YouTube"
+msgstr ""
+
+#: includes/class-syn-meta.php:172
+msgctxt "syndication-links"
 msgid "IndieNews"
 msgstr ""

@@ -21,8 +21,6 @@
 }
 .relsyn ul li .svg-icon, .relmewidget ul li .svg-icon {
   fill: currentColor;
-  height: 1.2em;
-  width: 1.2em;
   vertical-align: middle;
   /*  position: relative;  Align more nicely with capital letters */
   top: -0.0625em;
@@ -42,6 +40,14 @@
 .relsyn ul li a:visited, .relmewidget ul li a:visited {
   text-decoration: none;
   color: black;
+}
+
+.relsyn ul li .svg-icon, .relmewidget ul li .svg-icon {
+  height: 1.2em;
+  width: 1.2em;
+}
+.relsyn ul li .syn-name, .relmewidget ul li .syn-name {
+  font-size: .8em;
 }
 
 /*--------------------------------------------------------------
