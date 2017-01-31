@@ -1,34 +1,24 @@
-.relsyn ul, .relmewidget ul {
-  display: inline-block;
-	list-style: none;
+ul.relsyn {
+  	display: inline-block;
 	text-align: top;
+	list-style-type: none;
 	margin: 0;
 	padding: 1px;
-  li {
-    display: inline-block;
-	  padding-right: 5px;
-		.svg-icon {
-			fill: currentColor;
-			vertical-align: middle;
-			/*  position: relative;  Align more nicely with capital letters */
-			top: -0.0625em;
-		}
-		.syn-name {
-			font-size: .8em;
-		}
-    a {
-	    text-decoration: none;
-			color: black;
-    }
-    a:hover {
-	    text-decoration: none;
-      cursor: pointer;
-			color: black;
-	  }
-		a:visited { 
-			text-decoration: none;
-			color: black;
-		}
-  }
-}  
+  	li {
+	    display: inline-block;
+ 	    padding-right: 5px;
+	    font-size: .8em;
+	    .svg-icon {
+		fill: currentColor;
+		vertical-align: middle;
+		/*  position: relative;  Align more nicely with capital letters */
+		top: -0.0625em;
+	    }
+	}
+}
+
+a.syn-link, a.syn-link:visited, a.syn-link:hover {
+	text-decoration: none;
+	color: black;
+}
 

@@ -5,9 +5,9 @@ add_action( 'init', array( 'Syn_Config', 'init' ) );
 class Syn_Config {
 	public static function init() {
 		add_action( 'wp_enqueue_scripts', array( 'Syn_Config', 'enqueue_scripts' ) );
-		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ) , 20 );
 		add_action( 'admin_menu', array( 'Syn_Config', 'admin_menu' ), 11 );
 		add_action( 'admin_init', array( 'Syn_Config', 'admin_init' ) );
+		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ) , 20 );
 	}
 
 	public static function enqueue_scripts() {
@@ -263,6 +263,10 @@ class Syn_Config {
 			return $content;
 		}
 		if ( ( is_admin() ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+			return $content;
+		}
+
+		if ( is_feed() ) {
 			return $content;
 		}
 

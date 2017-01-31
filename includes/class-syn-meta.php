@@ -136,7 +136,7 @@ class Syn_Meta {
 	public static function get_network_strings() {
 		$strings = array(
 			'amazon.com' => _x( 'Amazon', 'syndication-links' ),
-			'behance.net'=> _x( 'Behance', 'syndication-links' ),
+			'behance.net' => _x( 'Behance', 'syndication-links' ),
 			'blogspot.com' => _x( 'Blogger', 'syndication-links' ),
 			'codepen.io' => _x( 'codepen', 'syndication-links' ),
 			'dribbble.com' => _x( 'Dribbble', 'syndication-links' ),
@@ -144,8 +144,8 @@ class Syn_Meta {
 			'eventbrite.com' => _x( 'Eventbrite', 'syndication-links' ),
 			'facebook.com' => _x( 'Facebook', 'syndication-links' ),
 			'flickr.com' => _x( 'Flickr', 'syndication-links' ),
-			'foursquare.com'  => _x ( 'Foursquare', 'syndication-links' ), 
-			'ghost.org' => _x( 'Ghost', 'syndication-links'),
+			'foursquare.com'  => _x( 'Foursquare', 'syndication-links' ),
+			'ghost.org' => _x( 'Ghost', 'syndication-links' ),
 			'plus.google.com' => _x( 'Google+', 'syndication-links' ),
 			'github.com' => _x( 'Github', 'syndication-links' ),
 			'instagram.com' => _x( 'Instagram', 'syndication-links' ),
@@ -175,11 +175,11 @@ class Syn_Meta {
 	}
 
 	public static function extract_domain_name($url, $subdomain = false) {
-		$parse = wp_parse_url( $url );
+		$parse = wp_parse_url( $url, PHP_URL_HOST );
 		if ( $subdomain ) {
-			return preg_replace( '/^www\./', '', $parse['host'] );
+			return preg_replace( '/^www\./', '', $parse );
 		}
-		return preg_replace( '/^([a-zA-Z0-9].*\.)?([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z.]{2,})$/', '$2', $parse['host'] );
+		return preg_replace( '/^([a-zA-Z0-9].*\.)?([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z.]{2,})$/', '$2', $parse );
 	}
 
 	public static function get_icon( $domain ) {
@@ -235,7 +235,7 @@ class Syn_Meta {
 		}
 			// Substitute another svg sprite file
 			$sprite = apply_filters( 'syndication_icon_sprite', plugin_dir_url( __FILE__ ) . 'social-logos.svg', $domain );
-			return '<svg class="svg-icon svg-' . $icon . '" aria-hidden="true"><use xlink:href="' . $sprite . '#' . $icon . '"></use><svg>';
+			return '<svg class="svg-icon svg-' . $icon . '" aria-hidden="true"><use xlink:href="' . $sprite . '#' . $icon . '"></use></svg>';
 	}
 
 
@@ -259,12 +259,11 @@ class Syn_Meta {
 		$links = self::clean_urls( $links );
 		if ( empty( $links ) ) {
 			return;
-		}
-		else { 
+		} else {
 			update_post_meta( $post_id, 'mf2_syndication', $links );
 		}
 	}
-		 
+
 
 
 	public static function get_syndication_links_data( $post_ID = null ) {
@@ -291,46 +290,39 @@ class Syn_Meta {
 		if ( empty( $urls ) ) {
 			return array();
 		}
+
+		// Allow adding of additional links before display
+		$urls = apply_filters( 'syn_add_links', $urls, $post_ID );
 		return $urls;
 	}
 
 
-	public static function get_syndication_links( $post_ID = null ) {
+	public static function get_syndication_links( $post_ID = null, $display = false ) {
 		if ( ! $post_ID ) {
 			$post_ID = get_the_ID();
 		}
 		$urls = self::get_syndication_links_data( $post_ID );
-		// Allow adding of additional links before display
-		$urls = apply_filters( 'syn_add_links', $urls, $post_ID );
 		if ( empty( $urls ) ) {
 			return '';
 		}
 		$strings = self::get_network_strings();
-		$single = is_single( $post_ID );
-		$synlinks = '<span class="relsyn"><ul>' . get_option( 'syndication-links_text_before' );
+		$rel = is_single( $post_ID ) ? ' rel="syndication">' : '>';
+		$single = get_option( 'syndication-links_archives' ) && ! is_single( $post_ID );
+		$display = $display ?: $single ? get_option( 'syndication-links_display' ) : 'hidden';
+		$icons = in_array( $display, array( 'icons', 'iconstext' ) );
+		$text = in_array( $display, array( 'text', 'iconstext' ) );
+		$links = array();
 		foreach ( $urls as $url ) {
 			if ( empty( $url ) || ! is_string( $url ) ) { continue; }
 			$domain = self::extract_domain_name( $url );
-			if ( array_key_exists( $domain, $strings ) ) {
-				$name = $strings[ $domain ];
-			} else {
-				$name = $domain;
-			}
-			$synlinks .= '<li><a title="' . $name . '" class="u-syndication" href="' . esc_url( $url ) . '"';
-			if ( $single ) {
-				$synlinks .= ' rel="syndication">';
-				if ( 'icons' !== get_option( 'syndication-links_display' ) ) {
-					$synlinks .= '<span class="syn-name">' . $name . '</span>';
-				}
-				$synlinks .= self::get_icon( $domain );
-			} else {
-				$synlinks .= '>';
-				$synlinks .= self::get_icon( $domain );
-			}
-			$synlinks .= '</a></li>';
+			$name = ( array_key_exists( $domain, $strings ) ) ? $strings[ $domain ] : $domain;
+			$syn = ($icons ? self::get_icon( $domain ) : '') . ($text ? $name : '');
+
+			$links[] = sprintf( '<a aria-label="%1$s" class="syn-link u-syndication" href="%2$s"%3$s %4$s</a>', $name, esc_url( $url ), $rel, $syn );
 		}
-		$synlinks .= '</ul></span>';
-		return $synlinks;
+		$textbefore = ( $display != 'hidden' ) ? get_option( 'syndication-links_text_before' ) : '';
+
+		return '<ul class="relsyn">' . $textbefore .  '<li>' . join( '</li><li>', $links ) . '</li></ul>';
 	}
 
 } // End Class

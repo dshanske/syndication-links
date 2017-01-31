@@ -8,46 +8,36 @@
 /*--------------------------------------------------------------
 * Link Style
 --------------------------------------------------------------*/
-.relsyn ul, .relmewidget ul {
+ul.relsyn {
   display: inline-block;
-  list-style: none;
   text-align: top;
+  list-style-type: none;
   margin: 0;
   padding: 1px;
 }
-.relsyn ul li, .relmewidget ul li {
+ul.relsyn li {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
   display: inline-block;
   padding-right: 5px;
+  font-size: .8em;
 }
-.relsyn ul li .svg-icon, .relmewidget ul li .svg-icon {
+ul.relsyn li .svg-icon {
   fill: currentColor;
   vertical-align: middle;
   /*  position: relative;  Align more nicely with capital letters */
   top: -0.0625em;
 }
-.relsyn ul li .syn-name, .relmewidget ul li .syn-name {
-  font-size: .8em;
-}
-.relsyn ul li a, .relmewidget ul li a {
-  text-decoration: none;
-  color: black;
-}
-.relsyn ul li a:hover, .relmewidget ul li a:hover {
-  text-decoration: none;
-  cursor: pointer;
-  color: black;
-}
-.relsyn ul li a:visited, .relmewidget ul li a:visited {
+
+a.syn-link, a.syn-link:visited, a.syn-link:hover {
   text-decoration: none;
   color: black;
 }
 
-.relsyn ul li .svg-icon, .relmewidget ul li .svg-icon {
+ul.relsyn li .svg-icon {
   height: 1.2em;
   width: 1.2em;
-}
-.relsyn ul li .syn-name, .relmewidget ul li .syn-name {
-  font-size: .8em;
 }
 
 /*--------------------------------------------------------------
