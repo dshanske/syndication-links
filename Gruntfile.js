@@ -23,10 +23,31 @@ module.exports = function(grunt) {
              },
           files: {                         // Dictionary of files
         'css/syn.min.css': 'sass/main.scss',       // 'destination': 'source'
+	'css/syn-medium.min.css': 'sass/main-medium.scss',
+	'css/syn-large.min.css': 'sass/main-large.scss',
         'css/syn-bw.min.css': 'sass/main-bw.scss',
+	'css/syn-bw-medium.min.css': 'sass/main-bw-medium.scss',
+	'css/syn-bw-large.min.css': 'sass/main-bw-large.scss',
          }
 	}
   },
+
+        svgstore: {
+                options: {
+                        prefix : '', // Unused by us, but svgstore demands this variable
+                        cleanup : ['style', 'fill', 'id'],
+                        svg: { // will add and overide the the default xmlns="http://www.w3.org/2000/svg" attribute to the resulting SVG
+                                viewBox : '0 0 24 24',
+                                xmlns: 'http://www.w3.org/2000/svg'
+                        },
+                },
+                dist: {
+                                files: {
+                                        'includes/social-logos.svg': ['svgs/*.svg']
+                                }
+                }
+        },
+
 
  copy: {
            main: {
@@ -56,6 +77,7 @@ module.exports = function(grunt) {
 		mainFile: 'syndication-links.php', // Main project file.
                 domainPath: '/languages',                   // Where to save the POT file.
                 potFilename: 'syndication-links.pot',
+		exclude: ['build/.*'],
                 type: 'wp-plugin',                // Type of project (wp-plugin or wp-theme).
                 updateTimestamp: true             // Whether the POT-Creation-Date should be updated without other changes.
             	}
@@ -67,7 +89,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks( 'grunt-wp-i18n' );
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-svgstore');
 
   // Default task(s).
-  grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'sass']);
+  grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'sass', 'svgstore']);
 };
