@@ -7,7 +7,8 @@ class Syn_Config {
 		add_action( 'wp_enqueue_scripts', array( 'Syn_Config', 'enqueue_scripts' ) );
 		add_action( 'admin_menu', array( 'Syn_Config', 'admin_menu' ), 11 );
 		add_action( 'admin_init', array( 'Syn_Config', 'admin_init' ) );
-		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ) , 20 );
+		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ), 20 );
+		add_filter( 'the_content_feed', array( 'Syn_Config', 'the_content_feed' ), 20 );
 	}
 
 	public static function enqueue_scripts() {
@@ -102,7 +103,7 @@ class Syn_Config {
 				'type' => 'string',
 				'description' => 'Text Before Syndication Links',
 				'show_in_rest' => true,
-				'default' => '',
+				'default' => 'Also on:',
 			)
 		);
 
@@ -258,7 +259,8 @@ class Syn_Config {
 	}
 
 	public static function the_content( $content ) {
-		global $post, $wp_current_filter;
+		global $wp_current_filter;
+		$post = get_post();
 		if ( empty( $post ) ) {
 			return $content;
 		}
@@ -282,6 +284,24 @@ class Syn_Config {
 		}
 		return $content . get_syndication_links();
 	}
+
+	public static function the_content_feed( $content ) {
+		$post = get_post();
+		if ( empty( $post ) ) {
+			return $content;
+		}
+		if ( ( is_admin() ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+			return $content;
+		}
+		$args = array(
+			'style' => 'p',
+			'icons' => false,
+			'text' => true
+		);
+		return $content . get_syndication_links( $post, $args );
+	}
+
+
 
 } // End Class
 

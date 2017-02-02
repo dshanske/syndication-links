@@ -292,44 +292,70 @@ class Syn_Meta {
 		}
 
 		// Allow adding of additional links before display
-		$urls = apply_filters( 'syn_add_links', $urls, $post_ID );
-		return $urls;
+		return apply_filters( 'syn_add_links', $urls, $post_ID );
 	}
 
 
-	public static function get_syndication_links( $post_ID = null, $display = false ) {
+	public static function get_syndication_links( $post_ID = null, $args = array() ) {
 		if ( ! $post_ID ) {
 			$post_ID = get_the_ID();
 		}
+		$display = get_option( 'syndication-links_display' );
+		if ( ! is_singular() ) {
+			$display = get_option( 'syndication-links_archives' ) ? $display : 'hidden';
+		}
+		$defaults = array(
+			'style' => 'ul',
+			'text' => in_array( $display, array( 'text', 'iconstext' ) ),
+			'icons' => in_array( $display, array( 'icons', 'iconstext' ) ),
+			'container-css' => 'relsyn',
+			'single-css' => 'syn-link',
+		);
+		$r = wp_parse_args( $args, $defaults );
+
 		$urls = self::get_syndication_links_data( $post_ID );
 		if ( empty( $urls ) ) {
 			return '';
 		}
 		$strings = self::get_network_strings();
-		$rel = is_single( $post_ID ) ? ' rel="syndication">' : '>';
-		$single = get_option( 'syndication-links_archives' ) && ! is_single( $post_ID );
-		$display = $display ?: $single ? get_option( 'syndication-links_display' ) : 'hidden';
-		$icons = in_array( $display, array( 'icons', 'iconstext' ) );
-		$text = in_array( $display, array( 'text', 'iconstext' ) );
+		$rel = is_single() ? ' rel="syndication">' : '>';
 		$links = array();
 		foreach ( $urls as $url ) {
 			if ( empty( $url ) || ! is_string( $url ) ) { continue; }
 			$domain = self::extract_domain_name( $url );
 			$name = ( array_key_exists( $domain, $strings ) ) ? $strings[ $domain ] : $domain;
-			$syn = ($icons ? self::get_icon( $domain ) : '') . ($text ? $name : '');
+			$syn = ( $r['icons'] ? self::get_icon( $domain ) : '') . ( $r['text'] ? $name : '');
 
 			$links[] = sprintf( '<a aria-label="%1$s" class="syn-link u-syndication" href="%2$s"%3$s %4$s</a>', $name, esc_url( $url ), $rel, $syn );
 		}
-		$textbefore = ( $display != 'hidden' ) ? get_option( 'syndication-links_text_before' ) : '';
+		$textbefore = ( 'hidden' !== $display ) ? get_option( 'syndication-links_text_before' ) : '';
 
-		return '<ul class="relsyn">' . $textbefore .  '<li>' . join( '</li><li>', $links ) . '</li></ul>';
+		switch ( $r['style'] ) {
+			case 'p':
+				$before = '<p class="' . $r['container-css']  . '"><span>';
+				$sep = ' ';
+				$after = '</p>';
+				break;
+			case 'ol':
+				$before = '<ol class="' . $r['container-css'] . '"><li>';
+				$sep = '</li><li>';
+				$after = '</li></ol>';
+				break;
+
+			default:
+				$before = '<ul class="' . $r['container-css'] . '"><li>';
+				$sep = '</li><li>';
+				$after = '</li></ul>';
+		}
+
+		return $textbefore . $before . join( $sep, $links ) . $after;
 	}
 
 } // End Class
 
 
-function get_syndication_links( $post_ID = null ) {
-	return Syn_Meta::get_syndication_links( $post_ID );
+function get_syndication_links( $post_ID = null, $args = array() ) {
+	return Syn_Meta::get_syndication_links( $post_ID, $args );
 }
 
 ?>
