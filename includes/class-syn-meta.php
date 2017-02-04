@@ -17,7 +17,42 @@ class Syn_Meta {
 			'show_in_rest' => true,
 		);
 		register_meta( 'post', 'mf2_syndication', $args );
+		add_filter( 'query_vars', array( 'Syn_Meta', 'query_var' ) );
+		add_action( 'parse_query', array( 'Syn_Meta', 'parse_query' ) );
 	}
+
+	public static function query_var( $vars ) {
+		$vars[] = 'original-of';
+			return $vars;
+	}
+
+	public static function parse_query( $wp ) {
+		if ( ! array_key_exists( 'original-of', $wp->query_vars ) ) {
+			return;
+		}
+		$url = $wp->get( 'original-of' );
+		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
+			include( get_404_template() );
+			exit;
+		}
+		$url = esc_url_raw( $url );
+		$args = array(
+			'fields' => 'ids',
+			'meta_key' => 'mf2_syndication',
+			'meta_query' => array(
+				'key' => 'mf2_syndication',
+				'value' => $url,
+				'compare' => 'LIKE',
+			),
+		);
+		$posts = get_posts( $args );
+		if ( empty( $posts ) ) {
+			include( get_404_template() );
+			exit;
+		}
+		wp_redirect( get_permalink( $posts[0] ) );
+	}
+
 
 	/*
 	Filters incoming URLs.
