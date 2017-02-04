@@ -322,12 +322,11 @@ class Syn_Meta {
 				delete_post_meta( $post_ID, 'syndication_urls' );
 			}
 		}
-		if ( empty( $urls ) ) {
-			return array();
-		}
 
-		// Allow adding of additional links before display
-		return apply_filters( 'syn_add_links', $urls, $post_ID );
+		// Allow adding of additional links before display but ensuring they are unique
+		$urls = apply_filters( 'syn_add_links', $urls, $post_ID );
+		$urls = array_unique( $urls );
+		return array_filter( $urls );
 	}
 
 
