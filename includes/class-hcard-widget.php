@@ -66,7 +66,7 @@ class hcard_widget extends WP_Widget {
 			  <div class="hcard_contact"> 
 				<?php
 				if ( ! empty( $user_meta['tel'] ) ) {
-			        echo '<a class="p-tel tel" href="tel:' . $user_meta['tel'] . '">' . $user_meta['tel'] . '</a>';
+					echo '<a class="p-tel tel" href="tel:' . $user_meta['tel'] . '">' . $user_meta['tel'] . '</a>';
 				}
 
 			?>
@@ -132,10 +132,10 @@ class hcard_widget extends WP_Widget {
 	<p>
 		<label for="<?php echo $this->get_field_id( 'display_author' ); ?>"><?php _e( 'Display Author:', 'framework' ) ?></label>
 		<?php wp_dropdown_users( array(
-		'id' => $this->get_field_id( 'display_author' ),
+			'id' => $this->get_field_id( 'display_author' ),
 									'name' => $this->get_field_name( 'display_author' ),
 									'selected' => $instance['display_author'],
-									) ); ?>
+		) ); ?>
 	</p>
 
 	<p>
