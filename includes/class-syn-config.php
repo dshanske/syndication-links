@@ -9,37 +9,7 @@ class Syn_Config {
 		add_action( 'admin_init', array( 'Syn_Config', 'admin_init' ) );
 		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ), 30 );
 		add_filter( 'the_content_feed', array( 'Syn_Config', 'the_content_feed' ), 20 );
-	}
 
-	public static function enqueue_scripts() {
-		$size = get_option( 'syndication-links_size' );
-		if ( '1' === get_option( 'syndication-links_bw' ) ) {
-			switch ( $size ) {
-				case 'large':
-					$css = 'css/syn-bw-large.min.css';
-					break;
-				case 'medium':
-					$css = 'css/syn-bw-medium.min.css';
-					break;
-				default:
-					$css = 'css/syn-bw.min.css';
-			}
-		} else {
-			switch ( $size ) {
-				case 'large':
-					$css = 'css/syn-large.min.css';
-					break;
-				case 'medium':
-					$css = 'css/syn-medium.min.css';
-					break;
-				default:
-					$css = 'css/syn.min.css';
-			}
-		}
-		wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname( __FILE__ ) ) . $css, array(), SYNDICATION_LINKS_VERSION );
-	}
-
-	public static function admin_init() {
 		// Syndication Content Options
 		register_setting(
 			'syndication_options',
@@ -106,7 +76,37 @@ class Syn_Config {
 				'default' => 'Also on:',
 			)
 		);
+	}
 
+	public static function enqueue_scripts() {
+		$size = get_option( 'syndication-links_size' );
+		if ( '1' === get_option( 'syndication-links_bw' ) ) {
+			switch ( $size ) {
+				case 'large':
+					$css = 'css/syn-bw-large.min.css';
+					break;
+				case 'medium':
+					$css = 'css/syn-bw-medium.min.css';
+					break;
+				default:
+					$css = 'css/syn-bw.min.css';
+			}
+		} else {
+			switch ( $size ) {
+				case 'large':
+					$css = 'css/syn-large.min.css';
+					break;
+				case 'medium':
+					$css = 'css/syn-medium.min.css';
+					break;
+				default:
+					$css = 'css/syn.min.css';
+			}
+		}
+		wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname( __FILE__ ) ) . $css, array(), SYNDICATION_LINKS_VERSION );
+	}
+
+	public static function admin_init() {
 		add_settings_section(
 			'syndication-content',
 			__( 'Content Options', 'syndication-links' ),
