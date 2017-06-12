@@ -46,6 +46,10 @@ The settings include the following options as follows with either a set of butto
 
 ## Upgrade Notice ##
 
+### Version 3.2.0 ###
+
+In this version, the signatures of the `get_syndication_links` function changed in order to allow for comments as an option. The new function is `get_post_syndication_links`.
+
 ### Version 3.0.5 ###
 
 Upgrade to this version moves the location of stored syndication links to match the changes in the Micropub plugin. Recommend
