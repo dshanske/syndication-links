@@ -121,7 +121,7 @@ class Syn_Config {
 			'syndication-content',
 			array(
 				'name' => 'syndication-links_display',
-			       'list' => self::display_options(),
+				   'list' => self::display_options(),
 			)
 		);
 		add_settings_field(
@@ -132,7 +132,7 @@ class Syn_Config {
 			'syndication-content',
 			array(
 				'name' => 'syndication-links_size',
-			       'list' => self::size_options(),
+				   'list' => self::size_options(),
 			)
 		);
 		add_settings_field(
@@ -170,7 +170,7 @@ class Syn_Config {
 	public static function admin_menu() {
 		// If the IndieWeb Plugin is installed use its menu.
 		if ( class_exists( 'IndieWeb_Plugin' ) ) {
-		    add_submenu_page(
+			add_submenu_page(
 				'indieweb',
 				__( 'Syndication Links', 'syndication-links' ), // page title
 				__( 'Syndication Links', 'syndication-links' ), // menu title
@@ -282,12 +282,12 @@ class Syn_Config {
 				}
 			}
 		}
-		return $content . get_syndication_links();
+		return $content . get_post_syndication_links();
 	}
 
 	public static function the_content_feed( $content ) {
-		$post = get_post();
-		if ( empty( $post ) ) {
+		$post_ID = get_the_ID();
+		if ( ! $post_ID ) {
 			return $content;
 		}
 		if ( ( is_admin() ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
@@ -296,9 +296,9 @@ class Syn_Config {
 		$args = array(
 			'style' => 'p',
 			'icons' => false,
-			'text' => true
+			'text' => true,
 		);
-		return $content . get_syndication_links( $post, $args );
+		return $content . get_post_syndication_links( $post_ID, $args );
 	}
 
 

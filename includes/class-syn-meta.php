@@ -274,7 +274,7 @@ class Syn_Meta {
 	}
 
 
-	public static function add_link( $post_id = null, $uri ) {
+	public static function add_post_link( $post_id = null, $uri ) {
 		if ( ! $post_id ) {
 			$post_id = get_the_ID();
 		}
@@ -301,38 +301,61 @@ class Syn_Meta {
 
 
 
-	public static function get_syndication_links_data( $post_ID = null ) {
-		if ( ! $post_ID ) {
-			$post_ID = get_the_ID();
-		}
-		$urls = get_post_meta( $post_ID, 'mf2_syndication', true );
-		if ( $urls ) {
-			if ( is_string( $urls ) ) {
-				$urls = explode( "\n", $urls );
+	public static function get_syndication_links_data( $meta_type, $object_id = null ) {
+		if ( ! $object_id ) {
+			switch ( $meta_type ) {
+				case 'post':
+					$object_id = get_the_ID();
+					$urls = get_post_meta( $object_id, 'mf2_syndication', true );
+					if ( $urls ) {
+						if ( is_string( $urls ) ) {
+							$urls = explode( "\n", $urls );
+						}
+					} else {
+						$urls = array();
+					}
+					$old = get_post_meta( $object_id, 'syndication_urls', true );
+					if ( $old ) {
+						$old = explode( "\n", $old );
+						if ( is_array( $old ) ) {
+							$urls = array_filter( array_unique( array_merge( $urls, $old ) ) );
+							update_post_meta( $object_id, 'mf2_syndication', $urls );
+							delete_post_meta( $object_id, 'syndication_urls' );
+						}
+					}
+					break;
+				case 'comment':
+					$urls = get_comment_meta( $object_id, 'mf2_syndication', true );
+					if ( $urls ) {
+						if ( is_string( $urls ) ) {
+							$urls = explode( "\n", $urls );
+						}
+					} else {
+						$urls = array();
+					}
+					break;
+				default:
+					return array();
 			}
-		} else {
-			$urls = array();
 		}
-		$old = get_post_meta( $post_ID, 'syndication_urls', true );
-		if ( $old ) {
-			$old = explode( "\n", $old );
-			if ( is_array( $old ) ) {
-				$urls = array_filter( array_unique( array_merge( $urls, $old ) ) );
-				update_post_meta( $post_ID, 'mf2_syndication', $urls );
-				delete_post_meta( $post_ID, 'syndication_urls' );
-			}
-		}
-
 		// Allow adding of additional links before display but ensuring they are unique
-		$urls = apply_filters( 'syn_add_links', $urls, $post_ID );
+		$urls = apply_filters( 'syn_add_links', $urls, $object_id );
 		$urls = array_unique( $urls );
 		return array_filter( $urls );
 	}
 
+	public static function get_post_syndication_links( $post_ID = null, $args = array() ) {
+		return get_syndication_links( 'post', $post_ID, $args );
+	}
 
-	public static function get_syndication_links( $post_ID = null, $args = array() ) {
-		if ( ! $post_ID ) {
-			$post_ID = get_the_ID();
+	public static function get_comment_syndication_links( $comment_ID = null, $args = array() ) {
+		return get_syndication_links( 'comment', $comment_ID, $args );
+	}
+
+	public static function get_syndication_links( $meta_type, $object_id = null, $args = array() ) {
+		$urls = self::get_syndication_links_data( $meta_type, $object_id );
+		if ( empty( $urls ) ) {
+			return '';
 		}
 		$display = get_option( 'syndication-links_display' );
 		if ( ! is_singular() ) {
@@ -347,10 +370,6 @@ class Syn_Meta {
 		);
 		$r = wp_parse_args( $args, $defaults );
 
-		$urls = self::get_syndication_links_data( $post_ID );
-		if ( empty( $urls ) ) {
-			return '';
-		}
 		$strings = self::get_network_strings();
 		$rel = is_single() ? ' rel="syndication">' : '>';
 		$links = array();
@@ -388,8 +407,16 @@ class Syn_Meta {
 } // End Class
 
 
-function get_syndication_links( $post_ID = null, $args = array() ) {
-	return Syn_Meta::get_syndication_links( $post_ID, $args );
+function get_syndication_links( $meta_type, $object_id = null, $args = array() ) {
+	return Syn_Meta::get_syndication_links( $meta_type, $object_id, $args );
+}
+
+function get_post_syndication_links( $post_ID = null, $args = array() ) {
+	return Syn_Meta::get_post_syndication_links( $post_ID, $args );
+}
+
+function get_comment_syndication_links( $comment_ID = null, $args = array() ) {
+	return Syn_Meta::get_comment_syndication_links( $comment_ID, $args );
 }
 
 ?>
