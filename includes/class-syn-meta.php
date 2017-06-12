@@ -85,7 +85,7 @@ class Syn_Meta {
 			return false;
 		}
 		// Rewrite these to https as needed
-		$secure = apply_filters( 'syn_rewrite_secure', array( 'facebook.com', 'twitter.com' ) );
+		$secure = apply_filters( 'syn_rewrite_secure', array( 'facebook.com', 'twitter.com', 'huffduffer.com', 'foursquare.com' ) );
 		if ( in_array( self::extract_domain_name( $url ), $secure ) ) {
 			$url = preg_replace( '/^http:/i', 'https:', $url );
 		}
@@ -340,7 +340,7 @@ class Syn_Meta {
 		}
 		// Allow adding of additional links before display but ensuring they are unique
 		$urls = apply_filters( 'syn_add_links', $urls, $object_id );
-		$urls = array_unique( $urls );
+		$urls = array_unique( self::clean_urls( $urls ) );
 		return array_filter( $urls );
 	}
 
