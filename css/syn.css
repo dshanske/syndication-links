@@ -16,9 +16,6 @@ ul.relsyn {
   padding: 1px;
 }
 ul.relsyn li {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
   display: inline-block;
   padding-right: 5px;
   font-size: .8em;

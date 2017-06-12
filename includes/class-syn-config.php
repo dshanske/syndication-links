@@ -7,7 +7,7 @@ class Syn_Config {
 		add_action( 'wp_enqueue_scripts', array( 'Syn_Config', 'enqueue_scripts' ) );
 		add_action( 'admin_menu', array( 'Syn_Config', 'admin_menu' ), 11 );
 		add_action( 'admin_init', array( 'Syn_Config', 'admin_init' ) );
-		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ), 20 );
+		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ), 30 );
 		add_filter( 'the_content_feed', array( 'Syn_Config', 'the_content_feed' ), 20 );
 	}
 
