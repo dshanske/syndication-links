@@ -296,32 +296,54 @@ class Syn_Meta {
 	}
 
 
-	public static function add_post_link( $post_id = null, $uri ) {
-		if ( ! $post_id ) {
-			$post_id = get_the_ID();
+	public static function add_syndication_link( $object = null, $uri ) {
+		if ( ! $object ) {
+			$object = get_post();
+		}
+		// If numeric assume post_ID
+		if ( is_numeric( $object ) ) {
+			$object = get_post( $object );
 		}
 		if ( empty( $uri ) ) {
 			return;
 		}
-		$links = get_post_meta( $post_id, 'mf2_syndication' );
-		if ( ! is_array( $links ) ) {
-			$links = array();
+		if ( $object instanceof WP_Post ) {
+			$links = get_post_meta( $object->ID, 'mf2_syndication' );
+			if ( ! is_array( $links ) ) {
+				$links = array();
+			}
+			if ( is_string( $uri ) ) {
+				$links[] = $uri;
+			}
+			if ( is_array( $uri ) ) {
+				$links = array_merge( $links, $uri );
+			}
+			$links = self::clean_urls( $links );
+			if ( empty( $links ) ) {
+				return;
+			} else {
+				update_post_meta( $object->ID, 'mf2_syndication', $links );
+			}
 		}
-		if ( is_string( $uri ) ) {
-			$links[] = $uri;
-		}
-		if ( is_array( $uri ) ) {
-			$links = array_merge( $links, $uri );
-		}
-		$links = self::clean_urls( $links );
-		if ( empty( $links ) ) {
-			return;
-		} else {
-			update_post_meta( $post_id, 'mf2_syndication', $links );
+		if ( $object instanceof WP_Comment ) {
+			$links = get_comment_meta( $object->comment_ID, 'mf2_syndication' );
+			if ( ! is_array( $links ) ) {
+				$links = array();
+			}
+			if ( is_string( $uri ) ) {
+				$links[] = $uri;
+			}
+			if ( is_array( $uri ) ) {
+				$links = array_merge( $links, $uri );
+			}
+			$links = self::clean_urls( $links );
+			if ( empty( $links ) ) {
+				return;
+			} else {
+				update_comment_meta( $object->comment_ID, 'mf2_syndication', $links );
+			}
 		}
 	}
-
-
 
 	public static function get_syndication_links_data( $object = null ) {
 		$urls = array();
