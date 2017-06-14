@@ -414,6 +414,7 @@ class Syn_Meta {
 			'single-css' => 'syn-link',
 			'text-css' => 'syn-text',
 		);
+		$defaults = apply_filters( 'syn_links_display_defaults', $defaults );
 		$r = wp_parse_args( $args, $defaults );
 
 		$strings = self::get_network_strings();
@@ -425,7 +426,7 @@ class Syn_Meta {
 			$name = ( array_key_exists( $domain, $strings ) ) ? $strings[ $domain ] : $domain;
 			$syn = ( $r['icons'] ? self::get_icon( $domain ) : '') . ( $r['text'] ? $name : '');
 
-			$links[] = sprintf( '<a aria-label="%1$s" class="syn-link u-syndication" href="%2$s"%3$s %4$s</a>', $name, esc_url( $url ), $rel, $syn );
+			$links[] = sprintf( '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>', $name, $r['single-css'], esc_url( $url ), $rel, $syn );
 		}
 		$textbefore = ( 'hidden' !== $display ) ? '<span class="' . $r['text-css'] . '">' . get_option( 'syndication-links_text_before' ) . '</span>' : '';
 

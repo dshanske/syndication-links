@@ -24,9 +24,26 @@ support automatically adding their links as well.
 
 You will have to remove the content filter `remove_filter( 'the_content', array( 'Syn_Config', 'the_content' ) , 30 )` and then you can call get_syndication_links() directly in your theme.
 
+* `get_syndication_links( $object, $args ) - Returns the HTML for $object. $object can be a post_ID, a WP_Post object, or a WP_Comment object.
+** $args
+*** `style` - Defaults to ul
+*** `text` - Display text, defaults to settings option
+*** `icons` - Display icons, defaults to settings option
+*** `container-css` - Class to wrap entire syndication links in
+*** `single-css` - Class to wrap a single link in
+*** `text-css` - Class to wrap the text before the links in
+
 ### How can I look up the original if I have a syndication link? ###
 
 If you add `?original-of=` and the URL-encoded URL it will return the post that has that URL stored. As no two posts should have the same two syndication links it will by default only return the first.
+
+### What filters are available to modify output? ###
+
+* `syn_rewrite_secure( $domains )` - $domains is an array of domain names to rewrite to https if found
+* `syn_metabox_types( $screens )` - $screens would be an array of post types to add the Syndication Link metabox to.
+* `syn_network_strings( $strings )` - $strings is an array of descriptive text strings by domain name
+* `syn_add_links( $urls, $post_ID )` - $urls is an array of retrieved links from $post_ID
+* `syn_links_display_defaults( $defaults )` - Filter the defaults for displaying Syndication Links
 
 ## Settings ##
 
