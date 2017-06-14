@@ -9,6 +9,7 @@ class Syn_Config {
 		add_action( 'admin_init', array( 'Syn_Config', 'admin_init' ) );
 		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ), 30 );
 		add_filter( 'the_content_feed', array( 'Syn_Config', 'the_content_feed' ), 20 );
+		add_filter( 'comment_text', array( 'Syn_Config', 'comment_text' ), 20, 2 );
 
 		// Syndication Content Options
 		register_setting(
@@ -283,6 +284,13 @@ class Syn_Config {
 			}
 		}
 		return $content . get_post_syndication_links();
+	}
+
+	public static function comment_text( $comment_text, $comment ) {
+		if ( ! is_admin() ) {
+			return $comment_text . '<p>' . get_comment_syndication_links( $comment ) . '</p>';
+		}
+		return $comment_text;
 	}
 
 	public static function the_content_feed( $content ) {
