@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Syndication Links package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Syndication Links 3.1.1\n"
+"Project-Id-Version: Syndication Links 3.2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2017-02-04 14:05:08+00:00\n"
+"POT-Creation-Date: 2017-06-14 05:14:15+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -71,7 +71,7 @@ msgid ""
 "are supported."
 msgstr ""
 
-#: includes/class-syn-meta.php:125
+#: includes/class-syn-meta.php:129
 msgid "One URL per line."
 msgstr ""
 
@@ -116,7 +116,7 @@ msgctxt "syndication-links"
 msgid "Small"
 msgstr ""
 
-#: includes/class-syn-config.php:242 includes/class-syn-meta.php:188
+#: includes/class-syn-config.php:242 includes/class-syn-meta.php:216
 msgctxt "syndication-links"
 msgid "Medium"
 msgstr ""
@@ -126,162 +126,162 @@ msgctxt "syndication-links"
 msgid "Large"
 msgstr ""
 
-#: includes/class-syn-meta.php:173
+#: includes/class-syn-meta.php:201
 msgctxt "syndication-links"
 msgid "Amazon"
 msgstr ""
 
-#: includes/class-syn-meta.php:174
+#: includes/class-syn-meta.php:202
 msgctxt "syndication-links"
 msgid "Behance"
 msgstr ""
 
-#: includes/class-syn-meta.php:175
+#: includes/class-syn-meta.php:203
 msgctxt "syndication-links"
 msgid "Blogger"
 msgstr ""
 
-#: includes/class-syn-meta.php:176
+#: includes/class-syn-meta.php:204
 msgctxt "syndication-links"
 msgid "codepen"
 msgstr ""
 
-#: includes/class-syn-meta.php:177
+#: includes/class-syn-meta.php:205
 msgctxt "syndication-links"
 msgid "Dribbble"
 msgstr ""
 
-#: includes/class-syn-meta.php:178
+#: includes/class-syn-meta.php:206
 msgctxt "syndication-links"
 msgid "Dropbox"
 msgstr ""
 
-#: includes/class-syn-meta.php:179
+#: includes/class-syn-meta.php:207
 msgctxt "syndication-links"
 msgid "Eventbrite"
 msgstr ""
 
-#: includes/class-syn-meta.php:180
+#: includes/class-syn-meta.php:208
 msgctxt "syndication-links"
 msgid "Facebook"
 msgstr ""
 
-#: includes/class-syn-meta.php:181
+#: includes/class-syn-meta.php:209
 msgctxt "syndication-links"
 msgid "Flickr"
 msgstr ""
 
-#: includes/class-syn-meta.php:182
+#: includes/class-syn-meta.php:210
 msgctxt "syndication-links"
 msgid "Foursquare"
 msgstr ""
 
-#: includes/class-syn-meta.php:183
+#: includes/class-syn-meta.php:211
 msgctxt "syndication-links"
 msgid "Ghost"
 msgstr ""
 
-#: includes/class-syn-meta.php:184
+#: includes/class-syn-meta.php:212
 msgctxt "syndication-links"
 msgid "Google+"
 msgstr ""
 
-#: includes/class-syn-meta.php:185
+#: includes/class-syn-meta.php:213
 msgctxt "syndication-links"
 msgid "Github"
 msgstr ""
 
-#: includes/class-syn-meta.php:186
+#: includes/class-syn-meta.php:214
 msgctxt "syndication-links"
 msgid "Instagram"
 msgstr ""
 
-#: includes/class-syn-meta.php:187
+#: includes/class-syn-meta.php:215
 msgctxt "syndication-links"
 msgid "LinkedIn"
 msgstr ""
 
-#: includes/class-syn-meta.php:189
+#: includes/class-syn-meta.php:217
 msgctxt "syndication-links"
 msgid "Path"
 msgstr ""
 
-#: includes/class-syn-meta.php:190
+#: includes/class-syn-meta.php:218
 msgctxt "syndication-links"
 msgid "Pinterest"
 msgstr ""
 
-#: includes/class-syn-meta.php:191
+#: includes/class-syn-meta.php:219
 msgctxt "syndication-links"
 msgid "Pocket"
 msgstr ""
 
-#: includes/class-syn-meta.php:192
+#: includes/class-syn-meta.php:220
 msgctxt "syndication-links"
 msgid "PollDaddy"
 msgstr ""
 
-#: includes/class-syn-meta.php:193
+#: includes/class-syn-meta.php:221
 msgctxt "syndication-links"
 msgid "Reddit"
 msgstr ""
 
-#: includes/class-syn-meta.php:194
+#: includes/class-syn-meta.php:222
 msgctxt "syndication-links"
 msgid "Squarespace"
 msgstr ""
 
-#: includes/class-syn-meta.php:195
+#: includes/class-syn-meta.php:223
 msgctxt "syndication-links"
 msgid "Skype"
 msgstr ""
 
-#: includes/class-syn-meta.php:196
+#: includes/class-syn-meta.php:224
 msgctxt "syndication-links"
 msgid "SoundCloud"
 msgstr ""
 
-#: includes/class-syn-meta.php:197
+#: includes/class-syn-meta.php:225
 msgctxt "syndication-links"
 msgid "Spotify"
 msgstr ""
 
-#: includes/class-syn-meta.php:198
+#: includes/class-syn-meta.php:226
 msgctxt "syndication-links"
 msgid "StumbleUpon"
 msgstr ""
 
-#: includes/class-syn-meta.php:199
+#: includes/class-syn-meta.php:227
 msgctxt "syndication-links"
 msgid "Telegram"
 msgstr ""
 
-#: includes/class-syn-meta.php:200
+#: includes/class-syn-meta.php:228
 msgctxt "syndication-links"
 msgid "Tumblr"
 msgstr ""
 
-#: includes/class-syn-meta.php:201
+#: includes/class-syn-meta.php:229
 msgctxt "syndication-links"
 msgid "Twitch"
 msgstr ""
 
-#: includes/class-syn-meta.php:202
+#: includes/class-syn-meta.php:230
 msgctxt "syndication-links"
 msgid "Twitter"
 msgstr ""
 
-#: includes/class-syn-meta.php:204
+#: includes/class-syn-meta.php:232
 msgctxt "syndication-links"
 msgid "WordPress"
 msgstr ""
 
-#: includes/class-syn-meta.php:205
+#: includes/class-syn-meta.php:233
 msgctxt "syndication-links"
 msgid "YouTube"
 msgstr ""
 
-#: includes/class-syn-meta.php:207
+#: includes/class-syn-meta.php:235
 msgctxt "syndication-links"
 msgid "IndieNews"
 msgstr ""

@@ -10,7 +10,7 @@ Simple way to link to copies of your post elsewhere.
 
 == Description == 
 
-It supports adding rel-syndication/u-syndication links to your posts and pages, indicating where a syndicated copy is. You can do this manually in the post UI, and some plugins
+It supports adding rel-syndication/u-syndication links to your posts, pages, and comments, indicating where a syndicated copy is. You can do this manually and some plugins
 support automatically adding their links as well.
 
 == Installation == 
@@ -46,10 +46,6 @@ The settings include the following options as follows with either a set of butto
 
 == Upgrade Notice == 
 
-= Version 3.2.0 =
-
-In this version, the signatures of the `get_syndication_links` function changed in order to allow for comments as an option. The new function is `get_post_syndication_links`.
-
 = Version 3.0.5 =
 
 Upgrade to this version moves the location of stored syndication links to match the changes in the Micropub plugin. Recommend
@@ -74,6 +70,7 @@ design.
 
 = Version 3.2.0 =
 * Add support for comment syndication links
+* Add CSS for styling text before
 
 = Version 3.1.1 = 
 
