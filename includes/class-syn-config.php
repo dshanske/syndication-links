@@ -9,37 +9,8 @@ class Syn_Config {
 		add_action( 'admin_init', array( 'Syn_Config', 'admin_init' ) );
 		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ), 30 );
 		add_filter( 'the_content_feed', array( 'Syn_Config', 'the_content_feed' ), 20 );
-	}
+		add_filter( 'comment_text', array( 'Syn_Config', 'comment_text' ), 20, 2 );
 
-	public static function enqueue_scripts() {
-		$size = get_option( 'syndication-links_size' );
-		if ( '1' === get_option( 'syndication-links_bw' ) ) {
-			switch ( $size ) {
-				case 'large':
-					$css = 'css/syn-bw-large.min.css';
-					break;
-				case 'medium':
-					$css = 'css/syn-bw-medium.min.css';
-					break;
-				default:
-					$css = 'css/syn-bw.min.css';
-			}
-		} else {
-			switch ( $size ) {
-				case 'large':
-					$css = 'css/syn-large.min.css';
-					break;
-				case 'medium':
-					$css = 'css/syn-medium.min.css';
-					break;
-				default:
-					$css = 'css/syn.min.css';
-			}
-		}
-		wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname( __FILE__ ) ) . $css, array(), SYNDICATION_LINKS_VERSION );
-	}
-
-	public static function admin_init() {
 		// Syndication Content Options
 		register_setting(
 			'syndication_options',
@@ -106,7 +77,37 @@ class Syn_Config {
 				'default' => 'Also on:',
 			)
 		);
+	}
 
+	public static function enqueue_scripts() {
+		$size = get_option( 'syndication-links_size' );
+		if ( '1' === get_option( 'syndication-links_bw' ) ) {
+			switch ( $size ) {
+				case 'large':
+					$css = 'css/syn-bw-large.min.css';
+					break;
+				case 'medium':
+					$css = 'css/syn-bw-medium.min.css';
+					break;
+				default:
+					$css = 'css/syn-bw.min.css';
+			}
+		} else {
+			switch ( $size ) {
+				case 'large':
+					$css = 'css/syn-large.min.css';
+					break;
+				case 'medium':
+					$css = 'css/syn-medium.min.css';
+					break;
+				default:
+					$css = 'css/syn.min.css';
+			}
+		}
+		wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname( __FILE__ ) ) . $css, array(), SYNDICATION_LINKS_VERSION );
+	}
+
+	public static function admin_init() {
 		add_settings_section(
 			'syndication-content',
 			__( 'Content Options', 'syndication-links' ),
@@ -121,7 +122,7 @@ class Syn_Config {
 			'syndication-content',
 			array(
 				'name' => 'syndication-links_display',
-			       'list' => self::display_options(),
+				   'list' => self::display_options(),
 			)
 		);
 		add_settings_field(
@@ -132,7 +133,7 @@ class Syn_Config {
 			'syndication-content',
 			array(
 				'name' => 'syndication-links_size',
-			       'list' => self::size_options(),
+				   'list' => self::size_options(),
 			)
 		);
 		add_settings_field(
@@ -170,7 +171,7 @@ class Syn_Config {
 	public static function admin_menu() {
 		// If the IndieWeb Plugin is installed use its menu.
 		if ( class_exists( 'IndieWeb_Plugin' ) ) {
-		    add_submenu_page(
+			add_submenu_page(
 				'indieweb',
 				__( 'Syndication Links', 'syndication-links' ), // page title
 				__( 'Syndication Links', 'syndication-links' ), // menu title
@@ -282,12 +283,19 @@ class Syn_Config {
 				}
 			}
 		}
-		return $content . get_syndication_links();
+		return $content . get_post_syndication_links();
+	}
+
+	public static function comment_text( $comment_text, $comment ) {
+		if ( ! is_admin() ) {
+			return $comment_text . '<p>' . get_comment_syndication_links( $comment ) . '</p>';
+		}
+		return $comment_text;
 	}
 
 	public static function the_content_feed( $content ) {
-		$post = get_post();
-		if ( empty( $post ) ) {
+		$post_ID = get_the_ID();
+		if ( ! $post_ID ) {
 			return $content;
 		}
 		if ( ( is_admin() ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
@@ -296,9 +304,9 @@ class Syn_Config {
 		$args = array(
 			'style' => 'p',
 			'icons' => false,
-			'text' => true
+			'text' => true,
 		);
-		return $content . get_syndication_links( $post, $args );
+		return $content . get_post_syndication_links( $post_ID, $args );
 	}
 
 
