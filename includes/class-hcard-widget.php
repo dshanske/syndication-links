@@ -1,5 +1,8 @@
 <?php
-add_action( 'widgets_init', create_function( '', 'register_widget("hcard_widget");' ) );
+add_action( 'widgets_init', 'syndication_links_register_hcard' );
+function syndication_links_register_hcard() {
+	register_widget( "hcard_widget" );
+}
 
 class hcard_widget extends WP_Widget {
 	/**
