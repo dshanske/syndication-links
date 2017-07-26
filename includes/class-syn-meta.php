@@ -445,13 +445,12 @@ class Syn_Meta {
 
 	function get_syndication_links( $object = null, $args = array() ) {
 		$links = self::get_syndication_links_elements($object,$args);
-		$display = self::get_syndicaiton_links_display_option();
 		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
 
 		if($r['show_text_before'])
-			$textbefore = ( 'hidden' !== $display ) ? '<span class="' . $r['text-css'] . '">' . get_option( 'syndication-links_text_before' ) . '</span>' : '';
+			$textbefore = self::get_syndication_links_text_before();
 		else
-			$textbefore = '';
+			$textbefore = "";
 
 		switch ( $r['style'] ) {
 			case 'p':
@@ -475,6 +474,12 @@ class Syn_Meta {
 	}
 
 } // End Class
+
+function get_syndication_links_text_before() {
+	$display = self::get_syndicaiton_links_display_option();
+
+	return ( 'hidden' !== $display ) ? '<span class="' . $r['text-css'] . '">' . get_option( 'syndication-links_text_before' ) . '</span>' : '';
+}
 
 
 function get_syndication_links( $meta_type, $object_id = null, $args = array() ) {
