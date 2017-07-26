@@ -402,7 +402,7 @@ class Syn_Meta {
 		if ( empty( $urls ) ) {
 			return '';
 		}
-		$display = self::get_syndicaiton_links_display_option();
+		$display = self::get_syndication_links_display_option();
 		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
 
 		$strings = self::get_network_strings();
@@ -419,7 +419,7 @@ class Syn_Meta {
 		return $links;
 	}
 
-	function get_syndicaiton_links_display_option() {
+	function get_syndication_links_display_option() {
 		$display = get_option( 'syndication-links_display' );
 		if ( ! is_singular() ) {
 			$display = get_option( 'syndication-links_archives' ) ? $display : 'hidden';
@@ -429,7 +429,7 @@ class Syn_Meta {
 	}
 
 	function get_syndication_links_display_defaults() {
-		$display = self::get_syndicaiton_links_display_option();
+		$display = self::get_syndication_links_display_option();
 		$defaults = array(
 			'style' => 'ul',
 			'text' => in_array( $display, array( 'text', 'iconstext' ) ),
