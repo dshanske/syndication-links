@@ -472,14 +472,14 @@ class Syn_Meta {
 
 		return $textbefore . $before . join( $sep, $links ) . $after;
 	}
+	
+	function get_syndication_links_text_before() {
+		$display = self::get_syndicaiton_links_display_option();
+
+		return ( 'hidden' !== $display ) ? '<span class="' . $r['text-css'] . '">' . get_option( 'syndication-links_text_before' ) . '</span>' : '';
+	}
 
 } // End Class
-
-function get_syndication_links_text_before() {
-	$display = self::get_syndicaiton_links_display_option();
-
-	return ( 'hidden' !== $display ) ? '<span class="' . $r['text-css'] . '">' . get_option( 'syndication-links_text_before' ) . '</span>' : '';
-}
 
 
 function get_syndication_links( $meta_type, $object_id = null, $args = array() ) {
