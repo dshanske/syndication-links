@@ -419,7 +419,7 @@ class Syn_Meta {
 		return $links;
 	}
 
-	function get_syndication_links_display_option() {
+	function static get_syndication_links_display_option() {
 		$display = get_option( 'syndication-links_display' );
 		if ( ! is_singular() ) {
 			$display = get_option( 'syndication-links_archives' ) ? $display : 'hidden';
