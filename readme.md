@@ -3,7 +3,7 @@
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.7  
 **Tested up to:** 4.8  
-**Stable tag:** 3.2.0  
+**Stable tag:** 3.2.1  
 **License:** GPLv2 or later  
 
 Simple way to link to copies of your post elsewhere.
@@ -84,6 +84,12 @@ design.
 5. [Chris Aldrich](http://stream.boffosocko.com) for many suggestions on improving the display.
 
 ## Changelog ##
+
+### Version 3.2.1###
+* Break add `get_syndication_links function` into smaller pieces ( props @Ruxton )
+* Adds `get_syndication_links_elements` which returns array of anchor tags
+* Adds `get_syndication_links_display_defaults` to return default options
+* Adds `get_syndication_links_text_before` to return textbefore on it's own
 
 ### Version 3.2.0 ###
 * Add support for comment syndication links

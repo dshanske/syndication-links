@@ -3,14 +3,14 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add Syndication Links to Your Content
- * Version: 3.2.0
+ * Version: 3.2.1
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  * Text Domain: syndication-links
  * Domain Path:  /languages
  */
 
-define( 'SYNDICATION_LINKS_VERSION', '3.2.0' );
+define( 'SYNDICATION_LINKS_VERSION', '3.2.1' );
 
 require_once( plugin_dir_path( __FILE__ ) . '/includes/class-syn-meta.php' );
 require_once( plugin_dir_path( __FILE__ ) . '/includes/class-syn-config.php' );
