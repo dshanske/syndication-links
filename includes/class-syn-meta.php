@@ -389,18 +389,10 @@ class Syn_Meta {
 		return array_filter( $urls );
 	}
 
-	public static function get_post_syndication_links( $post_ID = null, $args = array() ) {
-		return get_syndication_links( $post_ID, $args );
-	}
-
-	public static function get_comment_syndication_links( $comment_ID = null, $args = array() ) {
-		return get_syndication_links( get_comment( $comment_ID ), $args );
-	}
-
 	public static function get_syndication_links_elements( $object = null, $args = array() ) {
 		$urls = self::get_syndication_links_data( $object );
 		if ( empty( $urls ) ) {
-			return '';
+			return array();
 		}
 		$display = self::get_syndication_links_display_option();
 		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
@@ -416,6 +408,7 @@ class Syn_Meta {
 
 			$links[] = sprintf( '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>', $name, $r['single-css'], esc_url( $url ), $rel, $syn );
 		}
+
 		return $links;
 	}
 
@@ -443,13 +436,24 @@ class Syn_Meta {
 		return apply_filters( 'syn_links_display_defaults', $defaults );
 	}
 
+	public static function get_syndication_links_text_before( $css = 'syn-text' ) {
+		$display = self::get_syndication_links_display_option();
+
+		return ( 'hidden' !== $display ) ? '<span class="' . $css . '">' . get_option( 'syndication-links_text_before' ) . '</span>' : '';
+	}
+
+
+
 	public static function get_syndication_links( $object = null, $args = array() ) {
 		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
 
 		$links = self::get_syndication_links_elements( $object, $r );
+		if ( empty( $links ) ) {
+			return '';
+		}
 
 		if ( $r['show_text_before'] ) {
-			$textbefore = self::get_syndication_links_text_before();
+			$textbefore = self::get_syndication_links_text_before( $r['text-css'] );
 		} else { $textbefore = '';
 		}
 
@@ -474,10 +478,12 @@ class Syn_Meta {
 		return $textbefore . $before . join( $sep, $links ) . $after;
 	}
 
-	public static function get_syndication_links_text_before() {
-		$display = self::get_syndication_links_display_option();
+	public static function get_post_syndication_links( $post_ID = null, $args = array() ) {
+		return get_syndication_links( $post_ID, $args );
+	}
 
-		return ( 'hidden' !== $display ) ? '<span class="' . $r['text-css'] . '">' . get_option( 'syndication-links_text_before' ) . '</span>' : '';
+	public static function get_comment_syndication_links( $comment_ID = null, $args = array() ) {
+		return get_syndication_links( get_comment( $comment_ID ), $args );
 	}
 
 } // End Class
