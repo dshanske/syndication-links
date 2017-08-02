@@ -274,6 +274,7 @@ class Syn_Meta {
 				'soundcloud.com'  => 'soundcloud',
 				'spotify.com'     => 'spotify',
 				'stumbleupon.com' => 'stumbleupon',
+				'swarmapp.com'    => 'foursquare',
 				'telegram.org'    => 'telegram',
 				'tumblr.com'      => 'tumblr',
 				'twitch.tv'       => 'twitch',
