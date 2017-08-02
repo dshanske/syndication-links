@@ -419,7 +419,7 @@ class Syn_Meta {
 		return $links;
 	}
 
-	function static get_syndication_links_display_option() {
+	public static function get_syndication_links_display_option() {
 		$display = get_option( 'syndication-links_display' );
 		if ( ! is_singular() ) {
 			$display = get_option( 'syndication-links_archives' ) ? $display : 'hidden';
@@ -428,7 +428,7 @@ class Syn_Meta {
 		return $display;
 	}
 
-	function get_syndication_links_display_defaults() {
+	public static function get_syndication_links_display_defaults() {
 		$display = self::get_syndication_links_display_option();
 		$defaults = array(
 			'style' => 'ul',
@@ -443,14 +443,15 @@ class Syn_Meta {
 		return apply_filters( 'syn_links_display_defaults', $defaults );
 	}
 
-	function get_syndication_links( $object = null, $args = array() ) {
-		$links = self::get_syndication_links_elements($object,$args);
+	public static function get_syndication_links( $object = null, $args = array() ) {
 		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
 
-		if($r['show_text_before'])
+		$links = self::get_syndication_links_elements( $object, $r );
+
+		if ( $r['show_text_before'] ) {
 			$textbefore = self::get_syndication_links_text_before();
-		else
-			$textbefore = "";
+		} else { $textbefore = '';
+		}
 
 		switch ( $r['style'] ) {
 			case 'p':
@@ -473,7 +474,7 @@ class Syn_Meta {
 		return $textbefore . $before . join( $sep, $links ) . $after;
 	}
 
-	function get_syndication_links_text_before() {
+	public static function get_syndication_links_text_before() {
 		$display = self::get_syndication_links_display_option();
 
 		return ( 'hidden' !== $display ) ? '<span class="' . $r['text-css'] . '">' . get_option( 'syndication-links_text_before' ) . '</span>' : '';
