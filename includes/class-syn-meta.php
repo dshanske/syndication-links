@@ -397,25 +397,13 @@ class Syn_Meta {
 		return get_syndication_links( get_comment( $comment_ID ), $args );
 	}
 
-	public static function get_syndication_links( $object = null, $args = array() ) {
+	public static function get_syndication_links_elements( $object = null, $args = array() ) {
 		$urls = self::get_syndication_links_data( $object );
 		if ( empty( $urls ) ) {
 			return '';
 		}
-		$display = get_option( 'syndication-links_display' );
-		if ( ! is_singular() ) {
-			$display = get_option( 'syndication-links_archives' ) ? $display : 'hidden';
-		}
-		$defaults = array(
-			'style' => 'ul',
-			'text' => in_array( $display, array( 'text', 'iconstext' ) ),
-			'icons' => in_array( $display, array( 'icons', 'iconstext' ) ),
-			'container-css' => 'relsyn',
-			'single-css' => 'syn-link',
-			'text-css' => 'syn-text',
-		);
-		$defaults = apply_filters( 'syn_links_display_defaults', $defaults );
-		$r = wp_parse_args( $args, $defaults );
+		$display = self::get_syndication_links_display_option();
+		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
 
 		$strings = self::get_network_strings();
 		$rel = is_single() ? ' rel="syndication">' : '>';
@@ -428,7 +416,41 @@ class Syn_Meta {
 
 			$links[] = sprintf( '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>', $name, $r['single-css'], esc_url( $url ), $rel, $syn );
 		}
-		$textbefore = ( 'hidden' !== $display ) ? '<span class="' . $r['text-css'] . '">' . get_option( 'syndication-links_text_before' ) . '</span>' : '';
+		return $links;
+	}
+
+	function static get_syndication_links_display_option() {
+		$display = get_option( 'syndication-links_display' );
+		if ( ! is_singular() ) {
+			$display = get_option( 'syndication-links_archives' ) ? $display : 'hidden';
+		}
+
+		return $display;
+	}
+
+	function get_syndication_links_display_defaults() {
+		$display = self::get_syndication_links_display_option();
+		$defaults = array(
+			'style' => 'ul',
+			'text' => in_array( $display, array( 'text', 'iconstext' ) ),
+			'icons' => in_array( $display, array( 'icons', 'iconstext' ) ),
+			'container-css' => 'relsyn',
+			'single-css' => 'syn-link',
+			'text-css' => 'syn-text',
+			'show_text_before' => true,
+		);
+
+		return apply_filters( 'syn_links_display_defaults', $defaults );
+	}
+
+	function get_syndication_links( $object = null, $args = array() ) {
+		$links = self::get_syndication_links_elements($object,$args);
+		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
+
+		if($r['show_text_before'])
+			$textbefore = self::get_syndication_links_text_before();
+		else
+			$textbefore = "";
 
 		switch ( $r['style'] ) {
 			case 'p':
@@ -449,6 +471,12 @@ class Syn_Meta {
 		}
 
 		return $textbefore . $before . join( $sep, $links ) . $after;
+	}
+
+	function get_syndication_links_text_before() {
+		$display = self::get_syndication_links_display_option();
+
+		return ( 'hidden' !== $display ) ? '<span class="' . $r['text-css'] . '">' . get_option( 'syndication-links_text_before' ) . '</span>' : '';
 	}
 
 } // End Class
