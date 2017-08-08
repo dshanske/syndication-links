@@ -476,7 +476,10 @@ class Syn_Meta {
 				$after = '</li></ul>';
 		}
 
-		return $textbefore . $before . join( $sep, $links ) . $after;
+		if($links != "")
+			return $textbefore . $before . join( $sep, $links ) . $after;
+		else
+			return "";
 	}
 
 	public static function get_post_syndication_links( $post_ID = null, $args = array() ) {
