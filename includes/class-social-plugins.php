@@ -103,29 +103,25 @@ class Social_Plugins {
 				foreach ( $metas as $cntr => $m ) {
 					$url = false;
 					if ( isset( $m['isPosted'] ) && 1 == $m['isPosted'] ) {
-						/*
-						this should be available for some services, for example Tumblr,
-						* but buggy and misses slashes so URL ends up invalid
-						if ( isset( $m['postURL'] ) && !empty( $m['postURL'] ) ) {
-						$url = $m['postURL'];
-						}
-						else {
-						*/
-						$base = (isset( $urlmap[ $serv['code'] ]['url'] )) ? $urlmap[ $serv['code'] ]['url'] : false;
-						if ( $base != false ) {
-							/* Facebook exception, why not */
-							if ( 'FB' == $serv['code'] ) {
-								$pos = strpos( $m['pgID'],'_' );
-								$pgID = ( false == $pos ) ? $m['pgID'] : substr( $m['pgID'], $pos + 1 );
-							} else {
-								$pgID = $m['pgID'];
+						if ( isset( $m['postURL'] ) && ! filter_var( $m['postURL'], FILTER_VALIDATE_URL ) ) {
+							$url = $m['postURL'];
 							}
-							$o = $snap_options[ $okey ][ $cntr ];
-							$search = array( '%BASE%', '%pgID%' );
-							$replace = array( $o[ $urlkey ], $pgID );
-							$url = str_replace( $search, $replace, $base );
+						else {
+							$base = (isset( $urlmap[ $serv['code'] ]['url'] )) ? $urlmap[ $serv['code'] ]['url'] : false;
+							if ( $base != false ) {
+								/* Facebook exception, why not */
+								if ( 'FB' == $serv['code'] ) {
+									$pos = strpos( $m['pgID'],'_' );
+									$pgID = ( false == $pos ) ? $m['pgID'] : substr( $m['pgID'], $pos + 1 );
+								} else {
+									$pgID = $m['pgID'];
+								}
+								$o = $snap_options[ $okey ][ $cntr ];
+								$search = array( '%BASE%', '%pgID%' );
+								$replace = array( $o[ $urlkey ], $pgID );
+								$url = str_replace( $search, $replace, $base );
+							}
 						}
-						/* } */
 						if ( false != $url ) {
 							$url = preg_replace( '~(^|[^:])//+~', '\\1/', $url );
 							$broadcasts[] = $url;
