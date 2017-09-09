@@ -71,8 +71,11 @@ that all users back up prior to upgrade in the event of accidental corruption.
 ### Version 3.0 ###
 
 Version 3.0 removes the two sets of icon fonts in favor of SVG icons. If this is a concern, do not upgrade at this time. Version 3.0 also removes
-rel-me support from this plugin as this support is being built into the Indieweb plugin. Please install that. H-Card support is no longer
-supported and will be removed in a future version.
+rel-me support from this plugin as this support is being built into the Indieweb plugin. Please install that.
+
+### Version 3.2.2 ###
+
+Removes H-Card Widget as does not fit into this plugin. Moving over to the Indieweb plugin although there is a possibility it may not stay there.
 
 ## Credits ##
 
@@ -85,7 +88,10 @@ design.
 
 ## Changelog ##
 
-### Version 3.2.1###
+### Version 3.2.2 ###
+* Remove H-Card Widget
+
+### Version 3.2.1 ###
 * Break add `get_syndication_links function` into smaller pieces ( props @Ruxton )
 * Adds `get_syndication_links_elements` which returns array of anchor tags
 * Adds `get_syndication_links_display_defaults` to return default options
