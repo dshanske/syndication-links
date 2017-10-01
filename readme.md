@@ -2,8 +2,8 @@
 **Contributors:** dshanske  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.7  
-**Tested up to:** 4.8  
-**Stable tag:** 3.2.1  
+**Tested up to:** 4.8.2  
+**Stable tag:** 3.2.2  
 **License:** GPLv2 or later  
 
 Simple way to link to copies of your post elsewhere.
