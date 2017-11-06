@@ -16,10 +16,10 @@ class Syn_Config {
 			'syndication_options',
 			'syndication-links_bw',
 			array(
-				'type' => 'boolean',
-				'description' => 'Black and White Syndication Icons',
+				'type'         => 'boolean',
+				'description'  => 'Black and White Syndication Icons',
 				'show_in_rest' => true,
-				'default' => false,
+				'default'      => false,
 			)
 		);
 
@@ -27,10 +27,10 @@ class Syn_Config {
 			'syndication_options',
 			'syndication-links_the_content',
 			array(
-				'type' => 'boolean',
-				'description' => 'Disable Syndication Links in the Content',
+				'type'         => 'boolean',
+				'description'  => 'Disable Syndication Links in the Content',
 				'show_in_rest' => true,
-				'default' => false,
+				'default'      => false,
 			)
 		);
 
@@ -38,10 +38,10 @@ class Syn_Config {
 			'syndication_options',
 			'syndication-links_archives',
 			array(
-				'type' => 'boolean',
-				'description' => 'Show on Front Page, Archive Pages, and Search Results',
+				'type'         => 'boolean',
+				'description'  => 'Show on Front Page, Archive Pages, and Search Results',
 				'show_in_rest' => true,
-				'default' => true,
+				'default'      => true,
 			)
 		);
 
@@ -49,10 +49,10 @@ class Syn_Config {
 			'syndication_options',
 			'syndication-links_display',
 			array(
-				'type' => 'string',
-				'description' => 'How to Display Icons',
+				'type'         => 'string',
+				'description'  => 'How to Display Icons',
 				'show_in_rest' => true,
-				'default' => 'icons',
+				'default'      => 'icons',
 			)
 		);
 
@@ -60,10 +60,10 @@ class Syn_Config {
 			'syndication_options',
 			'syndication-links_size',
 			array(
-				'type' => 'string',
-				'description' => 'Icon Size',
+				'type'         => 'string',
+				'description'  => 'Icon Size',
 				'show_in_rest' => true,
-				'default' => 'small',
+				'default'      => 'small',
 			)
 		);
 
@@ -71,10 +71,10 @@ class Syn_Config {
 			'syndication_options',
 			'syndication-links_text_before',
 			array(
-				'type' => 'string',
-				'description' => 'Text Before Syndication Links',
+				'type'         => 'string',
+				'description'  => 'Text Before Syndication Links',
 				'show_in_rest' => true,
-				'default' => 'Also on:',
+				'default'      => 'Also on:',
 			)
 		);
 	}
@@ -122,7 +122,7 @@ class Syn_Config {
 			'syndication-content',
 			array(
 				'name' => 'syndication-links_display',
-				   'list' => self::display_options(),
+				'list' => self::display_options(),
 			)
 		);
 		add_settings_field(
@@ -133,7 +133,7 @@ class Syn_Config {
 			'syndication-content',
 			array(
 				'name' => 'syndication-links_size',
-				   'list' => self::size_options(),
+				'list' => self::size_options(),
 			)
 		);
 		add_settings_field(
@@ -191,16 +191,16 @@ class Syn_Config {
 		echo '</p>';
 	}
 
-	public static function checkbox_callback(array $args) {
-		$name = $args['name'];
-		 $checked = get_option( $args['name'] );
+	public static function checkbox_callback( array $args ) {
+		$name    = $args['name'];
+		$checked = get_option( $args['name'] );
 		echo "<input name='" . $name . "' type='hidden' value='0' />";
 		echo "<input name='" . $name . "' type='checkbox' value='1' " . checked( 1, $checked, false ) . ' /> ';
 	}
 
 	public static function select_callback( array $args ) {
-		$name = $args['name'];
-		$select = get_option( $name );
+		$name    = $args['name'];
+		$select  = get_option( $name );
 		$options = $args['list'];
 		echo "<select name='" . $name . "id='" . $name . "'>";
 		foreach ( $options as $key => $value ) {
@@ -210,8 +210,8 @@ class Syn_Config {
 	}
 
 	public static function radio_callback( array $args ) {
-		$name = $args['name'];
-		$select = get_option( $name );
+		$name    = $args['name'];
+		$select  = get_option( $name );
 		$options = $args['list'];
 		echo '<fieldset>';
 		foreach ( $options as $key => $value ) {
@@ -230,18 +230,18 @@ class Syn_Config {
 
 	public static function display_options() {
 		return array(
-			'icons' => _x( 'Icons Only', 'syndication-links' ),
-			'text' => _x( 'Text Only', 'syndication-links' ),
-			'iconstext'  => _x( 'Icons and Text', 'syndication-links' ),
-			'hidden' => _x( 'Hidden Links', 'syndication-links' ),
+			'icons'     => __( 'Icons Only', 'syndication-links' ),
+			'text'      => __( 'Text Only', 'syndication-links' ),
+			'iconstext' => __( 'Icons and Text', 'syndication-links' ),
+			'hidden'    => __( 'Hidden Links', 'syndication-links' ),
 		);
 	}
 
 	public static function size_options() {
 		return array(
-			'small' => _x( 'Small', 'syndication-links' ),
-			'medium' => _x( 'Medium', 'syndication-links' ),
-			'large'  => _x( 'Large', 'syndication-links' ),
+			'small'  => __( 'Small', 'syndication-links' ),
+			'medium' => __( 'Medium', 'syndication-links' ),
+			'large'  => __( 'Large', 'syndication-links' ),
 		);
 	}
 
@@ -276,10 +276,11 @@ class Syn_Config {
 		// Don't allow to be added to the_content more than once (prevent infinite loops)
 		$done = false;
 		foreach ( $wp_current_filter as $filter ) {
-			if ( 'the_content' == $filter ) {
+			if ( 'the_content' === $filter ) {
 				if ( $done ) {
 					return $content;
-				} else { $done = true;
+				} else {
+					$done = true;
 				}
 			}
 		}
@@ -304,7 +305,7 @@ class Syn_Config {
 		$args = array(
 			'style' => 'p',
 			'icons' => false,
-			'text' => true,
+			'text'  => true,
 		);
 		return $content . get_post_syndication_links( $post_ID, $args );
 	}
@@ -313,4 +314,4 @@ class Syn_Config {
 
 } // End Class
 
-?>
+

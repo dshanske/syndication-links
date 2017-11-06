@@ -1,6 +1,6 @@
 <?php
 // Adds Post Meta Box for Syndication URLs
-add_action( 'init' , array( 'Syn_Meta', 'init' ) );
+add_action( 'init', array( 'Syn_Meta', 'init' ) );
 
 // The Syn_Meta class sets up post meta boxes for data associated with Syndication
 class Syn_Meta {
@@ -9,10 +9,9 @@ class Syn_Meta {
 		add_action( 'save_post', array( 'Syn_Meta', 'save_post_meta' ) );
 		add_action( 'edit_comment', array( 'Syn_Meta', 'save_comment_meta' ) );
 		$args = array(
-			// 'sanitize_callback' => '',
-			'type' => 'array',
-			'description' => 'Syndication URLs',
-			'single' => false,
+			'type'         => 'array',
+			'description'  => 'Syndication URLs',
+			'single'       => false,
 			'show_in_rest' => true,
 		);
 		register_meta( 'post', 'mf2_syndication', $args );
@@ -31,22 +30,22 @@ class Syn_Meta {
 		}
 		$url = $wp->get( 'original-of' );
 		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			include( get_404_template() );
+			include get_404_template();
 			exit;
 		}
-		$url = esc_url_raw( $url );
-		$args = array(
-			'fields' => 'ids',
-			'meta_key' => 'mf2_syndication',
+		$url   = esc_url_raw( $url );
+		$args  = array(
+			'fields'     => 'ids',
+			'meta_key'   => 'mf2_syndication',
 			'meta_query' => array(
-				'key' => 'mf2_syndication',
-				'value' => $url,
+				'key'     => 'mf2_syndication',
+				'value'   => $url,
 				'compare' => 'LIKE',
 			),
 		);
 		$posts = get_posts( $args );
 		if ( empty( $posts ) ) {
-			include( get_404_template() );
+			include get_404_template();
 			exit;
 		}
 		wp_redirect( get_permalink( $posts[0] ) );
@@ -60,7 +59,7 @@ class Syn_Meta {
 	 * @return array A filtered array of unique URLs.
 	 * @uses clean_url
 	 */
-	public static function clean_urls($urls) {
+	public static function clean_urls( $urls ) {
 		if ( ! is_array( $urls ) ) {
 			return $urls;
 		}
@@ -75,7 +74,7 @@ class Syn_Meta {
 	 * @return string|bool The filtered and escaped URL string, or FALSE if invalid.
 	 * @used-by clean_urls
 	 */
-	public static function clean_url($string) {
+	public static function clean_url( $string ) {
 		if ( is_array( $string ) ) {
 			return $string;
 		}
@@ -85,7 +84,7 @@ class Syn_Meta {
 		}
 		// Rewrite these to https as needed
 		$secure = apply_filters( 'syn_rewrite_secure', array( 'facebook.com', 'twitter.com', 'huffduffer.com', 'foursquare.com' ) );
-		if ( in_array( self::extract_domain_name( $url ), $secure ) ) {
+		if ( in_array( self::extract_domain_name( $url ), $secure, true ) ) {
 			$url = preg_replace( '/^http:/i', 'https:', $url );
 		}
 		$url = esc_url_raw( $url );
@@ -120,7 +119,7 @@ class Syn_Meta {
 			$meta = implode( PHP_EOL, $meta );
 		}
 		echo '<p><label for="syndication_urls">';
-		_e( 'One URL per line.', 'Syn Links' );
+		_e( 'One URL per line.', 'syndication-links' );
 		echo '</label></p>';
 		echo '<textarea name="syndication_urls" id="syndication_urls" style="width:99%" rows="4" cols="40">';
 		if ( is_string( $meta ) ) {
@@ -192,46 +191,77 @@ class Syn_Meta {
 
 	public static function get_network_strings() {
 		$strings = array(
-			'amazon.com' => _x( 'Amazon', 'syndication-links' ),
-			'behance.net' => _x( 'Behance', 'syndication-links' ),
-			'blogspot.com' => _x( 'Blogger', 'syndication-links' ),
-			'codepen.io' => _x( 'codepen', 'syndication-links' ),
-			'dribbble.com' => _x( 'Dribbble', 'syndication-links' ),
-			'dropbox.com' => _x( 'Dropbox', 'syndication-links' ),
-			'eventbrite.com' => _x( 'Eventbrite', 'syndication-links' ),
-			'facebook.com' => _x( 'Facebook', 'syndication-links' ),
-			'flickr.com' => _x( 'Flickr', 'syndication-links' ),
-			'foursquare.com'  => _x( 'Foursquare', 'syndication-links' ),
-			'ghost.org' => _x( 'Ghost', 'syndication-links' ),
-			'plus.google.com' => _x( 'Google+', 'syndication-links' ),
-			'github.com' => _x( 'Github', 'syndication-links' ),
-			'instagram.com' => _x( 'Instagram', 'syndication-links' ),
-			'linkedin.com' => _x( 'LinkedIn', 'syndication-links' ),
-			'medium.com' => _x( 'Medium', 'syndication-links' ),
-			'path.com' => _x( 'Path', 'syndication-links' ),
-			'pinterest.com' => _x( 'Pinterest', 'syndication-links' ),
-			'getpocket.com' => _x( 'Pocket', 'syndication-links' ),
-			'polldaddy.com' => _x( 'PollDaddy', 'syndication-links' ),
-			'reddit.com' => _x( 'Reddit', 'syndication-links' ),
-			'squarespace.com' => _x( 'Squarespace', 'syndication-links' ),
-			'skype.com' => _x( 'Skype', 'syndication-links' ),
-			'soundcloud.com' => _x( 'SoundCloud', 'syndication-links' ),
-			'spotify.com' => _x( 'Spotify', 'syndication-links' ),
-			'stumbleupon.com' => _x( 'StumbleUpon', 'syndication-links' ),
-			'telegram.org' => _x( 'Telegram', 'syndication-links' ),
-			'tumblr.com' => _x( 'Tumblr', 'syndication-links' ),
-			'twitch.tv' => _x( 'Twitch', 'syndication-links' ),
-			'twitter.com' => _x( 'Twitter', 'syndication-links' ),
+			'500px'                 => __( '500PX', 'syndication-links' ),
+			'amazon.com'            => __( 'Amazon', 'syndication-links' ),
+			'bandcamp.com'          => __( 'Bandcamp', 'syndication-links' ),
+			'behance.net'           => __( 'Behance', 'syndication-links' ),
+			'bing.com'              => __( 'Bing', 'syndication-links' ),
+			'bitbucket.com'         => __( 'Bitbucket', 'syndication-links' ),
+			'blogspot.com'          => __( 'Blogger', 'syndication-links' ),
+			'codepen.io'            => __( 'Codepen', 'syndication-links' ),
+			'circleci.com'          => __( 'CircleCI', 'syndication-links' ),
+			'dailymotion.com'       => __( 'DailyMotion', 'syndication-links' ),
+			'discordapp.com'->__( 'Discord', 'syndication-links' ),
+			'dribbble.com'          => __( 'Dribbble', 'syndication-links' ),
+			'dropbox.com'           => __( 'Dropbox', 'syndication-links' ),
+			'ebay.com'              => __( 'Ebay', 'syndication-links' ),
+			'etsy.com'              => __( 'Etsy', 'syndication-links' ),
+			'deviantart.com'        => __( 'Deviantart', 'syndication-links' ),
+			'eventbrite.com'        => __( 'Eventbrite', 'syndication-links' ),
+			'evernote.com'          => __( 'Evernote', 'syndication-links' ),
+			'facebook.com'          => __( 'Facebook', 'syndication-links' ),
+			'flickr.com'            => __( 'Flickr', 'syndication-links' ),
+			'foursquare.com'        => __( 'Foursquare', 'syndication-links' ),
+			'ghost.org'             => __( 'Ghost', 'syndication-links' ),
+			'goodreads.com'         => __( 'Goodreads', 'syndication-links' ),
+			'plus.google.com'       => __( 'Google+', 'syndication-links' ),
+			'google.com'->__( 'Google', 'syndication-links' ),
+			'github.com'            => __( 'Github', 'syndication-links' ),
+			'gitlab.com'            => __( 'Gitlab', 'syndication-links' ),
+			'instapaper.com'        => __( 'Instapaper', 'syndication-links' ),
+			'instagram.com'         => __( 'Instagram', 'syndication-links' ),
+			'lanyrd'                => __( 'Lanyrd', 'syndication-links' ),
+			'linkedin.com'          => __( 'LinkedIn', 'syndication-links' ),
+			'livejournal.com'       => __( 'LiveJournal', 'syndication-links' ),
+			'mailchimp.com'         => __( 'Mailchimp', 'syndication-links' ),
+			'medium.com'            => __( 'Medium', 'syndication-links' ),
+			'meetup.com'            => __( 'Meetup', 'syndication-links' ),
+			'path.com'              => __( 'Path', 'syndication-links' ),
+			'pinboard.in'           => __( 'Pinboard', 'syndication-links' ),
+			'pinterest.com'         => __( 'Pinterest', 'syndication-links' ),
+			'getpocket.com'         => __( 'Pocket', 'syndication-links' ),
+			'polldaddy.com'         => __( 'PollDaddy', 'syndication-links' ),
+			'quora.com'             => __( 'Quora', 'syndication-links' ),
+			'reddit.com'            => __( 'Reddit', 'syndication-links' ),
+			'runkeeper.com'         => __( 'Runkeeper', 'syndication-links' ),
+			'slack.com'             => __( 'Slack', 'syndication-links' ),
+			'slashdot.org'          => __( 'Slashdot', 'syndication-links' ),
+			'snapchat.com'          => __( 'Snapchat', 'syndication-links' ),
+			'squarespace.com'       => __( 'Squarespace', 'syndication-links' ),
+			'skype.com'             => __( 'Skype', 'syndication-links' ),
+			'soundcloud.com'        => __( 'SoundCloud', 'syndication-links' ),
+			'spotify.com'           => __( 'Spotify', 'syndication-links' ),
+			'strava.com'            => __( 'Strava', 'syndication-links' ),
+			'stumbleupon.com'       => __( 'StumbleUpon', 'syndication-links' ),
+			'swarmapp.com'          => __( 'Swarm', 'syndication-links' ),
+			'telegram.org'          => __( 'Telegram', 'syndication-links' ),
+			'travis-ci.org'         => __( 'Travis CI', 'syndication-links' ),
+			'tripadvisor.com'       => __( 'Tripadvisor', 'syndication-links' ),
+			'tumblr.com'            => __( 'Tumblr', 'syndication-links' ),
+			'twitch.tv'             => __( 'Twitch', 'syndication-links' ),
+			'twitter.com'           => __( 'Twitter', 'syndication-links' ),
+			'vimeo.com'             => __( 'Vimeo', 'syndication-links' ),
+			'wordpress.com'         => __( 'WordPress', 'syndication-links' ),
+			'whatsapp.com'          => __( ' Whatsapp', 'syndication-links' ),
+			'yelp.com'              => __( 'Yelp', 'syndication-links' ),
+			'youtube.com'           => __( 'YouTube', 'syndication-links' ),
 
-			'wordpress.com' => _x( 'WordPress', 'syndication-links' ),
-			'youtube.com' => _x( 'YouTube', 'syndication-links' ),
-
-			'news.indiewebcamp.com' => _x( 'IndieNews', 'syndication-links' ),
+			'news.indiewebcamp.com' => __( 'IndieNews', 'syndication-links' ),
 		);
 		return apply_filters( 'syn_network_strings', $strings );
 	}
 
-	public static function extract_domain_name($url, $subdomain = false) {
+	public static function extract_domain_name( $url, $subdomain = false ) {
 		$parse = wp_parse_url( $url, PHP_URL_HOST );
 		if ( $subdomain ) {
 			return preg_replace( '/^www\./', '', $parse );
@@ -243,39 +273,63 @@ class Syn_Meta {
 		// Supportedicons.
 			$icons = array(
 				'default'         => 'website',
+				'500px.com'       => '500px',
 				'amazon.com'      => 'amazon',
 				'behance.net'     => 'behance',
+				'bandcamp.com'    => 'bandcamp',
+				'bing.com'        => 'bing',
+				'bitbucket.com'   => 'bitbucket',
 				'blogspot.com'    => 'blogger',
 				'codepen.io'      => 'codepen',
+				'circleci.com'    => 'circleci',
+				'dailymotion.com' => 'dailymotion',
+				'deviantart.com'  => 'deviantart',
+				'discordapp.com'  => 'discord',
 				'dribbble.com'    => 'dribbble',
 				'dropbox.com'     => 'dropbox',
+				'etsy.com'        => 'etsy',
+				'ebay.com'        => 'ebay',
 				'eventbrite.com'  => 'eventbrite',
+				'evernote.com'    => 'evernote',
 				'facebook.com'    => 'facebook',
 				'flickr.com'      => 'flickr',
 				// feed
 				'foursquare.com'  => 'foursquare',
-				'ghost.org' 	=> 'ghost',
+				'goodreads.com'   => 'goodreads',
+				'ghost.org'       => 'ghost',
 				'plus.google.com' => 'google-plus',
 				'github.com'      => 'github',
+				'gitlab.com'      => 'gitlab',
 				'instagram.com'   => 'instagram',
+				'instapaper.com'  => 'instapaper',
+				'lanyrd.com'      => 'lanyrd',
 				'linkedin.com'    => 'linkedin',
+				'livejournal.com' => 'livejournal',
 				'mailto:'         => 'mail',
+				'mailchimp.com'   => 'mailchimp',
 				'medium.com'      => 'medium',
+				'meetup.com'      => 'meetup',
 				'path.com'        => 'path',
+				'pinboard.in'     => 'pinboard',
 				'pinterest.com'   => 'pinterest',
 				'getpocket.com'   => 'pocket',
 				'polldaddy.com'   => 'polldaddy',
-				// print
+				'quora.com'       => 'quora',
 				'reddit.com'      => 'reddit',
+				'runkeeper.com'   => 'runkeeper',
+				'slack.com'       => 'slack',
+				'snapchat.com'    => 'snapchat',
 				'squarespace.com' => 'squarespace',
 				'skype.com'       => 'skype',
 				'skype:'          => 'skype',
-				// share
+				'strava.com'      => 'strava',
 				'soundcloud.com'  => 'soundcloud',
 				'spotify.com'     => 'spotify',
 				'stumbleupon.com' => 'stumbleupon',
-				'swarmapp.com'    => 'foursquare',
+				'swarmapp.com'    => 'swarm',
 				'telegram.org'    => 'telegram',
+				'travis-ci.org'   => 'travisci',
+				'tripadvisor.com' => 'tripadvisor',
 				'tumblr.com'      => 'tumblr',
 				'twitch.tv'       => 'twitch',
 				'twitter.com'     => 'twitter',
@@ -284,10 +338,11 @@ class Syn_Meta {
 				'wordpress.org'   => 'wordpress',
 				'wordpress.com'   => 'wordpress',
 				'youtube.com'     => 'youtube',
+				'yelp.com'        => 'yelp',
 			);
 			// Substitute another domain to sprite map
 			$icons = apply_filters( 'syndication_domain_icons', $icons );
-			$icon = $icons['default'];
+			$icon  = $icons['default'];
 		if ( array_key_exists( $domain, $icons ) ) {
 			$icon = $icons[ $domain ];
 		}
@@ -396,16 +451,17 @@ class Syn_Meta {
 			return array();
 		}
 		$display = self::get_syndication_links_display_option();
-		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
+		$r       = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
 
 		$strings = self::get_network_strings();
-		$rel = is_single() ? ' rel="syndication">' : '>';
-		$links = array();
+		$rel     = is_single() ? ' rel="syndication">' : '>';
+		$links   = array();
 		foreach ( $urls as $url ) {
-			if ( empty( $url ) || ! is_string( $url ) ) { continue; }
+			if ( empty( $url ) || ! is_string( $url ) ) {
+				continue; }
 			$domain = self::extract_domain_name( $url );
-			$name = ( array_key_exists( $domain, $strings ) ) ? $strings[ $domain ] : $domain;
-			$syn = ( $r['icons'] ? self::get_icon( $domain ) : '') . ( $r['text'] ? $name : '');
+			$name   = ( array_key_exists( $domain, $strings ) ) ? $strings[ $domain ] : $domain;
+			$syn    = ( $r['icons'] ? self::get_icon( $domain ) : '' ) . ( $r['text'] ? $name : '' );
 
 			$links[] = sprintf( '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>', $name, $r['single-css'], esc_url( $url ), $rel, $syn );
 		}
@@ -423,14 +479,14 @@ class Syn_Meta {
 	}
 
 	public static function get_syndication_links_display_defaults() {
-		$display = self::get_syndication_links_display_option();
+		$display  = self::get_syndication_links_display_option();
 		$defaults = array(
-			'style' => 'ul',
-			'text' => in_array( $display, array( 'text', 'iconstext' ) ),
-			'icons' => in_array( $display, array( 'icons', 'iconstext' ) ),
-			'container-css' => 'relsyn',
-			'single-css' => 'syn-link',
-			'text-css' => 'syn-text',
+			'style'            => 'ul',
+			'text'             => in_array( $display, array( 'text', 'iconstext' ), true ),
+			'icons'            => in_array( $display, array( 'icons', 'iconstext' ), true ),
+			'container-css'    => 'relsyn',
+			'single-css'       => 'syn-link',
+			'text-css'         => 'syn-text',
 			'show_text_before' => true,
 		);
 
@@ -455,25 +511,26 @@ class Syn_Meta {
 
 		if ( $r['show_text_before'] ) {
 			$textbefore = self::get_syndication_links_text_before( $r['text-css'] );
-		} else { $textbefore = '';
+		} else {
+			$textbefore = '';
 		}
 
 		switch ( $r['style'] ) {
 			case 'p':
-				$before = '<p class="' . $r['container-css']  . '"><span>';
-				$sep = ' ';
-				$after = '</p>';
+				$before = '<p class="' . $r['container-css'] . '"><span>';
+				$sep    = ' ';
+				$after  = '</p>';
 				break;
 			case 'ol':
 				$before = '<ol class="' . $r['container-css'] . '"><li>';
-				$sep = '</li><li>';
-				$after = '</li></ol>';
+				$sep    = '</li><li>';
+				$after  = '</li></ol>';
 				break;
 
 			default:
 				$before = '<ul class="' . $r['container-css'] . '"><li>';
-				$sep = '</li><li>';
-				$after = '</li></ul>';
+				$sep    = '</li><li>';
+				$after  = '</li></ul>';
 		}
 
 		return $textbefore . $before . join( $sep, $links ) . $after;
@@ -483,8 +540,8 @@ class Syn_Meta {
 		return get_syndication_links( $post_ID, $args );
 	}
 
-	public static function get_comment_syndication_links( $comment_ID = null, $args = array() ) {
-		return get_syndication_links( get_comment( $comment_ID ), $args );
+	public static function get_comment_syndication_links( $comment_id = null, $args = array() ) {
+		return get_syndication_links( get_comment( $comment_id ), $args );
 	}
 
 } // End Class
@@ -494,12 +551,12 @@ function get_syndication_links( $meta_type, $object_id = null, $args = array() )
 	return Syn_Meta::get_syndication_links( $meta_type, $object_id, $args );
 }
 
-function get_post_syndication_links( $post_ID = null, $args = array() ) {
-	return Syn_Meta::get_post_syndication_links( $post_ID, $args );
+function get_post_syndication_links( $post_id = null, $args = array() ) {
+	return Syn_Meta::get_post_syndication_links( $post_id, $args );
 }
 
-function get_comment_syndication_links( $comment_ID = null, $args = array() ) {
-	return Syn_Meta::get_comment_syndication_links( $comment_ID, $args );
+function get_comment_syndication_links( $comment_id = null, $args = array() ) {
+	return Syn_Meta::get_comment_syndication_links( $comment_id, $args );
 }
 
-?>
+
