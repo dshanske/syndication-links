@@ -94,6 +94,7 @@ design.
 * Fix textdomain issues
 * Add PHP Compatibility tests and textdomain tests
 * PHPCS Improvements
+* Add setting for disabling links in feed
 
 = Version 3.2.2 =
 * Remove H-Card Widget

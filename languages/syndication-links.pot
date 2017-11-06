@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Syndication Links package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Syndication Links 3.2.2\n"
+"Project-Id-Version: Syndication Links 3.2.3\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2017-11-06 01:42:44+00:00\n"
+"POT-Creation-Date: 2017-11-06 02:59:38+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,27 +13,31 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 
-#: includes/class-syn-config.php:113
+#: includes/class-syn-config.php:126
 msgid "Content Options"
 msgstr ""
 
-#: includes/class-syn-config.php:119
+#: includes/class-syn-config.php:132
 msgid "Display"
 msgstr ""
 
-#: includes/class-syn-config.php:130
+#: includes/class-syn-config.php:143
 msgid "Size"
 msgstr ""
 
-#: includes/class-syn-config.php:141
+#: includes/class-syn-config.php:154
 msgid "Black Icons"
 msgstr ""
 
-#: includes/class-syn-config.php:151
+#: includes/class-syn-config.php:164
 msgid "Show on Front Page, Archive Pages, and Search Results"
 msgstr ""
 
-#: includes/class-syn-config.php:161
+#: includes/class-syn-config.php:174
+msgid "Show on Feed"
+msgstr ""
+
+#: includes/class-syn-config.php:184
 msgid "Text Before Links"
 msgstr ""
 
@@ -41,45 +45,45 @@ msgstr ""
 msgid "Syndication Links"
 msgstr ""
 
-#: includes/class-syn-config.php:188
+#: includes/class-syn-config.php:211
 msgid "Options for Presenting Syndication Links in Posts."
 msgstr ""
 
-#: includes/class-syn-config.php:190
+#: includes/class-syn-config.php:213
 msgid ""
 "Syndication Links by default will add links to the content. You can disable "
 "this for theme support."
 msgstr ""
 
-#: includes/class-syn-config.php:233
+#: includes/class-syn-config.php:256
 msgid "Icons Only"
 msgstr ""
 
-#: includes/class-syn-config.php:234
+#: includes/class-syn-config.php:257
 msgid "Text Only"
 msgstr ""
 
-#: includes/class-syn-config.php:235
+#: includes/class-syn-config.php:258
 msgid "Icons and Text"
 msgstr ""
 
-#: includes/class-syn-config.php:236
+#: includes/class-syn-config.php:259
 msgid "Hidden Links"
 msgstr ""
 
-#: includes/class-syn-config.php:242
+#: includes/class-syn-config.php:265
 msgid "Small"
 msgstr ""
 
-#: includes/class-syn-config.php:243 includes/class-syn-meta.php:228
+#: includes/class-syn-config.php:266 includes/class-syn-meta.php:227
 msgid "Medium"
 msgstr ""
 
-#: includes/class-syn-config.php:244
+#: includes/class-syn-config.php:267
 msgid "Large"
 msgstr ""
 
-#: includes/class-syn-config.php:253
+#: includes/class-syn-config.php:276
 msgid ""
 "Adds optional syndication links for various sites. Syndication is the act "
 "of posting your content on other sites. You can either manually add these "
@@ -87,204 +91,208 @@ msgid ""
 "are supported."
 msgstr ""
 
-#: includes/class-syn-meta.php:123
+#: includes/class-syn-meta.php:122
 msgid "One URL per line."
 msgstr ""
 
-#: includes/class-syn-meta.php:195
+#: includes/class-syn-meta.php:194
 msgid "500PX"
 msgstr ""
 
-#: includes/class-syn-meta.php:196
+#: includes/class-syn-meta.php:195
 msgid "Amazon"
 msgstr ""
 
-#: includes/class-syn-meta.php:197
+#: includes/class-syn-meta.php:196
 msgid "Bandcamp"
 msgstr ""
 
-#: includes/class-syn-meta.php:198
+#: includes/class-syn-meta.php:197
 msgid "Behance"
 msgstr ""
 
-#: includes/class-syn-meta.php:199
+#: includes/class-syn-meta.php:198
 msgid "Bing"
 msgstr ""
 
-#: includes/class-syn-meta.php:200
+#: includes/class-syn-meta.php:199
 msgid "Bitbucket"
 msgstr ""
 
-#: includes/class-syn-meta.php:201
+#: includes/class-syn-meta.php:200
 msgid "Blogger"
 msgstr ""
 
-#: includes/class-syn-meta.php:202
+#: includes/class-syn-meta.php:201
 msgid "Codepen"
 msgstr ""
 
-#: includes/class-syn-meta.php:203
+#: includes/class-syn-meta.php:202
 msgid "CircleCI"
 msgstr ""
 
-#: includes/class-syn-meta.php:204
+#: includes/class-syn-meta.php:203
 msgid "DailyMotion"
 msgstr ""
 
-#: includes/class-syn-meta.php:205
+#: includes/class-syn-meta.php:204
 msgid "Discord"
 msgstr ""
 
-#: includes/class-syn-meta.php:206
+#: includes/class-syn-meta.php:205
 msgid "Dribbble"
 msgstr ""
 
-#: includes/class-syn-meta.php:207
+#: includes/class-syn-meta.php:206
 msgid "Dropbox"
 msgstr ""
 
-#: includes/class-syn-meta.php:208
+#: includes/class-syn-meta.php:207
 msgid "Ebay"
 msgstr ""
 
-#: includes/class-syn-meta.php:209
+#: includes/class-syn-meta.php:208
 msgid "Etsy"
 msgstr ""
 
-#: includes/class-syn-meta.php:210
+#: includes/class-syn-meta.php:209
 msgid "Deviantart"
 msgstr ""
 
-#: includes/class-syn-meta.php:211
+#: includes/class-syn-meta.php:210
 msgid "Eventbrite"
 msgstr ""
 
-#: includes/class-syn-meta.php:212
+#: includes/class-syn-meta.php:211
 msgid "Evernote"
 msgstr ""
 
-#: includes/class-syn-meta.php:213
+#: includes/class-syn-meta.php:212
 msgid "Facebook"
 msgstr ""
 
-#: includes/class-syn-meta.php:214
+#: includes/class-syn-meta.php:213
 msgid "Flickr"
 msgstr ""
 
-#: includes/class-syn-meta.php:215
+#: includes/class-syn-meta.php:214
 msgid "Foursquare"
 msgstr ""
 
-#: includes/class-syn-meta.php:216
+#: includes/class-syn-meta.php:215
 msgid "Ghost"
 msgstr ""
 
-#: includes/class-syn-meta.php:217
+#: includes/class-syn-meta.php:216
 msgid "Goodreads"
 msgstr ""
 
-#: includes/class-syn-meta.php:218
+#: includes/class-syn-meta.php:217
 msgid "Google+"
 msgstr ""
 
-#: includes/class-syn-meta.php:219
+#: includes/class-syn-meta.php:218
 msgid "Google"
 msgstr ""
 
-#: includes/class-syn-meta.php:220
+#: includes/class-syn-meta.php:219
 msgid "Github"
 msgstr ""
 
-#: includes/class-syn-meta.php:221
+#: includes/class-syn-meta.php:220
 msgid "Gitlab"
 msgstr ""
 
-#: includes/class-syn-meta.php:222
+#: includes/class-syn-meta.php:221
 msgid "Instapaper"
 msgstr ""
 
-#: includes/class-syn-meta.php:223
+#: includes/class-syn-meta.php:222
 msgid "Instagram"
 msgstr ""
 
-#: includes/class-syn-meta.php:224
+#: includes/class-syn-meta.php:223
 msgid "Lanyrd"
 msgstr ""
 
-#: includes/class-syn-meta.php:225
+#: includes/class-syn-meta.php:224
 msgid "LinkedIn"
 msgstr ""
 
-#: includes/class-syn-meta.php:226
+#: includes/class-syn-meta.php:225
 msgid "LiveJournal"
 msgstr ""
 
-#: includes/class-syn-meta.php:227
+#: includes/class-syn-meta.php:226
 msgid "Mailchimp"
 msgstr ""
 
-#: includes/class-syn-meta.php:229
+#: includes/class-syn-meta.php:228
 msgid "Meetup"
 msgstr ""
 
-#: includes/class-syn-meta.php:230
+#: includes/class-syn-meta.php:229
 msgid "Path"
 msgstr ""
 
-#: includes/class-syn-meta.php:231
+#: includes/class-syn-meta.php:230
 msgid "Pinboard"
 msgstr ""
 
-#: includes/class-syn-meta.php:232
+#: includes/class-syn-meta.php:231
 msgid "Pinterest"
 msgstr ""
 
-#: includes/class-syn-meta.php:233
+#: includes/class-syn-meta.php:232
 msgid "Pocket"
 msgstr ""
 
-#: includes/class-syn-meta.php:234
+#: includes/class-syn-meta.php:233
 msgid "PollDaddy"
 msgstr ""
 
-#: includes/class-syn-meta.php:235
+#: includes/class-syn-meta.php:234
 msgid "Quora"
 msgstr ""
 
-#: includes/class-syn-meta.php:236
+#: includes/class-syn-meta.php:235
 msgid "Reddit"
 msgstr ""
 
-#: includes/class-syn-meta.php:237
+#: includes/class-syn-meta.php:236
 msgid "Runkeeper"
 msgstr ""
 
-#: includes/class-syn-meta.php:238
+#: includes/class-syn-meta.php:237
 msgid "Slack"
 msgstr ""
 
-#: includes/class-syn-meta.php:239
+#: includes/class-syn-meta.php:238
 msgid "Slashdot"
 msgstr ""
 
-#: includes/class-syn-meta.php:240
+#: includes/class-syn-meta.php:239
 msgid "Snapchat"
 msgstr ""
 
-#: includes/class-syn-meta.php:241
+#: includes/class-syn-meta.php:240
 msgid "Squarespace"
 msgstr ""
 
-#: includes/class-syn-meta.php:242
+#: includes/class-syn-meta.php:241
 msgid "Skype"
 msgstr ""
 
-#: includes/class-syn-meta.php:243
+#: includes/class-syn-meta.php:242
 msgid "SoundCloud"
 msgstr ""
 
-#: includes/class-syn-meta.php:244
+#: includes/class-syn-meta.php:243
 msgid "Spotify"
+msgstr ""
+
+#: includes/class-syn-meta.php:244
+msgid "StackOverflow"
 msgstr ""
 
 #: includes/class-syn-meta.php:245

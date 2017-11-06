@@ -8,7 +8,9 @@ class Syn_Config {
 		add_action( 'admin_menu', array( 'Syn_Config', 'admin_menu' ), 11 );
 		add_action( 'admin_init', array( 'Syn_Config', 'admin_init' ) );
 		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ), 30 );
-		add_filter( 'the_content_feed', array( 'Syn_Config', 'the_content_feed' ), 20 );
+		if ( get_option( 'syndication-links_feed' ) ) {
+			add_filter( 'the_content_feed', array( 'Syn_Config', 'the_content_feed' ), 20 );
+		}
 		add_filter( 'comment_text', array( 'Syn_Config', 'comment_text' ), 20, 2 );
 
 		// Syndication Content Options
@@ -40,6 +42,17 @@ class Syn_Config {
 			array(
 				'type'         => 'boolean',
 				'description'  => 'Show on Front Page, Archive Pages, and Search Results',
+				'show_in_rest' => true,
+				'default'      => true,
+			)
+		);
+
+		register_setting(
+			'syndication_options',
+			'syndication-links_feed',
+			array(
+				'type'         => 'boolean',
+				'description'  => 'Show on Feed',
 				'show_in_rest' => true,
 				'default'      => true,
 			)
@@ -154,6 +167,16 @@ class Syn_Config {
 			'syndication-content',
 			array(
 				'name' => 'syndication-links_archives',
+			)
+		);
+		add_settings_field(
+			'syndication-links_feed',
+			__( 'Show on Feed', 'syndication-links' ),
+			array( 'Syn_Config', 'checkbox_callback' ),
+			'links_options',
+			'syndication-content',
+			array(
+				'name' => 'syndication-links_feed',
 			)
 		);
 		add_settings_field(
