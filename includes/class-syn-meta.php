@@ -201,7 +201,7 @@ class Syn_Meta {
 			'codepen.io'            => __( 'Codepen', 'syndication-links' ),
 			'circleci.com'          => __( 'CircleCI', 'syndication-links' ),
 			'dailymotion.com'       => __( 'DailyMotion', 'syndication-links' ),
-			'discordapp.com'->__( 'Discord', 'syndication-links' ),
+			'discordapp.com'        => __( 'Discord', 'syndication-links' ),
 			'dribbble.com'          => __( 'Dribbble', 'syndication-links' ),
 			'dropbox.com'           => __( 'Dropbox', 'syndication-links' ),
 			'ebay.com'              => __( 'Ebay', 'syndication-links' ),
