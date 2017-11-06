@@ -2,8 +2,8 @@
 Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Requires at least: 4.7
-Tested up to: 4.8.2
-Stable tag: 3.2.2
+Tested up to: 4.8.3
+Stable tag: 3.2.3
 License: GPLv2 or later
 
 Simple way to link to copies of your post elsewhere.
@@ -87,6 +87,13 @@ design.
 5. [Chris Aldrich](http://stream.boffosocko.com) for many suggestions on improving the display.
 
 == Changelog ==
+
+= Version 3.2.3 =
+* Remove Social Support as Plugin is no longer listed in WordPress repository
+* Add additional syndication icons
+* Fix textdomain issues
+* Add PHP Compatibility tests and textdomain tests
+* PHPCS Improvements
 
 = Version 3.2.2 =
 * Remove H-Card Widget

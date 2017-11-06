@@ -6,7 +6,7 @@
 	<file>./includes/</file>
 	<exclude-pattern>*/includes/*\.(inc|css|js|svg)</exclude-pattern>
 	<rule ref="PHPCompatibility"/>
-	<config name="testVersion" value="5.3-"/>
+	<config name="testVersion" value="5.2-"/>
 	<rule ref="WordPress-Core" />	
 	<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 

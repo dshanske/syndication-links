@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Syndication Links 3.2.2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2017-10-01 15:16:16+00:00\n"
+"POT-Creation-Date: 2017-11-06 01:42:44+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -51,6 +51,34 @@ msgid ""
 "this for theme support."
 msgstr ""
 
+#: includes/class-syn-config.php:233
+msgid "Icons Only"
+msgstr ""
+
+#: includes/class-syn-config.php:234
+msgid "Text Only"
+msgstr ""
+
+#: includes/class-syn-config.php:235
+msgid "Icons and Text"
+msgstr ""
+
+#: includes/class-syn-config.php:236
+msgid "Hidden Links"
+msgstr ""
+
+#: includes/class-syn-config.php:242
+msgid "Small"
+msgstr ""
+
+#: includes/class-syn-config.php:243 includes/class-syn-meta.php:228
+msgid "Medium"
+msgstr ""
+
+#: includes/class-syn-config.php:244
+msgid "Large"
+msgstr ""
+
 #: includes/class-syn-config.php:253
 msgid ""
 "Adds optional syndication links for various sites. Syndication is the act "
@@ -61,6 +89,262 @@ msgstr ""
 
 #: includes/class-syn-meta.php:123
 msgid "One URL per line."
+msgstr ""
+
+#: includes/class-syn-meta.php:195
+msgid "500PX"
+msgstr ""
+
+#: includes/class-syn-meta.php:196
+msgid "Amazon"
+msgstr ""
+
+#: includes/class-syn-meta.php:197
+msgid "Bandcamp"
+msgstr ""
+
+#: includes/class-syn-meta.php:198
+msgid "Behance"
+msgstr ""
+
+#: includes/class-syn-meta.php:199
+msgid "Bing"
+msgstr ""
+
+#: includes/class-syn-meta.php:200
+msgid "Bitbucket"
+msgstr ""
+
+#: includes/class-syn-meta.php:201
+msgid "Blogger"
+msgstr ""
+
+#: includes/class-syn-meta.php:202
+msgid "Codepen"
+msgstr ""
+
+#: includes/class-syn-meta.php:203
+msgid "CircleCI"
+msgstr ""
+
+#: includes/class-syn-meta.php:204
+msgid "DailyMotion"
+msgstr ""
+
+#: includes/class-syn-meta.php:205
+msgid "Discord"
+msgstr ""
+
+#: includes/class-syn-meta.php:206
+msgid "Dribbble"
+msgstr ""
+
+#: includes/class-syn-meta.php:207
+msgid "Dropbox"
+msgstr ""
+
+#: includes/class-syn-meta.php:208
+msgid "Ebay"
+msgstr ""
+
+#: includes/class-syn-meta.php:209
+msgid "Etsy"
+msgstr ""
+
+#: includes/class-syn-meta.php:210
+msgid "Deviantart"
+msgstr ""
+
+#: includes/class-syn-meta.php:211
+msgid "Eventbrite"
+msgstr ""
+
+#: includes/class-syn-meta.php:212
+msgid "Evernote"
+msgstr ""
+
+#: includes/class-syn-meta.php:213
+msgid "Facebook"
+msgstr ""
+
+#: includes/class-syn-meta.php:214
+msgid "Flickr"
+msgstr ""
+
+#: includes/class-syn-meta.php:215
+msgid "Foursquare"
+msgstr ""
+
+#: includes/class-syn-meta.php:216
+msgid "Ghost"
+msgstr ""
+
+#: includes/class-syn-meta.php:217
+msgid "Goodreads"
+msgstr ""
+
+#: includes/class-syn-meta.php:218
+msgid "Google+"
+msgstr ""
+
+#: includes/class-syn-meta.php:219
+msgid "Google"
+msgstr ""
+
+#: includes/class-syn-meta.php:220
+msgid "Github"
+msgstr ""
+
+#: includes/class-syn-meta.php:221
+msgid "Gitlab"
+msgstr ""
+
+#: includes/class-syn-meta.php:222
+msgid "Instapaper"
+msgstr ""
+
+#: includes/class-syn-meta.php:223
+msgid "Instagram"
+msgstr ""
+
+#: includes/class-syn-meta.php:224
+msgid "Lanyrd"
+msgstr ""
+
+#: includes/class-syn-meta.php:225
+msgid "LinkedIn"
+msgstr ""
+
+#: includes/class-syn-meta.php:226
+msgid "LiveJournal"
+msgstr ""
+
+#: includes/class-syn-meta.php:227
+msgid "Mailchimp"
+msgstr ""
+
+#: includes/class-syn-meta.php:229
+msgid "Meetup"
+msgstr ""
+
+#: includes/class-syn-meta.php:230
+msgid "Path"
+msgstr ""
+
+#: includes/class-syn-meta.php:231
+msgid "Pinboard"
+msgstr ""
+
+#: includes/class-syn-meta.php:232
+msgid "Pinterest"
+msgstr ""
+
+#: includes/class-syn-meta.php:233
+msgid "Pocket"
+msgstr ""
+
+#: includes/class-syn-meta.php:234
+msgid "PollDaddy"
+msgstr ""
+
+#: includes/class-syn-meta.php:235
+msgid "Quora"
+msgstr ""
+
+#: includes/class-syn-meta.php:236
+msgid "Reddit"
+msgstr ""
+
+#: includes/class-syn-meta.php:237
+msgid "Runkeeper"
+msgstr ""
+
+#: includes/class-syn-meta.php:238
+msgid "Slack"
+msgstr ""
+
+#: includes/class-syn-meta.php:239
+msgid "Slashdot"
+msgstr ""
+
+#: includes/class-syn-meta.php:240
+msgid "Snapchat"
+msgstr ""
+
+#: includes/class-syn-meta.php:241
+msgid "Squarespace"
+msgstr ""
+
+#: includes/class-syn-meta.php:242
+msgid "Skype"
+msgstr ""
+
+#: includes/class-syn-meta.php:243
+msgid "SoundCloud"
+msgstr ""
+
+#: includes/class-syn-meta.php:244
+msgid "Spotify"
+msgstr ""
+
+#: includes/class-syn-meta.php:245
+msgid "Strava"
+msgstr ""
+
+#: includes/class-syn-meta.php:246
+msgid "StumbleUpon"
+msgstr ""
+
+#: includes/class-syn-meta.php:247
+msgid "Swarm"
+msgstr ""
+
+#: includes/class-syn-meta.php:248
+msgid "Telegram"
+msgstr ""
+
+#: includes/class-syn-meta.php:249
+msgid "Travis CI"
+msgstr ""
+
+#: includes/class-syn-meta.php:250
+msgid "Tripadvisor"
+msgstr ""
+
+#: includes/class-syn-meta.php:251
+msgid "Tumblr"
+msgstr ""
+
+#: includes/class-syn-meta.php:252
+msgid "Twitch"
+msgstr ""
+
+#: includes/class-syn-meta.php:253
+msgid "Twitter"
+msgstr ""
+
+#: includes/class-syn-meta.php:254
+msgid "Vimeo"
+msgstr ""
+
+#: includes/class-syn-meta.php:255
+msgid "WordPress"
+msgstr ""
+
+#: includes/class-syn-meta.php:256
+msgid " Whatsapp"
+msgstr ""
+
+#: includes/class-syn-meta.php:257
+msgid "Yelp"
+msgstr ""
+
+#: includes/class-syn-meta.php:258
+msgid "YouTube"
+msgstr ""
+
+#: includes/class-syn-meta.php:260
+msgid "IndieNews"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
@@ -77,199 +361,4 @@ msgstr ""
 
 #. Author URI of the plugin/theme
 msgid "http://david.shanske.com"
-msgstr ""
-
-#: includes/class-syn-config.php:233
-msgctxt "syndication-links"
-msgid "Icons Only"
-msgstr ""
-
-#: includes/class-syn-config.php:234
-msgctxt "syndication-links"
-msgid "Text Only"
-msgstr ""
-
-#: includes/class-syn-config.php:235
-msgctxt "syndication-links"
-msgid "Icons and Text"
-msgstr ""
-
-#: includes/class-syn-config.php:236
-msgctxt "syndication-links"
-msgid "Hidden Links"
-msgstr ""
-
-#: includes/class-syn-config.php:242
-msgctxt "syndication-links"
-msgid "Small"
-msgstr ""
-
-#: includes/class-syn-config.php:243 includes/class-syn-meta.php:210
-msgctxt "syndication-links"
-msgid "Medium"
-msgstr ""
-
-#: includes/class-syn-config.php:244
-msgctxt "syndication-links"
-msgid "Large"
-msgstr ""
-
-#: includes/class-syn-meta.php:195
-msgctxt "syndication-links"
-msgid "Amazon"
-msgstr ""
-
-#: includes/class-syn-meta.php:196
-msgctxt "syndication-links"
-msgid "Behance"
-msgstr ""
-
-#: includes/class-syn-meta.php:197
-msgctxt "syndication-links"
-msgid "Blogger"
-msgstr ""
-
-#: includes/class-syn-meta.php:198
-msgctxt "syndication-links"
-msgid "codepen"
-msgstr ""
-
-#: includes/class-syn-meta.php:199
-msgctxt "syndication-links"
-msgid "Dribbble"
-msgstr ""
-
-#: includes/class-syn-meta.php:200
-msgctxt "syndication-links"
-msgid "Dropbox"
-msgstr ""
-
-#: includes/class-syn-meta.php:201
-msgctxt "syndication-links"
-msgid "Eventbrite"
-msgstr ""
-
-#: includes/class-syn-meta.php:202
-msgctxt "syndication-links"
-msgid "Facebook"
-msgstr ""
-
-#: includes/class-syn-meta.php:203
-msgctxt "syndication-links"
-msgid "Flickr"
-msgstr ""
-
-#: includes/class-syn-meta.php:204
-msgctxt "syndication-links"
-msgid "Foursquare"
-msgstr ""
-
-#: includes/class-syn-meta.php:205
-msgctxt "syndication-links"
-msgid "Ghost"
-msgstr ""
-
-#: includes/class-syn-meta.php:206
-msgctxt "syndication-links"
-msgid "Google+"
-msgstr ""
-
-#: includes/class-syn-meta.php:207
-msgctxt "syndication-links"
-msgid "Github"
-msgstr ""
-
-#: includes/class-syn-meta.php:208
-msgctxt "syndication-links"
-msgid "Instagram"
-msgstr ""
-
-#: includes/class-syn-meta.php:209
-msgctxt "syndication-links"
-msgid "LinkedIn"
-msgstr ""
-
-#: includes/class-syn-meta.php:211
-msgctxt "syndication-links"
-msgid "Path"
-msgstr ""
-
-#: includes/class-syn-meta.php:212
-msgctxt "syndication-links"
-msgid "Pinterest"
-msgstr ""
-
-#: includes/class-syn-meta.php:213
-msgctxt "syndication-links"
-msgid "Pocket"
-msgstr ""
-
-#: includes/class-syn-meta.php:214
-msgctxt "syndication-links"
-msgid "PollDaddy"
-msgstr ""
-
-#: includes/class-syn-meta.php:215
-msgctxt "syndication-links"
-msgid "Reddit"
-msgstr ""
-
-#: includes/class-syn-meta.php:216
-msgctxt "syndication-links"
-msgid "Squarespace"
-msgstr ""
-
-#: includes/class-syn-meta.php:217
-msgctxt "syndication-links"
-msgid "Skype"
-msgstr ""
-
-#: includes/class-syn-meta.php:218
-msgctxt "syndication-links"
-msgid "SoundCloud"
-msgstr ""
-
-#: includes/class-syn-meta.php:219
-msgctxt "syndication-links"
-msgid "Spotify"
-msgstr ""
-
-#: includes/class-syn-meta.php:220
-msgctxt "syndication-links"
-msgid "StumbleUpon"
-msgstr ""
-
-#: includes/class-syn-meta.php:221
-msgctxt "syndication-links"
-msgid "Telegram"
-msgstr ""
-
-#: includes/class-syn-meta.php:222
-msgctxt "syndication-links"
-msgid "Tumblr"
-msgstr ""
-
-#: includes/class-syn-meta.php:223
-msgctxt "syndication-links"
-msgid "Twitch"
-msgstr ""
-
-#: includes/class-syn-meta.php:224
-msgctxt "syndication-links"
-msgid "Twitter"
-msgstr ""
-
-#: includes/class-syn-meta.php:226
-msgctxt "syndication-links"
-msgid "WordPress"
-msgstr ""
-
-#: includes/class-syn-meta.php:227
-msgctxt "syndication-links"
-msgid "YouTube"
-msgstr ""
-
-#: includes/class-syn-meta.php:229
-msgctxt "syndication-links"
-msgid "IndieNews"
 msgstr ""
