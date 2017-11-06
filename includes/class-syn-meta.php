@@ -215,7 +215,7 @@ class Syn_Meta {
 			'ghost.org'             => __( 'Ghost', 'syndication-links' ),
 			'goodreads.com'         => __( 'Goodreads', 'syndication-links' ),
 			'plus.google.com'       => __( 'Google+', 'syndication-links' ),
-			'google.com'->__( 'Google', 'syndication-links' ),
+			'google.com'            => __( 'Google', 'syndication-links' ),
 			'github.com'            => __( 'Github', 'syndication-links' ),
 			'gitlab.com'            => __( 'Gitlab', 'syndication-links' ),
 			'instapaper.com'        => __( 'Instapaper', 'syndication-links' ),
