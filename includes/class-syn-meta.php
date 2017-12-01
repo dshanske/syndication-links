@@ -119,7 +119,7 @@ class Syn_Meta {
 			$meta = implode( PHP_EOL, $meta );
 		}
 		echo '<p><label for="syndication_urls">';
-		_e( 'One URL per line.', 'syndication-links' );
+		_e( 'For manual entry of Syndication Links. One URL per line.', 'syndication-links' );
 		echo '</label></p>';
 		echo '<textarea name="syndication_urls" id="syndication_urls" style="width:99%" rows="4" cols="40">';
 		if ( is_string( $meta ) ) {
