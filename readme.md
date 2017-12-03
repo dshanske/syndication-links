@@ -6,17 +6,56 @@
 **Stable tag:** 3.2.4  
 **License:** GPLv2 or later  
 
-Simple way to link to copies of your post elsewhere.
+A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
 
 ## Description ##
 
-It supports adding rel-syndication/u-syndication links to your posts, pages, and comments, indicating where a syndicated copy is. You can do this manually and some plugins
-support automatically adding their links as well.
+The plugin supports adding rel="syndication"/"u-syndication" links to your posts, pages, and comments, indicating where a syndicated copy of your content is stored. You can do this manually by copying and pasting permalink URLS while some plugins support automatically adding their links as well.
+
+Third-party services like [Brid.gy](https://brid.gy/) can use these syndication links to send replies, comments, likes, etc. from some social silos back to the original content on your website as well.
+
+## Screenshots ##
+
+Example of Syndication Links metabox with links filled in
+![syndication links meta box](https://user-images.githubusercontent.com/5882943/33523039-55f8a8e6-d7b1-11e7-9ac6-62e53c228e75.PNG)
+
+Example of output display on website:
+![syndicated copies](https://user-images.githubusercontent.com/5882943/33523035-3ada080c-d7b1-11e7-9776-5accf1654e0d.PNG)
 
 ## Installation ##
 
 1. Upload the folder 'syndication-links' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
+
+## Settings ##
+
+Settings for the Syndication Links plugin can be found in the main WordPress "Settings" tab in the
+admin dashboard, or if the [Indieweb plugin](https://wordpress.org/plugins/indieweb) is installed, under the Indieweb tab. The options provided allow for various ways of presenting the syndication links in posts. Syndication Links by default will add links to the content. You can remove this in your plugin if you wish to call the display function directly.
+
+The settings include the following options as follows with either a set of buttons, a check box (with a check indicating that the feature is "on") or an optional text field:
+
+* **Display Text** -  Offers options to display text only, icons only, icons and text, and no display(hidden icons).
+* **Size** - Choice of small, medium, or large size icons.
+* **Black Icons** - Checking the box defaults to a "black" social media icon set. 
+* **Show on Front Page, Archive Page, and Search Results** - If checked the icons will show on pages other than a single view. If not checked, the icons will be hidden by the links will remain.
+* **Text Before Links** - This is the text that appears before the Display Text/Icons (as indicated above). The default text is "Syndicated to:" but can be modified if desired.
+
+**Note**: The particular CSS of your theme may change the display and output of the text and some of the icons.
+
+## Supported syndication plugins and implementations ##
+
+The plugin supports pulling data from plugins that automatically syndicate your content so you don't need to do so manually.
+
+For anything not built in, it supports a filter 'syn_add_links' to add URLs,
+for potential use with any other plugin.
+
+* [Bridgy Publish](https://wordpress.org/plugins/bridgy-publish) - Simple user interface for Bridgy Publish
+* [Social Networks Autoposter](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) - Syndication Links supports Twitter, Facebook, and Tumblr since version 1.0.0
+* [Medium](https://wordpress.org/plugins/medium/) - Syndication Links supports since version 3.0.5
+* [Tumblr Crosspostr](https://wordpress.org/plugins/tumblr-crosspostr) - Supports Syndication Links since version 0.8.1
+* [WordPress Crossposter](https://wordpress.org/plugins/wp-crosspost) - Supports Syndication Links since version 0.3.2
+* [Diaposter](https://wordpress.org/plugins/diasposter/) - Supports Syndication Links since version 0.1.8
+* [Social](https://wordpress.org/plugins/social/) - Syndication Links supports Twitter URL import since version 1.0.0 (This plugin no longer works.)
 
 ## Frequently Asked Questions ##
 
@@ -45,21 +84,6 @@ If you add `?original-of=` and the URL-encoded URL it will return the post that 
 * `syn_add_links( $urls, $post_ID )` - $urls is an array of retrieved links from $post_ID
 * `syn_links_display_defaults( $defaults )` - Filter the defaults for displaying Syndication Links
 
-## Settings ##
-
-Settings for the Syndication Links plugin can be found in the main WordPress "Settings" tab in the
-admin dashboard, or if the [Indieweb plugin](https://wordpress.org/plugins/indieweb) is installed, under the Indieweb tab. The options provided allow for various ways of presenting the syndication links in posts. Syndication Links by default will add links to the content. You can remove this in your plugin if you wish to call the display function directly.
-
-The settings include the following options as follows with either a set of buttons, a check box (with a check indicating that the feature is "on") or an optional text field:
-
-* **Display Text** -  Offers options to display text only, icons only, icons and text, and no display(hidden icons).
-* **Size** - Choice of small, medium, or large size icons.
-* **Black Icons** - Checking the box defaults to a "black" social media icon set. 
-* **Show on Front Page, Archive Page, and Search Results** - If checked the icons will show on pages other than a single view. If not checked, the icons will be hidden by the links will remain.
-* **Text Before Links** - This is the text that appears before the Display Text/Icons (as indicated above). The default text is "Syndicated to:" but can be modified if desired.
-
-
-**Note**: The particular CSS of your theme may change the display and output of the text and some of the icons.
 
 ## Upgrade Notice ##
 
@@ -201,19 +225,3 @@ design.
 	* Added social icons CSS to automatically add icons to anything in a <LI>
 ### Version 0.1 ###
 	* Forked from the Semantic Comments plugin. Start of configurable options.
-
-## Supported POSSE plugins and implementations ##
-
-The plugin supports pulling data from plugins that syndicate your content.
-
-For anything not built in, it supports a filter 'syn_add_links' to add URLs,
-for potential use with any other plugin.
-
-
-* [Bridgy Publish](https://wordpress.org/plugins/bridgy-publish) - Simple user interface for Bridgy Publish
-* [Social](https://wordpress.org/plugins/social/) - Syndication Links supports Twitter URL import since version 1.0.0
-* [Social Networks Autoposter](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) - Syndication Links supports Twitter, Facebook, and Tumblr since version 1.0.0
-* [Medium](https://wordpress.org/plugins/medium/) - Syndication Links supports since version 3.0.5
-* [Tumblr Crosspostr](https://wordpress.org/plugins/tumblr-crosspostr) - Supports Syndication Links since version 0.8.1
-* [WordPress Crossposter](https://wordpress.org/plugins/wp-crosspost) - Supports Syndication Links since version 0.3.2
-* [Diaposter](https://wordpress.org/plugins/diasposter/) - Supports Syndication Links since version 0.1.8
