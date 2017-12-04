@@ -29,6 +29,7 @@ ul.relsyn li .svg-icon {
 a.syn-link, a.syn-link:visited, a.syn-link:hover {
   text-decoration: none;
   color: black;
+  background: transparent;
 }
 
 ul.relsyn li .svg-icon {
