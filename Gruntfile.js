@@ -43,6 +43,9 @@ module.exports = function(grunt) {
 
     wp_readme_to_markdown: {
       target: {
+       options: {
+          screenshot_url: '/assets/{screenshot}.png'
+       },
         files: {
           'readme.md': 'readme.txt'
         }
@@ -107,7 +110,17 @@ module.exports = function(grunt) {
        '!syn.min.css.map'
                ],
                dest: 'build/trunk/'
-           }
+           },
+        assets: {
+               options: {
+                   mode: true
+               },
+               src: [
+                 'assets/*'
+               ],
+               dest: 'build/'
+            }
+
        },
 
 
@@ -134,5 +147,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-execute');
 
   // Default task(s).
-  grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'execute', 'sass', 'svgstore', 'checktextdomain']);
+  grunt.registerTask('default', ['wp_readme_to_markdown', 'execute', 'makepot', 'sass', 'svgstore', 'checktextdomain']);
 };
