@@ -81,8 +81,11 @@ function readFile(path, callback) {
     }
 }
 
-var sass = "// Brand colours from simpleicons.org\n";
+var sass = "// Brand colors from simpleicons.org\n";
+var names = "// Brand names from simpleicons.org\n";
+var textdomain = "syndication-links";
 sass += ".relsyn li a {\n";
+names += "<?php\n\nfunction simpleicons_syn_get_names() {\n\treturn array(";
 var maxNameLength = 0;
 
 for (var i = 0; i < source.icons.length; i++) {
@@ -118,13 +121,23 @@ for (var i = 0; i < source.icons.length; i++) {
     }
 
     sass += "\n\t.svg-" + fileName.toLowerCase() + spacing + "{" + "\n\t\tcolor: #" + source.icons[i].hex.toUpperCase() + ";" + "\n\t}";
+    names += "\n\t\t'" + fileName.toLowerCase() + "'" + spacing + "=>" + spacing + "__( '" + source.icons[i].title + "', '" + textdomain + "' ),";
 }
-sass += "\n}"
+sass += ");\n}"
+names += "\n\t);\n}"
 
-// Generate Sass file with colour variables
+// Generate Sass file with color variables
 fs.writeFile("./sass/_simple-icons.scss", sass, function(err) {
     if(err) {
         return console.log(err);
     }
     console.log("The Sass file was built");
+});
+
+// Generate PHP file with names
+fs.writeFile("./includes/simple-icons.php", names, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+    console.log("The PHP file was built");
 });
