@@ -1,6 +1,11 @@
 module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
+	      execute: {
+		target: {
+			src: ['simpleicons.js']
+	          }
+	      },
               checktextdomain: {
                         options:{
                                 text_domain: 'syndication-links',
@@ -78,7 +83,7 @@ module.exports = function(grunt) {
                 },
                 dist: {
                                 files: {
-                                        'includes/social-logos.svg': ['svgs/*.svg']
+                                        'simple-icons.svg': ['node_modules/simple-icons/icons/*.svg']
                                 }
                 }
         },
@@ -126,7 +131,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-svgstore');
   grunt.loadNpmTasks('grunt-checktextdomain');
+  grunt.loadNpmTasks('grunt-execute');
 
   // Default task(s).
-  grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'sass', 'svgstore', 'checktextdomain']);
+  grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'execute', 'sass', 'svgstore', 'checktextdomain']);
 };

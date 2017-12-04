@@ -298,7 +298,7 @@ class Syn_Meta {
 				'foursquare.com'    => 'foursquare',
 				'goodreads.com'     => 'goodreads',
 				'ghost.org'         => 'ghost',
-				'plus.google.com'   => 'google-plus',
+				'plus.google.com'   => 'googleplus',
 				'github.com'        => 'github',
 				'gitlab.com'        => 'gitlab',
 				'instagram.com'     => 'instagram',
@@ -349,7 +349,7 @@ class Syn_Meta {
 			$icon = $icons[ $domain ];
 		}
 			// Substitute another svg sprite file
-			$sprite = apply_filters( 'syndication_icon_sprite', plugin_dir_url( __FILE__ ) . 'social-logos.svg', $domain );
+			$sprite = apply_filters( 'syndication_icon_sprite', plugins_url( 'simple-icons.svg', dirname( __FILE__ ) ), $domain );
 			return '<svg class="svg-icon svg-' . $icon . '" aria-hidden="true"><use xlink:href="' . $sprite . '#' . $icon . '"></use></svg>';
 	}
 
