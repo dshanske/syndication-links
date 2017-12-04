@@ -1,6 +1,5 @@
 build/*
 node_modules/*
-!/node_modules/simple-icons
 sass/.sass-cache/*
 vendor/*
 
