@@ -226,7 +226,7 @@ class Syn_Meta {
 			}
 			// Anything with WordPress in the name that is not matched return WordPress
 			if ( false !== stripos( $domain, 'WordPress' ) ) {
-				return 'WordPress';
+				return 'wordpress';
 			}
 			// Some domains have the word app in them check for matches with that
 			$strip = str_replace( 'app', '', $strip );
