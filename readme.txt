@@ -96,12 +96,17 @@ Removes H-Card Widget as does not fit into this plugin. Moving over to the Indie
 
 == Credits ==
 
-1. [Meitar Moscovitz](https://github.com/meitar) for fixes and code contributions
-2. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2) design.
-3. Jihaisse and Peter Molnar for the [SNAP](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/), courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
-4. [Simple-Icons](https://https://simpleicons.org/) for their icon packs for logos
-5. [Genericons Neue](http://genericons.com/) for their generic icon packs
-6. [Chris Aldrich](http://stream.boffosocko.com) for many suggestions on improving the display.
+In no particular order...
+
+1. The [Indieweb](https://indieweb.org) community of users and all users of this plugin 
+2. [Meitar Moscovitz](https://github.com/meitar) for fixes and code contributions related to support of the plugin in his various plugins.
+3. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2) design.
+4. Jihaisse and Peter Molnar for the [SNAP](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/), courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
+5. [Simple-Icons](https://https://simpleicons.org/) for their icon packs for logos. Simple Icons is licensed under CC0 v1.0 Universal.
+6. [Genericons Neue](http://genericons.com/) for their generic icon packs. Genericons Neue is licensed under the GPLv2.
+7. [Chris Aldrich](http://stream.boffosocko.com) for many suggestions on improving the display and for screenshots.
+8. [PHPCS](https://github.com/squizlabs/PHP_CodeSniffer) is used with the [WordPress](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards) and [PHP Compatibility](https://github.com/wimg/PHPCompatibility) Standards in order to ensure compatibility with supported versions of PHP and enact WordPress Coding Standards.
+9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
 
 == Changelog ==
 
@@ -111,9 +116,10 @@ Removes H-Card Widget as does not fit into this plugin. Moving over to the Indie
 * SVG Sprite only will be distributed instead of individual SVG files
 * Icon colors automatically generated from Simple Icons repository
 * Icon names automatically generated from Simple Icon repository
+* New code to try and find an icon without hard coding the domain to icon relationship by trying to find the icon name inside the domain string.
 * Development tools now configured for bringing in PHPCS Coding Standards and generating new files
 * Screenshots!
-* 
+* Again, automation automation automation
 
 = Version 3.2.4 ( 2017-11-23 )
 * Changelog will now note a release date
