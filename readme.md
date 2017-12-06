@@ -13,6 +13,15 @@ Simple way to link to copies of your post elsewhere.
 It supports adding rel-syndication/u-syndication links to your posts, pages, and comments, indicating where a syndicated copy is. You can do this manually and some plugins
 support automatically adding their links as well.
 
+## Screenshots ##
+
+### 1. Example of Syndication Links metabox with links filled in ###
+![Example of Syndication Links metabox with links filled in](/assets/screenshot-1.png)
+
+### 2. Example of output display on website ###
+![Example of output display on website](/assets/screenshot-2.png)
+
+
 ## Installation ##
 
 1. Upload the folder 'syndication-links' to the '/wp-content/plugins/' directory
@@ -80,14 +89,24 @@ Removes H-Card Widget as does not fit into this plugin. Moving over to the Indie
 ## Credits ##
 
 1. [Meitar Moscovitz](https://github.com/meitar) for fixes and code contributions
-2. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2)
-design.
-3. Jihaisse and Peter Molnar for the [SNAP](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) and [Social](https://github.com/crowdfavorite/wp-social) Import, courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
-4. Automattic for their [Social Logos](https://github.com/Automattic/social-logos/) icon library.
-5. [Chris Aldrich](http://stream.boffosocko.com) for many suggestions on improving the display.
+2. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2) design.
+3. Jihaisse and Peter Molnar for the [SNAP](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/), courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
+4. [Simple-Icons](https://https://simpleicons.org/) for their icon packs for logos
+5. [Genericons Neue](http://genericons.com/) for their generic icon packs
+6. [Chris Aldrich](http://stream.boffosocko.com) for many suggestions on improving the display.
 
 ## Changelog ##
 
+### Version 3.2.5 ( 2017-12-?? )
+* Switched to Simple Icons as larger, updated, and maintained more frequently than Automattic's Social Icons repo
+* Added in the Genericon Neue pack for when there is no logo for a site
+* SVG Sprite only will be distributed instead of individual SVG files
+* Icon colors automatically generated from Simple Icons repository
+* Icon names automatically generated from Simple Icon repository
+* Development tools now configured for bringing in PHPCS Coding Standards and generating new files
+* Plugin can be a composer dependency
+* screenshots!
+###
 ### Version 3.2.4 ( 2017-11-23 )
 * Changelog will now note a release date
 * Added/redid colors for many links
@@ -211,7 +230,6 @@ for potential use with any other plugin.
 
 
 * [Bridgy Publish](https://wordpress.org/plugins/bridgy-publish) - Simple user interface for Bridgy Publish
-* [Social](https://wordpress.org/plugins/social/) - Syndication Links supports Twitter URL import since version 1.0.0
 * [Social Networks Autoposter](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) - Syndication Links supports Twitter, Facebook, and Tumblr since version 1.0.0
 * [Medium](https://wordpress.org/plugins/medium/) - Syndication Links supports since version 3.0.5
 * [Tumblr Crosspostr](https://wordpress.org/plugins/tumblr-crosspostr) - Supports Syndication Links since version 0.8.1

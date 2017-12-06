@@ -82,7 +82,7 @@ function readFile(path, callback) {
 }
 
 var sass = "// Brand colors from simpleicons.org\n";
-var names = "// Brand names from simpleicons.org\n";
+var names = "";
 var textdomain = "syndication-links";
 sass += ".relsyn li a {\n";
 names += "<?php\n\nfunction simpleicons_syn_get_names() {\n\treturn array(";

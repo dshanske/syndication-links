@@ -210,7 +210,7 @@ class Syn_Meta {
 
 	public static function url_to_name( $url ) {
 		$scheme = wp_parse_url( $url, PHP_URL_SCHEME );
-		if ( ('http' === $scheme) || ( 'https' === $scheme ) ) {
+		if ( ( 'http' === $scheme ) || ( 'https' === $scheme ) ) {
 			$domain  = self::extract_domain_name( $url );
 			$strip   = self::split_domain( $domain );
 			$strings = array_keys( simpleicons_syn_get_names() );
@@ -224,9 +224,9 @@ class Syn_Meta {
 			if ( false !== stripos( $url, 'getpocket.com' ) ) {
 				return 'pocket';
 			}
-			// Anything with WordPress in the name that is not matched return wordpress
-			if ( false !== stripos( $domain, 'wordpress' ) ) {
-				return 'wordpress';
+			// Anything with WordPress in the name that is not matched return WordPress
+			if ( false !== stripos( $domain, 'WordPress' ) ) {
+				return 'WordPress';
 			}
 			// Some domains have the word app in them check for matches with that
 			$strip = str_replace( 'app', '', $strip );
@@ -247,7 +247,7 @@ class Syn_Meta {
 
 	public static function get_title( $name ) {
 		$strings = simpleicons_syn_get_names();
-		if ( isset( $strings[$name] ) ) {
+		if ( isset( $strings[ $name ] ) ) {
 			return $strings[ $name ];
 		}
 		return $name;
@@ -360,7 +360,7 @@ class Syn_Meta {
 			if ( empty( $url ) || ! is_string( $url ) ) {
 				continue; }
 			$name = self::url_to_name( $url );
-			$syn    = ( $r['icons'] ? self::get_icon( $name ) : '' ) . ( $r['text'] ? self::get_title( $name ) : '' );
+			$syn  = ( $r['icons'] ? self::get_icon( $name ) : '' ) . ( $r['text'] ? self::get_title( $name ) : '' );
 
 			$links[] = sprintf( '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>', $name, $r['single-css'], esc_url( $url ), $rel, $syn );
 		}

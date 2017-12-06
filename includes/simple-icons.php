@@ -1,4 +1,3 @@
-// Brand names from simpleicons.org
 <?php
 
 function simpleicons_syn_get_names() {
