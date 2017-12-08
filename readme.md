@@ -2,21 +2,58 @@
 **Contributors:** dshanske  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.7  
-**Tested up to:** 4.9  
-**Stable tag:** 3.2.4  
+**Tested up to:** 4.9.1  
+**Stable tag:** 3.3.0  
 **License:** GPLv2 or later  
 
-Simple way to link to copies of your post elsewhere.
+A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
 
 ## Description ##
 
-It supports adding rel-syndication/u-syndication links to your posts, pages, and comments, indicating where a syndicated copy is. You can do this manually and some plugins
-support automatically adding their links as well.
+It supports adding rel-syndication/u-syndication links to your posts, pages, and comments, indicating where a syndicated copy is. You can do this manually and some plugins support 
+automatically adding their links as well.
+
+## Screenshots ##
+
+### 1. Example of Syndication Links metabox with links filled in ###
+![Example of Syndication Links metabox with links filled in](/assets/screenshot-1.png)
+
+### 2. Example of output display on website ###
+![Example of output display on website](/assets/screenshot-2.png)
+
 
 ## Installation ##
 
 1. Upload the folder 'syndication-links' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
+
+## Settings ##
+
+Settings for the Syndication Links plugin can be found in the main WordPress "Settings" tab in the
+admin dashboard, or if the [Indieweb plugin](https://wordpress.org/plugins/indieweb) is installed, under the Indieweb tab. The options provided allow for various ways of presenting the syndication links in posts. Syndication Links by default will add links to the content. You can remove this in your plugin if you wish to call the display function directly.
+
+The settings include the following options as follows with either a set of buttons, a check box (with a check indicating that the feature is "on") or an optional text field:
+
+* **Display Text** -  Offers options to display text only, icons only, icons and text, and no display(hidden icons).
+* **Size** - Choice of small, medium, or large size icons.
+* **Black Icons** - Checking the box defaults to a "black" social media icon set. 
+* **Show on Front Page, Archive Page, and Search Results** - If checked the icons will show on pages other than a single view. If not checked, the icons will be hidden by the links will remain.
+* **Show on Feed** - If checked the icons will show in your RSS feed as well
+* **Text Before Links** - This is the text that appears before the Display Text/Icons (as indicated above). The default text is "Syndicated to:" but can be modified if desired.
+
+
+**Note**: The particular CSS of your theme may change the display and output of the text and some of the icons.
+
+## Supported POSSE plugins and implementations ##
+
+The plugin supports automatically pulling data from plugins that syndicate your content so you don't need to do it manually. For anything not built in, integation is easy with a simple filter for potential use with any other plugin.
+
+* [Bridgy](https://wordpress.org/plugins/bridgy-publish) - Simple user interface for Bridgy Publish
+* [Social Networks Autoposter](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) - Syndication Links supports Twitter, Facebook, and Tumblr since version 1.0.0
+* [Medium](https://wordpress.org/plugins/medium/) - Syndication Links supports since version 3.0.5
+* [Tumblr Crosspostr](https://wordpress.org/plugins/tumblr-crosspostr) - Supports Syndication Links since version 0.8.1
+* [WordPress Crossposter](https://wordpress.org/plugins/wp-crosspost) - Supports Syndication Links since version 0.3.2
+* [Diaposter](https://wordpress.org/plugins/diasposter/) - Supports Syndication Links since version 0.1.8
 
 ## Frequently Asked Questions ##
 
@@ -45,22 +82,6 @@ If you add `?original-of=` and the URL-encoded URL it will return the post that 
 * `syn_add_links( $urls, $post_ID )` - $urls is an array of retrieved links from $post_ID
 * `syn_links_display_defaults( $defaults )` - Filter the defaults for displaying Syndication Links
 
-## Settings ##
-
-Settings for the Syndication Links plugin can be found in the main WordPress "Settings" tab in the
-admin dashboard, or if the [Indieweb plugin](https://wordpress.org/plugins/indieweb) is installed, under the Indieweb tab. The options provided allow for various ways of presenting the syndication links in posts. Syndication Links by default will add links to the content. You can remove this in your plugin if you wish to call the display function directly.
-
-The settings include the following options as follows with either a set of buttons, a check box (with a check indicating that the feature is "on") or an optional text field:
-
-* **Display Text** -  Offers options to display text only, icons only, icons and text, and no display(hidden icons).
-* **Size** - Choice of small, medium, or large size icons.
-* **Black Icons** - Checking the box defaults to a "black" social media icon set. 
-* **Show on Front Page, Archive Page, and Search Results** - If checked the icons will show on pages other than a single view. If not checked, the icons will be hidden by the links will remain.
-* **Text Before Links** - This is the text that appears before the Display Text/Icons (as indicated above). The default text is "Syndicated to:" but can be modified if desired.
-
-
-**Note**: The particular CSS of your theme may change the display and output of the text and some of the icons.
-
 ## Upgrade Notice ##
 
 ### Version 3.0.5 ###
@@ -79,15 +100,32 @@ Removes H-Card Widget as does not fit into this plugin. Moving over to the Indie
 
 ## Credits ##
 
-1. [Meitar Moscovitz](https://github.com/meitar) for fixes and code contributions
-2. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2)
-design.
-3. Jihaisse and Peter Molnar for the [SNAP](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) and [Social](https://github.com/crowdfavorite/wp-social) Import, courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
-4. Automattic for their [Social Logos](https://github.com/Automattic/social-logos/) icon library.
-5. [Chris Aldrich](http://stream.boffosocko.com) for many suggestions on improving the display.
+In no particular order...
+
+1. The [Indieweb](https://indieweb.org) community of users and all users of this plugin 
+2. [Meitar Moscovitz](https://github.com/meitar) for fixes and code contributions related to support of the plugin in his various plugins.
+3. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2) design.
+4. Jihaisse and Peter Molnar for the [SNAP](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/), courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
+5. [Simple-Icons](https://https://simpleicons.org/) for their icon packs for logos. Simple Icons is licensed under CC0 v1.0 Universal.
+6. [Genericons Neue](http://genericons.com/) for their generic icon packs. Genericons Neue is licensed under the GPLv2.
+7. [Chris Aldrich](http://stream.boffosocko.com) for many suggestions on improving the display and for screenshots.
+8. [PHPCS](https://github.com/squizlabs/PHP_CodeSniffer) is used with the [WordPress](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards) and [PHP Compatibility](https://github.com/wimg/PHPCompatibility) Standards in order to ensure compatibility with supported versions of PHP and enact WordPress Coding Standards.
+9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
 
 ## Changelog ##
 
+### Version 3.3.0 ( 2017-12-?? )
+* Switched to Simple Icons as larger, updated, and maintained more frequently than Automattic's Social Icons repo
+* Added in the Genericon Neue pack for when there is no logo for a site with a series of generic icons
+* SVG Sprite only will be distributed instead of individual SVG files
+* Icon colors automatically generated from Simple Icons repository
+* Icon names automatically generated from Simple Icon repository
+* New code to try and find an icon without hard coding the domain to icon relationship by trying to find the icon name inside the domain string.
+* Development tools now configured for bringing in PHPCS Coding Standards and generating new files
+* Screenshots!
+* License information included for the plugin as well as dependencies
+* Again, automation automation automation
+###
 ### Version 3.2.4 ( 2017-11-23 )
 * Changelog will now note a release date
 * Added/redid colors for many links
@@ -201,19 +239,3 @@ design.
 	* Added social icons CSS to automatically add icons to anything in a <LI>
 ### Version 0.1 ###
 	* Forked from the Semantic Comments plugin. Start of configurable options.
-
-## Supported POSSE plugins and implementations ##
-
-The plugin supports pulling data from plugins that syndicate your content.
-
-For anything not built in, it supports a filter 'syn_add_links' to add URLs,
-for potential use with any other plugin.
-
-
-* [Bridgy Publish](https://wordpress.org/plugins/bridgy-publish) - Simple user interface for Bridgy Publish
-* [Social](https://wordpress.org/plugins/social/) - Syndication Links supports Twitter URL import since version 1.0.0
-* [Social Networks Autoposter](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) - Syndication Links supports Twitter, Facebook, and Tumblr since version 1.0.0
-* [Medium](https://wordpress.org/plugins/medium/) - Syndication Links supports since version 3.0.5
-* [Tumblr Crosspostr](https://wordpress.org/plugins/tumblr-crosspostr) - Supports Syndication Links since version 0.8.1
-* [WordPress Crossposter](https://wordpress.org/plugins/wp-crosspost) - Supports Syndication Links since version 0.3.2
-* [Diaposter](https://wordpress.org/plugins/diasposter/) - Supports Syndication Links since version 0.1.8

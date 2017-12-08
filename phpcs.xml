@@ -5,6 +5,7 @@
 	<file>./syndication-links.php</file>
 	<file>./includes/</file>
 	<exclude-pattern>*/includes/*\.(inc|css|js|svg)</exclude-pattern>
+	<exclude-pattern>*/includes/class-social-plugins.php</exclude-pattern>
 	<rule ref="PHPCompatibility"/>
 	<config name="testVersion" value="5.2-"/>
 	<rule ref="WordPress-Core" />	

@@ -1,6 +1,11 @@
 module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
+	      execute: {
+		target: {
+			src: ['simpleicons.js']
+	          }
+	      },
               checktextdomain: {
                         options:{
                                 text_domain: 'syndication-links',
@@ -38,6 +43,9 @@ module.exports = function(grunt) {
 
     wp_readme_to_markdown: {
       target: {
+       options: {
+          screenshot_url: '/assets/{screenshot}.png'
+       },
         files: {
           'readme.md': 'readme.txt'
         }
@@ -78,7 +86,7 @@ module.exports = function(grunt) {
                 },
                 dist: {
                                 files: {
-                                        'includes/social-logos.svg': ['svgs/*.svg']
+                                        'icons.svg': ['node_modules/simple-icons/icons/*.svg', 'node_modules/genericons-neue/svg-min/*.svg']
                                 }
                 }
         },
@@ -102,7 +110,17 @@ module.exports = function(grunt) {
        '!syn.min.css.map'
                ],
                dest: 'build/trunk/'
-           }
+           },
+        assets: {
+               options: {
+                   mode: true
+               },
+               src: [
+                 'assets/*'
+               ],
+               dest: 'build/'
+            }
+
        },
 
 
@@ -126,7 +144,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-svgstore');
   grunt.loadNpmTasks('grunt-checktextdomain');
+  grunt.loadNpmTasks('grunt-execute');
 
   // Default task(s).
-  grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'sass', 'svgstore', 'checktextdomain']);
+  grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'sass', 'checktextdomain']);
 };
