@@ -235,7 +235,7 @@ class Syn_Meta {
 
 			// Anything with WordPress in the name that is not matched return WordPress
 			if ( false !== stripos( $domain, 'WordPress' ) ) {
-				return 'wordpress';
+				return 'WordPress';
 			}
 			// Some domains have the word app in them check for matches with that
 			$strip = str_replace( 'app', '', $strip );
@@ -373,7 +373,7 @@ class Syn_Meta {
 			if ( 'website' === $name ) {
 				$name = self::extract_domain_name( $url );
 			}
-			$syn  = ( $r['icons'] ? $icon : '' ) . ( $r['text'] ? self::get_title( $name ) : '' );
+			$syn = ( $r['icons'] ? $icon : '' ) . ( $r['text'] ? self::get_title( $name ) : '' );
 
 			$links[] = sprintf( '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>', $name, $r['single-css'], esc_url( $url ), $rel, $syn );
 		}

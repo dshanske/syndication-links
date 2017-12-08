@@ -2,8 +2,8 @@
 **Contributors:** dshanske  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.7  
-**Tested up to:** 4.9  
-**Stable tag:** 3.2.4  
+**Tested up to:** 4.9.1  
+**Stable tag:** 3.3.0  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
@@ -123,6 +123,7 @@ In no particular order...
 * New code to try and find an icon without hard coding the domain to icon relationship by trying to find the icon name inside the domain string.
 * Development tools now configured for bringing in PHPCS Coding Standards and generating new files
 * Screenshots!
+* License information included for the plugin as well as dependencies
 * Again, automation automation automation
 ###
 ### Version 3.2.4 ( 2017-11-23 )
