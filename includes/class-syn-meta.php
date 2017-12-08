@@ -200,7 +200,7 @@ class Syn_Meta {
 	// Try to get the correct icon for the majority of sites by dropping
 	public static function split_domain( $string ) {
 		// Strip things we know we dont want. Not every TLD but the common ones in the fontset
-		$unwanted = array( '-', '.com', '.org', '.net', '.io', '.in' );
+		$unwanted = array( '-', '.com', '.org', '.net', '.io', '.in', '.tv', '.fm', '.social' );
 		// Strip these
 		$string = str_replace( $unwanted, '', $string );
 		// Strip the dot if it is a TLD other than the above
@@ -224,6 +224,15 @@ class Syn_Meta {
 			if ( false !== stripos( $url, 'getpocket.com' ) ) {
 				return 'pocket';
 			}
+			// Special Case Flipboard
+			if ( false !== stripos( $url, 'flip.it' ) ) {
+				return 'flipboard';
+			}
+
+			if ( false !== stripos( $url, 'lanyard' ) ) {
+				return 'lanyrd';
+			}
+
 			// Anything with WordPress in the name that is not matched return WordPress
 			if ( false !== stripos( $domain, 'WordPress' ) ) {
 				return 'wordpress';
@@ -360,7 +369,11 @@ class Syn_Meta {
 			if ( empty( $url ) || ! is_string( $url ) ) {
 				continue; }
 			$name = self::url_to_name( $url );
-			$syn  = ( $r['icons'] ? self::get_icon( $name ) : '' ) . ( $r['text'] ? self::get_title( $name ) : '' );
+			$icon = self::get_icon( $name );
+			if ( 'website' === $name ) {
+				$name = self::extract_domain_name( $url );
+			}
+			$syn  = ( $r['icons'] ? $icon : '' ) . ( $r['text'] ? self::get_title( $name ) : '' );
 
 			$links[] = sprintf( '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>', $name, $r['single-css'], esc_url( $url ), $rel, $syn );
 		}
