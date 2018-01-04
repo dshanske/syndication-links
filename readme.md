@@ -3,7 +3,7 @@
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.7  
 **Tested up to:** 4.9.1  
-**Stable tag:** 3.3.0  
+**Stable tag:** 3.3.1  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
@@ -114,6 +114,10 @@ In no particular order...
 
 ## Changelog ##
 
+### Version 3.3.1 ( 2018-01-04 )
+* Updated Simple Icons to latest version
+* Support for pulling data out for SNAP out of Post Meta without dependence on SNAP classes
+###
 ### Version 3.3.0 ( 2017-12-?? )
 * Switched to Simple Icons as larger, updated, and maintained more frequently than Automattic's Social Icons repo
 * Added in the Genericon Neue pack for when there is no logo for a site with a series of generic icons
