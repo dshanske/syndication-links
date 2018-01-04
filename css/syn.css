@@ -78,6 +78,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-adobephotoshop {
   color: #00C8FF;
 }
+.relsyn li a .svg-adobetypekit {
+  color: #87EC00;
+}
 .relsyn li a .svg-airbnb {
   color: #FF5A5F;
 }
@@ -109,7 +112,7 @@ ul.relsyn li .svg-icon {
   color: #273347;
 }
 .relsyn li a .svg-atlassian {
-  color: #0747A6;
+  color: #0052CC;
 }
 .relsyn li a .svg-atom {
   color: #66595C;
@@ -119,6 +122,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-automatic {
   color: #7D8084;
+}
+.relsyn li a .svg-aventrix {
+  color: #0099DD;
 }
 .relsyn li a .svg-baidu {
   color: #2319DC;
@@ -184,7 +190,7 @@ ul.relsyn li .svg-icon {
   color: #343434;
 }
 .relsyn li a .svg-coop {
-  color: #00A1CC;
+  color: #00B1E7;
 }
 .relsyn li a .svg-codeschool {
   color: #4CADC0;
@@ -196,7 +202,7 @@ ul.relsyn li .svg-icon {
   color: #000000;
 }
 .relsyn li a .svg-codecademy {
-  color: #204056;
+  color: #1F4056;
 }
 .relsyn li a .svg-codeforces {
   color: #1F8ACB;
@@ -217,7 +223,7 @@ ul.relsyn li .svg-icon {
   color: #414959;
 }
 .relsyn li a .svg-coursera {
-  color: #757575;
+  color: #2A73CC;
 }
 .relsyn li a .svg-dailymotion {
   color: #0066DC;
@@ -387,6 +393,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-googleanalytics {
   color: #FFC107;
 }
+.relsyn li a .svg-googlechrome {
+  color: #4285F4;
+}
 .relsyn li a .svg-googledrive {
   color: #4386FC;
 }
@@ -445,7 +454,7 @@ ul.relsyn li .svg-icon {
   color: #0E83CD;
 }
 .relsyn li a .svg-hipchat {
-  color: #205281;
+  color: #0052CC;
 }
 .relsyn li a .svg-hootsuite {
   color: #000000;
@@ -454,7 +463,7 @@ ul.relsyn li .svg-icon {
   color: #7AC142;
 }
 .relsyn li a .svg-hulu {
-  color: #66AA33;
+  color: #3DBB3D;
 }
 .relsyn li a .svg-humblebundle {
   color: #CC2929;
@@ -534,6 +543,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-klout {
   color: #E44600;
 }
+.relsyn li a .svg-known {
+  color: #333333;
+}
 .relsyn li a .svg-koding {
   color: #00B057;
 }
@@ -577,7 +589,7 @@ ul.relsyn li .svg-icon {
   color: #EE672F;
 }
 .relsyn li a .svg-mailchimp {
-  color: #2C9AB7;
+  color: #239AB9;
 }
 .relsyn li a .svg-makerbot {
   color: #FF1E0D;
@@ -693,6 +705,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-nodejs {
   color: #339933;
 }
+.relsyn li a .svg-nodemon {
+  color: #76D04B;
+}
 .relsyn li a .svg-nucleo {
   color: #766DCC;
 }
@@ -716,6 +731,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-overcast {
   color: #FC7E0F;
+}
+.relsyn li a .svg-php {
+  color: #777BB4;
 }
 .relsyn li a .svg-pagekit {
   color: #212121;
@@ -787,7 +805,7 @@ ul.relsyn li .svg-icon {
   color: #34A7C1;
 }
 .relsyn li a .svg-protonmail {
-  color: #9497CE;
+  color: #8B89CC;
 }
 .relsyn li a .svg-python {
   color: #3776AB;
@@ -811,7 +829,7 @@ ul.relsyn li .svg-icon {
   color: #C51A4A;
 }
 .relsyn li a .svg-react {
-  color: #00D8FF;
+  color: #61DAFB;
 }
 .relsyn li a .svg-readthedocs {
   color: #8CA1AF;
@@ -839,6 +857,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-runkeeper {
   color: #2DC9D7;
+}
+.relsyn li a .svg-rust {
+  color: #000000;
 }
 .relsyn li a .svg-salesforce {
   color: #00A1E0;
@@ -975,6 +996,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-styleshare {
   color: #231F20;
 }
+.relsyn li a .svg-stylus {
+  color: #333333;
+}
 .relsyn li a .svg-sublimetext {
   color: #272822;
 }
@@ -986,6 +1010,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-swarm {
   color: #FFA633;
+}
+.relsyn li a .svg-swift {
+  color: #FA7343;
 }
 .relsyn li a .svg-symfony {
   color: #000000;
@@ -1045,7 +1072,7 @@ ul.relsyn li .svg-icon {
   color: #F22F46;
 }
 .relsyn li a .svg-twitch {
-  color: #6441A5;
+  color: #6441A4;
 }
 .relsyn li a .svg-twitter {
   color: #1DA1F2;
@@ -1067,6 +1094,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-umbraco {
   color: #00BEC1;
+}
+.relsyn li a .svg-untappd {
+  color: #FFC000;
 }
 .relsyn li a .svg-upwork {
   color: #6FDA44;
@@ -1138,7 +1168,7 @@ ul.relsyn li .svg-icon {
   color: #000000;
 }
 .relsyn li a .svg-wix {
-  color: #FFC233;
+  color: #FAAD4D;
 }
 .relsyn li a .svg-wordpress {
   color: #21759B;
@@ -1146,11 +1176,14 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-xbox {
   color: #107C10;
 }
+.relsyn li a .svg-xcode {
+  color: #1575F9;
+}
 .relsyn li a .svg-xero {
   color: #13B5EA;
 }
 .relsyn li a .svg-xing {
-  color: #005A5F;
+  color: #006567;
 }
 .relsyn li a .svg-ycombinator {
   color: #F0652F;
@@ -1165,7 +1198,7 @@ ul.relsyn li .svg-icon {
   color: #FF0000;
 }
 .relsyn li a .svg-yelp {
-  color: #C41200;
+  color: #D32323;
 }
 .relsyn li a .svg-youtube {
   color: #FF0000;
