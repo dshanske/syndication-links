@@ -7,10 +7,39 @@ class Social_Plugins {
 		add_filter( 'syn_add_links', array( 'Social_Plugins', 'add_syn_plugins' ) );
 	}
 
+	public static function array_flatten($array) { 
+		  if (!is_array($array)) { 
+			      return false; 
+			        } 
+		    $result = array(); 
+		    foreach ($array as $key => $value) { 
+			        if (is_array($value)) { 
+					      $result = array_merge($result, self::array_flatten($value)); 
+					          } else { 
+							        $result[$key] = $value; 
+								    } 
+				  } 
+		    return $result;
+	}
+
 	public static function add_syn_plugins( $urls ) {
 		$see_on = array();
-		if ( defined( 'NextScripts_SNAP_Version' ) ) {
-			$see_on = array_merge( $see_on, self::add_links_from_snap() );
+//		if ( defined( 'NextScripts_SNAP_Version' ) ) {
+//			$see_on = array_merge( $see_on, self::add_links_from_snap() );
+//		}
+
+		$keys = get_post_meta( get_the_ID() );
+		$keys = array_keys( $keys );
+		foreach(  $keys as $key ) {
+			if ( 0 === strpos( $key, 'snap' ) && 6 === strlen( $key ) ) {
+				$meta = get_post_meta( get_the_ID(), $key, true );
+				$meta = maybe_unserialize( $meta );
+				$meta = self::array_flatten( $meta );
+				error_log( 'Key: ' . $key . print_r( $meta, true ) );
+				if ( isset( $meta['postURL'] ) ) {
+					$see_on[] = $meta['postURL'];
+				}
+			}
 		}
 		// Support for the Official Medium Plugin per request @chrisaldrich
 		if ( class_exists( 'Medium_Post' ) ) {
