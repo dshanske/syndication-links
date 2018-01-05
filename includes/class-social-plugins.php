@@ -35,7 +35,6 @@ class Social_Plugins {
 				$meta = get_post_meta( get_the_ID(), $key, true );
 				$meta = maybe_unserialize( $meta );
 				$meta = self::array_flatten( $meta );
-				error_log( 'Key: ' . $key . print_r( $meta, true ) );
 				if ( isset( $meta['postURL'] ) ) {
 					$see_on[] = $meta['postURL'];
 				}
