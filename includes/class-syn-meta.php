@@ -233,6 +233,10 @@ class Syn_Meta {
 				return 'lanyrd';
 			}
 
+			if ( false !== stripos( $url, 'micro.blog' ) ) {
+				return 'microblog';
+			}
+
 			// Anything with WordPress in the name that is not matched return WordPress
 			if ( false !== stripos( $domain, 'WordPress' ) ) {
 				return 'WordPress';
