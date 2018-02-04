@@ -618,6 +618,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-meteor {
   color: #DE4F4F;
 }
+.relsyn li a .svg-microblog {
+  color: #FD8308;
+}
 .relsyn li a .svg-microgenetics {
   color: #FF0000;
 }
@@ -809,6 +812,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-python {
   color: #3776AB;
+}
+.relsyn li a .svg-qiita {
+  color: #55C500;
 }
 .relsyn li a .svg-quantcast {
   color: #1E262C;
