@@ -117,6 +117,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-atom {
   color: #66595C;
 }
+.relsyn li a .svg-aurelia {
+  color: #ED2B88;
+}
 .relsyn li a .svg-auth0 {
   color: #EB5424;
 }
@@ -156,6 +159,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-bitly {
   color: #EE6123;
 }
+.relsyn li a .svg-blender {
+  color: #F5792A;
+}
 .relsyn li a .svg-blogger {
   color: #FF5722;
 }
@@ -188,6 +194,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-circleci {
   color: #343434;
+}
+.relsyn li a .svg-cloudflare {
+  color: #F38020;
 }
 .relsyn li a .svg-coop {
   color: #00B1E7;
@@ -261,6 +270,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-disqus {
   color: #2E9FFF;
 }
+.relsyn li a .svg-disroot {
+  color: #50162D;
+}
 .relsyn li a .svg-django {
   color: #092E20;
 }
@@ -314,6 +326,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-feedly {
   color: #6CC655;
+}
+.relsyn li a .svg-firebase {
+  color: #FFCA28;
 }
 .relsyn li a .svg-fitbit {
   color: #00B0B9;
@@ -429,6 +444,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-gulp {
   color: #DA4648;
 }
+.relsyn li a .svg-gumroad {
+  color: #36A9AE;
+}
 .relsyn li a .svg-gumtree {
   color: #72EF36;
 }
@@ -495,9 +513,6 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-intercom {
   color: #1F8DED;
 }
-.relsyn li a .svg-jira {
-  color: #172B4D;
-}
 .relsyn li a .svg-jsfiddle {
   color: #4679A4;
 }
@@ -512,6 +527,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-jenkins {
   color: #D24939;
+}
+.relsyn li a .svg-jira {
+  color: #172B4D;
 }
 .relsyn li a .svg-joomla {
   color: #5091CD;
@@ -752,6 +770,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-periscope {
   color: #40A4C4;
+}
+.relsyn li a .svg-picartotv {
+  color: #3B4F63;
 }
 .relsyn li a .svg-pinboard {
   color: #0000FF;
@@ -1026,6 +1047,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-ted {
   color: #E62B1E;
 }
+.relsyn li a .svg-tapas {
+  color: #FFCE00;
+}
 .relsyn li a .svg-teespring {
   color: #39ACE6;
 }
@@ -1101,6 +1125,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-umbraco {
   color: #00BEC1;
 }
+.relsyn li a .svg-unsplash {
+  color: #000000;
+}
 .relsyn li a .svg-untappd {
   color: #FFC000;
 }
@@ -1142,6 +1169,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-wpengine {
   color: #40BAC8;
+}
+.relsyn li a .svg-wattpad {
+  color: #F68D12;
 }
 .relsyn li a .svg-wechat {
   color: #7BB32E;

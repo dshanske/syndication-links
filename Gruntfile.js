@@ -86,7 +86,7 @@ module.exports = function(grunt) {
                 },
                 dist: {
                                 files: {
-                                        'icons.svg': ['node_modules/simple-icons/icons/*.svg', 'node_modules/genericons-neue/svg/*.svg']
+                                        'icons.svg': ['node_modules/simple-icons/icons/*.svg', 'genericons-neue/svg/*.svg']
                                 }
                 }
         },
