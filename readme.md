@@ -114,6 +114,12 @@ In no particular order...
 
 ## Changelog ##
 
+### Version 3.x.x ( 2018-02-xx )
+* Updated Simple Icons to latest version
+* Switched Genericons Neue to a submodule as the svg version was not distributed in the npm package
+* Added support for Mastodon Auto Post per request. Unable to test due not using same
+* Added support for Keyring Social Importer. Unable to test due not using same
+###
 ### Version 3.3.2 ( 2018-02-03 )
 * Updated Simple Icons to latest version
 ###
