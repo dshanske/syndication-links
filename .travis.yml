@@ -105,8 +105,7 @@ script:
       # Search for PHP syntax errors.
       - find -L . -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
       # Run PHPUnit tests
-      phpunit || exit 1
-      WP_MULTISITE=1 phpunit || exit 1
+      ./bin/test.sh
     fi
   - |
     if [[ "$WP_TRAVISCI" == "travis:phpcs" ]] ; then
