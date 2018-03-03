@@ -27,7 +27,6 @@ class Social_Plugins {
 //		if ( defined( 'NextScripts_SNAP_Version' ) ) {
 //			$see_on = array_merge( $see_on, self::add_links_from_snap() );
 //		}
-
 		$keys = get_post_meta( get_the_ID() );
 		$keys = array_keys( $keys );
 		foreach(  $keys as $key ) {
