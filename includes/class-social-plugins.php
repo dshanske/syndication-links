@@ -27,7 +27,6 @@ class Social_Plugins {
 //		if ( defined( 'NextScripts_SNAP_Version' ) ) {
 //			$see_on = array_merge( $see_on, self::add_links_from_snap() );
 //		}
-
 		$keys = get_post_meta( get_the_ID() );
 		$keys = array_keys( $keys );
 		foreach(  $keys as $key ) {
@@ -44,6 +43,23 @@ class Social_Plugins {
 		if ( class_exists( 'Medium_Post' ) ) {
 			$medium_post = Medium_Post::get_by_wp_id( get_the_ID() );
 			$see_on[]    = $medium_post->url;
+		}
+		// Support for Mastodon Autopost https://github.com/dshanske/syndication-links/issues/75
+		if ( function_exists( 'mastodon_autopost_ajax_handler' ) ) {
+			$mastodon = get_post_meta( get_the_ID(), 'mastodonAutopostLastSuccessfullPostURL', true );
+			if ( $mastodon ) {
+				$see_on[] = $mastodon;
+			}
+		}
+		// Support for Keyring Social Importer fields https://github.com/dshanske/syndication-links/issues/73
+		if ( class_exists( 'Keyring_Importer_Base' ) ) {
+			$keyrings = array( 'href', 'flickr_url', 'instagram_url', 'pinterest_url', 'twitter_permalink' );
+			foreach( $keyrings as $keyring ) {
+				$keyr = get_post_meta( get_the_ID(), $keyring, true );
+				if ( $keyr ) {
+					$see_on[] = $keyr;
+				}
+			}
 		}
 		return array_merge( $see_on, $urls );
 	}

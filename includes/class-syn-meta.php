@@ -19,6 +19,25 @@ class Syn_Meta {
 		add_action( 'parse_query', array( 'Syn_Meta', 'parse_query' ) );
 	}
 
+
+	public static function screens() {
+		$screens = array( 'post', 'page', 'comment' );
+		return apply_filters( 'syn_metabox_types', $screens );
+	}
+
+	public static function enqueue( $hook_suffix ) {
+		$screens = self::screens();
+		if ( in_array( get_current_screen()->id, $screens, true ) ) {
+			wp_enqueue_script(
+				'synlinks',
+				plugins_url( 'js/synlinks.js', dirname( __FILE__ ) ),
+				array( 'jquery' ),
+				SYNDICATION_LINKS_VERSION
+			);
+		}
+	}
+
+
 	public static function query_var( $vars ) {
 		$vars[] = 'original-of';
 			return $vars;
@@ -93,19 +112,18 @@ class Syn_Meta {
 
 	/* Meta box setup function. */
 	public static function setup() {
+		add_action( 'admin_enqueue_scripts', array( 'Syn_Meta', 'enqueue' ) );
 		/* Add meta boxes on the 'add_meta_boxes' hook. */
 		add_action( 'add_meta_boxes', array( 'Syn_Meta', 'add_meta_boxes' ) );
 	}
 
 	/* Create one or more meta boxes to be displayed on the post editor screen. */
 	public static function add_meta_boxes() {
-		$screens = array( 'post', 'page', 'comment' );
-		$screens = apply_filters( 'syn_metabox_types', $screens );
 		add_meta_box(
 			'synbox-meta',      // Unique ID
 			esc_html__( 'Syndication Links', 'syndication-links' ),    // Title
 			array( 'Syn_Meta', 'metabox' ),   // Callback function
-			$screens,         // Admin page (or post type)
+			self::screens(),         // Admin page (or post type)
 			'normal',         // Context
 			'default'         // Priority
 		);
@@ -113,20 +131,37 @@ class Syn_Meta {
 
 	public static function metabox( $object, $box ) {
 		wp_nonce_field( 'syn_metabox', 'syn_metabox_nonce' );
-		$meta = self::get_syndication_links_data( $object );
+		$urls = self::get_syndication_links_data( $object );
 
-		if ( is_array( $meta ) ) {
-			$meta = implode( PHP_EOL, $meta );
+		if ( is_string( $urls ) ) {
+			$urls = explode( PHP_EOL, $urls );
 		}
-		echo '<p><label for="syndication_urls">';
-		_e( 'For manual entry of Syndication Links. One URL per line.', 'syndication-links' );
+		if ( ! $urls ) {
+			$urls = array( '' );
+		}
+		echo '<span class="button-primary add-syn-link-button">' . __( 'Add', 'syndication-links' ) . '</span></br>';
+		echo '<p class="syndication_url_list"><label for="syndication_urls">';
+		_e( 'Add Links to this same content on other sites', 'syndication-links' );
+		foreach ( $urls as $url ) {
+			echo '<input type="text" name="syndication_urls[]" class="widefat" id="syndication_urls" value="' . $url . '" /><br />';
+		}
 		echo '</label></p>';
-		echo '<textarea name="syndication_urls" id="syndication_urls" style="width:99%" rows="4" cols="40">';
-		if ( is_string( $meta ) ) {
-			echo $meta;
-		}
-		echo '</textarea>';
 	}
+
+	/* Save the meta box's metadata. */
+	public static function save_meta( $type, $id ) {
+		if ( empty( $_POST['syndication_urls'] ) ) {
+			delete_metadata( $type, $id, 'mf2_syndication' );
+		} else {
+			$meta = $_POST['syndication_urls'];
+			if ( is_string( $meta ) ) {
+				$meta = explode( PHP_EOL, $_POST['syndication_urls'] );
+			}
+			$meta = self::clean_urls( $meta );
+			update_metadata( $type, $id, 'mf2_syndication', $meta );
+		}
+	}
+
 
 	/* Save the meta box's post metadata. */
 	public static function save_post_meta( $post_id ) {
@@ -156,14 +191,10 @@ class Syn_Meta {
 				return;
 			}
 		}
-		if ( empty( $_POST['syndication_urls'] ) ) {
-			delete_post_meta( $post_id, 'mf2_syndication' );
-		} else {
-			$meta = explode( PHP_EOL, $_POST['syndication_urls'] );
-			$meta = self::clean_urls( $meta );
-			update_post_meta( $post_id, 'mf2_syndication', $meta );
-		}
+		self::save_meta( 'post', $post_id );
 	}
+
+
 
 	/* Save the meta box's comment metadata. */
 	public static function save_comment_meta( $comment_id ) {
@@ -179,14 +210,8 @@ class Syn_Meta {
 		if ( ! wp_verify_nonce( $_POST['syn_metabox_nonce'], 'syn_metabox' ) ) {
 			return;
 		}
+		self::save_meta( 'comment', $comment_id );
 
-		if ( empty( $_POST['syndication_urls'] ) ) {
-			delete_comment_meta( $comment_id, 'mf2_syndication' );
-		} else {
-			$meta = explode( PHP_EOL, $_POST['syndication_urls'] );
-			$meta = self::clean_urls( $meta );
-			update_comment_meta( $comment_id, 'mf2_syndication', $meta );
-		}
 	}
 
 	public static function extract_domain_name( $url, $subdomain = false ) {
