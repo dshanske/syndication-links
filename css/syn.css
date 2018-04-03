@@ -52,7 +52,7 @@ ul.relsyn li .svg-icon {
   color: #00A98F;
 }
 .relsyn li a .svg-addthis {
-  color: #FF5C3E;
+  color: #FF6550;
 }
 .relsyn li a .svg-adobe {
   color: #FF0000;
@@ -471,6 +471,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-hexo {
   color: #0E83CD;
 }
+.relsyn li a .svg-highly {
+  color: #FF3C00;
+}
 .relsyn li a .svg-hipchat {
   color: #0052CC;
 }
@@ -566,6 +569,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-koding {
   color: #00B057;
+}
+.relsyn li a .svg-linewebtoon {
+  color: #00D564;
 }
 .relsyn li a .svg-lanyrd {
   color: #3C80CA;
@@ -772,7 +778,7 @@ ul.relsyn li .svg-icon {
   color: #40A4C4;
 }
 .relsyn li a .svg-picartotv {
-  color: #3B4F63;
+  color: #1DA456;
 }
 .relsyn li a .svg-pinboard {
   color: #0000FF;
@@ -1250,6 +1256,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-zillow {
   color: #0074E4;
+}
+.relsyn li a .svg-devto {
+  color: #0A0A0A;
 }
 .relsyn li a .svg-ebay {
   color: #E53238;
