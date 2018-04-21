@@ -45,9 +45,6 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-acm {
   color: #0085CA;
 }
-.relsyn li a .svg-aim {
-  color: #FFCA00;
-}
 .relsyn li a .svg-aboutme {
   color: #00A98F;
 }
@@ -107,6 +104,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-archlinux {
   color: #1793D1;
+}
+.relsyn li a .svg-artstation {
+  color: #13AFF0;
 }
 .relsyn li a .svg-asana {
   color: #273347;
@@ -301,7 +301,7 @@ ul.relsyn li .svg-icon {
   color: #3C3C3D;
 }
 .relsyn li a .svg-etsy {
-  color: #F45800;
+  color: #F16521;
 }
 .relsyn li a .svg-eventstore {
   color: #5AB552;
@@ -325,7 +325,7 @@ ul.relsyn li .svg-icon {
   color: #9B9B9B;
 }
 .relsyn li a .svg-feedly {
-  color: #6CC655;
+  color: #2BB24C;
 }
 .relsyn li a .svg-firebase {
   color: #FFCA28;
@@ -355,19 +355,19 @@ ul.relsyn li .svg-icon {
   color: #005EA5;
 }
 .relsyn li a .svg-garmin {
-  color: #007DC3;
+  color: #007CC3;
 }
 .relsyn li a .svg-gatsby {
-  color: #744C9E;
+  color: #663399;
 }
 .relsyn li a .svg-gauges {
-  color: #339966;
+  color: #2FA66A;
 }
 .relsyn li a .svg-geeklist {
   color: #8CC63F;
 }
 .relsyn li a .svg-geocaching {
-  color: #467126;
+  color: #00874D;
 }
 .relsyn li a .svg-gerrit {
   color: #EEEEEE;
@@ -376,7 +376,7 @@ ul.relsyn li .svg-icon {
   color: #718087;
 }
 .relsyn li a .svg-git {
-  color: #F14E32;
+  color: #F05032;
 }
 .relsyn li a .svg-github {
   color: #181717;
@@ -867,9 +867,6 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-readthedocs {
   color: #8CA1AF;
 }
-.relsyn li a .svg-readability {
-  color: #990000;
-}
 .relsyn li a .svg-reddit {
   color: #FF4500;
 }
@@ -1150,7 +1147,7 @@ ul.relsyn li .svg-icon {
   color: #F88D2D;
 }
 .relsyn li a .svg-viber {
-  color: #7C529E;
+  color: #665CAC;
 }
 .relsyn li a .svg-vim {
   color: #019733;
@@ -1264,7 +1261,7 @@ ul.relsyn li .svg-icon {
   color: #E53238;
 }
 .relsyn li a .svg-freecodecamp {
-  color: #006600;
+  color: #006400;
 }
 .relsyn li a .svg-homify {
   color: #7DCDA3;

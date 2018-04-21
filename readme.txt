@@ -2,7 +2,7 @@
 Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Requires at least: 4.7
-Tested up to: 4.9.3
+Tested up to: 4.9.5
 Stable tag: 3.4.0
 License: GPLv2 or later
 
@@ -109,6 +109,11 @@ In no particular order...
 9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 3.x.x ( 2018-xx-xx )
+* Refresh Simple Icons
+* Remove internationalization of icon names
+* Update development environment
 
 = Version 3.4.0 ( 2018-03-03 )
 * Updated Simple Icons to latest version
