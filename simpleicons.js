@@ -121,7 +121,7 @@ for (var i = 0; i < source.icons.length; i++) {
     }
 
     sass += "\n\t.svg-" + fileName.toLowerCase() + spacing + "{" + "\n\t\tcolor: #" + source.icons[i].hex.toUpperCase() + ";" + "\n\t}";
-    names += "\n\t\t'" + fileName.toLowerCase() + "'" + spacing + "=>" + spacing + "__( '" + source.icons[i].title + "', '" + textdomain + "' ),";
+    names += "\n\t\t'" + fileName.toLowerCase() + "'" + spacing + "=>" + spacing + "'" + source.icons[i].title + "',";
 }
 sass += "\n}"
 names += "\n\t);\n}"
