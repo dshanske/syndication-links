@@ -9,9 +9,10 @@ class Syn_Config {
 		add_action( 'admin_init', array( 'Syn_Config', 'admin_init' ) );
 		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ), 30 );
 		if ( get_option( 'syndication-links_feed' ) ) {
-			add_filter( 'the_content_feed', array( 'Syn_Config', 'the_content_feed' ), 20 );
+			add_filter( 'the_content_feed', array( 'Syn_Config', 'the_content_feed' ), 20, 2 );
 		}
 		add_filter( 'comment_text', array( 'Syn_Config', 'comment_text' ), 20, 2 );
+		add_filter( 'json_feed_item', array( 'Syn_Config', 'json_feed_item' ), 10, 2 );
 
 		// Syndication Content Options
 		register_setting(
@@ -317,11 +318,15 @@ class Syn_Config {
 		return $comment_text;
 	}
 
-	public static function the_content_feed( $content ) {
+	public static function the_content_feed( $content, $feed_type ) {
 		$post_ID = get_the_ID();
 		if ( ! $post_ID ) {
 			return $content;
 		}
+		if ( 'json' === $feed_type ) {
+			return $content;
+		}
+
 		if ( ( is_admin() ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 			return $content;
 		}
@@ -331,6 +336,11 @@ class Syn_Config {
 			'text'  => true,
 		);
 		return $content . get_post_syndication_links( $post_ID, $args );
+	}
+
+	public static function json_feed_item( $feed_item, $post ) {
+		$feed_item['syndication'] = get_syndication_links_data( $post );
+		return $feed_item;
 	}
 
 
