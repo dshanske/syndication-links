@@ -7,6 +7,7 @@
     "grunt-checktextdomain": "1.0.1",
     "grunt-contrib-sass": "~0.8.1",
     "grunt-execute": "^0.2.2",
+    "grunt-svg-sprite": "^1.4.0",
     "grunt-wp-i18n": "~0.4.9",
     "grunt-wp-readme-to-markdown": "~0.8.0",
     "jshint": "^2.9.5",

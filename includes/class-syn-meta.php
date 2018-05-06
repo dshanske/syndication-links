@@ -17,7 +17,65 @@ class Syn_Meta {
 		register_meta( 'post', 'mf2_syndication', $args );
 		add_filter( 'query_vars', array( 'Syn_Meta', 'query_var' ) );
 		add_action( 'parse_query', array( 'Syn_Meta', 'parse_query' ) );
+
+		add_filter( 'wp_privacy_personal_data_exporters', array( 'Syn_Meta', 'wp_privacy_personal_data_exporters' ), 10 );
 	}
+
+	public static function wp_privacy_personal_data_exporters( $exporters ) {
+		$exporters['syndication-links'] = array(
+			'exporter_friendly_name' => __( 'Syndication Links Plugin', 'syndication-links' ),
+			'callback'               => array( 'Syn_Meta', 'data_exporter' ),
+		);
+		return $exporters;
+	}
+
+	public static function data_exporter( $email_address, $page = 1 ) {
+		$number = 500; // Limit us to avoid timing out
+		$page   = (int) $page;
+
+		$export_items = array();
+		$comments     = get_comments(
+			array(
+				'author_email' => $email_address,
+				'number'       => $number,
+				'paged'        => $page,
+				'order_by'     => 'comment_ID',
+				'order'        => 'ASC',
+			)
+		);
+
+		foreach ( (array) $comments as $comment ) {
+			$syndication = self::get_syndication_links_data( $comment );
+			if ( ! empty( $syndication ) ) {
+				$item_id     = "comment-{$comment->comment_ID}";
+				$group_id    = 'comments';
+				$group_label = __( 'Comments', 'default' );
+
+				$data           = array(
+					array(
+						'name'  => __( 'Syndication Links', 'syndication-links' ),
+						'value' => $syndication,
+					),
+				);
+				$export_items[] = array(
+					'group_id'    => $group_id,
+					'group_label' => $group_label,
+					'item_id'     => $item_id,
+					'data'        => $data,
+				);
+			}
+		}
+
+		$done = count( $comments ) < $number;
+
+		return array(
+			'data' => $export_items,
+			'done' => $done,
+		);
+	}
+
+
+
 
 
 	public static function screens() {
@@ -486,18 +544,3 @@ class Syn_Meta {
 	}
 
 } // End Class
-
-
-function get_syndication_links( $meta_type, $object_id = null, $args = array() ) {
-	return Syn_Meta::get_syndication_links( $meta_type, $object_id, $args );
-}
-
-function get_post_syndication_links( $post_id = null, $args = array() ) {
-	return Syn_Meta::get_post_syndication_links( $post_id, $args );
-}
-
-function get_comment_syndication_links( $comment_id = null, $args = array() ) {
-	return Syn_Meta::get_comment_syndication_links( $comment_id, $args );
-}
-
-

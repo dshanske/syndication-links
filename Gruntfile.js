@@ -75,19 +75,32 @@ module.exports = function(grunt) {
 	}
   },
 
-        svgstore: {
-                options: {
-                        prefix : '', // Unused by us, but svgstore demands this variable
-                        cleanup : ['style', 'fill', 'id'],
-                        svg: { // will add and overide the the default xmlns="http://www.w3.org/2000/svg" attribute to the resulting SVG
-                                viewBox : '0 0 24 24',
-                                xmlns: 'http://www.w3.org/2000/svg'
-                        },
-                },
-                dist: {
-                                files: {
-                                        'icons.svg': ['node_modules/simple-icons/icons/*.svg', 'genericons-neue/svg/*.svg']
+        svg_sprite              : {
+                icons: {
+                        src: ['node_modules/simple-icons/icons/*.svg', 'genericons-neue/svg/*.svg'],
+                        dest: '.',
+                        options         : {
+
+                                shape                           : {
+                                        dimension               : {                     // Set maximum dimensions
+                                                maxWidth        : 64,
+                                                maxHeight       : 64
+                                        },
+                                        spacing                 : {                     // Add padding
+                                                padding         : 10
+                                        },
+                                        id                      : {
+                                                separator       : ''
+                                        }
+                                },
+                                mode : {
+                                        symbol                  : {             // Activate the «symbol» mode
+                                                sprite : 'icons.svg',
+                                                dest: ''
+                                        }
+
                                 }
+                        }
                 }
         },
 
@@ -108,7 +121,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-wp-readme-to-markdown');
   grunt.loadNpmTasks( 'grunt-wp-i18n' );
   grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-svgstore');
+  grunt.loadNpmTasks('grunt-svg-sprite');
   grunt.loadNpmTasks('grunt-checktextdomain');
   grunt.loadNpmTasks('grunt-execute');
 
