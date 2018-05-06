@@ -339,7 +339,10 @@ class Syn_Config {
 	}
 
 	public static function json_feed_item( $feed_item, $post ) {
-		$feed_item['syndication'] = get_syndication_links_data( $post );
+		$syn = get_syndication_links_data( $post );
+		if ( $syn ) {
+			$feed_item['syndication'] = get_syndication_links_data( $post );
+		}
 		return $feed_item;
 	}
 
