@@ -3,7 +3,7 @@
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.7  
 **Tested up to:** 4.9.5  
-**Stable tag:** 3.4.0  
+**Stable tag:** 3.4.1  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
@@ -26,6 +26,17 @@ automatically adding their links as well.
 
 1. Upload the folder 'syndication-links' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
+
+## Privacy and Data Storage Information ##
+
+This plugin stores syndication links, which can be attached to any post, page, or comment. They can be added to custom post types by filter. 
+
+For webmention initiated comments, this information
+will be added by parsing the source of the webmention. It is assumed if you send a webmention, you consent to share this information if it is publicly shared on your page. Our recommendation
+is that site owners should take down information on request. 
+
+For comments initiated on the site, there is built-in way to add these links. For posts, they are typically added by retrieving information stored by other plugins for display. It is assumed
+that by installing this plugin, as its intent is to display these links, that you wish to display them.
 
 ## Settings ##
 
@@ -114,10 +125,14 @@ In no particular order...
 
 ## Changelog ##
 
-### Version 3.x.x ( 2018-xx-xx )
+### Version 3.4.1 ( 2018-05-06 )
 * Refresh Simple Icons
 * Remove internationalization of icon names
 * Update development environment
+* Add Syndication data to JSONFeed
+* Do not add syndication information to the content of a jsonfeed
+* Add privacy policy and export data support for WordPress 4.9.6
+* Add privacy notice to readme
 ###
 ### Version 3.4.0 ( 2018-03-03 )
 * Updated Simple Icons to latest version
