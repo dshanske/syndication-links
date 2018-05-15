@@ -1,19 +1,23 @@
 <?php
 
 function get_syndication_links( $meta_type, $object_id = null, $args = array() ) {
-		return Syn_Meta::get_syndication_links( $meta_type, $object_id, $args );
+	return Syn_Meta::get_syndication_links( $meta_type, $object_id, $args );
 }
 
 function get_post_syndication_links( $post_id = null, $args = array() ) {
-		return Syn_Meta::get_post_syndication_links( $post_id, $args );
+	return Syn_Meta::get_post_syndication_links( $post_id, $args );
 }
 
 function get_comment_syndication_links( $comment_id = null, $args = array() ) {
-		return Syn_Meta::get_comment_syndication_links( $comment_id, $args );
+	return Syn_Meta::get_comment_syndication_links( $comment_id, $args );
 }
 
 function get_syndication_links_data( $object = null ) {
-		return Syn_Meta::get_syndication_links_data( $object );
+	return Syn_Meta::get_syndication_links_data( $object );
+}
+
+function add_syndication_link( $post_id, $uri ) {
+	return Syn_Meta::add_syndication_link( $post_id, $uri );
 }
 
 function get_the_content_syndication( $syndication_uid = null ) {

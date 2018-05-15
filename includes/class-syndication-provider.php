@@ -15,11 +15,15 @@ abstract class Syndication_Provider {
 	 */
 	public function __construct( $args = array() ) {
 		$defaults  = array(
-			'api' => null,
 		);
 		$defaults  = apply_filters( 'syn_provider_defaults', $defaults );
 		$r         = wp_parse_args( $args, $defaults );
-		$this->api = $r['api'];
+		add_filter( 'syn_syndication_targets', array( $this, 'add_target' ) );
+	}
+
+	public function add_target( $targets ) {
+		$targets[] = $this;
+		return $targets;
 	}
 
 	/**
@@ -73,6 +77,6 @@ abstract class Syndication_Provider {
 	 *
 	 * @return array of results
 	 */
-	abstract public function posse( $post_id );
+	abstract public function posse( $post_id = null );
 
 }
