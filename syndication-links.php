@@ -12,9 +12,16 @@
 
 define( 'SYNDICATION_LINKS_VERSION', '3.4.1' );
 
+// Icon Information
 require_once plugin_dir_path( __FILE__ ) . '/includes/simple-icons.php';
+
+// Information on Metadata
 require_once plugin_dir_path( __FILE__ ) . '/includes/class-syn-meta.php';
+
+// Configuration Options
 require_once plugin_dir_path( __FILE__ ) . '/includes/class-syn-config.php';
+new Syn_Config();
+
 // Social Plugin Add-Ons
 require_once plugin_dir_path( __FILE__ ) . '/includes/class-social-plugins.php';
 
