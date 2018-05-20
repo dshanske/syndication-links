@@ -16,8 +16,8 @@ function get_syndication_links_data( $object = null ) {
 	return Syn_Meta::get_syndication_links_data( $object );
 }
 
-function add_syndication_link( $post_id, $uri ) {
-	return Syn_Meta::add_syndication_link( $post_id, $uri );
+function add_syndication_link( $post_id, $uri, $replace = false ) {
+	return Syn_Meta::add_syndication_link( $post_id, $uri, $replace );
 }
 
 function get_the_content_syndication( $syndication_uid = null ) {

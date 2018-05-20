@@ -350,7 +350,7 @@ class Syn_Meta {
 	}
 
 
-	public static function add_syndication_link( $object = null, $uri ) {
+	public static function add_syndication_link( $object = null, $uri, $replace = false ) {
 		if ( ! $object ) {
 			$object = get_post();
 		}
@@ -362,40 +362,31 @@ class Syn_Meta {
 			return;
 		}
 		if ( $object instanceof WP_Post ) {
-			$links = get_post_meta( $object->ID, 'mf2_syndication' );
-			if ( ! is_array( $links ) ) {
-				$links = array();
-			}
-			if ( is_string( $uri ) ) {
-				$links[] = $uri;
-			}
-			if ( is_array( $uri ) ) {
-				$links = array_merge( $links, $uri );
-			}
-			$links = self::clean_urls( $links );
-			if ( empty( $links ) ) {
-				return;
-			} else {
-				update_post_meta( $object->ID, 'mf2_syndication', $links );
-			}
+			$type = 'post';
+			$id   = $object->ID;
 		}
 		if ( $object instanceof WP_Comment ) {
-			$links = get_comment_meta( $object->comment_ID, 'mf2_syndication' );
-			if ( ! is_array( $links ) ) {
-				$links = array();
-			}
-			if ( is_string( $uri ) ) {
-				$links[] = $uri;
-			}
-			if ( is_array( $uri ) ) {
-				$links = array_merge( $links, $uri );
-			}
-			$links = self::clean_urls( $links );
-			if ( empty( $links ) ) {
-				return;
-			} else {
-				update_comment_meta( $object->comment_ID, 'mf2_syndication', $links );
-			}
+			$type = 'comment';
+			$id   = $object->comment_ID;
+		}
+		$links = false;
+		if ( ! $replace ) {
+			$links = get_metadata( $type, $id, 'mf2_syndication' );
+		}
+		if ( ! is_array( $links ) ) {
+			$links = array();
+		}
+		if ( is_string( $uri ) ) {
+			$links[] = $uri;
+		}
+		if ( is_array( $uri ) ) {
+			$links = array_merge( $links, $uri );
+		}
+		$links = self::clean_urls( $links );
+		if ( empty( $links ) ) {
+			return;
+		} else {
+			update_metadata( $type, $id, 'mf2_syndication', $links );
 		}
 	}
 
@@ -528,7 +519,7 @@ class Syn_Meta {
 			case 'span':
 				$before = '<span class="' . $r['container-css'] . '">';
 				$sep    = ' ';
-				$after = '</span>';
+				$after  = '</span>';
 				break;
 			default:
 				$before = '<ul class="' . $r['container-css'] . '"><li>';
