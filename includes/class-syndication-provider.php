@@ -14,16 +14,9 @@ abstract class Syndication_Provider {
 	 * @param string $key API Key if Needed
 	 */
 	public function __construct( $args = array() ) {
-		$defaults  = array(
-		);
-		$defaults  = apply_filters( 'syn_provider_defaults', $defaults );
-		$r         = wp_parse_args( $args, $defaults );
-		add_filter( 'syn_syndication_targets', array( $this, 'add_target' ) );
-	}
-
-	public function add_target( $targets ) {
-		$targets[] = $this;
-		return $targets;
+		$defaults = array();
+		$defaults = apply_filters( 'syn_provider_defaults', $defaults );
+		$r        = wp_parse_args( $args, $defaults );
 	}
 
 	/**

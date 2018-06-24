@@ -49,7 +49,7 @@ class Syn_Meta {
 			if ( ! empty( $syndication ) ) {
 				$item_id     = "comment-{$comment->comment_ID}";
 				$group_id    = 'comments';
-				$group_label = __( 'Comments', 'default' );
+				$group_label = __( 'Comments', 'syndication-links' );
 
 				$data           = array(
 					array(

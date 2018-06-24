@@ -3,14 +3,14 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add Syndication Links to Your Content
- * Version: 3.4.1
+ * Version: 4.0.0
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  * Text Domain: syndication-links
  * Domain Path:  /languages
  */
 
-define( 'SYNDICATION_LINKS_VERSION', '3.4.1' );
+define( 'SYNDICATION_LINKS_VERSION', '4.0.0' );
 
 // Icon Information
 require_once plugin_dir_path( __FILE__ ) . '/includes/simple-icons.php';
@@ -27,13 +27,22 @@ require_once plugin_dir_path( __FILE__ ) . '/includes/class-social-plugins.php';
 
 // Syndication Providers
 require_once plugin_dir_path( __FILE__ ) . '/includes/class-syndication-provider.php';
+require_once plugin_dir_path( __FILE__ ) . '/includes/class-syndication-provider-indienews.php';
+
+add_filter( 'syn_syndication_targets', 'syn_add_targets' );
+
+function syn_add_targets( $targets ) {
+	$targets[] = new Syndication_Provider_Indienews();
+	return $targets;
+}
+
 
 // Global Functions
 require_once plugin_dir_path( __FILE__ ) . '/includes/functions.php';
 
 // Post Syndication Logic
-# require_once plugin_dir_path( __FILE__ ) . '/includes/class-post-syndication.php';
-# new Post_Syndication();
+require_once plugin_dir_path( __FILE__ ) . '/includes/class-post-syndication.php';
+new Post_Syndication();
 
 function syndication_links_load_plugin_textdomain() {
 	load_plugin_textdomain( 'syndication-links', false, basename( dirname( __FILE__ ) ) . '/languages/' );
