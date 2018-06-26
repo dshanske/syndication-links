@@ -369,10 +369,10 @@ class Syn_Meta {
 			$type = 'comment';
 			$id   = $object->comment_ID;
 		}
-		$links = false;
-		if ( ! $replace ) {
-			$links = get_metadata( $type, $id, 'mf2_syndication' );
+		if ( $replace ) {
+			return update_metadata( $type, $id, 'mf2_syndication', $uri );
 		}
+		$links = get_metadata( $type, $id, 'mf2_syndication', true );
 		if ( ! is_array( $links ) ) {
 			$links = array();
 		}
@@ -384,10 +384,9 @@ class Syn_Meta {
 		}
 		$links = self::clean_urls( $links );
 		if ( empty( $links ) ) {
-			return;
-		} else {
-			update_metadata( $type, $id, 'mf2_syndication', $links );
-		}
+			return false;
+		} 
+		return update_metadata( $type, $id, 'mf2_syndication', $links );
 	}
 
 	public static function get_syndication_links_data( $object = null ) {
