@@ -1,11 +1,20 @@
 // Brand colors from simpleicons.org
 .relsyn li a {
 
+	.svg-net                {
+		color: #5C2D91;
+	}
 	.svg-500px              {
 		color: #0099E5;
 	}
 	.svg-acm                {
 		color: #0085CA;
+	}
+	.svg-amd                {
+		color: #ED1C24;
+	}
+	.svg-at&t               {
+		color: #00A8E0;
 	}
 	.svg-aboutme            {
 		color: #00A98F;
@@ -22,6 +31,12 @@
 	.svg-adobeaftereffects  {
 		color: #D291FF;
 	}
+	.svg-adobeaudition      {
+		color: #00E4BB;
+	}
+	.svg-adobecreativecloud {
+		color: #D41818;
+	}
 	.svg-adobedreamweaver   {
 		color: #35FA00;
 	}
@@ -36,6 +51,9 @@
 	}
 	.svg-adobephotoshop     {
 		color: #00C8FF;
+	}
+	.svg-adobepremiere      {
+		color: #EA77FF;
 	}
 	.svg-adobetypekit       {
 		color: #87EC00;
@@ -64,8 +82,14 @@
 	.svg-applemusic         {
 		color: #000000;
 	}
+	.svg-applepay           {
+		color: #000000;
+	}
 	.svg-archlinux          {
 		color: #1793D1;
+	}
+	.svg-archiveofourown    {
+		color: #990000;
 	}
 	.svg-artstation         {
 		color: #13AFF0;
@@ -103,6 +127,9 @@
 	.svg-bathasu            {
 		color: #00A3E0;
 	}
+	.svg-beats              {
+		color: #005571;
+	}
 	.svg-behance            {
 		color: #1769FF;
 	}
@@ -126,6 +153,9 @@
 	}
 	.svg-blogger            {
 		color: #FF5722;
+	}
+	.svg-boost              {
+		color: #F69220;
 	}
 	.svg-bootstrap          {
 		color: #563D7C;
@@ -154,17 +184,32 @@
 	.svg-campaignmonitor    {
 		color: #509CF6;
 	}
+	.svg-cashapp            {
+		color: #00C244;
+	}
+	.svg-castorama          {
+		color: #0078D7;
+	}
+	.svg-castro             {
+		color: #00B265;
+	}
+	.svg-circle             {
+		color: #8669AE;
+	}
 	.svg-circleci           {
 		color: #343434;
+	}
+	.svg-clockify           {
+		color: #03A9F4;
+	}
+	.svg-clojure            {
+		color: #5881D8;
 	}
 	.svg-cloudflare         {
 		color: #F38020;
 	}
 	.svg-coop               {
 		color: #00B1E7;
-	}
-	.svg-codeschool         {
-		color: #4CADC0;
 	}
 	.svg-codeigniter        {
 		color: #EE4623;
@@ -187,6 +232,9 @@
 	.svg-codio              {
 		color: #4574E0;
 	}
+	.svg-coffeescript       {
+		color: #2F2625;
+	}
 	.svg-compropago         {
 		color: #00AAEF;
 	}
@@ -196,14 +244,26 @@
 	.svg-coursera           {
 		color: #2A73CC;
 	}
+	.svg-d3js               {
+		color: #F9A03C;
+	}
+	.svg-dtube              {
+		color: #FF0000;
+	}
 	.svg-dailymotion        {
 		color: #0066DC;
+	}
+	.svg-debian             {
+		color: #A81D33;
 	}
 	.svg-deezer             {
 		color: #00C7F2;
 	}
 	.svg-delicious          {
 		color: #3399FF;
+	}
+	.svg-dell               {
+		color: #007DB8;
 	}
 	.svg-designernews       {
 		color: #2D72D9;
@@ -253,11 +313,29 @@
 	.svg-drupal             {
 		color: #0678BE;
 	}
+	.svg-eslint             {
+		color: #4B32C3;
+	}
+	.svg-elastic            {
+		color: #005571;
+	}
+	.svg-elasticcloud       {
+		color: #005571;
+	}
+	.svg-elasticstack       {
+		color: #005571;
+	}
+	.svg-elasticsearch      {
+		color: #005571;
+	}
 	.svg-ello               {
 		color: #000000;
 	}
 	.svg-empirekred         {
 		color: #72BE50;
+	}
+	.svg-envato             {
+		color: #81B441;
 	}
 	.svg-ethereum           {
 		color: #3C3C3D;
@@ -272,10 +350,13 @@
 		color: #F6682F;
 	}
 	.svg-evernote           {
-		color: #2DBE60;
+		color: #00A82D;
 	}
 	.svg-everplaces         {
 		color: #FA4B32;
+	}
+	.svg-fsecure            {
+		color: #00BAFF;
 	}
 	.svg-facebook           {
 		color: #3B5998;
@@ -289,11 +370,17 @@
 	.svg-feedly             {
 		color: #2BB24C;
 	}
+	.svg-figma              {
+		color: #F24E1E;
+	}
 	.svg-firebase           {
 		color: #FFCA28;
 	}
 	.svg-fitbit             {
 		color: #00B0B9;
+	}
+	.svg-flattr             {
+		color: #000000;
 	}
 	.svg-flickr             {
 		color: #0063DC;
@@ -306,6 +393,15 @@
 	}
 	.svg-foursquare         {
 		color: #F94877;
+	}
+	.svg-framer             {
+		color: #0055FF;
+	}
+	.svg-furaffinity        {
+		color: #FAAF3A;
+	}
+	.svg-furrynetwork       {
+		color: #2E75B4;
 	}
 	.svg-gnu                {
 		color: #A42E2B;
@@ -325,9 +421,6 @@
 	.svg-gauges             {
 		color: #2FA66A;
 	}
-	.svg-geeklist           {
-		color: #8CC63F;
-	}
 	.svg-geocaching         {
 		color: #00874D;
 	}
@@ -335,7 +428,7 @@
 		color: #EEEEEE;
 	}
 	.svg-ghost              {
-		color: #718087;
+		color: #738A94;
 	}
 	.svg-git                {
 		color: #F05032;
@@ -347,7 +440,7 @@
 		color: #E24329;
 	}
 	.svg-gitter             {
-		color: #FF0064;
+		color: #ED1965;
 	}
 	.svg-glassdoor          {
 		color: #0CAA41;
@@ -355,8 +448,11 @@
 	.svg-gmail              {
 		color: #D14836;
 	}
+	.svg-go                 {
+		color: #76E1FE;
+	}
 	.svg-goldenline         {
-		color: #FBBF00;
+		color: #F1B92B;
 	}
 	.svg-goodreads          {
 		color: #663300;
@@ -382,6 +478,9 @@
 	.svg-googlekeep         {
 		color: #FFBB00;
 	}
+	.svg-googlepay          {
+		color: #5F6368;
+	}
 	.svg-googleplay         {
 		color: #607D8B;
 	}
@@ -394,14 +493,14 @@
 	.svg-graphcool          {
 		color: #27AE60;
 	}
-	.svg-gratipay           {
-		color: #663300;
-	}
 	.svg-grav               {
 		color: #221E1F;
 	}
 	.svg-gravatar           {
 		color: #1E8CBE;
+	}
+	.svg-groupon            {
+		color: #53A318;
 	}
 	.svg-gulp               {
 		color: #DA4648;
@@ -439,6 +538,9 @@
 	.svg-hipchat            {
 		color: #0052CC;
 	}
+	.svg-hockeyapp          {
+		color: #009EE1;
+	}
 	.svg-hootsuite          {
 		color: #000000;
 	}
@@ -456,6 +558,9 @@
 	}
 	.svg-imdb               {
 		color: #E6B91E;
+	}
+	.svg-iconjar            {
+		color: #16A5F3;
 	}
 	.svg-invision           {
 		color: #FF3366;
@@ -478,11 +583,20 @@
 	.svg-intercom           {
 		color: #1F8DED;
 	}
+	.svg-internetexplorer   {
+		color: #0076D6;
+	}
 	.svg-jsfiddle           {
 		color: #4679A4;
 	}
 	.svg-json               {
 		color: #000000;
+	}
+	.svg-jabber             {
+		color: #CC0000;
+	}
+	.svg-java               {
+		color: #007396;
 	}
 	.svg-javascript         {
 		color: #F7DF1E;
@@ -505,6 +619,9 @@
 	.svg-kaggle             {
 		color: #20BEFF;
 	}
+	.svg-kaios              {
+		color: #6F02B5;
+	}
 	.svg-keycdn             {
 		color: #3686BE;
 	}
@@ -513,6 +630,9 @@
 	}
 	.svg-khanacademy        {
 		color: #9DB63B;
+	}
+	.svg-kibana             {
+		color: #005571;
 	}
 	.svg-kickstarter        {
 		color: #2BDE73;
@@ -529,8 +649,14 @@
 	.svg-known              {
 		color: #333333;
 	}
+	.svg-kofi               {
+		color: #F16061;
+	}
 	.svg-koding             {
 		color: #00B057;
+	}
+	.svg-kotlin             {
+		color: #0095D5;
 	}
 	.svg-linewebtoon        {
 		color: #00D564;
@@ -546,6 +672,9 @@
 	}
 	.svg-launchpad          {
 		color: #F8C300;
+	}
+	.svg-leetcode           {
+		color: #F89F1B;
 	}
 	.svg-letterboxd         {
 		color: #00D735;
@@ -568,14 +697,23 @@
 	.svg-livestream         {
 		color: #CF202E;
 	}
+	.svg-logstash           {
+		color: #005571;
+	}
+	.svg-lua                {
+		color: #2C2D72;
+	}
 	.svg-macys              {
 		color: #E21A2C;
 	}
 	.svg-magento            {
 		color: #EE672F;
 	}
+	.svg-mailru             {
+		color: #168DE2;
+	}
 	.svg-mailchimp          {
-		color: #239AB9;
+		color: #FFE01B;
 	}
 	.svg-makerbot           {
 		color: #FF1E0D;
@@ -584,7 +722,7 @@
 		color: #EB001B;
 	}
 	.svg-mastodon           {
-		color: #189EFC;
+		color: #3088D4;
 	}
 	.svg-matternet          {
 		color: #261C29;
@@ -593,7 +731,7 @@
 		color: #000000;
 	}
 	.svg-medium             {
-		color: #1C1B1A;
+		color: #12100E;
 	}
 	.svg-meetup             {
 		color: #ED1C40;
@@ -616,8 +754,14 @@
 	.svg-microsoftaccess    {
 		color: #BA141A;
 	}
+	.svg-microsoftedge      {
+		color: #0078D7;
+	}
 	.svg-microsoftexcel     {
 		color: #217346;
+	}
+	.svg-microsoftonedrive  {
+		color: #094AB2;
 	}
 	.svg-microsoftonenote   {
 		color: #80397B;
@@ -634,8 +778,14 @@
 	.svg-minutemailer       {
 		color: #3ABFE6;
 	}
+	.svg-mix                {
+		color: #FF8126;
+	}
 	.svg-mixcloud           {
 		color: #314359;
+	}
+	.svg-mixer              {
+		color: #002050;
 	}
 	.svg-monero             {
 		color: #FF6600;
@@ -670,6 +820,9 @@
 	.svg-npm                {
 		color: #CB3837;
 	}
+	.svg-nvidia             {
+		color: #76B900;
+	}
 	.svg-neo4j              {
 		color: #008CC1;
 	}
@@ -678,6 +831,9 @@
 	}
 	.svg-netlify            {
 		color: #00C7B7;
+	}
+	.svg-nextcloud          {
+		color: #0082C9;
 	}
 	.svg-nextdoor           {
 		color: #00B246;
@@ -697,6 +853,9 @@
 	.svg-nodemon            {
 		color: #76D04B;
 	}
+	.svg-nuget              {
+		color: #004880;
+	}
 	.svg-nucleo             {
 		color: #766DCC;
 	}
@@ -708,9 +867,6 @@
 	}
 	.svg-odnoklassniki      {
 		color: #F4731C;
-	}
-	.svg-onedrive           {
-		color: #094AB2;
 	}
 	.svg-opera              {
 		color: #FF1B2D;
@@ -776,7 +932,7 @@
 		color: #F15B2A;
 	}
 	.svg-plurk              {
-		color: #E9443D;
+		color: #FF574D;
 	}
 	.svg-pocket             {
 		color: #EF3F56;
@@ -805,6 +961,9 @@
 	.svg-qiita              {
 		color: #55C500;
 	}
+	.svg-qualcomm           {
+		color: #3253DC;
+	}
 	.svg-quantcast          {
 		color: #1E262C;
 	}
@@ -813,6 +972,9 @@
 	}
 	.svg-quora              {
 		color: #B92B27;
+	}
+	.svg-qzone              {
+		color: #FECE00;
 	}
 	.svg-rss                {
 		color: #FFA500;
@@ -829,6 +991,9 @@
 	.svg-readthedocs        {
 		color: #8CA1AF;
 	}
+	.svg-redbubble          {
+		color: #E41321;
+	}
 	.svg-reddit             {
 		color: #FF4500;
 	}
@@ -838,11 +1003,17 @@
 	.svg-redux              {
 		color: #764ABC;
 	}
+	.svg-renren             {
+		color: #217DC6;
+	}
 	.svg-reverbnation       {
 		color: #E43526;
 	}
+	.svg-riseup             {
+		color: #5E9EE3;
+	}
 	.svg-roots              {
-		color: #27AE60;
+		color: #525DDC;
 	}
 	.svg-ruby               {
 		color: #CC342D;
@@ -853,14 +1024,29 @@
 	.svg-rust               {
 		color: #000000;
 	}
+	.svg-sap                {
+		color: #008FD3;
+	}
+	.svg-safari             {
+		color: #000000;
+	}
 	.svg-salesforce         {
 		color: #00A1E0;
+	}
+	.svg-samsung            {
+		color: #1428A0;
+	}
+	.svg-samsungpay         {
+		color: #1428A0;
 	}
 	.svg-sass               {
 		color: #CC6699;
 	}
 	.svg-saucelabs          {
 		color: #E2231A;
+	}
+	.svg-scala              {
+		color: #DC322F;
 	}
 	.svg-scribd             {
 		color: #1A7BBA;
@@ -931,6 +1117,9 @@
 	.svg-sourceforge        {
 		color: #535353;
 	}
+	.svg-sparkfun           {
+		color: #E53525;
+	}
 	.svg-sparkpost          {
 		color: #FA6423;
 	}
@@ -945,6 +1134,9 @@
 	}
 	.svg-spreaker           {
 		color: #F5C300;
+	}
+	.svg-sprint             {
+		color: #FFCE0A;
 	}
 	.svg-squarespace        {
 		color: #000000;
@@ -967,6 +1159,9 @@
 	.svg-steem              {
 		color: #4BA2F2;
 	}
+	.svg-steemit            {
+		color: #06D6A9;
+	}
 	.svg-stitcher           {
 		color: #000000;
 	}
@@ -982,11 +1177,8 @@
 	.svg-stubhub            {
 		color: #003168;
 	}
-	.svg-stumbleupon        {
-		color: #EB4924;
-	}
 	.svg-styleshare         {
-		color: #231F20;
+		color: #212121;
 	}
 	.svg-stylus             {
 		color: #333333;
@@ -1009,8 +1201,17 @@
 	.svg-symfony            {
 		color: #000000;
 	}
+	.svg-tmobile            {
+		color: #E20074;
+	}
 	.svg-ted                {
 		color: #E62B1E;
+	}
+	.svg-typo3              {
+		color: #FF8700;
+	}
+	.svg-tails              {
+		color: #56347C;
 	}
 	.svg-tapas              {
 		color: #FFCE00;
@@ -1022,13 +1223,16 @@
 		color: #2CA5E0;
 	}
 	.svg-tencentqq          {
-		color: #12B7F5;
+		color: #EB1923;
 	}
 	.svg-tesla              {
 		color: #CC0000;
 	}
 	.svg-themighty          {
 		color: #D0072A;
+	}
+	.svg-themoviedatabase   {
+		color: #01D277;
 	}
 	.svg-tinder             {
 		color: #FF6B6B;
@@ -1105,6 +1309,15 @@
 	.svg-vsco               {
 		color: #000000;
 	}
+	.svg-vagrant            {
+		color: #1563FF;
+	}
+	.svg-venmo              {
+		color: #3D95CE;
+	}
+	.svg-verizon            {
+		color: #CD040B;
+	}
 	.svg-viadeo             {
 		color: #F88D2D;
 	}
@@ -1127,7 +1340,7 @@
 		color: #142787;
 	}
 	.svg-visualstudiocode   {
-		color: #0271BC;
+		color: #007ACC;
 	}
 	.svg-vuejs              {
 		color: #4FC08D;
@@ -1140,6 +1353,9 @@
 	}
 	.svg-wechat             {
 		color: #7BB32E;
+	}
+	.svg-weasyl             {
+		color: #990000;
 	}
 	.svg-webstorm           {
 		color: #00CDD7;
@@ -1171,8 +1387,23 @@
 	.svg-wix                {
 		color: #FAAD4D;
 	}
+	.svg-wolfram            {
+		color: #DD1100;
+	}
+	.svg-wolframlanguage    {
+		color: #DD1100;
+	}
+	.svg-wolframmathematica {
+		color: #DD1100;
+	}
 	.svg-wordpress          {
 		color: #21759B;
+	}
+	.svg-xpack              {
+		color: #005571;
+	}
+	.svg-xsplit             {
+		color: #0095DE;
 	}
 	.svg-xbox               {
 		color: #107C10;
@@ -1219,6 +1450,9 @@
 	.svg-devto              {
 		color: #0A0A0A;
 	}
+	.svg-devrant            {
+		color: #F99A66;
+	}
 	.svg-ebay               {
 		color: #E53238;
 	}
@@ -1233,5 +1467,8 @@
 	}
 	.svg-jquery             {
 		color: #0769AD;
+	}
+	.svg-rollupjs           {
+		color: #EC4A3F;
 	}
 }
