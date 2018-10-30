@@ -385,7 +385,7 @@ class Syn_Meta {
 		$links = self::clean_urls( $links );
 		if ( empty( $links ) ) {
 			return false;
-		} 
+		}
 		return update_metadata( $type, $id, 'mf2_syndication', $links );
 	}
 

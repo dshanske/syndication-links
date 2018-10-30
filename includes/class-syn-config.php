@@ -348,4 +348,4 @@ class Syn_Config {
 
 } // End Class
 
-
+new Syn_Config();

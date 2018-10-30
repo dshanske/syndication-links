@@ -2,19 +2,33 @@
 // Triggers Syndication using Micropub or a Metabox in the UI
 
 // The Post_Syndication class sets up a post meta box to trigger
-class Post_Syndication {
-	public function __construct() {
-		// Add meta box to new post/post pages only
-		add_action( 'load-post.php', array( $this, 'metabox_setup' ) );
-		add_action( 'load-post-new.php', array( $this, 'metabox_setup' ) );
 
-		add_action( 'save_post', array( $this, 'save_post' ), 8, 3 );
-		add_action( 'micropub_syndication', array( $this, 'syndication' ), 10, 2 );
-		add_action( 'syn_syndication', array( $this, 'syndication' ), 10, 2 );
+add_action( 'init', array( 'Post_Syndication', 'init' ) );
+
+class Post_Syndication {
+	protected static $targets = array();
+
+	public static function init() {
+		$cls = get_called_class();
+		// Add meta box to new post/post pages only
+		add_action( 'load-post.php', array( $cls, 'metabox_setup' ) );
+		add_action( 'load-post-new.php', array( $cls, 'metabox_setup' ) );
+
+		add_action( 'save_post', array( $cls, 'save_post' ), 8, 3 );
+		add_action( 'micropub_syndication', array( $cls, 'syndication' ), 10, 2 );
+		add_action( 'syn_syndication', array( $cls, 'syndication' ), 10, 2 );
+	}
+
+	public static function register( $object ) {
+		if ( $object instanceof Syndication_Provider ) {
+			static::$targets[ $object->get_uid() ] = $object;
+			return true;
+		}
+		return false;
 	}
 
 	/* Syndicate To is an Array of UIDS */
-	public function syndication( $post_ID, $syndicate_to ) {
+	public static function syndication( $post_ID, $syndicate_to ) {
 		$post = get_post( $post_ID );
 		// If this is an invalid post return
 		if ( ! $post ) {
@@ -24,7 +38,7 @@ class Post_Syndication {
 		if ( 'publish' !== $post->post_status ) {
 			return;
 		}
-		$targets = $this->targets();
+		$targets = static::$targets;
 		if ( empty( $targets ) || ! is_array( $targets ) ) {
 			return;
 		}
@@ -42,19 +56,19 @@ class Post_Syndication {
 	}
 
 	/* Meta box setup function. */
-	public function metabox_setup() {
+	public static function metabox_setup() {
 		/* Add meta boxes on the 'add_meta_boxes' hook. */
-		add_action( 'add_meta_boxes', array( $this, 'add_postmeta_boxes' ) );
+		add_action( 'add_meta_boxes', array( get_called_class(), 'add_postmeta_boxes' ) );
 	}
 
 	/* Create one or more meta boxes to be displayed on the post editor screen. */
-	public function add_postmeta_boxes() {
+	public static function add_postmeta_boxes() {
 		$post_types = apply_filters( 'syndication_publish_post_types', array( 'post', 'page' ) );
 		foreach ( $post_types as $post_type ) {
 			add_meta_box(
 				'syndicationbox-meta',      // Unique ID
 				esc_html__( 'Syndicate To', 'syndication-links' ),    // Title
-				array( &$this, 'metabox' ),   // Callback function
+				array( get_called_class(), 'metabox' ),   // Callback function
 				$post_type,         // Admin page (or post type)
 				'side',         // Context
 				'default'         // Priority
@@ -62,46 +76,50 @@ class Post_Syndication {
 		}
 	}
 
-	public function targets() {
-		return apply_filters( 'syn_syndication_targets', array() );
-	}
-
-	public function checkboxes( $post_ID ) {
-		$targets = $this->targets();
+	public static function checkboxes( $post_ID ) {
+		$targets = self::get_providers();
 		if ( empty( $targets ) ) {
 			return __( 'No Syndication Targets Available', 'syndication-links' );
 		}
 		$string = '<ul>';
 		$meta   = get_post_meta( $post_ID, 'syndicate-to', true );
-		foreach ( $targets as $target ) {
-			if ( ! $target instanceof Syndication_Provider ) {
-				continue;
-			}
-			$string .= $this->checkbox( $target, $post_ID );
+		foreach ( $targets as $uid => $name ) {
+			$string .= self::checkbox( $uid, $name, $post_ID );
 		}
 		$string .= '</ul>';
 		return $string;
 	}
 
-	public function checkbox( $target, $post_ID ) {
-		$checked = $this->get_target( $post_ID, $target->get_uid() );
+	public static function checkbox( $uid, $name, $post_ID ) {
+		$checked = self::get_target( $post_ID, $uid );
 		return sprintf(
 			'<li><input type="checkbox" name="syndicate-to[]" id="%1$s" value="%1$s" %3$s />
-			<label for="%1$s">%2$s</label></li>', $target->get_uid(), $target->get_name(), checked( $target->get_uid(), $checked, true, false )
+			<label for="%1$s">%2$s</label></li>',
+			$uid,
+			$name,
+			checked( $uid, $checked, false )
 		);
 	}
 
-	public function get_target( $post_ID ) {
+	public static function get_providers() {
+		$return = array();
+		foreach ( static::$targets as $target ) {
+			$return[ $target->get_uid() ] = esc_html( $target->get_name() );
+		}
+		return $return;
 	}
 
-	public function metabox( $object, $box ) {
+	public static function get_target( $post_ID ) {
+	}
+
+	public static function metabox( $object, $box ) {
 		wp_nonce_field( 'synto_metabox', 'synto_metabox_nonce' );
 
-		echo $this->checkboxes( $object->ID );
+		echo self::checkboxes( $object->ID );
 	}
 
 	/* Save the meta box's post metadata. */
-	public function save_post( $post_id, $post, $update ) {
+	public static function save_post( $post_id, $post, $update ) {
 		/*
 		 * We need to verify this came from our screen and with proper authorization,
 		 * because the save_post action can be triggered at other times.
@@ -138,7 +156,7 @@ class Post_Syndication {
 		}
 	}
 
-	public function str_prefix( $source, $prefix ) {
+	public static function str_prefix( $source, $prefix ) {
 		if ( ! is_string( $source ) || ! is_string( $prefix ) ) {
 			return false;
 		}
