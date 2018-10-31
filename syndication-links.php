@@ -37,7 +37,10 @@ function syndication_links_init() {
 			'functions.php', // Global Functions
 			'class-syndication-provider-webmention.php', // Class for Any Webmention Based Service
 			'class-syndication-provider-indienews.php', // Indienews Syndication Provider
-			'class-syndication-provider-bridgy-twitter.php'
+			'class-syndication-provider-bridgy-twitter.php', // Twitter via Bridgy
+			'class-syndication-provider-bridgy-github.php', // Github via Bridgy
+			'class-syndication-provider-bridgy-flickr.php', // Flickr via Bridgy
+
 		) );
 	load_plugin_textdomain( 'syndication-links', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
