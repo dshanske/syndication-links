@@ -89,6 +89,19 @@ class Syn_Config {
 				'default'      => 'Also on:',
 			)
 		);
+
+		// Syndication Links POSSE/Syndication Options
+		register_setting(
+			'syndication_posse_options',
+			'syndication_posse_enable',
+			array(
+				'type'         => 'number',
+				'description'  => 'Enable Syndication via Syndication Links',
+				'show_in_rest' => true,
+				'default'      => '0',
+			)
+		);
+
 	}
 
 	public function enqueue_scripts() {
@@ -188,6 +201,24 @@ class Syn_Config {
 				'name' => 'syndication-links_text_before',
 			)
 		);
+
+		add_settings_section(
+			'syndication_posse_options',
+			__( 'Syndication/POSSE Options', 'syndication-links' ),
+			array( $this, 'posse_options_callback' ),
+			'links_options'
+		);
+		add_settings_field(
+			'syndication_posse_enable',
+			__( 'Enable Syndication to Other Sites', 'syndication-links' ),
+			array( $this, 'checkbox_callback' ),
+			'links_options',
+			'syndication_posse_options',
+			array(
+				'name' => 'syndication_posse_enable',
+			)
+		);
+
 	}
 
 	public function admin_menu() {
@@ -213,20 +244,28 @@ class Syn_Config {
 		echo '</p>';
 	}
 
+	public function posse_options_callback() {
+		esc_html_e( 'Options for Syndicating to Other Sites', 'syndication-links' );
+		echo '<p>';
+		esc_html_e( 'Syndication Links offers an interface to syndicate your content to other sites via the Post Editor or Micropub', 'syndication-links' );
+		echo '</p>';
+	}
+
+
 	public function checkbox_callback( array $args ) {
 		$name    = $args['name'];
 		$checked = get_option( $args['name'] );
-		echo "<input name='" . $name . "' type='hidden' value='0' />";
-		echo "<input name='" . $name . "' type='checkbox' value='1' " . checked( 1, $checked, false ) . ' /> ';
+		echo "<input name='" . esc_attr( $name ) . "' type='hidden' value='0' />";
+		echo "<input name='" . esc_attr( $name ) . "' type='checkbox' value='1' " . checked( 1, $checked, false ) . ' /> ';
 	}
 
 	public function select_callback( array $args ) {
 		$name    = $args['name'];
 		$select  = get_option( $name );
 		$options = $args['list'];
-		echo "<select name='" . $name . "id='" . $name . "'>";
+		echo "<select name='" . esc_attr( $name ) . "id='" . esc_attr( $name ) . "'>";
 		foreach ( $options as $key => $value ) {
-			echo '<option value="' . $key . '" ' . ( $select === $key ? 'selected>' : '>' ) . $value . '</option>';
+			echo '<option value="' . esc_attr( $key ) . '" ' . ( $select === $key ? 'selected>' : '>' ) . esc_attr( $value ) . '</option>';
 		}
 		echo '</select>';
 	}
@@ -237,8 +276,8 @@ class Syn_Config {
 		$options = $args['list'];
 		echo '<fieldset>';
 		foreach ( $options as $key => $value ) {
-			echo '<input type="radio" name="' . $name . '" id="' . $name . '" value="' . $key . '" ' . checked( $key, $select, false ) . ' />';
-			echo '<label for="' . $args['name'] . '">' . $value . '</label>';
+			echo '<input type="radio" name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '" value="' . esc_attr( $key ) . '" ' . checked( $key, $select, false ) . ' />';
+			echo '<label for="' . esc_attr( $args['name'] ) . '">' . esc_attr( $value ) . '</label>';
 			echo '<br />';
 		}
 		echo '</fieldset>';
@@ -247,7 +286,7 @@ class Syn_Config {
 
 	public function text_callback( $args ) {
 		$name = $args['name'];
-		echo "<input name='" . $name . "' type='text' value='" . get_option( $name ) . "' /> ";
+		echo "<input name='" . esc_attr( $name ) . "' type='text' value='" . esc_attr( get_option( $name ) ) . "' /> ";
 	}
 
 	public function display_options() {
@@ -270,12 +309,13 @@ class Syn_Config {
 
 	public function links_options() {
 		echo '<div class="wrap">';
-		echo '<h2>' . __( 'Syndication Links', 'syndication-links' ) . '</h2>';
+		echo '<h2>' . esc_html__( 'Syndication Links', 'syndication-links' ) . '</h2>';
 		echo '<p>';
 		esc_html_e( 'Adds optional syndication links for various sites. Syndication is the act of posting your content on other sites. You can either manually add these to the box in the post editor or automatically. Several plugins support or are supported.', 'syndication-links' );
 		echo '</p><hr />';
 		echo '<form method="post" action="options.php">';
 		settings_fields( 'syndication_options' );
+		settings_fields( 'syndication_posse_options' );
 		do_settings_sections( 'links_options' );
 		submit_button();
 		echo '</form></div>';

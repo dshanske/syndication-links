@@ -26,22 +26,28 @@ function syndication_links_load( $files ) {
 }
 
 function syndication_links_init() {
-	syndication_links_load( 
+	syndication_links_load(
 		array(
 			'simple-icons.php', // Icon Information
 			'class-syn-meta.php', // Information on Metadata
 			'class-syn-config.php', // Configuration Options
 			'class-social-plugins.php', // Social Plugin Add-Ons
-			'class-syndication-provider.php', // Syndication Provider Base Class
-			'class-post-syndication.php', // Post syndication logic
 			'functions.php', // Global Functions
-			'class-syndication-provider-webmention.php', // Class for Any Webmention Based Service
-			'class-syndication-provider-indienews.php', // Indienews Syndication Provider
-			'class-syndication-provider-bridgy-twitter.php', // Twitter via Bridgy
-			'class-syndication-provider-bridgy-github.php', // Github via Bridgy
-			'class-syndication-provider-bridgy-flickr.php', // Flickr via Bridgy
-
-		) );
+		)
+	);
+	if ( 1 === intval( get_option( 'syndication_posse_enable', 0 ) ) ) {
+		syndication_links_load(
+			array(
+				'class-syndication-provider.php', // Syndication Provider Base Class
+				'class-post-syndication.php', // Post syndication logic
+				'class-syndication-provider-webmention.php', // Class for Any Webmention Based Service
+				'class-syndication-provider-indienews.php', // Indienews Syndication Provider
+				'class-syndication-provider-bridgy-twitter.php', // Twitter via Bridgy
+				'class-syndication-provider-bridgy-github.php', // Github via Bridgy
+				'class-syndication-provider-bridgy-flickr.php', // Flickr via Bridgy
+			)
+		);
+	}
 	load_plugin_textdomain( 'syndication-links', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
 

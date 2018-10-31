@@ -20,10 +20,6 @@ function add_syndication_link( $post_id, $uri, $replace = false ) {
 	return Syn_Meta::add_syndication_link( $post_id, $uri, $replace );
 }
 
-function register_syndication_provider( $object ) {
-	return Post_Syndication::register( $object );
-}
-
 function get_the_content_syndication( $syndication_uid = null ) {
 
 	/** This filter is documented in wp-includes/post-template.php */
