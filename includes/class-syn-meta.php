@@ -49,7 +49,7 @@ class Syn_Meta {
 			if ( ! empty( $syndication ) ) {
 				$item_id     = "comment-{$comment->comment_ID}";
 				$group_id    = 'comments';
-				$group_label = __( 'Comments', 'default' );
+				$group_label = __( 'Comments', 'syndication-links' );
 
 				$data           = array(
 					array(
@@ -90,7 +90,8 @@ class Syn_Meta {
 				'synlinks',
 				plugins_url( 'js/synlinks.js', dirname( __FILE__ ) ),
 				array( 'jquery' ),
-				SYNDICATION_LINKS_VERSION
+				SYNDICATION_LINKS_VERSION,
+				true
 			);
 		}
 	}
@@ -125,7 +126,8 @@ class Syn_Meta {
 			include get_404_template();
 			exit;
 		}
-		wp_redirect( get_permalink( $posts[0] ) );
+		wp_safe_redirect( get_permalink( $posts[0] ) );
+		exit;
 	}
 
 
@@ -197,11 +199,11 @@ class Syn_Meta {
 		if ( ! $urls ) {
 			$urls = array( '' );
 		}
-		echo '<span class="button-primary add-syn-link-button">' . __( 'Add', 'syndication-links' ) . '</span></br>';
+		echo '<span class="button-primary add-syn-link-button">' . esc_html__( 'Add', 'syndication-links' ) . '</span></br>';
 		echo '<p class="syndication_url_list"><label for="syndication_urls">';
-		_e( 'Add Links to this same content on other sites', 'syndication-links' );
+		esc_html_e( 'Add Links to this same content on other sites', 'syndication-links' );
 		foreach ( $urls as $url ) {
-			echo '<input type="text" name="syndication_urls[]" class="widefat" id="syndication_urls" value="' . $url . '" /><br />';
+			echo '<input type="text" name="syndication_urls[]" class="widefat" id="syndication_urls" value="' . esc_url_raw( $url ) . '" /><br />';
 		}
 		echo '</label></p>';
 	}
@@ -350,7 +352,7 @@ class Syn_Meta {
 	}
 
 
-	public static function add_syndication_link( $object = null, $uri ) {
+	public static function add_syndication_link( $object = null, $uri, $replace = false ) {
 		if ( ! $object ) {
 			$object = get_post();
 		}
@@ -362,41 +364,31 @@ class Syn_Meta {
 			return;
 		}
 		if ( $object instanceof WP_Post ) {
-			$links = get_post_meta( $object->ID, 'mf2_syndication' );
-			if ( ! is_array( $links ) ) {
-				$links = array();
-			}
-			if ( is_string( $uri ) ) {
-				$links[] = $uri;
-			}
-			if ( is_array( $uri ) ) {
-				$links = array_merge( $links, $uri );
-			}
-			$links = self::clean_urls( $links );
-			if ( empty( $links ) ) {
-				return;
-			} else {
-				update_post_meta( $object->ID, 'mf2_syndication', $links );
-			}
+			$type = 'post';
+			$id   = $object->ID;
 		}
 		if ( $object instanceof WP_Comment ) {
-			$links = get_comment_meta( $object->comment_ID, 'mf2_syndication' );
-			if ( ! is_array( $links ) ) {
-				$links = array();
-			}
-			if ( is_string( $uri ) ) {
-				$links[] = $uri;
-			}
-			if ( is_array( $uri ) ) {
-				$links = array_merge( $links, $uri );
-			}
-			$links = self::clean_urls( $links );
-			if ( empty( $links ) ) {
-				return;
-			} else {
-				update_comment_meta( $object->comment_ID, 'mf2_syndication', $links );
-			}
+			$type = 'comment';
+			$id   = $object->comment_ID;
 		}
+		if ( $replace ) {
+			return update_metadata( $type, $id, 'mf2_syndication', $uri );
+		}
+		$links = get_metadata( $type, $id, 'mf2_syndication', true );
+		if ( ! is_array( $links ) ) {
+			$links = array();
+		}
+		if ( is_string( $uri ) ) {
+			$links[] = $uri;
+		}
+		if ( is_array( $uri ) ) {
+			$links = array_merge( $links, $uri );
+		}
+		$links = self::clean_urls( $links );
+		if ( empty( $links ) ) {
+			return false;
+		}
+		return update_metadata( $type, $id, 'mf2_syndication', $links );
 	}
 
 	public static function get_syndication_links_data( $object = null ) {
@@ -517,7 +509,7 @@ class Syn_Meta {
 		switch ( $r['style'] ) {
 			case 'p':
 				$before = '<p class="' . $r['container-css'] . '"><span>';
-				$sep    = ' ';
+				$sep    = '</span><span>';
 				$after  = '</p>';
 				break;
 			case 'ol':
@@ -525,7 +517,11 @@ class Syn_Meta {
 				$sep    = '</li><li>';
 				$after  = '</li></ol>';
 				break;
-
+			case 'span':
+				$before = '<span class="' . $r['container-css'] . '">';
+				$sep    = ' ';
+				$after  = '</span>';
+				break;
 			default:
 				$before = '<ul class="' . $r['container-css'] . '"><li>';
 				$sep    = '</li><li>';

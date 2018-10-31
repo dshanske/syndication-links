@@ -28,7 +28,11 @@ class Social_Plugins {
 //			$see_on = array_merge( $see_on, self::add_links_from_snap() );
 //		}
 		$keys = get_post_meta( get_the_ID() );
+		if ( ! $keys ) {
+			return $urls;
+		}
 		$keys = array_keys( $keys );
+		
 		foreach(  $keys as $key ) {
 			if ( 0 === strpos( $key, 'snap' ) && 6 === strlen( $key ) ) {
 				$meta = get_post_meta( get_the_ID(), $key, true );

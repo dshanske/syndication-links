@@ -12,3 +12,5 @@ phpcs.xml
 README.md
 readme.md
 .travis.yml
+genericons-neue
+vendor
