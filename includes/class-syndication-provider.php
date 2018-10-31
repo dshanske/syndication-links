@@ -17,6 +17,12 @@ abstract class Syndication_Provider {
 		$defaults = array();
 		$defaults = apply_filters( 'syn_provider_defaults', $defaults );
 		$r        = wp_parse_args( $args, $defaults );
+		add_filter( 'micropub_syndicate-to', array( $this, 'syndicate_to' ), 10, 2 );
+	}
+
+	public function syndicate_to( $targets, $user_id ) {
+		$targets[] = $this->get();
+		return $targets;
 	}
 
 	/**

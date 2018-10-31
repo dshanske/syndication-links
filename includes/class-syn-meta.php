@@ -90,7 +90,8 @@ class Syn_Meta {
 				'synlinks',
 				plugins_url( 'js/synlinks.js', dirname( __FILE__ ) ),
 				array( 'jquery' ),
-				SYNDICATION_LINKS_VERSION
+				SYNDICATION_LINKS_VERSION,
+				true
 			);
 		}
 	}
@@ -125,7 +126,8 @@ class Syn_Meta {
 			include get_404_template();
 			exit;
 		}
-		wp_redirect( get_permalink( $posts[0] ) );
+		wp_safe_redirect( get_permalink( $posts[0] ) );
+		exit;
 	}
 
 
@@ -197,11 +199,11 @@ class Syn_Meta {
 		if ( ! $urls ) {
 			$urls = array( '' );
 		}
-		echo '<span class="button-primary add-syn-link-button">' . __( 'Add', 'syndication-links' ) . '</span></br>';
+		echo '<span class="button-primary add-syn-link-button">' . esc_html__( 'Add', 'syndication-links' ) . '</span></br>';
 		echo '<p class="syndication_url_list"><label for="syndication_urls">';
-		_e( 'Add Links to this same content on other sites', 'syndication-links' );
+		esc_html_e( 'Add Links to this same content on other sites', 'syndication-links' );
 		foreach ( $urls as $url ) {
-			echo '<input type="text" name="syndication_urls[]" class="widefat" id="syndication_urls" value="' . $url . '" /><br />';
+			echo '<input type="text" name="syndication_urls[]" class="widefat" id="syndication_urls" value="' . esc_url_raw( $url ) . '" /><br />';
 		}
 		echo '</label></p>';
 	}

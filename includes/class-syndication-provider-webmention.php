@@ -3,9 +3,6 @@
 class Syndication_Provider_Webmention extends Syndication_Provider {
 
 	public function __construct( $args = array() ) {
-		// Micropub Syndication Targets
-		add_filter( 'micropub_syndicate-to', array( $this, 'syndicate_to' ), 10, 2 );
-
 		// Parent Constructor
 		parent::__construct( $args );
 	}
@@ -50,7 +47,7 @@ class Syndication_Provider_Webmention extends Syndication_Provider {
 		if ( ! is_wp_error( $response ) ) {
 			$links  = get_syndication_links_data( $post_id );
 			$search = array_search( $this->get_target(), $links, true );
-			if ( $search ) {
+			if ( false !== $search ) {
 				unset( $links[ $search ] );
 			}
 			if ( is_string( $response ) ) {
