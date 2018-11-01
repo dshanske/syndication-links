@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Syndication Links 4.0.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2018-10-28 02:22:09+00:00\n"
+"POT-Creation-Date: 2018-11-01 21:34:46+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,85 +13,107 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 
-#: includes/class-post-syndication.php:56
+#: includes/class-post-syndication.php:40
+msgid "Disable the Following Providers"
+msgstr ""
+
+#: includes/class-post-syndication.php:98
 msgid "Syndicate To"
 msgstr ""
 
-#: includes/class-post-syndication.php:72
+#: includes/class-post-syndication.php:121
 msgid "No Syndication Targets Available"
 msgstr ""
 
-#: includes/class-syn-config.php:125
+#: includes/class-syn-config.php:138
 msgid "Content Options"
 msgstr ""
 
-#: includes/class-syn-config.php:131
+#: includes/class-syn-config.php:144
 msgid "Display"
 msgstr ""
 
-#: includes/class-syn-config.php:142
+#: includes/class-syn-config.php:155
 msgid "Size"
 msgstr ""
 
-#: includes/class-syn-config.php:153
+#: includes/class-syn-config.php:166
 msgid "Black Icons"
 msgstr ""
 
-#: includes/class-syn-config.php:163
+#: includes/class-syn-config.php:176
 msgid "Show on Front Page, Archive Pages, and Search Results"
 msgstr ""
 
-#: includes/class-syn-config.php:173
+#: includes/class-syn-config.php:186
 msgid "Show on Feed"
 msgstr ""
 
-#: includes/class-syn-config.php:183
+#: includes/class-syn-config.php:196
 msgid "Text Before Links"
+msgstr ""
+
+#: includes/class-syn-config.php:207
+msgid "Syndication/POSSE Options"
+msgstr ""
+
+#: includes/class-syn-config.php:213
+msgid "Enable Syndication to Other Sites"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
 msgid "Syndication Links"
 msgstr ""
 
-#: includes/class-syn-config.php:210
+#: includes/class-syn-config.php:241
 msgid "Options for Presenting Syndication Links in Posts."
 msgstr ""
 
-#: includes/class-syn-config.php:212
+#: includes/class-syn-config.php:243
 msgid ""
 "Syndication Links by default will add links to the content. You can disable "
 "this for theme support."
 msgstr ""
 
-#: includes/class-syn-config.php:255
+#: includes/class-syn-config.php:248
+msgid "Options for Syndicating to Other Sites"
+msgstr ""
+
+#: includes/class-syn-config.php:250
+msgid ""
+"Syndication Links offers an interface to syndicate your content to other "
+"sites via the Post Editor or Micropub"
+msgstr ""
+
+#: includes/class-syn-config.php:294
 msgid "Icons Only"
 msgstr ""
 
-#: includes/class-syn-config.php:256
+#: includes/class-syn-config.php:295
 msgid "Text Only"
 msgstr ""
 
-#: includes/class-syn-config.php:257
+#: includes/class-syn-config.php:296
 msgid "Icons and Text"
 msgstr ""
 
-#: includes/class-syn-config.php:258
+#: includes/class-syn-config.php:297
 msgid "Hidden Links"
 msgstr ""
 
-#: includes/class-syn-config.php:264
+#: includes/class-syn-config.php:303
 msgid "Small"
 msgstr ""
 
-#: includes/class-syn-config.php:265
+#: includes/class-syn-config.php:304
 msgid "Medium"
 msgstr ""
 
-#: includes/class-syn-config.php:266
+#: includes/class-syn-config.php:305
 msgid "Large"
 msgstr ""
 
-#: includes/class-syn-config.php:275
+#: includes/class-syn-config.php:314
 msgid ""
 "Adds optional syndication links for various sites. Syndication is the act "
 "of posting your content on other sites. You can either manually add these "
@@ -107,31 +129,36 @@ msgstr ""
 msgid "Comments"
 msgstr ""
 
-#: includes/class-syn-meta.php:200
+#: includes/class-syn-meta.php:202
 msgid "Add"
 msgstr ""
 
-#: includes/class-syn-meta.php:202
+#: includes/class-syn-meta.php:204
 msgid "Add Links to this same content on other sites"
 msgstr ""
 
-#: includes/class-syndication-provider-bridgy.php:44
-msgid "Bridgy Error: "
+#: includes/class-syndication-provider-bridgy-flickr.php:6
+msgid "Flickr via Bridgy"
 msgstr ""
 
-#: includes/class-syndication-provider-bridgy.php:90
-msgid "Unknown Bridgy Publish Error"
+#: includes/class-syndication-provider-bridgy-github.php:6
+msgid "Github via Bridgy"
 msgstr ""
 
-#: includes/class-syndication-provider-indienews.php:9
+#: includes/class-syndication-provider-bridgy-twitter.php:6
+msgid "Twitter via Bridgy"
+msgstr ""
+
+#: includes/class-syndication-provider-indienews.php:6
 msgid "Indienews"
 msgstr ""
 
-#: includes/class-syndication-provider-indienews.php:48
-msgid "Unknown Indienews Error"
+#: includes/class-syndication-provider-webmention.php:25
+#. translators: Syndication Target
+msgid "Unknown %1$s Error"
 msgstr ""
 
-#: syndication-links.php:54
+#: syndication-links.php:58
 msgid ""
 "Syndication Links, which are links to the same content on other sites, may "
 "be displayed on comments, but only if supplied by the submitter or if your "

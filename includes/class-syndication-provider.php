@@ -14,10 +14,13 @@ abstract class Syndication_Provider {
 	 * @param string $key API Key if Needed
 	 */
 	public function __construct( $args = array() ) {
-		$defaults = array();
-		$defaults = apply_filters( 'syn_provider_defaults', $defaults );
-		$r        = wp_parse_args( $args, $defaults );
-		add_filter( 'micropub_syndicate-to', array( $this, 'syndicate_to' ), 10, 2 );
+		$defaults  = array();
+		$defaults  = apply_filters( 'syn_provider_defaults', $defaults );
+		$r         = wp_parse_args( $args, $defaults );
+		$blacklist = get_option( 'syndication_provider_disable', array() );
+		if ( ! in_array( $this->uid, $blacklist, true ) ) {
+			add_filter( 'micropub_syndicate-to', array( $this, 'syndicate_to' ), 10, 2 );
+		}
 	}
 
 	public function syndicate_to( $targets, $user_id ) {

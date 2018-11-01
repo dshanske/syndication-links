@@ -21,6 +21,7 @@ class Syndication_Provider_Webmention extends Syndication_Provider {
 		$json = json_decode( $response['body'] );
 		return new WP_Error(
 			$this->uid . '_publish_error',
+			/* translators: Syndication Target */
 			sprintf( __( 'Unknown %1$s Error', 'syndication-links' ), $this->name ),
 			array(
 				'status' => $response_code,

@@ -2,16 +2,16 @@
 Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Requires at least: 4.7
-Tested up to: 4.9.6
+Tested up to: 4.9.8
 Stable tag: 4.0.0
 License: GPLv2 or later
 
-A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
+A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
 
 == Description == 
 
 It supports adding rel-syndication/u-syndication links to your posts, pages, and comments, indicating where a syndicated copy is. You can do this manually and some plugins support 
-automatically adding their links as well.
+automatically adding their links as well. The plugin contains a generic UI for syndicating to other sites via the Classic Editor or a Micropub Client. There is limited support built in.
 
 == Screenshots ==
 
@@ -22,6 +22,8 @@ automatically adding their links as well.
 
 1. Upload the folder 'syndication-links' to the '/wp-content/plugins/' directory
 2. Activate the plugin through the 'Plugins' menu in WordPress
+
+Or install through the WordPress Plugin Directory.
 
 == Privacy and Data Storage Information ==
 
@@ -55,12 +57,18 @@ The settings include the following options as follows with either a set of butto
 
 The plugin supports automatically pulling data from plugins that syndicate your content so you don't need to do it manually. For anything not built in, integation is easy with a simple filter for potential use with any other plugin.
 
-* [Bridgy](https://wordpress.org/plugins/bridgy-publish) - Simple user interface for Bridgy Publish
 * [Social Networks Autoposter](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) - Syndication Links supports Twitter, Facebook, and Tumblr since version 1.0.0
 * [Medium](https://wordpress.org/plugins/medium/) - Syndication Links supports since version 3.0.5
 * [Tumblr Crosspostr](https://wordpress.org/plugins/tumblr-crosspostr) - Supports Syndication Links since version 0.8.1
 * [WordPress Crossposter](https://wordpress.org/plugins/wp-crosspost) - Supports Syndication Links since version 0.3.2
 * [Diaposter](https://wordpress.org/plugins/diasposter/) - Supports Syndication Links since version 0.1.8
+
+Using the optional Syndication feature(disabled by default) you can syndicate your posts to:
+
+* [Indienews](https://news.indieweb.org) - A curated list of Indieweb related articles
+* [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, and Flickr
+
+Will be looking to integrate with other plugins to add more options. The goal of the interface is not only can you syndicate via Micropub, but in the classic editor using a simple checkbox.
 
 == Frequently Asked Questions ==
 
@@ -89,7 +97,15 @@ If you add `?original-of=` and the URL-encoded URL it will return the post that 
 * `syn_add_links( $urls, $post_ID )` - $urls is an array of retrieved links from $post_ID
 * `syn_links_display_defaults( $defaults )` - Filter the defaults for displaying Syndication Links
 
+= How do I contribute or file bug reports?
+
+Development and bug reports on this plugin is on Github at https://github.com/dshanske/syndication-links
+
 == Upgrade Notice == 
+
+= Version 4.0.0 =
+
+This version includes the ability to syndicate to external sites. This is disabled by default
 
 = Version 3.0.5 =
 
@@ -123,6 +139,7 @@ In no particular order...
 
 = Version 4.0.0 ( 2018-xx-xx )
 * Add support for syndicating posts using an interface to any arbitrary provider
+* include support for syndicating from Micropub to any arbitrary provider
 
 = Version 3.4.1 ( 2018-05-06 )
 * Refresh Simple Icons
