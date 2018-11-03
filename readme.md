@@ -3,7 +3,7 @@
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.7  
 **Tested up to:** 4.9.8  
-**Stable tag:** 4.0.0  
+**Stable tag:** 4.0.1  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -141,7 +141,12 @@ In no particular order...
 
 ## Changelog ##
 
-### Version 4.0.0 ( 2018-xx-xx )
+### Version 4.0.1 ( 2018-11-03 )
+* Fix issue with settings caused in previous version
+* Add base Bridgy class to store settings
+* Fix issue with display
+###
+### Version 4.0.0 ( 2018-11-01 )
 * Add support for syndicating posts using an interface to any arbitrary provider
 * include support for syndicating from Micropub to any arbitrary provider
 ###

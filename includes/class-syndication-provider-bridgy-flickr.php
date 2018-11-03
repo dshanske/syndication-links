@@ -1,6 +1,6 @@
 <?php
 
-class Syndication_Provider_Bridgy_Flickr extends Syndication_Provider_Webmention {
+class Syndication_Provider_Bridgy_Flickr extends Syndication_Provider_Bridgy {
 
 	public function __construct( $args = array() ) {
 		$this->name = __( 'Flickr via Bridgy', 'syndication-links' );

@@ -1,6 +1,6 @@
 <?php
 
-class Syndication_Provider_Bridgy_Github extends Syndication_Provider_Webmention {
+class Syndication_Provider_Bridgy_Github extends Syndication_Provider_Bridgy {
 
 	public function __construct( $args = array() ) {
 		$this->name = __( 'Github via Bridgy', 'syndication-links' );
