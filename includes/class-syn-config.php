@@ -92,7 +92,7 @@ class Syn_Config {
 
 		// Syndication Links POSSE/Syndication Options
 		register_setting(
-			'syndication_posse_options',
+			'syndication_options',
 			'syndication_posse_enable',
 			array(
 				'type'         => 'number',
@@ -134,7 +134,7 @@ class Syn_Config {
 
 	public function admin_init() {
 		add_settings_section(
-			'syndication-content',
+			'syndication_content',
 			__( 'Content Options', 'syndication-links' ),
 			array( $this, 'options_callback' ),
 			'links_options'
@@ -144,7 +144,7 @@ class Syn_Config {
 			__( 'Display', 'syndication-links' ),
 			array( $this, 'radio_callback' ),
 			'links_options',
-			'syndication-content',
+			'syndication_content',
 			array(
 				'name' => 'syndication-links_display',
 				'list' => self::display_options(),
@@ -155,7 +155,7 @@ class Syn_Config {
 			__( 'Size', 'syndication-links' ),
 			array( $this, 'radio_callback' ),
 			'links_options',
-			'syndication-content',
+			'syndication_content',
 			array(
 				'name' => 'syndication-links_size',
 				'list' => self::size_options(),
@@ -166,7 +166,7 @@ class Syn_Config {
 			__( 'Black Icons', 'syndication-links' ),
 			array( $this, 'checkbox_callback' ),
 			'links_options',
-			'syndication-content',
+			'syndication_content',
 			array(
 				'name' => 'syndication-links_bw',
 			)
@@ -176,7 +176,7 @@ class Syn_Config {
 			__( 'Show on Front Page, Archive Pages, and Search Results', 'syndication-links' ),
 			array( $this, 'checkbox_callback' ),
 			'links_options',
-			'syndication-content',
+			'syndication_content',
 			array(
 				'name' => 'syndication-links_archives',
 			)
@@ -186,7 +186,7 @@ class Syn_Config {
 			__( 'Show on Feed', 'syndication-links' ),
 			array( $this, 'checkbox_callback' ),
 			'links_options',
-			'syndication-content',
+			'syndication_content',
 			array(
 				'name' => 'syndication-links_feed',
 			)
@@ -196,7 +196,7 @@ class Syn_Config {
 			__( 'Text Before Links', 'syndication-links' ),
 			array( $this, 'text_callback' ),
 			'links_options',
-			'syndication-content',
+			'syndication_content',
 			array(
 				'name' => 'syndication-links_text_before',
 			)
@@ -315,7 +315,6 @@ class Syn_Config {
 		echo '</p><hr />';
 		echo '<form method="post" action="options.php">';
 		settings_fields( 'syndication_options' );
-		settings_fields( 'syndication_posse_options' );
 		do_settings_sections( 'links_options' );
 		submit_button();
 		echo '</form></div>';

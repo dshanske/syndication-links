@@ -21,7 +21,7 @@ class Post_Syndication {
 
 				// Syndication Links POSSE/Syndication Options
 				register_setting(
-					'syndication_posse_options',
+					'syndication_options',
 					'syndication_provider_disable',
 					array(
 						'type'         => 'array',
