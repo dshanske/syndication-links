@@ -2,11 +2,6 @@
 
 class Syndication_Provider_Webmention extends Syndication_Provider {
 
-	public function __construct( $args = array() ) {
-		// Parent Constructor
-		parent::__construct( $args );
-	}
-
 	public function send_webmention( $url ) {
 		$target = $this->get_target();
 		if ( ! $target ) {

@@ -141,6 +141,10 @@ In no particular order...
 
 ## Changelog ##
 
+### Version 4.0.2 ( 2018-11-05 )
+* Fix PHP notice about incorrect setting
+* Restore Bridgy global settings options that were in the Bridgy plugin to disable the link back to the post and ignore whitespace
+###
 ### Version 4.0.1 ( 2018-11-03 )
 * Fix issue with settings caused in previous version
 * Add base Bridgy class to store settings
