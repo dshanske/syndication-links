@@ -19,32 +19,34 @@ class Post_Syndication {
 		add_action( 'syn_syndication', array( $cls, 'syndication' ), 10, 2 );
 		add_action( 'admin_init', array( $cls, 'admin_init' ) );
 
-				// Syndication Links POSSE/Syndication Options
-				register_setting(
-					'syndication_options',
-					'syndication_provider_disable',
-					array(
-						'type'         => 'array',
-						'description'  => 'Disable Display of these Providers',
-						'show_in_rest' => true,
-						'default'      => array(),
-					)
-				);
+		// Syndication Links POSSE/Syndication Options
+		register_setting(
+			'syndication_options',
+			'syndication_provider_disable',
+			array(
+				'type'         => 'string',
+				'description'  => 'Disable Display of these Providers',
+				'show_in_rest' => true,
+				'default'      => array(),
+			)
+		);
 
 	}
 
 	public static function admin_init() {
-
-				add_settings_field(
-					'syndication_provider_disable',
-					__( 'Disable the Following Providers', 'syndication-links' ),
-					array( get_called_class(), 'provider_callback' ),
-					'links_options',
-					'syndication_posse_options',
-					array(
-						'name' => 'syndication_provider_disable',
-					)
-				);
+		add_settings_field(
+			'syndication_provider_disable',
+			__( 'Disable the Following Providers', 'syndication-links' ),
+			array(
+				get_called_class(),
+				'provider_callback',
+			),
+			'links_options',
+			'syndication_posse_options',
+			array(
+				'name' => 'syndication_provider_disable',
+			)
+		);
 	}
 
 	public static function register( $object ) {
@@ -196,7 +198,6 @@ class Post_Syndication {
 		if ( isset( $_POST['syndicate-to'] ) ) {
 			// Wait 15 seconds before posting to ensure the post is published
 			wp_schedule_single_event( time() + 15, 'syn_syndication', array( $post_id, $_POST['syndicate-to'] ) );
-			// do_action( 'syn_syndication', $post_id, $_POST['syndicate-to'] );
 		}
 	}
 

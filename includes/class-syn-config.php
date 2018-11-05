@@ -268,9 +268,9 @@ class Syn_Config {
 		$name    = $args['name'];
 		$select  = get_option( $name );
 		$options = $args['list'];
-		echo "<select name='" . esc_attr( $name ) . "id='" . esc_attr( $name ) . "'>";
+		echo "<select name='" . esc_attr( $name ) . "' id='" . esc_attr( $name ) . "'>";
 		foreach ( $options as $key => $value ) {
-			echo '<option value="' . esc_attr( $key ) . '" ' . ( $select === $key ? 'selected>' : '>' ) . esc_attr( $value ) . '</option>';
+			echo '<option value="' . esc_attr( $key ) . '"' . ( $select === $key ? ' selected>' : '>' ) . esc_attr( $value ) . '</option>';
 		}
 		echo '</select>';
 	}
