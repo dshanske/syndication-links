@@ -2,6 +2,7 @@
 **Contributors:** dshanske  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.7  
+**Requires PHP:** 5.3  
 **Tested up to:** 4.9.8  
 **Stable tag:** 4.0.1  
 **License:** GPLv2 or later  
