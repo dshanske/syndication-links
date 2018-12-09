@@ -93,17 +93,18 @@ class Post_Syndication {
 
 	/* Create one or more meta boxes to be displayed on the post editor screen. */
 	public static function add_postmeta_boxes() {
-		$post_types = apply_filters( 'syndication_publish_post_types', array( 'post', 'page' ) );
-		foreach ( $post_types as $post_type ) {
-			add_meta_box(
-				'syndicationbox-meta',      // Unique ID
-				esc_html__( 'Syndicate To', 'syndication-links' ),    // Title
-				array( get_called_class(), 'metabox' ),   // Callback function
-				$post_type,         // Admin page (or post type)
-				'side',         // Context
-				'default'         // Priority
-			);
-		}
+		add_meta_box(
+			'syndicationbox-meta',      // Unique ID
+			esc_html__( 'Syndicate To', 'syndication-links' ),    // Title
+			array( get_called_class(), 'metabox' ),   // Callback function
+			apply_filters( 'syndication_publish_post_types', array( 'post', 'page' ) ),         // Admin page (or post type)
+			'side',         // Context
+			'default',      // Priority
+			array(
+				'__block_editor_compatible_meta_box' => true,
+				'__back_compat_meta_box'             => false,
+			)
+		);
 	}
 
 	public static function provider_callback( $args ) {
