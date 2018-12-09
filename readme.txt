@@ -3,8 +3,8 @@ Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Requires at least: 4.7
 Requires PHP: 5.3
-Tested up to: 4.9.8
-Stable tag: 4.0.2
+Tested up to: 5.0
+Stable tag: 4.0.3
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -12,7 +12,7 @@ A simple way to link to copies of your [cross-posted](https://indieweb.org/cross
 == Description == 
 
 It supports adding rel-syndication/u-syndication links to your posts, pages, and comments, indicating where a syndicated copy is. You can do this manually and some plugins support 
-automatically adding their links as well. The plugin contains a generic UI for syndicating to other sites via the Classic Editor or a Micropub Client. There is limited support built in.
+automatically adding their links as well. The plugin contains a generic UI for syndicating to other sites through your site or a Micropub Client.
 
 == Screenshots ==
 
@@ -69,7 +69,7 @@ Using the optional Syndication feature(disabled by default) you can syndicate yo
 * [Indienews](https://news.indieweb.org) - A curated list of Indieweb related articles
 * [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, and Flickr
 
-Will be looking to integrate with other plugins to add more options. The goal of the interface is not only can you syndicate via Micropub, but in the classic editor using a simple checkbox.
+Will be looking to integrate with other plugins to add more options. The goal of the interface is not only can you syndicate via Micropub, but in the editor using a simple checkbox.
 
 == Frequently Asked Questions ==
 
@@ -137,6 +137,9 @@ In no particular order...
 9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.0.3 ( 2018-12-08 )
+* Checks for 5.0 compatibility.
 
 = Version 4.0.2 ( 2018-11-05 )
 * Fix PHP notice about incorrect setting

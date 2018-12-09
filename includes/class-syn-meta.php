@@ -9,7 +9,7 @@ class Syn_Meta {
 		add_action( 'save_post', array( 'Syn_Meta', 'save_post_meta' ) );
 		add_action( 'edit_comment', array( 'Syn_Meta', 'save_comment_meta' ) );
 		$args = array(
-			'type'         => 'array',
+			'type'         => 'string',
 			'description'  => 'Syndication URLs',
 			'single'       => false,
 			'show_in_rest' => true,
@@ -185,7 +185,11 @@ class Syn_Meta {
 			array( 'Syn_Meta', 'metabox' ),   // Callback function
 			self::screens(),         // Admin page (or post type)
 			'normal',         // Context
-			'default'         // Priority
+			'default',        // Priority
+			array(
+				'__block_editor_compatible_meta_box' => true,
+				'__back_compat_meta_box'             => false,
+			)
 		);
 	}
 

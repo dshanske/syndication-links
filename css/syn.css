@@ -150,6 +150,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-automatic {
   color: #7D8084;
 }
+.relsyn li a .svg-autotask {
+  color: #E51937;
+}
 .relsyn li a .svg-aventrix {
   color: #0099DD;
 }
@@ -182,6 +185,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-bitcoin {
   color: #F7931A;
+}
+.relsyn li a .svg-bitdefender {
+  color: #ED1C24;
 }
 .relsyn li a .svg-bitly {
   color: #EE6123;
@@ -252,6 +258,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-coop {
   color: #00B1E7;
 }
+.relsyn li a .svg-codacy {
+  color: #222F29;
+}
 .relsyn li a .svg-codeigniter {
   color: #EE4623;
 }
@@ -260,6 +269,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-codecademy {
   color: #1F4056;
+}
+.relsyn li a .svg-codecov {
+  color: #F01F7A;
 }
 .relsyn li a .svg-codeforces {
   color: #1F8ACB;
@@ -388,13 +400,16 @@ ul.relsyn li .svg-icon {
   color: #5AB552;
 }
 .relsyn li a .svg-eventbrite {
-  color: #F6682F;
+  color: #F05537;
 }
 .relsyn li a .svg-evernote {
   color: #00A82D;
 }
 .relsyn li a .svg-everplaces {
   color: #FA4B32;
+}
+.relsyn li a .svg-expertsexchange {
+  color: #00AAE7;
 }
 .relsyn li a .svg-fsecure {
   color: #00BAFF;
@@ -511,7 +526,7 @@ ul.relsyn li .svg-icon {
   color: #4285F4;
 }
 .relsyn li a .svg-googledrive {
-  color: #4386FC;
+  color: #4285F4;
 }
 .relsyn li a .svg-googlehangouts {
   color: #0C9D58;
@@ -525,8 +540,14 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-googleplay {
   color: #607D8B;
 }
+.relsyn li a .svg-googlepodcasts {
+  color: #4285F4;
+}
 .relsyn li a .svg-googleplus {
   color: #DC4E41;
+}
+.relsyn li a .svg-grafana {
+  color: #F46800;
 }
 .relsyn li a .svg-graphql {
   color: #E10098;
@@ -552,8 +573,14 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-gumtree {
   color: #72EF36;
 }
+.relsyn li a .svg-here {
+  color: #48DAD0;
+}
 .relsyn li a .svg-html5 {
   color: #E34F26;
+}
+.relsyn li a .svg-hackhands {
+  color: #00ACBD;
 }
 .relsyn li a .svg-hackerrank {
   color: #2EC866;
@@ -587,6 +614,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-houzz {
   color: #7AC142;
+}
+.relsyn li a .svg-huawei {
+  color: #FF0000;
 }
 .relsyn li a .svg-hulu {
   color: #3DBB3D;
@@ -653,6 +683,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-joomla {
   color: #5091CD;
+}
+.relsyn li a .svg-jupyter {
+  color: #F37626;
 }
 .relsyn li a .svg-justgiving {
   color: #AD29B6;
@@ -1023,6 +1056,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-qzone {
   color: #FECE00;
 }
+.relsyn li a .svg-r {
+  color: #276DC3;
+}
 .relsyn li a .svg-rss {
   color: #FFA500;
 }
@@ -1338,6 +1374,9 @@ ul.relsyn li .svg-icon {
 .relsyn li a .svg-udacity {
   color: #01B3E3;
 }
+.relsyn li a .svg-udemy {
+  color: #EC5252;
+}
 .relsyn li a .svg-umbraco {
   color: #00BEC1;
 }
@@ -1505,6 +1544,9 @@ ul.relsyn li .svg-icon {
 }
 .relsyn li a .svg-ebay {
   color: #E53238;
+}
+.relsyn li a .svg-elementary {
+  color: #64BAFF;
 }
 .relsyn li a .svg-freecodecamp {
   color: #006400;

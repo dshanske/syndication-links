@@ -3,8 +3,8 @@
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.7  
 **Requires PHP:** 5.3  
-**Tested up to:** 4.9.8  
-**Stable tag:** 4.0.2  
+**Tested up to:** 5.0.0  
+**Stable tag:** 4.0.3  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -142,6 +142,9 @@ In no particular order...
 
 ## Changelog ##
 
+### Version 4.0.3 ( 2018-12-xx )
+* Checks for 5.0 compatibility.
+###
 ### Version 4.0.2 ( 2018-11-05 )
 * Fix PHP notice about incorrect setting
 * Restore Bridgy global settings options that were in the Bridgy plugin to disable the link back to the post and ignore whitespace
