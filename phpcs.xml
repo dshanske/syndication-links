@@ -4,12 +4,9 @@
 	<!-- Check up to 8 files simultanously. -->
 	<arg name="parallel" value="8"/>
 	
-	<file>.</file>
+	<file>./includes/</file>
+	<file>./syndication-links.php</file>
 	<exclude-pattern>*/includes/class-social-plugins.php</exclude-pattern>
-	<exclude-pattern>*/vendor</exclude-pattern>
-	<exclude-pattern>*/node_modules</exclude-pattern>
-	<exclude-pattern>*/build</exclude-pattern>
-	<exclude-pattern>*/genericons-neue</exclude-pattern>
 	<!-- Only check the PHP, CSS and SCSS files. -->
 	<arg name="extensions" value="php,css,scss/css"/>
 
