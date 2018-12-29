@@ -514,7 +514,7 @@ class Syn_Meta {
 			case 'p':
 				$before = '<p class="' . $r['container-css'] . '"><span>';
 				$sep    = '</span><span>';
-				$after  = '</p>';
+				$after  = '</span></p>';
 				break;
 			case 'ol':
 				$before = '<ol class="' . $r['container-css'] . '"><li>';

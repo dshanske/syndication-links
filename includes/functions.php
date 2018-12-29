@@ -38,3 +38,28 @@ function get_the_content_syndication( $syndication_uid = null ) {
 function is_syndication() {
 	return doing_filter( 'the_content_syndication' );
 }
+
+// Modeled after get_search_form
+function get_original_of_form( $echo = true ) {
+	$of_form_template = locate_template( 'originalofform.php' );
+	if ( '' != $of_form_template ) {
+		ob_start();
+		require $of_form_template;
+		$form = ob_get_clean();
+	} else {
+		$form = '<form role="search" method="get" class="original-of-form" action="' . esc_url( home_url( '/' ) ) . '">
+                <label>
+                    <span class="screen-reader-text">' . _x( 'Enter a link to the syndicated copy of a post to get the original page:', 'label', 'syndication-links' ) . '</span>
+                    <input type="url" placeholder="http://example.com" class="original-of-field" name="original-of" />
+		    </label>
+                <input type="submit" class="original-of-submit" value="' . esc_attr_x( 'Lookup Original', 'submit button', 'syndication-links' ) . '" />
+		</form>';
+	}
+
+	if ( $echo ) {
+		echo $form;
+	} else {
+		return $form;
+	}
+
+}
