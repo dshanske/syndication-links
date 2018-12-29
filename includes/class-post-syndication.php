@@ -120,6 +120,9 @@ class Post_Syndication {
 	public static function checkboxes( $post_ID ) {
 		$targets   = self::get_providers();
 		$blacklist = get_option( 'syndication_provider_disable', array() );
+		if ( ! is_array( $blacklist ) ) {
+			$blacklist = array( $blacklist );
+		}
 		if ( empty( $targets ) ) {
 			return __( 'No Syndication Targets Available', 'syndication-links' );
 		}
