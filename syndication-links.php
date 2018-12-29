@@ -3,14 +3,14 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add Syndication Links to Your Content
- * Version: 4.0.3
+ * Version: 4.0.4
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  * Text Domain: syndication-links
  * Domain Path:  /languages
  */
 
-define( 'SYNDICATION_LINKS_VERSION', '4.0.3' );
+define( 'SYNDICATION_LINKS_VERSION', '4.0.4' );
 
 
 function syndication_links_load( $files ) {
@@ -33,6 +33,7 @@ function syndication_links_init() {
 			'class-syn-config.php', // Configuration Options
 			'class-social-plugins.php', // Social Plugin Add-Ons
 			'functions.php', // Global Functions
+			'class-original-of-widget.php', // Original Of Widget
 		)
 	);
 	if ( 1 === intval( get_option( 'syndication_posse_enable', 0 ) ) ) {
@@ -41,7 +42,6 @@ function syndication_links_init() {
 				'class-syndication-provider.php', // Syndication Provider Base Class
 				'class-post-syndication.php', // Post syndication logic
 				'class-syndication-provider-webmention.php', // Class for Any Webmention Based Service
-				'class-syndication-provider-indienews.php', // Indienews Syndication Provider
 				'class-syndication-provider-bridgy.php', // Bridgy Base Class
 				'class-syndication-provider-bridgy-twitter.php', // Twitter via Bridgy
 				'class-syndication-provider-bridgy-github.php', // Github via Bridgy

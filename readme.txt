@@ -3,8 +3,8 @@ Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Requires at least: 4.7
 Requires PHP: 5.3
-Tested up to: 5.0
-Stable tag: 4.0.3
+Tested up to: 5.0.2
+Stable tag: 4.0.4
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -66,16 +66,17 @@ The plugin supports automatically pulling data from plugins that syndicate your 
 
 Using the optional Syndication feature(disabled by default) you can syndicate your posts to:
 
-* [Indienews](https://news.indieweb.org) - A curated list of Indieweb related articles
 * [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, and Flickr
 
-Will be looking to integrate with other plugins to add more options. The goal of the interface is not only can you syndicate via Micropub, but in the editor using a simple checkbox.
+Will be looking to integrate with other plugins to add more options and invite developers to add support if they wish as the interface is simple. 
+The goal of the interface is not only can you syndicate via Micropub, but in the editor using a simple checkbox.
 
 == Frequently Asked Questions ==
 
 = How do I prevent the links from being automatically added to the content? =
 
-You will have to remove the content filter `remove_filter( 'the_content', array( 'Syn_Config', 'the_content' ) , 30 )` and then you can call get_syndication_links() directly in your theme.
+You will have to remove the content filter `remove_filter( 'the_content', array( 'Syn_Config', 'the_content' ) , 30 )` and then you can call get_syndication_links() directly in your theme. You should add
+this to the init hook.
 
 * `get_syndication_links( $object, $args ) - Returns the HTML for $object. $object can be a post_ID, a WP_Post object, or a WP_Comment object.
 ** $args
@@ -90,6 +91,9 @@ You will have to remove the content filter `remove_filter( 'the_content', array(
 
 If you add `?original-of=` and the URL-encoded URL it will return the post that has that URL stored. As no two posts should have the same two syndication links it will by default only return the first.
 
+If you want to do this with a form, there is a function you can add to your theme called `get_original_of_form()` and a widget that calls this. Like the search form if you have a
+originalofform.php in your theme folder the function will return it so you can customize the form.
+
 = What filters are available to modify output? =
 
 * `syn_rewrite_secure( $domains )` - $domains is an array of domain names to rewrite to https if found
@@ -103,6 +107,10 @@ If you add `?original-of=` and the URL-encoded URL it will return the post that 
 Development and bug reports on this plugin is on Github at https://github.com/dshanske/syndication-links
 
 == Upgrade Notice == 
+
+= Version 4.0.4 =
+
+Support for Indienews is no longer bundled with this plugin due spam issues. Indienews is dedicated for Indieweb related news.
 
 = Version 4.0.0 =
 
@@ -137,6 +145,13 @@ In no particular order...
 9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.0.4 ( 2018-12-29 ) 
+* Add setting to use the excerpt if set for Bridgy Publish to Twitter
+* Indienews(news.indieweb.org) will no longer be a bundled provider per request due spam issues
+* When automatically added to content wrap the links in an element for styling
+* Add function `get_original_of_form()` which creates a search for for the original of query which looks up posts by their syndication link
+* Added widget that calls new original of form function
 
 = Version 4.0.3 ( 2018-12-08 )
 * Checks for 5.0 compatibility.
