@@ -350,7 +350,7 @@ class Syn_Config {
 				}
 			}
 		}
-		return $content . get_post_syndication_links();
+		return $content . '<div id="syndication-links">' . get_post_syndication_links() . '</div>';
 	}
 
 	public static function comment_text( $comment_text, $comment ) {
