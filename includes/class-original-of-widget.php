@@ -31,7 +31,6 @@ class Original_Of_Widget extends WP_Widget {
 	 * @param array $instance Saved values from database.
 	 */
 	public function widget( $args, $instance ) {
-		$kind = ifset( $instance['kind'], 'note' );
 		// phpcs:ignore
 		echo $args['before_widget'];
 		if ( ! empty( $instance['title'] ) ) {
@@ -68,10 +67,11 @@ class Original_Of_Widget extends WP_Widget {
 	 * @param array $instance Previously saved values from database.
 	 */
 	public function form( $instance ) {
+		$title = isset( $instance['title'] ? $instance['title'] : '';
 		?>
 				<p><label for="title"><?php esc_html_e( 'Title: ', 'syndication-links' ); ?></label>
 				<input type="text" size="30" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?> id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" value="
-		<?php echo esc_html( ifset( $instance['title'] ) ); ?>" /></p>
+		<?php echo esc_html( $title ); ?>" /></p>
 		<?php
 	}
 }
