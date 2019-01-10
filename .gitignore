@@ -8,3 +8,4 @@ node_modules/genericons-neue/*
 !node_modules/genericons-neue/LICENSE.md
 sass/.sass-cache/*
 vendor/*
+*.scssc

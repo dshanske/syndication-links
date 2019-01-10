@@ -1,33 +1,33 @@
 {
-   "name": "dshanske/syndication-links",
-     "description": "Syndication Links for WordPress",
-     "type": "wordpress-plugin",
-     "license": "GPLv2 or later",
-     "authors": [
-       {
-	       "name": "David Shanske",
-	       "email": "david@shanske.com"
-       }
-     ],
-     "extra": {
+    "name": "dshanske/syndication-links",
+    "description": "Syndication Links for WordPress",
+    "type": "wordpress-plugin",
+    "license": "GPLv2 or later",
+    "authors": [
+        {
+	        "name": "David Shanske",
+	        "email": "david@shanske.com"
+        }
+    ],
+    "extra": {
 		"installer-name": "syndication-links"
-     },
+    },
     "require": {
-	"php": ">=5.2.0",
-	"composer/installers": "~1.0"
+		"php": ">=5.2.0",
+		"composer/installers": "~1.0"
     },
     "require-dev": {
         "dealerdirect/phpcodesniffer-composer-installer": "^0.4",
-	"squizlabs/php_codesniffer": "*",
+		"squizlabs/php_codesniffer": "*",
         "phpcompatibility/php-compatibility": "*",
         "wp-coding-standards/wpcs": "*",
-      "phpcompatibility/phpcompatibility-wp": "^2.0"
+		"phpcompatibility/phpcompatibility-wp": "^2.0"
     },
     "prefer-stable" : true,
     "scripts": {
         "lint": "phpcs",
-	"install-codestandards": [
-		"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
-	]
+		"install-codestandards": [
+			"Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
+		]
     }
 }

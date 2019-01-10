@@ -1,17 +1,17 @@
 # Syndication Links #
-**Contributors:** dshanske  
-**Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
-**Requires at least:** 4.7  
-**Requires PHP:** 5.3  
-**Tested up to:** 5.0.2  
-**Stable tag:** 4.0.5  
-**License:** GPLv2 or later  
+**Contributors:** dshanske
+**Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing
+**Requires at least:** 4.7
+**Requires PHP:** 5.3
+**Tested up to:** 5.0.2
+**Stable tag:** 4.0.5
+**License:** GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
 
 ## Description ##
 
-It supports adding rel-syndication/u-syndication links to your posts, pages, and comments, indicating where a syndicated copy is. You can do this manually and some plugins support 
+It supports adding rel-syndication/u-syndication links to your posts, pages, and comments, indicating where a syndicated copy is. You can do this manually and some plugins support
 automatically adding their links as well. The plugin contains a generic UI for syndicating to other sites through your site or a Micropub Client.
 
 ## Screenshots ##
@@ -32,11 +32,11 @@ Or install through the WordPress Plugin Directory.
 
 ## Privacy and Data Storage Information ##
 
-This plugin stores syndication links, which can be attached to any post, page, or comment. They can be added to custom post types by filter. 
+This plugin stores syndication links, which can be attached to any post, page, or comment. They can be added to custom post types by filter.
 
 For webmention initiated comments, this information
 will be added by parsing the source of the webmention. It is assumed if you send a webmention, you consent to share this information if it is publicly shared on your page. Our recommendation
-is that site owners should take down information on request. 
+is that site owners should take down information on request.
 
 For comments initiated on the site, there is built-in way to add these links. For posts, they are typically added by retrieving information stored by other plugins for display. It is assumed
 that by installing this plugin, as its intent is to display these links, that you wish to display them.
@@ -50,7 +50,7 @@ The settings include the following options as follows with either a set of butto
 
 * **Display Text** -  Offers options to display text only, icons only, icons and text, and no display(hidden icons).
 * **Size** - Choice of small, medium, or large size icons.
-* **Black Icons** - Checking the box defaults to a "black" social media icon set. 
+* **Black Icons** - Checking the box defaults to a "black" social media icon set.
 * **Show on Front Page, Archive Page, and Search Results** - If checked the icons will show on pages other than a single view. If not checked, the icons will be hidden by the links will remain.
 * **Show on Feed** - If checked the icons will show in your RSS feed as well
 * **Text Before Links** - This is the text that appears before the Display Text/Icons (as indicated above). The default text is "Syndicated to:" but can be modified if desired.
@@ -60,7 +60,7 @@ The settings include the following options as follows with either a set of butto
 
 ## Supported POSSE plugins and implementations ##
 
-The plugin supports automatically pulling data from plugins that syndicate your content so you don't need to do it manually. For anything not built in, integation is easy with a simple filter for potential use with any other plugin.
+The plugin supports automatically pulling data from plugins that syndicate your content so you don't need to do it manually. For anything not built in, integration is easy with a simple filter for potential use with any other plugin.
 
 * [Social Networks Autoposter](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) - Syndication Links supports Twitter, Facebook, and Tumblr since version 1.0.0
 * [Medium](https://wordpress.org/plugins/medium/) - Syndication Links supports since version 3.0.5
@@ -68,11 +68,15 @@ The plugin supports automatically pulling data from plugins that syndicate your 
 * [WordPress Crossposter](https://wordpress.org/plugins/wp-crosspost) - Supports Syndication Links since version 0.3.2
 * [Diaposter](https://wordpress.org/plugins/diasposter/) - Supports Syndication Links since version 0.1.8
 
-Using the optional Syndication feature(disabled by default) you can syndicate your posts to:
+Using the optional Syndication feature (disabled by default) you can syndicate your posts to:
 
 * [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, and Flickr
 
-Will be looking to integrate with other plugins to add more options and invite developers to add support if they wish as the interface is simple. 
+To enhance the syndicated content to services like Twitter, plugins that support [The Open Graph protocol](http://ogp.me/) will enable more meaningful content displays, such as a [Summary Card Tweet](https://developer.twitter.com/en/docs/tweets/optimize-with-cards/overview/summary).
+
+* [The SEO Framework](https://wordpress.org/plugins/autodescription/)
+
+Will be looking to integrate with other plugins to add more options and invite developers to add support if they wish as the interface is simple.
 The goal of the interface is not only can you syndicate via Micropub, but in the editor using a simple checkbox.
 
 ## Frequently Asked Questions ##
@@ -138,7 +142,7 @@ Removes H-Card Widget as does not fit into this plugin. Moving over to the Indie
 
 In no particular order...
 
-1. The [Indieweb](https://indieweb.org) community of users and all users of this plugin 
+1. The [Indieweb](https://indieweb.org) community of users and all users of this plugin
 2. [Meitar Moscovitz](https://github.com/meitar) for fixes and code contributions related to support of the plugin in his various plugins.
 3. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2) design.
 4. Jihaisse and Peter Molnar for the [SNAP](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/), courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
@@ -153,7 +157,7 @@ In no particular order...
 ### Version 4.0.5 ( 2019-o1-05 )
 * Fix minor bug introduced in customizer by original of widget
 ###
-### Version 4.0.4 ( 2018-12-29 ) 
+### Version 4.0.4 ( 2018-12-29 )
 * Add setting to use the excerpt if set for Bridgy Publish to Twitter
 * Indienews(news.indieweb.org) will no longer be a bundled provider per request due spam issues
 * When automatically added to content wrap the links in an element for styling
@@ -303,25 +307,25 @@ In no particular order...
 	* Add support for pages and a filter to add additional content types
 ### Version 1.0.0 ###
 	* Refinements
-	* Addition of h-card widget. 
+	* Addition of h-card widget.
 	* Improvements to hooks
-	* Addition of automatic information from SNAP and Social(courtesy WordPress Syndication). 
+	* Addition of automatic information from SNAP and Social(courtesy WordPress Syndication).
 	* Now supports second font choice and choice of color or black.
 ### Version 0.6.0 ###
 	* Add hooks and functions to allow additional urls to  be added
 ### Version 0.5.0 ###
 	* Clean up the plugin for initial release to WordPress repository.
 ### Version 0.5 ###
-	* Moved to simplified data structure. 
+	* Moved to simplified data structure.
 	* Hidden migration function
 ### Version 0.4 ###
 	* Rewriting using Grunt/SASS for more flexibility
 ### Version 0.3 ###
-	* Customizable Networks finished. 
+	* Customizable Networks finished.
 	* Changed social icons CSS to automatically add only if the class for the list has social-icon in it.
 ### Version 0.2 ###
-	* Settings Screen rewritten using WordPress Settings API. 
-	* Going to rewrite with customizable networks and thus option to disable sites you do not syndicate to. 
+	* Settings Screen rewritten using WordPress Settings API.
+	* Going to rewrite with customizable networks and thus option to disable sites you do not syndicate to.
 	* Added social icons CSS to automatically add icons to anything in a <LI>
 ### Version 0.1 ###
 	* Forked from the Semantic Comments plugin. Start of configurable options.
