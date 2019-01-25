@@ -39,8 +39,14 @@ module.exports = function(grunt) {
                                 expand: true
                         }
                 },
-
-
+    copy: {
+	    main: {
+		    files: [
+		    	{expand: true, cwd: 'node_modules/simple-icons/icons/', src: ['*.svg'], dest: 'svgs/'}, 
+		    	{expand: true, cwd: 'node_modules/genericons-neue/svg-min/', src: ['*.svg'], dest: 'svgs/'},
+		    ],
+		},
+    },
     wp_readme_to_markdown: {
       target: {
        options: {
@@ -124,7 +130,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-svg-sprite');
   grunt.loadNpmTasks('grunt-checktextdomain');
   grunt.loadNpmTasks('grunt-execute');
-
+  grunt.loadNpmTasks('grunt-copy');
+  
   // Default task(s).
-  grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'sass', 'checktextdomain']);
+  grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'sass', 'checktextdomain', 'copy' ]);
 };

@@ -5,18 +5,26 @@ ul.relsyn {
 	padding: 1px;
 	  li {
 		display: inline-block;
-		 padding-right: 5px;
+		padding-right: 5px;
 		font-size: .8em;
-		.svg-icon {
+	}
+}
+
+.svg-icon {
+	svg {
 		fill: currentColor;
 		vertical-align: middle;
-		/*  position: relative;  Align more nicely with capital letters */
 		top: -0.0625em;
+		:hover {
+			filter: brightness(50%);
 		}
 	}
 }
 
-a.syn-link, a.syn-link:visited, a.syn-link:hover {
-	text-decoration: none;
-	color: black;
+a {
+	:hover {
+		.syn-link {
+			text-decoration: none;
+		}
+	}
 }
