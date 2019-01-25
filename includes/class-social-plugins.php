@@ -5,21 +5,33 @@ add_action( 'init', array( 'Social_Plugins', 'init' ) );
 class Social_Plugins {
 	public static function init() {
 		add_filter( 'syn_add_links', array( 'Social_Plugins', 'add_syn_plugins' ) );
+		add_filter( 'syn_links_url_to_name', array( 'Social_Plugins', 'url_to_name_plugins' ), 2 );
 	}
 
-	public static function array_flatten($array) { 
-		  if (!is_array($array)) { 
-			      return false; 
-			        } 
-		    $result = array(); 
-		    foreach ($array as $key => $value) { 
-			        if (is_array($value)) { 
-					      $result = array_merge($result, self::array_flatten($value)); 
-					          } else { 
-							        $result[$key] = $value; 
-								    } 
-				  } 
-		    return $result;
+	public static function url_to_name_plugins( $name, $url ) {
+		if ( class_exists( 'autopostToMastodon' ) ) {
+			$instance = get_option( 'autopostToMastodon-instance', null );
+			if ( wp_http_validate_url( $instance ) ) {
+				if ( wp_parse_url( $instance, PHP_URL_HOST ) === wp_parse_url( $url, PHP_URL_HOST ) ) {
+					return 'mastodon';
+				}
+			}
+		}
+	}
+
+	public static function array_flatten( $array ) { 
+		if ( ! is_array( $array ) ) { 	 
+			return false; 
+		} 
+		$result = array(); 
+		foreach ($array as $key => $value) { 
+			if (is_array($value)) { 
+			$result = array_merge($result, self::array_flatten($value)); 
+			} else { 
+			$result[$key] = $value; 
+			} 
+		} 
+		return $result;
 	}
 
 	public static function add_syn_plugins( $urls ) {
