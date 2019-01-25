@@ -130,7 +130,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-svg-sprite');
   grunt.loadNpmTasks('grunt-checktextdomain');
   grunt.loadNpmTasks('grunt-execute');
-  grunt.loadNpmTasks('grunt-copy');
+  grunt.loadNpmTasks('grunt-contrib-copy');
   
   // Default task(s).
   grunt.registerTask('default', ['wp_readme_to_markdown', 'makepot', 'sass', 'checktextdomain', 'copy' ]);
