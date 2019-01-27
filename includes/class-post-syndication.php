@@ -109,7 +109,7 @@ class Post_Syndication {
 
 	public static function provider_callback( $args ) {
 		$targets   = self::get_providers();
-		$blacklist = get_option( 'syndication_provider_disable', array() );
+		$blacklist = (array) get_option( 'syndication_provider_disable', array() );
 		echo '<div>';
 		foreach ( $targets as $uid => $name ) {
 			printf( '<p><input type="checkbox" name="syndication_provider_disable[]" id="%1$s" value="%1$s" %3$s /><label for="%1$s">%2$s</label></p>', esc_attr( $uid ), esc_html( $name ), checked( true, in_array( $uid, $blacklist, true ), false ) );
