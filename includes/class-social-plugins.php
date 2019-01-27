@@ -5,7 +5,7 @@ add_action( 'init', array( 'Social_Plugins', 'init' ) );
 class Social_Plugins {
 	public static function init() {
 		add_filter( 'syn_add_links', array( 'Social_Plugins', 'add_syn_plugins' ) );
-		add_filter( 'syn_links_url_to_name', array( 'Social_Plugins', 'url_to_name_plugins' ), 2 );
+		add_filter( 'syn_links_url_to_name', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
 	}
 
 	public static function url_to_name_plugins( $name, $url ) {
