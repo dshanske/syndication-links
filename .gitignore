@@ -1,10 +1,3 @@
-build/*
 node_modules/*
-!node_modules/simple-icons
-/node_modules/simple-icons/*
-!node_modules/simple-icons/LICENSE.md
-!node_nodules/genericons-neue
-node_modules/genericons-neue/*
-!node_modules/genericons-neue/LICENSE.md
 sass/.sass-cache/*
 vendor/*

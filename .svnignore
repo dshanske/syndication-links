@@ -14,3 +14,6 @@ readme.md
 .travis.yml
 genericons-neue
 vendor
+css/*.map
+node_modules
+simpleicons.js
