@@ -161,7 +161,7 @@ class Post_Syndication {
 		}
 		printf( '</ul>' );
 		printf( '<span class="button button-primary" id="add-custom-webmention-button">%s</span>', esc_html__( 'Add', 'syndication-links' ) );
-		printf( '<span class="button button-secondary" id="add-custom-webmention-button">%s</span>', esc_html__( 'Remove', 'syndication-links' ) );
+		printf( '<span class="button button-secondary" id="delete-custom-webmention-button">%s</span>', esc_html__( 'Remove', 'syndication-links' ) );
 	}
 
 	public static function ifset( $array, $key ) {

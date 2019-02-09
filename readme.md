@@ -71,6 +71,8 @@ The plugin supports automatically pulling data from plugins that syndicate your 
 Using the optional Syndication feature(disabled by default) you can syndicate your posts to:
 
 * [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, and Flickr
+* [Bridgy Fed](https://fed.brid.gy) - Bridgy Fed is a service that allows you to interact with federated social networks using webmentions.
+* Custom Webmention Syndication - Add any site that supports publishing by sending a webmention by configuring it in the settings page
 
 Will be looking to integrate with other plugins to add more options and invite developers to add support if they wish as the interface is simple. 
 The goal of the interface is not only can you syndicate via Micropub, but in the editor using a simple checkbox.
@@ -150,7 +152,7 @@ In no particular order...
 
 ## Changelog ##
 
-### Version 4.1.0 ( 2019-xx-xx )
+### Version 4.1.0 ( 2019-02-09 )
 * Switch to inline SVG over SVG sprites to reduce load size
 * Add ability to configure arbitrary webmention POSSE providers on the settings page
 ###
