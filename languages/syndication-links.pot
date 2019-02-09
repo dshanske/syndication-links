@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Syndication Links package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Syndication Links 4.0.5\n"
+"Project-Id-Version: Syndication Links 4.1.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2019-01-05 06:17:55+00:00\n"
+"POT-Creation-Date: 2019-02-09 20:23:44+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -25,15 +25,51 @@ msgstr ""
 msgid "Title: "
 msgstr ""
 
-#: includes/class-post-syndication.php:39
+#: includes/class-post-syndication.php:50
 msgid "Disable the Following Providers"
 msgstr ""
 
-#: includes/class-post-syndication.php:98
+#: includes/class-post-syndication.php:64
+msgid "Custom Webmention POSSE providers"
+msgstr ""
+
+#: includes/class-post-syndication.php:71
+msgid "Custom Providers"
+msgstr ""
+
+#: includes/class-post-syndication.php:83
+msgid "Set up Custom Webmention POSSE handling"
+msgstr ""
+
+#: includes/class-post-syndication.php:132
 msgid "Syndicate To"
 msgstr ""
 
-#: includes/class-post-syndication.php:127
+#: includes/class-post-syndication.php:152
+msgid "Enter Name, UID, and Target URL for all Custom Webmention POSSE options"
+msgstr ""
+
+#: includes/class-post-syndication.php:163 includes/class-syn-meta.php:206
+msgid "Add"
+msgstr ""
+
+#: includes/class-post-syndication.php:164
+msgid "Remove"
+msgstr ""
+
+#: includes/class-post-syndication.php:178
+msgid "Name"
+msgstr ""
+
+#: includes/class-post-syndication.php:179
+msgid "UID"
+msgstr ""
+
+#: includes/class-post-syndication.php:180
+msgid "Target URL"
+msgstr ""
+
+#: includes/class-post-syndication.php:204
 msgid "No Syndication Targets Available"
 msgstr ""
 
@@ -141,12 +177,12 @@ msgstr ""
 msgid "Comments"
 msgstr ""
 
-#: includes/class-syn-meta.php:206
-msgid "Add"
-msgstr ""
-
 #: includes/class-syn-meta.php:208
 msgid "Add Links to this same content on other sites"
+msgstr ""
+
+#: includes/class-syndication-provider-bridgy-fed.php:6
+msgid "Bridgy Fed"
 msgstr ""
 
 #: includes/class-syndication-provider-bridgy-flickr.php:6
@@ -193,12 +229,12 @@ msgstr ""
 msgid "Tell Bridgy to Ignore Formatting"
 msgstr ""
 
-#: includes/class-syndication-provider-webmention.php:20
+#: includes/class-syndication-provider-webmention.php:23
 #. translators: Syndication Target
 msgid "Unknown %1$s Error"
 msgstr ""
 
-#: syndication-links.php:59
+#: syndication-links.php:61
 msgid ""
 "Syndication Links, which are links to the same content on other sites, may "
 "be displayed on comments, but only if supplied by the submitter or if your "

@@ -81,35 +81,6 @@ module.exports = function(grunt) {
 	}
   },
 
-        svg_sprite              : {
-                icons: {
-                        src: ['node_modules/simple-icons/icons/*.svg', 'genericons-neue/svg/*.svg'],
-                        dest: '.',
-                        options         : {
-
-                                shape                           : {
-                                        dimension               : {                     // Set maximum dimensions
-                                                maxWidth        : 64,
-                                                maxHeight       : 64
-                                        },
-                                        spacing                 : {                     // Add padding
-                                                padding         : 10
-                                        },
-                                        id                      : {
-                                                separator       : ''
-                                        }
-                                },
-                                mode : {
-                                        symbol                  : {             // Activate the «symbol» mode
-                                                sprite : 'icons.svg',
-                                                dest: ''
-                                        }
-
-                                }
-                        }
-                }
-        },
-
    makepot: {
         target: {
             options: {
@@ -127,7 +98,6 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-wp-readme-to-markdown');
   grunt.loadNpmTasks( 'grunt-wp-i18n' );
   grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-svg-sprite');
   grunt.loadNpmTasks('grunt-checktextdomain');
   grunt.loadNpmTasks('grunt-execute');
   grunt.loadNpmTasks('grunt-contrib-copy');

@@ -28,7 +28,7 @@ abstract class Syndication_Provider {
 
 	public function syndicate_to( $targets, $user_id ) {
 		$targets[] = $this->get();
-		return $targets;
+		return array_filter( $targets );
 	}
 
 	/**

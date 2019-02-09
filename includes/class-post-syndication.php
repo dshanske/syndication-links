@@ -31,6 +31,17 @@ class Post_Syndication {
 			)
 		);
 
+		register_setting(
+			'syndication_options',
+			'syndication_links_custom_posse',
+			array(
+				'type'         => 'string',
+				'description'  => 'Syndication Links Custom Webmention POSSE list',
+				'show_in_rest' => true,
+				'default'      => array(),
+			)
+		);
+
 	}
 
 	public static function admin_init() {
@@ -47,6 +58,29 @@ class Post_Syndication {
 				'name' => 'syndication_provider_disable',
 			)
 		);
+
+		add_settings_section(
+			'webmention_provider_options',
+			__( 'Custom Webmention POSSE providers', 'syndication-links' ),
+			array( get_called_class(), 'webmention_heading' ),
+			'links_options'
+		);
+
+		add_settings_field(
+			'syndication_links_custom_posse',
+			__( 'Custom Providers', 'syndication-links' ),
+			array(
+				get_called_class(),
+				'webmention_callback',
+			),
+			'links_options',
+			'webmention_provider_options',
+			array()
+		);
+	}
+
+	public static function webmention_heading() {
+		esc_html_e( 'Set up Custom Webmention POSSE handling', 'syndication-links' );
 	}
 
 	public static function register( $object ) {
@@ -107,11 +141,54 @@ class Post_Syndication {
 		);
 	}
 
+
+	public static function webmention_callback( $args ) {
+		$name   = 'syndication_links_custom_posse';
+		$custom = get_option( $name );
+		foreach ( $custom as $key => $value ) {
+			$custom[ $key ] = array_filter( $value );
+		}
+		$custom = array_filter( $custom );
+		esc_html_e( 'Enter Name, UID, and Target URL for all Custom Webmention POSSE options', 'syndication-links' );
+		printf( '<ul id="custom_webmention">' );
+		if ( empty( $custom ) ) {
+			self::webmention_inputs( '0' );
+
+		} else {
+			foreach ( $custom as $key => $value ) {
+				self::webmention_inputs( $key, $value );
+			}
+		}
+		printf( '</ul>' );
+		printf( '<span class="button button-primary" id="add-custom-webmention-button">%s</span>', esc_html__( 'Add', 'syndication-links' ) );
+		printf( '<span class="button button-secondary" id="add-custom-webmention-button">%s</span>', esc_html__( 'Remove', 'syndication-links' ) );
+	}
+
+	public static function ifset( $array, $key ) {
+		if ( array_key_exists( $key, $array ) ) {
+			return $array[ $key ];
+		}
+		return '';
+	}
+
+	private static function webmention_inputs( $int, $value = array() ) {
+		$output = '<input type="text" name="%1$s[%2$s][%3$s]" id="%4$s" value="%5$s" placeholder="%6$s" />';
+		$name   = 'syndication_links_custom_posse';
+		echo '<li>';
+		printf( $output, $name, $int, 'name', esc_attr( $name ), esc_attr( self::ifset( $value, 'name' ) ), esc_html__( 'Name', 'syndication-links' ) );
+		printf( $output, $name, $int, 'uid', esc_attr( $name ), esc_attr( self::ifset( $value, 'uid' ) ), esc_html__( 'UID', 'syndication-links' ) );
+		printf( $output, $name, $int, 'target', esc_attr( $name ), esc_attr( self::ifset( $value, 'target' ) ), esc_html__( 'Target URL', 'syndication-links' ) );
+		echo '</li>';
+	}
+
 	public static function provider_callback( $args ) {
 		$targets   = self::get_providers();
 		$blacklist = (array) get_option( 'syndication_provider_disable', array() );
 		echo '<div>';
 		foreach ( $targets as $uid => $name ) {
+			if ( empty( $uid ) || empty( $name ) ) {
+				continue;
+			}
 			printf( '<p><input type="checkbox" name="syndication_provider_disable[]" id="%1$s" value="%1$s" %3$s /><label for="%1$s">%2$s</label></p>', esc_attr( $uid ), esc_html( $name ), checked( true, in_array( $uid, $blacklist, true ), false ) );
 			echo '</div>';
 		}

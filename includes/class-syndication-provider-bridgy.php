@@ -33,11 +33,11 @@ class Syndication_Provider_Bridgy extends Syndication_Provider_Webmention {
 		);
 	}
 
-	public function options_callback() {
+	public static function options_callback() {
 		printf( '<p>%1$s</p>', esc_html__( 'Options for Publishing with Bridgy', 'syndication-links' ) );
 	}
 
-	public function admin_init() {
+	public static function admin_init() {
 		add_settings_section(
 			'bridgy_options',
 			__( 'Bridgy Publish  Options', 'syndication-links' ),

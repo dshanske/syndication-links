@@ -79,7 +79,7 @@ class Syn_Meta {
 
 
 	public static function screens() {
-		$screens = array( 'post', 'page', 'comment' );
+		$screens = array( 'post', 'page', 'comment', 'indieweb_page_syndication_links' );
 		return apply_filters( 'syn_metabox_types', $screens );
 	}
 
@@ -203,7 +203,7 @@ class Syn_Meta {
 		if ( ! $urls ) {
 			$urls = array( '' );
 		}
-		echo '<span class="button-primary add-syn-link-button">' . esc_html__( 'Add', 'syndication-links' ) . '</span></br>';
+		echo '<span class="button-primary" id="add-syn-link-button">' . esc_html__( 'Add', 'syndication-links' ) . '</span></br>';
 		echo '<p class="syndication_url_list"><label for="syndication_urls">';
 		esc_html_e( 'Add Links to this same content on other sites', 'syndication-links' );
 		foreach ( $urls as $url ) {
@@ -306,6 +306,9 @@ class Syn_Meta {
 			if ( in_array( $strip, array_keys( $strings ), true ) ) {
 				return $strip;
 			}
+			if ( false !== stripos( $url, 'indieweb.xyz' ) ) {
+				return 'info';
+			}
 			// Special Cases
 			if ( false !== stripos( $url, 'plus.google.com' ) ) {
 				return 'googleplus';
@@ -349,7 +352,7 @@ class Syn_Meta {
 				return sprintf( '<span class="svg-icon svg-%1$s" aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $name ), $icon );
 			}
 		}
-		return '';
+		return $name;
 	}
 
 	public static function get_title( $name ) {

@@ -491,6 +491,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-gnusocial {
   color: #A22430;
 }
+.relsyn li a .svg-gogcom {
+  color: #86328A;
+}
 .relsyn li a .svg-govuk {
   color: #005EA5;
 }
@@ -757,6 +760,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-kotlin {
   color: #0095D5;
+}
+.relsyn li a .svg-lgtm {
+  color: #FFFFFF;
 }
 .relsyn li a .svg-linewebtoon {
   color: #00D564;
@@ -1215,7 +1221,7 @@ ul.relsyn li svg {
   color: #00AFF0;
 }
 .relsyn li a .svg-slack {
-  color: #56B68B;
+  color: #4A154B;
 }
 .relsyn li a .svg-slashdot {
   color: #026664;
@@ -1576,6 +1582,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-zapier {
   color: #FF4A00;
+}
+.relsyn li a .svg-zeit {
+  color: #000000;
 }
 .relsyn li a .svg-zendesk {
   color: #03363D;
