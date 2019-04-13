@@ -11,7 +11,7 @@ class Syndication_Provider_Webmention extends Syndication_Provider {
 		$response_code = wp_remote_retrieve_response_code( $response );
 		$location      = wp_remote_retrieve_header( $response, 'location' );
 		if ( empty( $location ) ) {
-			$location = url;
+			$location = $url;
 		}
 		if ( 201 === $response_code ) {
 			return $location;
