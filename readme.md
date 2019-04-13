@@ -3,8 +3,8 @@
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.7  
 **Requires PHP:** 5.3  
-**Tested up to:** 5.0.3  
-**Stable tag:** 4.1.0  
+**Tested up to:** 5.1.1  
+**Stable tag:** 4.1.1  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -152,6 +152,11 @@ In no particular order...
 
 ## Changelog ##
 
+### Version 4.1.1 ( 2019-04-13 )
+* Update icons
+* Fix minor typo
+* Attempt at cache busting
+###
 ### Version 4.1.0 ( 2019-02-09 )
 * Switch to inline SVG over SVG sprites to reduce load size
 * Add ability to configure arbitrary webmention POSSE providers on the settings page
