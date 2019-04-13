@@ -41,7 +41,12 @@ class Syndication_Provider_Webmention extends Syndication_Provider {
 		if ( ! $post_id ) {
 			$post_id = get_the_ID();
 		}
+		$post = get_post( $post_id );
 		add_syndication_link( $post_id, $this->get_target() );
+
+		// Attempt at cache busting by classifying this as an edit
+		do_action( 'edit_post', $post_ID, $post );
+
 		$response = self::send_webmention( get_permalink( $post_id ) );
 		if ( ! is_wp_error( $response ) ) {
 			$links  = get_syndication_links_data( $post_id );
@@ -52,6 +57,9 @@ class Syndication_Provider_Webmention extends Syndication_Provider {
 			if ( is_string( $response ) ) {
 				$links[] = $response;
 				add_syndication_link( $post_id, $links, true );
+
+				// Attempt at cache busting by classifying this as an edit
+				do_action( 'edit_post', $post_ID, $post );
 			} else {
 				error_log( $response );
 			}
