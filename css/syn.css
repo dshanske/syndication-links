@@ -86,7 +86,10 @@ ul.relsyn li svg {
 .relsyn li a .svg-adobeindesign {
   color: #FD3F93;
 }
-.relsyn li a .svg-adobelightroom {
+.relsyn li a .svg-adobelightroomcc {
+  color: #3DF0F0;
+}
+.relsyn li a .svg-adobelightroomclassic {
   color: #ADD5EC;
 }
 .relsyn li a .svg-adobephotoshop {
@@ -97,6 +100,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-adobetypekit {
   color: #87EC00;
+}
+.relsyn li a .svg-adobexd {
+  color: #FF2BC2;
 }
 .relsyn li a .svg-airbnb {
   color: #FF5A5F;
@@ -118,6 +124,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-angular {
   color: #DD0031;
+}
+.relsyn li a .svg-angularuniversal {
+  color: #00ACC1;
 }
 .relsyn li a .svg-apache {
   color: #D22128;
@@ -193,6 +202,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-bing {
   color: #008373;
+}
+.relsyn li a .svg-bit {
+  color: #73398D;
 }
 .relsyn li a .svg-bitbucket {
   color: #0052CC;
@@ -452,6 +464,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-elasticsearch {
   color: #005571;
 }
+.relsyn li a .svg-electron {
+  color: #47848F;
+}
 .relsyn li a .svg-ello {
   color: #000000;
 }
@@ -674,6 +689,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-hackhands {
   color: #00ACBD;
 }
+.relsyn li a .svg-hackaday {
+  color: #1A1A1A;
+}
 .relsyn li a .svg-hackerrank {
   color: #2EC866;
 }
@@ -781,6 +799,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-jenkins {
   color: #D24939;
+}
+.relsyn li a .svg-jest {
+  color: #C21325;
 }
 .relsyn li a .svg-jira {
   color: #172B4D;
@@ -928,6 +949,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-mastodon {
   color: #3088D4;
+}
+.relsyn li a .svg-materialdesign {
+  color: #757575;
 }
 .relsyn li a .svg-mathworks {
   color: #0076A8;
@@ -1597,6 +1621,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-umbraco {
   color: #00BEC1;
+}
+.relsyn li a .svg-unity {
+  color: #000000;
 }
 .relsyn li a .svg-unsplash {
   color: #000000;

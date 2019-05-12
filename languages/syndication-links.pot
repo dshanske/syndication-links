@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Syndication Links package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Syndication Links 4.1.0\n"
+"Project-Id-Version: Syndication Links 4.1.2\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2019-04-13 21:23:30+00:00\n"
+"POT-Creation-Date: 2019-05-12 13:44:39+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -41,35 +41,35 @@ msgstr ""
 msgid "Set up Custom Webmention POSSE handling"
 msgstr ""
 
-#: includes/class-post-syndication.php:132
+#: includes/class-post-syndication.php:139
 msgid "Syndicate To"
 msgstr ""
 
-#: includes/class-post-syndication.php:152
+#: includes/class-post-syndication.php:159
 msgid "Enter Name, UID, and Target URL for all Custom Webmention POSSE options"
 msgstr ""
 
-#: includes/class-post-syndication.php:163 includes/class-syn-meta.php:206
+#: includes/class-post-syndication.php:170 includes/class-syn-meta.php:206
 msgid "Add"
 msgstr ""
 
-#: includes/class-post-syndication.php:164
+#: includes/class-post-syndication.php:171
 msgid "Remove"
 msgstr ""
 
-#: includes/class-post-syndication.php:178
+#: includes/class-post-syndication.php:185
 msgid "Name"
 msgstr ""
 
-#: includes/class-post-syndication.php:179
+#: includes/class-post-syndication.php:186
 msgid "UID"
 msgstr ""
 
-#: includes/class-post-syndication.php:180
+#: includes/class-post-syndication.php:187
 msgid "Target URL"
 msgstr ""
 
-#: includes/class-post-syndication.php:204
+#: includes/class-post-syndication.php:211
 msgid "No Syndication Targets Available"
 msgstr ""
 

@@ -43,7 +43,7 @@ class Syndication_Provider_Bridgy_Twitter extends Syndication_Provider_Bridgy {
 	}
 	public function wp_footer() {
 		if ( ( 1 === (int) get_option( 'bridgy_twitterexcerpt' ) ) && has_excerpt() ) {
-			printf( '<p class="p-bridgy-twitter-content" style="display:none">%1$s</p>', get_the_excerpt() );
+			printf( '<p class="p-bridgy-twitter-content" style="display:none">%1$s</p>', get_the_excerpt() ); // phpcs:ignore
 		}
 	}
 

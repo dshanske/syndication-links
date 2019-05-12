@@ -182,9 +182,9 @@ class Post_Syndication {
 		$output = '<input type="text" name="%1$s[%2$s][%3$s]" id="%4$s" value="%5$s" placeholder="%6$s" />';
 		$name   = 'syndication_links_custom_posse';
 		echo '<li>';
-		printf( $output, $name, $int, 'name', esc_attr( $name ), esc_attr( self::ifset( $value, 'name' ) ), esc_html__( 'Name', 'syndication-links' ) );
-		printf( $output, $name, $int, 'uid', esc_attr( $name ), esc_attr( self::ifset( $value, 'uid' ) ), esc_html__( 'UID', 'syndication-links' ) );
-		printf( $output, $name, $int, 'target', esc_attr( $name ), esc_attr( self::ifset( $value, 'target' ) ), esc_html__( 'Target URL', 'syndication-links' ) );
+		printf( $output, $name, $int, 'name', esc_attr( $name ), esc_attr( self::ifset( $value, 'name' ) ), esc_html__( 'Name', 'syndication-links' ) ); // phpcs:ignore
+		printf( $output, $name, $int, 'uid', esc_attr( $name ), esc_attr( self::ifset( $value, 'uid' ) ), esc_html__( 'UID', 'syndication-links' ) ); // phpcs:ignore
+		printf( $output, $name, $int, 'target', esc_attr( $name ), esc_attr( self::ifset( $value, 'target' ) ), esc_html__( 'Target URL', 'syndication-links' ) ); // phpcs:ignore
 		echo '</li>';
 	}
 

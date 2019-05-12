@@ -42,7 +42,7 @@ function is_syndication() {
 // Modeled after get_search_form
 function get_original_of_form( $echo = true ) {
 	$of_form_template = locate_template( 'originalofform.php' );
-	if ( '' != $of_form_template ) {
+	if ( '' !== $of_form_template ) {
 		ob_start();
 		require $of_form_template;
 		$form = ob_get_clean();
@@ -57,7 +57,7 @@ function get_original_of_form( $echo = true ) {
 	}
 
 	if ( $echo ) {
-		echo $form;
+		echo $form; // phpcs:ignore
 	} else {
 		return $form;
 	}
