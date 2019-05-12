@@ -378,6 +378,7 @@ class Syn_Meta {
 		if ( $object instanceof WP_Post ) {
 			$type = 'post';
 			$id   = $object->ID;
+			do_action( 'edit_post', $id, $object );
 		}
 		if ( $object instanceof WP_Comment ) {
 			$type = 'comment';
@@ -400,6 +401,7 @@ class Syn_Meta {
 		if ( empty( $links ) ) {
 			return false;
 		}
+
 		return update_metadata( $type, $id, 'mf2_syndication', $links );
 	}
 
