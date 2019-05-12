@@ -349,7 +349,7 @@ class Syn_Meta {
 		if ( file_exists( $svg ) ) {
 			$icon = file_get_contents( $svg );
 			if ( $icon ) {
-				return sprintf( '<span class="svg-icon svg-%1$s" aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $name ), $icon );
+				return sprintf( '<span class="svg-icon svg-%1$s" style="display: inline-block; max-width: 1rem; margin: 2px;" aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $name ), $icon );
 			}
 		}
 		return $name;
