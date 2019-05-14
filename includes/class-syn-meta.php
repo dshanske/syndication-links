@@ -300,33 +300,21 @@ class Syn_Meta {
 	public static function url_to_name( $url ) {
 		$scheme = wp_parse_url( $url, PHP_URL_SCHEME );
 		if ( ( 'http' === $scheme ) || ( 'https' === $scheme ) ) {
+
+			$iconMap = Syn_Link_Domain_Icon_Map::getName($url);
+			if(false !== $iconMap) {
+				return $iconMap;
+			}
+
 			$domain  = self::extract_domain_name( $url );
 			$strip   = self::split_domain( $domain );
 			$strings = array_keys( simpleicons_syn_get_names() );
 			if ( in_array( $strip, array_keys( $strings ), true ) ) {
 				return $strip;
 			}
-			if ( false !== stripos( $url, 'indieweb.xyz' ) ) {
-				return 'info';
-			}
-			// Special Cases
-			if ( false !== stripos( $url, 'plus.google.com' ) ) {
-				return 'googleplus';
-			}
-			if ( false !== stripos( $url, 'getpocket.com' ) ) {
-				return 'pocket';
-			}
-			// Special Case Flipboard
-			if ( false !== stripos( $url, 'flip.it' ) ) {
-				return 'flipboard';
-			}
 
 			if ( false !== stripos( $url, 'lanyard' ) ) {
 				return 'lanyrd';
-			}
-
-			if ( false !== stripos( $url, 'micro.blog' ) ) {
-				return 'microblog';
 			}
 
 			// Anything with WordPress in the name that is not matched return WordPress
