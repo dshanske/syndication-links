@@ -1,23 +1,30 @@
 ul.relsyn {
-  	display: inline-block;
+	display: inline-block;
 	list-style-type: none;
 	margin: 0;
 	padding: 1px;
-  	li {
-	    display: inline-block;
- 	    padding-right: 5px;
-	    font-size: .8em;
-	    .svg-icon {
-		fill: currentColor;
-		vertical-align: middle;
-		/*  position: relative;  Align more nicely with capital letters */
-		top: -0.0625em;
-	    }
+	  li {
+		display: inline-block;
+		padding-right: 5px;
+		font-size: .8em;
 	}
 }
 
-a.syn-link, a.syn-link:visited, a.syn-link:hover {
-	text-decoration: none;
-	color: black;
+.svg-icon {
+	svg {
+		fill: currentColor;
+		vertical-align: middle;
+		top: -0.0625em;
+		:hover {
+			filter: brightness(50%);
+		}
+	}
 }
 
+a {
+	:hover {
+		.syn-link {
+			text-decoration: none;
+		}
+	}
+}

@@ -1,6 +1,6 @@
 <?php
 // Adds Post Meta Box for Syndication URLs
-add_action( 'init' , array( 'Syn_Meta', 'init' ) );
+add_action( 'init', array( 'Syn_Meta', 'init' ) );
 
 // The Syn_Meta class sets up post meta boxes for data associated with Syndication
 class Syn_Meta {
@@ -9,16 +9,93 @@ class Syn_Meta {
 		add_action( 'save_post', array( 'Syn_Meta', 'save_post_meta' ) );
 		add_action( 'edit_comment', array( 'Syn_Meta', 'save_comment_meta' ) );
 		$args = array(
-			// 'sanitize_callback' => '',
-			'type' => 'array',
-			'description' => 'Syndication URLs',
-			'single' => false,
+			'type'         => 'string',
+			'description'  => 'Syndication URLs',
+			'single'       => false,
 			'show_in_rest' => true,
 		);
 		register_meta( 'post', 'mf2_syndication', $args );
 		add_filter( 'query_vars', array( 'Syn_Meta', 'query_var' ) );
 		add_action( 'parse_query', array( 'Syn_Meta', 'parse_query' ) );
+
+		add_filter( 'wp_privacy_personal_data_exporters', array( 'Syn_Meta', 'wp_privacy_personal_data_exporters' ), 10 );
 	}
+
+	public static function wp_privacy_personal_data_exporters( $exporters ) {
+		$exporters['syndication-links'] = array(
+			'exporter_friendly_name' => __( 'Syndication Links Plugin', 'syndication-links' ),
+			'callback'               => array( 'Syn_Meta', 'data_exporter' ),
+		);
+		return $exporters;
+	}
+
+	public static function data_exporter( $email_address, $page = 1 ) {
+		$number = 500; // Limit us to avoid timing out
+		$page   = (int) $page;
+
+		$export_items = array();
+		$comments     = get_comments(
+			array(
+				'author_email' => $email_address,
+				'number'       => $number,
+				'paged'        => $page,
+				'order_by'     => 'comment_ID',
+				'order'        => 'ASC',
+			)
+		);
+
+		foreach ( (array) $comments as $comment ) {
+			$syndication = self::get_syndication_links_data( $comment );
+			if ( ! empty( $syndication ) ) {
+				$item_id     = "comment-{$comment->comment_ID}";
+				$group_id    = 'comments';
+				$group_label = __( 'Comments', 'syndication-links' );
+
+				$data           = array(
+					array(
+						'name'  => __( 'Syndication Links', 'syndication-links' ),
+						'value' => $syndication,
+					),
+				);
+				$export_items[] = array(
+					'group_id'    => $group_id,
+					'group_label' => $group_label,
+					'item_id'     => $item_id,
+					'data'        => $data,
+				);
+			}
+		}
+
+		$done = count( $comments ) < $number;
+
+		return array(
+			'data' => $export_items,
+			'done' => $done,
+		);
+	}
+
+
+
+
+
+	public static function screens() {
+		$screens = array( 'post', 'page', 'comment', 'indieweb_page_syndication_links' );
+		return apply_filters( 'syn_metabox_types', $screens );
+	}
+
+	public static function enqueue( $hook_suffix ) {
+		$screens = self::screens();
+		if ( in_array( get_current_screen()->id, $screens, true ) ) {
+			wp_enqueue_script(
+				'synlinks',
+				plugins_url( 'js/synlinks.js', dirname( __FILE__ ) ),
+				array( 'jquery' ),
+				SYNDICATION_LINKS_VERSION,
+				true
+			);
+		}
+	}
+
 
 	public static function query_var( $vars ) {
 		$vars[] = 'original-of';
@@ -31,25 +108,26 @@ class Syn_Meta {
 		}
 		$url = $wp->get( 'original-of' );
 		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			include( get_404_template() );
+			include get_404_template();
 			exit;
 		}
-		$url = esc_url_raw( $url );
-		$args = array(
-			'fields' => 'ids',
-			'meta_key' => 'mf2_syndication',
+		$url   = esc_url_raw( $url );
+		$args  = array(
+			'fields'     => 'ids',
+			'meta_key'   => 'mf2_syndication',
 			'meta_query' => array(
-				'key' => 'mf2_syndication',
-				'value' => $url,
+				'key'     => 'mf2_syndication',
+				'value'   => $url,
 				'compare' => 'LIKE',
 			),
 		);
 		$posts = get_posts( $args );
 		if ( empty( $posts ) ) {
-			include( get_404_template() );
+			include get_404_template();
 			exit;
 		}
-		wp_redirect( get_permalink( $posts[0] ) );
+		wp_safe_redirect( get_permalink( $posts[0] ) );
+		exit;
 	}
 
 
@@ -60,7 +138,7 @@ class Syn_Meta {
 	 * @return array A filtered array of unique URLs.
 	 * @uses clean_url
 	 */
-	public static function clean_urls($urls) {
+	public static function clean_urls( $urls ) {
 		if ( ! is_array( $urls ) ) {
 			return $urls;
 		}
@@ -75,7 +153,7 @@ class Syn_Meta {
 	 * @return string|bool The filtered and escaped URL string, or FALSE if invalid.
 	 * @used-by clean_urls
 	 */
-	public static function clean_url($string) {
+	public static function clean_url( $string ) {
 		if ( is_array( $string ) ) {
 			return $string;
 		}
@@ -85,7 +163,7 @@ class Syn_Meta {
 		}
 		// Rewrite these to https as needed
 		$secure = apply_filters( 'syn_rewrite_secure', array( 'facebook.com', 'twitter.com', 'huffduffer.com', 'foursquare.com' ) );
-		if ( in_array( self::extract_domain_name( $url ), $secure ) ) {
+		if ( in_array( self::extract_domain_name( $url ), $secure, true ) ) {
 			$url = preg_replace( '/^http:/i', 'https:', $url );
 		}
 		$url = esc_url_raw( $url );
@@ -94,40 +172,60 @@ class Syn_Meta {
 
 	/* Meta box setup function. */
 	public static function setup() {
+		add_action( 'admin_enqueue_scripts', array( 'Syn_Meta', 'enqueue' ) );
 		/* Add meta boxes on the 'add_meta_boxes' hook. */
 		add_action( 'add_meta_boxes', array( 'Syn_Meta', 'add_meta_boxes' ) );
 	}
 
 	/* Create one or more meta boxes to be displayed on the post editor screen. */
 	public static function add_meta_boxes() {
-		$screens = array( 'post', 'page', 'comment' );
-		$screens = apply_filters( 'syn_metabox_types', $screens );
 		add_meta_box(
 			'synbox-meta',      // Unique ID
 			esc_html__( 'Syndication Links', 'syndication-links' ),    // Title
 			array( 'Syn_Meta', 'metabox' ),   // Callback function
-			$screens,         // Admin page (or post type)
+			self::screens(),         // Admin page (or post type)
 			'normal',         // Context
-			'default'         // Priority
+			'default',        // Priority
+			array(
+				'__block_editor_compatible_meta_box' => true,
+				'__back_compat_meta_box'             => false,
+			)
 		);
 	}
 
 	public static function metabox( $object, $box ) {
 		wp_nonce_field( 'syn_metabox', 'syn_metabox_nonce' );
-		$meta = self::get_syndication_links_data( $object );
+		$urls = self::get_syndication_links_data( $object );
 
-		if ( is_array( $meta ) ) {
-			$meta = implode( PHP_EOL, $meta );
+		if ( is_string( $urls ) ) {
+			$urls = explode( PHP_EOL, $urls );
 		}
-		echo '<p><label for="syndication_urls">';
-		_e( 'One URL per line.', 'Syn Links' );
+		if ( ! $urls ) {
+			$urls = array( '' );
+		}
+		echo '<span class="button-primary" id="add-syn-link-button">' . esc_html__( 'Add', 'syndication-links' ) . '</span></br>';
+		echo '<p class="syndication_url_list"><label for="syndication_urls">';
+		esc_html_e( 'Add Links to this same content on other sites', 'syndication-links' );
+		foreach ( $urls as $url ) {
+			echo '<input type="text" name="syndication_urls[]" class="widefat" id="syndication_urls" value="' . esc_url_raw( $url ) . '" /><br />';
+		}
 		echo '</label></p>';
-		echo '<textarea name="syndication_urls" id="syndication_urls" style="width:99%" rows="4" cols="40">';
-		if ( is_string( $meta ) ) {
-			echo $meta;
-		}
-		echo '</textarea>';
 	}
+
+	/* Save the meta box's metadata. */
+	public static function save_meta( $type, $id ) {
+		if ( empty( $_POST['syndication_urls'] ) ) {
+			delete_metadata( $type, $id, 'mf2_syndication' );
+		} else {
+			$meta = $_POST['syndication_urls'];
+			if ( is_string( $meta ) ) {
+				$meta = explode( PHP_EOL, $_POST['syndication_urls'] );
+			}
+			$meta = self::clean_urls( $meta );
+			update_metadata( $type, $id, 'mf2_syndication', $meta );
+		}
+	}
+
 
 	/* Save the meta box's post metadata. */
 	public static function save_post_meta( $post_id ) {
@@ -157,14 +255,10 @@ class Syn_Meta {
 				return;
 			}
 		}
-		if ( empty( $_POST['syndication_urls'] ) ) {
-			delete_post_meta( $post_id, 'mf2_syndication' );
-		} else {
-			$meta = explode( PHP_EOL, $_POST['syndication_urls'] );
-			$meta = self::clean_urls( $meta );
-			update_post_meta( $post_id, 'mf2_syndication', $meta );
-		}
+		self::save_meta( 'post', $post_id );
 	}
+
+
 
 	/* Save the meta box's comment metadata. */
 	public static function save_comment_meta( $comment_id ) {
@@ -180,58 +274,11 @@ class Syn_Meta {
 		if ( ! wp_verify_nonce( $_POST['syn_metabox_nonce'], 'syn_metabox' ) ) {
 			return;
 		}
+		self::save_meta( 'comment', $comment_id );
 
-		if ( empty( $_POST['syndication_urls'] ) ) {
-			delete_comment_meta( $comment_id, 'mf2_syndication' );
-		} else {
-			$meta = explode( PHP_EOL, $_POST['syndication_urls'] );
-			$meta = self::clean_urls( $meta );
-			update_comment_meta( $comment_id, 'mf2_syndication', $meta );
-		}
 	}
 
-	public static function get_network_strings() {
-		$strings = array(
-			'amazon.com' => _x( 'Amazon', 'syndication-links' ),
-			'behance.net' => _x( 'Behance', 'syndication-links' ),
-			'blogspot.com' => _x( 'Blogger', 'syndication-links' ),
-			'codepen.io' => _x( 'codepen', 'syndication-links' ),
-			'dribbble.com' => _x( 'Dribbble', 'syndication-links' ),
-			'dropbox.com' => _x( 'Dropbox', 'syndication-links' ),
-			'eventbrite.com' => _x( 'Eventbrite', 'syndication-links' ),
-			'facebook.com' => _x( 'Facebook', 'syndication-links' ),
-			'flickr.com' => _x( 'Flickr', 'syndication-links' ),
-			'foursquare.com'  => _x( 'Foursquare', 'syndication-links' ),
-			'ghost.org' => _x( 'Ghost', 'syndication-links' ),
-			'plus.google.com' => _x( 'Google+', 'syndication-links' ),
-			'github.com' => _x( 'Github', 'syndication-links' ),
-			'instagram.com' => _x( 'Instagram', 'syndication-links' ),
-			'linkedin.com' => _x( 'LinkedIn', 'syndication-links' ),
-			'medium.com' => _x( 'Medium', 'syndication-links' ),
-			'path.com' => _x( 'Path', 'syndication-links' ),
-			'pinterest.com' => _x( 'Pinterest', 'syndication-links' ),
-			'getpocket.com' => _x( 'Pocket', 'syndication-links' ),
-			'polldaddy.com' => _x( 'PollDaddy', 'syndication-links' ),
-			'reddit.com' => _x( 'Reddit', 'syndication-links' ),
-			'squarespace.com' => _x( 'Squarespace', 'syndication-links' ),
-			'skype.com' => _x( 'Skype', 'syndication-links' ),
-			'soundcloud.com' => _x( 'SoundCloud', 'syndication-links' ),
-			'spotify.com' => _x( 'Spotify', 'syndication-links' ),
-			'stumbleupon.com' => _x( 'StumbleUpon', 'syndication-links' ),
-			'telegram.org' => _x( 'Telegram', 'syndication-links' ),
-			'tumblr.com' => _x( 'Tumblr', 'syndication-links' ),
-			'twitch.tv' => _x( 'Twitch', 'syndication-links' ),
-			'twitter.com' => _x( 'Twitter', 'syndication-links' ),
-
-			'wordpress.com' => _x( 'WordPress', 'syndication-links' ),
-			'youtube.com' => _x( 'YouTube', 'syndication-links' ),
-
-			'news.indiewebcamp.com' => _x( 'IndieNews', 'syndication-links' ),
-		);
-		return apply_filters( 'syn_network_strings', $strings );
-	}
-
-	public static function extract_domain_name($url, $subdomain = false) {
+	public static function extract_domain_name( $url, $subdomain = false ) {
 		$parse = wp_parse_url( $url, PHP_URL_HOST );
 		if ( $subdomain ) {
 			return preg_replace( '/^www\./', '', $parse );
@@ -239,65 +286,85 @@ class Syn_Meta {
 		return preg_replace( '/^([a-zA-Z0-9].*\.)?([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z.]{2,})$/', '$2', $parse );
 	}
 
-	public static function get_icon( $domain ) {
-		// Supportedicons.
-			$icons = array(
-				'default'         => 'website',
-				'amazon.com'      => 'amazon',
-				'behance.net'     => 'behance',
-				'blogspot.com'    => 'blogger',
-				'codepen.io'      => 'codepen',
-				'dribbble.com'    => 'dribbble',
-				'dropbox.com'     => 'dropbox',
-				'eventbrite.com'  => 'eventbrite',
-				'facebook.com'    => 'facebook',
-				'flickr.com'      => 'flickr',
-				// feed
-				'foursquare.com'  => 'foursquare',
-				'ghost.org' 	=> 'ghost',
-				'plus.google.com' => 'google-plus',
-				'github.com'      => 'github',
-				'instagram.com'   => 'instagram',
-				'linkedin.com'    => 'linkedin',
-				'mailto:'         => 'mail',
-				'medium.com'      => 'medium',
-				'path.com'        => 'path',
-				'pinterest.com'   => 'pinterest',
-				'getpocket.com'   => 'pocket',
-				'polldaddy.com'   => 'polldaddy',
-				// print
-				'reddit.com'      => 'reddit',
-				'squarespace.com' => 'squarespace',
-				'skype.com'       => 'skype',
-				'skype:'          => 'skype',
-				// share
-				'soundcloud.com'  => 'soundcloud',
-				'spotify.com'     => 'spotify',
-				'stumbleupon.com' => 'stumbleupon',
-				'swarmapp.com'    => 'foursquare',
-				'telegram.org'    => 'telegram',
-				'tumblr.com'      => 'tumblr',
-				'twitch.tv'       => 'twitch',
-				'twitter.com'     => 'twitter',
-				'vimeo.com'       => 'vimeo',
-				'whatsapp.com'    => 'whatsapp',
-				'wordpress.org'   => 'wordpress',
-				'wordpress.com'   => 'wordpress',
-				'youtube.com'     => 'youtube',
-			);
-			// Substitute another domain to sprite map
-			$icons = apply_filters( 'syndication_domain_icons', $icons );
-			$icon = $icons['default'];
-		if ( array_key_exists( $domain, $icons ) ) {
-			$icon = $icons[ $domain ];
+	// Try to get the correct icon for the majority of sites by dropping
+	public static function split_domain( $string ) {
+		// Strip things we know we dont want. Not every TLD but the common ones in the fontset
+		$unwanted = array( '-', '.com', '.org', '.net', '.io', '.in', '.tv', '.fm', '.social' );
+		// Strip these
+		$string = str_replace( $unwanted, '', $string );
+		// Strip the dot if it is a TLD other than the above
+		$string = str_replace( '.', '', $string );
+		return strtolower( $string );
+	}
+
+	public static function url_to_name( $url ) {
+		$scheme = wp_parse_url( $url, PHP_URL_SCHEME );
+		if ( ( 'http' === $scheme ) || ( 'https' === $scheme ) ) {
+			$domain  = self::extract_domain_name( $url );
+			$strip   = self::split_domain( $domain );
+			$strings = array_keys( simpleicons_syn_get_names() );
+			if ( in_array( $strip, array_keys( $strings ), true ) ) {
+				return $strip;
+			}
+			if ( false !== stripos( $url, 'indieweb.xyz' ) ) {
+				return 'info';
+			}
+			// Special Cases
+			if ( false !== stripos( $url, 'plus.google.com' ) ) {
+				return 'googleplus';
+			}
+			if ( false !== stripos( $url, 'getpocket.com' ) ) {
+				return 'pocket';
+			}
+			// Special Case Flipboard
+			if ( false !== stripos( $url, 'flip.it' ) ) {
+				return 'flipboard';
+			}
+
+			if ( false !== stripos( $url, 'lanyard' ) ) {
+				return 'lanyrd';
+			}
+
+			if ( false !== stripos( $url, 'micro.blog' ) ) {
+				return 'microblog';
+			}
+
+			// Anything with WordPress in the name that is not matched return WordPress
+			if ( false !== stripos( $domain, 'WordPress' ) ) {
+				return 'WordPress';
+			}
+			// Some domains have the word app in them check for matches with that
+			$strip = str_replace( 'app', '', $strip );
+			if ( in_array( $strip, $strings, true ) ) {
+				return $strip;
+			}
+			return apply_filters( 'syn_links_url_to_name', 'website', $url );
 		}
-			// Substitute another svg sprite file
-			$sprite = apply_filters( 'syndication_icon_sprite', plugin_dir_url( __FILE__ ) . 'social-logos.svg', $domain );
-			return '<svg class="svg-icon svg-' . $icon . '" aria-hidden="true"><use xlink:href="' . $sprite . '#' . $icon . '"></use></svg>';
+		// Not sure why someone would do a scheme other than web for a syndication link
+		return 'notice';
+	}
+
+	public static function get_icon( $name ) {
+		$svg = sprintf( '%1$ssvgs/%2$s.svg', plugin_dir_path( __DIR__ ), $name );
+		if ( file_exists( $svg ) ) {
+			$icon = file_get_contents( $svg );
+			if ( $icon ) {
+				return sprintf( '<span class="svg-icon svg-%1$s" style="display: inline-block; max-width: 1rem; margin: 2px;" aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $name ), $icon );
+			}
+		}
+		return $name;
+	}
+
+	public static function get_title( $name ) {
+		$strings = simpleicons_syn_get_names();
+		if ( isset( $strings[ $name ] ) ) {
+			return $strings[ $name ];
+		}
+		return $name;
 	}
 
 
-	public static function add_syndication_link( $object = null, $uri ) {
+	public static function add_syndication_link( $object = null, $uri, $replace = false ) {
 		if ( ! $object ) {
 			$object = get_post();
 		}
@@ -309,41 +376,33 @@ class Syn_Meta {
 			return;
 		}
 		if ( $object instanceof WP_Post ) {
-			$links = get_post_meta( $object->ID, 'mf2_syndication' );
-			if ( ! is_array( $links ) ) {
-				$links = array();
-			}
-			if ( is_string( $uri ) ) {
-				$links[] = $uri;
-			}
-			if ( is_array( $uri ) ) {
-				$links = array_merge( $links, $uri );
-			}
-			$links = self::clean_urls( $links );
-			if ( empty( $links ) ) {
-				return;
-			} else {
-				update_post_meta( $object->ID, 'mf2_syndication', $links );
-			}
+			$type = 'post';
+			$id   = $object->ID;
+			do_action( 'edit_post', $id, $object );
 		}
 		if ( $object instanceof WP_Comment ) {
-			$links = get_comment_meta( $object->comment_ID, 'mf2_syndication' );
-			if ( ! is_array( $links ) ) {
-				$links = array();
-			}
-			if ( is_string( $uri ) ) {
-				$links[] = $uri;
-			}
-			if ( is_array( $uri ) ) {
-				$links = array_merge( $links, $uri );
-			}
-			$links = self::clean_urls( $links );
-			if ( empty( $links ) ) {
-				return;
-			} else {
-				update_comment_meta( $object->comment_ID, 'mf2_syndication', $links );
-			}
+			$type = 'comment';
+			$id   = $object->comment_ID;
 		}
+		if ( $replace ) {
+			return update_metadata( $type, $id, 'mf2_syndication', $uri );
+		}
+		$links = get_metadata( $type, $id, 'mf2_syndication', true );
+		if ( ! is_array( $links ) ) {
+			$links = array();
+		}
+		if ( is_string( $uri ) ) {
+			$links[] = $uri;
+		}
+		if ( is_array( $uri ) ) {
+			$links = array_merge( $links, $uri );
+		}
+		$links = self::clean_urls( $links );
+		if ( empty( $links ) ) {
+			return false;
+		}
+
+		return update_metadata( $type, $id, 'mf2_syndication', $links );
 	}
 
 	public static function get_syndication_links_data( $object = null ) {
@@ -396,16 +455,18 @@ class Syn_Meta {
 			return array();
 		}
 		$display = self::get_syndication_links_display_option();
-		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
-
-		$strings = self::get_network_strings();
-		$rel = is_single() ? ' rel="syndication">' : '>';
-		$links = array();
+		$r       = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
+		$rel     = is_single() ? ' rel="syndication">' : '>';
+		$links   = array();
 		foreach ( $urls as $url ) {
-			if ( empty( $url ) || ! is_string( $url ) ) { continue; }
-			$domain = self::extract_domain_name( $url );
-			$name = ( array_key_exists( $domain, $strings ) ) ? $strings[ $domain ] : $domain;
-			$syn = ( $r['icons'] ? self::get_icon( $domain ) : '') . ( $r['text'] ? $name : '');
+			if ( empty( $url ) || ! is_string( $url ) ) {
+				continue; }
+			$name = self::url_to_name( $url );
+			$icon = self::get_icon( $name );
+			if ( 'website' === $name ) {
+				$name = self::extract_domain_name( $url );
+			}
+			$syn = ( $r['icons'] ? $icon : '' ) . ( $r['text'] ? self::get_title( $name ) : '' );
 
 			$links[] = sprintf( '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>', $name, $r['single-css'], esc_url( $url ), $rel, $syn );
 		}
@@ -423,14 +484,14 @@ class Syn_Meta {
 	}
 
 	public static function get_syndication_links_display_defaults() {
-		$display = self::get_syndication_links_display_option();
+		$display  = self::get_syndication_links_display_option();
 		$defaults = array(
-			'style' => 'ul',
-			'text' => in_array( $display, array( 'text', 'iconstext' ) ),
-			'icons' => in_array( $display, array( 'icons', 'iconstext' ) ),
-			'container-css' => 'relsyn',
-			'single-css' => 'syn-link',
-			'text-css' => 'syn-text',
+			'style'            => 'ul',
+			'text'             => in_array( $display, array( 'text', 'iconstext' ), true ),
+			'icons'            => in_array( $display, array( 'icons', 'iconstext' ), true ),
+			'container-css'    => 'relsyn',
+			'single-css'       => 'syn-link',
+			'text-css'         => 'syn-text',
 			'show_text_before' => true,
 		);
 
@@ -455,25 +516,30 @@ class Syn_Meta {
 
 		if ( $r['show_text_before'] ) {
 			$textbefore = self::get_syndication_links_text_before( $r['text-css'] );
-		} else { $textbefore = '';
+		} else {
+			$textbefore = '';
 		}
 
 		switch ( $r['style'] ) {
 			case 'p':
-				$before = '<p class="' . $r['container-css']  . '"><span>';
-				$sep = ' ';
-				$after = '</p>';
+				$before = '<p class="' . $r['container-css'] . '"><span>';
+				$sep    = '</span><span>';
+				$after  = '</span></p>';
 				break;
 			case 'ol':
 				$before = '<ol class="' . $r['container-css'] . '"><li>';
-				$sep = '</li><li>';
-				$after = '</li></ol>';
+				$sep    = '</li><li>';
+				$after  = '</li></ol>';
 				break;
-
+			case 'span':
+				$before = '<span class="' . $r['container-css'] . '">';
+				$sep    = ' ';
+				$after  = '</span>';
+				break;
 			default:
 				$before = '<ul class="' . $r['container-css'] . '"><li>';
-				$sep = '</li><li>';
-				$after = '</li></ul>';
+				$sep    = '</li><li>';
+				$after  = '</li></ul>';
 		}
 
 		if($links != "")
@@ -486,23 +552,8 @@ class Syn_Meta {
 		return get_syndication_links( $post_ID, $args );
 	}
 
-	public static function get_comment_syndication_links( $comment_ID = null, $args = array() ) {
-		return get_syndication_links( get_comment( $comment_ID ), $args );
+	public static function get_comment_syndication_links( $comment_id = null, $args = array() ) {
+		return get_syndication_links( get_comment( $comment_id ), $args );
 	}
 
 } // End Class
-
-
-function get_syndication_links( $meta_type, $object_id = null, $args = array() ) {
-	return Syn_Meta::get_syndication_links( $meta_type, $object_id, $args );
-}
-
-function get_post_syndication_links( $post_ID = null, $args = array() ) {
-	return Syn_Meta::get_post_syndication_links( $post_ID, $args );
-}
-
-function get_comment_syndication_links( $comment_ID = null, $args = array() ) {
-	return Syn_Meta::get_comment_syndication_links( $comment_ID, $args );
-}
-
-?>
