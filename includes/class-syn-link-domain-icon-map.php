@@ -14,16 +14,14 @@ class Syn_Link_Domain_Icon_Map {
 
 	public static function getName( $url ) {
 		$parsed = parse_url( $url );
+		$return = false;
 		if ( false !== $parsed ) {
 			$host = $parsed['host'];
 			if ( array_key_exists( $host, self::$map ) ) {
-				return self::$map[ $host ];
-			} else {
-				return false;
-			}
+				$return = self::$map[ $host ];
+			} 
 		}
-
-		return false;
+		return apply_filters( 'syn_link_mapping', $return, $url );
 	}
 }
 
