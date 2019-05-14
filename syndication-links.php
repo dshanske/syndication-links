@@ -29,7 +29,7 @@ function syndication_links_init() {
 	syndication_links_load(
 		array(
 			'simple-icons.php', // Icon Information
-			'class-syn-link-domain-icon-map.php' // Mapping domains to icon names
+			'class-syn-link-domain-icon-map.php', // Mapping domains to icon names
 			'class-syn-meta.php', // Information on Metadata
 			'class-syn-config.php', // Configuration Options
 			'class-social-plugins.php', // Social Plugin Add-Ons
