@@ -8,15 +8,16 @@ class Syn_Link_Domain_Icon_Map {
     'getpocket.com'      => 'pocket',
     'flip.it'            => 'flipboard',
     'micro.blog'         => 'microblog',
-    'wordpress.org'      => 'wordpress'
+    'wordpress.org'      => 'wordpress',
+    'itunes.apple.com'   => 'applemusic',
   );
 
   public static function getName($url) {
     $parsed = parse_url($url);
     if(false !== $parsed) {
       $host = $parsed['host'];
-      if(array_key_exists($host,$map)) {
-        return $map[$host];
+      if(array_key_exists($host,self::$map)) {
+        return self::$map[$host];
       } else {
         return false;
       }
