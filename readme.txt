@@ -1,8 +1,8 @@
 === Syndication Links ===
 Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
-Requires at least: 4.7
-Requires PHP: 5.3
+Requires at least: 4.9
+Requires PHP: 5.4
 Tested up to: 5.2
 Stable tag: 4.1.2
 License: GPLv2 or later
