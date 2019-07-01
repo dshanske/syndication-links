@@ -31,11 +31,9 @@ class Syndication_Provider_Webmention_Custom extends Syndication_Provider_Webmen
 	}
 }
 
-if ( class_exists( 'Webmention_Plugin' ) ) {
-	$custom = get_option( 'syndication_links_custom_posse' );
-	if ( ! empty( $custom ) && is_array( $custom ) ) {
-		foreach ( $custom as $c ) {
-			register_syndication_provider( new Syndication_Provider_Webmention_Custom( $c ) );
-		}
+$custom = get_option( 'syndication_links_custom_posse' );
+if ( ! empty( $custom ) && is_array( $custom ) ) {
+	foreach ( $custom as $c ) {
+		register_syndication_provider( new Syndication_Provider_Webmention_Custom( $c ) );
 	}
 }

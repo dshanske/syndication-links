@@ -3,14 +3,14 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add Syndication Links to Your Content
- * Version: 4.1.2
+ * Version: 4.1.3
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  * Text Domain: syndication-links
  * Domain Path:  /languages
  */
 
-define( 'SYNDICATION_LINKS_VERSION', '4.1.2' );
+define( 'SYNDICATION_LINKS_VERSION', '4.1.3' );
 
 
 function syndication_links_load( $files ) {
@@ -42,20 +42,26 @@ function syndication_links_init() {
 			array(
 				'class-syndication-provider.php', // Syndication Provider Base Class
 				'class-post-syndication.php', // Post syndication logic
-				'class-syndication-provider-webmention.php', // Class for Any Webmention Based Service
-				'class-syndication-provider-webmention-custom.php', // Class for A Custom Webmention Based Service
-				'class-syndication-provider-bridgy.php', // Bridgy Base Class
-				'class-syndication-provider-bridgy-twitter.php', // Twitter via Bridgy
-				'class-syndication-provider-bridgy-github.php', // Github via Bridgy
-				'class-syndication-provider-bridgy-flickr.php', // Flickr via Bridgy
-				'class-syndication-provider-bridgy-fed.php', // Bridgy Fed
 			)
 		);
+		if ( function_exists( 'send_webmention' ) ) {
+			syndication_links_load(
+				array(
+					'class-syndication-provider-webmention.php', // Class for Any Webmention Based Service
+					'class-syndication-provider-webmention-custom.php', // Class for A Custom Webmention Based Service
+					'class-syndication-provider-bridgy.php', // Bridgy Base Class
+					'class-syndication-provider-bridgy-twitter.php', // Twitter via Bridgy
+					'class-syndication-provider-bridgy-github.php', // Github via Bridgy
+					'class-syndication-provider-bridgy-flickr.php', // Flickr via Bridgy
+					'class-syndication-provider-bridgy-fed.php', // Bridgy Fed
+				)
+			);
+		}
 	}
 	load_plugin_textdomain( 'syndication-links', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
 
-add_action( 'plugins_loaded', 'syndication_links_init' );
+	add_action( 'plugins_loaded', 'syndication_links_init', 11 );
 
 function syndication_links_privacy_declaration() {
 	if ( function_exists( 'wp_add_privacy_policy_content' ) ) {
@@ -71,4 +77,4 @@ function syndication_links_privacy_declaration() {
 	}
 }
 
-add_action( 'admin_init', 'syndication_links_privacy_declaration' );
+	add_action( 'admin_init', 'syndication_links_privacy_declaration' );

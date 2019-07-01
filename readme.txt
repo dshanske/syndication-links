@@ -3,8 +3,8 @@ Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Requires at least: 4.9
 Requires PHP: 5.4
-Tested up to: 5.2
-Stable tag: 4.1.2
+Tested up to: 5.2.2
+Stable tag: 4.1.3
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -147,6 +147,10 @@ In no particular order...
 9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.1.3 ( 2019-07-01 )
+* Fix issue with providers not loading because of name change in webmention plugin
+* Refresh icons
 
 = Version 4.1.2 ( 2019-05-12 )
 * Update icon size to be relative

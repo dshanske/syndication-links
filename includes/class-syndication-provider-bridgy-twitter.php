@@ -52,6 +52,4 @@ class Syndication_Provider_Bridgy_Twitter extends Syndication_Provider_Bridgy {
 	}
 }
 
-if ( class_exists( 'Webmention_Plugin' ) ) {
-	register_syndication_provider( new Syndication_Provider_Bridgy_Twitter() );
-}
+register_syndication_provider( new Syndication_Provider_Bridgy_Twitter() );
