@@ -19,7 +19,7 @@ class Syn_Link_Domain_Icon_Map {
 			$host = $parsed['host'];
 			if ( array_key_exists( $host, self::$map ) ) {
 				$return = self::$map[ $host ];
-			} 
+			}
 		}
 		return apply_filters( 'syn_link_mapping', $return, $url );
 	}
