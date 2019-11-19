@@ -301,9 +301,9 @@ class Syn_Meta {
 		$scheme = wp_parse_url( $url, PHP_URL_SCHEME );
 		if ( ( 'http' === $scheme ) || ( 'https' === $scheme ) ) {
 
-			$iconMap = Syn_Link_Domain_Icon_Map::getName( $url );
-			if ( false !== $iconMap ) {
-				return $iconMap;
+			$iconmap = Syn_Link_Domain_Icon_Map::getName( $url );
+			if ( false !== $iconmap ) {
+				return $iconmap;
 			}
 
 			$domain  = self::extract_domain_name( $url );
