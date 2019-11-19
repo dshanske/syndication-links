@@ -2,15 +2,15 @@
 class Syn_Link_Domain_Icon_Map {
 
 	private static $map = array(
-		'play.google.com'  => 'googleplay',
-		'plus.google.com'  => 'googleplus',
-		'indieweb.xyz'     => 'info',
+		'play.google.com'   => 'googleplay',
+		'plus.google.com'   => 'googleplus',
+		'indieweb.xyz'      => 'info',
 		'news.indieweb.org' => 'website',
-		'getpocket.com'    => 'pocket',
-		'flip.it'          => 'flipboard',
-		'micro.blog'       => 'microblog',
-		'wordpress.org'    => 'wordpress',
-		'itunes.apple.com' => 'applemusic',
+		'getpocket.com'     => 'pocket',
+		'flip.it'           => 'flipboard',
+		'micro.blog'        => 'microblog',
+		'wordpress.org'     => 'wordpress',
+		'itunes.apple.com'  => 'applemusic',
 	);
 
 	public static function getName( $url ) {
