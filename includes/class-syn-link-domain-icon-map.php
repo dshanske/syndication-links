@@ -5,6 +5,7 @@ class Syn_Link_Domain_Icon_Map {
 		'play.google.com'  => 'googleplay',
 		'plus.google.com'  => 'googleplus',
 		'indieweb.xyz'     => 'info',
+		'news.indieweb.org' => 'website',
 		'getpocket.com'    => 'pocket',
 		'flip.it'          => 'flipboard',
 		'micro.blog'       => 'microblog',
