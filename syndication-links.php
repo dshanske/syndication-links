@@ -53,6 +53,7 @@ function syndication_links_init() {
 					'class-syndication-provider-bridgy-twitter.php', // Twitter via Bridgy
 					'class-syndication-provider-bridgy-github.php', // Github via Bridgy
 					'class-syndication-provider-bridgy-flickr.php', // Flickr via Bridgy
+					'class-syndication-provider-bridgy-mastodon.php', // Mastodon via Bridgy
 					'class-syndication-provider-bridgy-fed.php', // Bridgy Fed
 				)
 			);

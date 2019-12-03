@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Syndication Links 4.1.4\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2019-11-19 03:39:26+00:00\n"
+"POT-Creation-Date: 2019-12-01 03:39:49+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -193,6 +193,14 @@ msgstr ""
 msgid "Github via Bridgy"
 msgstr ""
 
+#: includes/class-syndication-provider-bridgy-mastodon.php:6
+msgid "Mastodon via Bridgy"
+msgstr ""
+
+#: includes/class-syndication-provider-bridgy-mastodon.php:32
+msgid "Tell Bridgy to Use Post Excerpt for Toots if set"
+msgstr ""
+
 #: includes/class-syndication-provider-bridgy-twitter.php:6
 msgid "Twitter via Bridgy"
 msgstr ""
@@ -234,7 +242,7 @@ msgstr ""
 msgid "Unknown %1$s Error"
 msgstr ""
 
-#: syndication-links.php:68
+#: syndication-links.php:69
 msgid ""
 "Syndication Links, which are links to the same content on other sites, may "
 "be displayed on comments, but only if supplied by the submitter or if your "
