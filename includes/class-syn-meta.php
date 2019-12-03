@@ -205,17 +205,20 @@ class Syn_Meta {
 		}
 
 		$html  = '<div class="syndication_url_list">';
-		$html .= sprintf( '<label for="syndication_urls">%s</label>',
+		$html .= sprintf(
+			'<label for="syndication_urls">%s</label>',
 			esc_html__( 'Add Links to this same content on other sites', 'syndication-links' )
 		);
 		$html .= '<ul>';
 		foreach ( $urls as $url ) {
-			$html .= sprintf( '<li><input type="text" name="syndication_urls[]" class="widefat" id="syndication_urls" value="%s" /></li>',
+			$html .= sprintf(
+				'<li><input type="text" name="syndication_urls[]" class="widefat" id="syndication_urls" value="%s" /></li>',
 				esc_url_raw( $url )
 			);
 		}
 		$html .= '</ul>';
-		$html .= sprintf( '<button class="button-primary" id="add-syn-link-button">%s</button>',
+		$html .= sprintf(
+			'<button class="button-primary" id="add-syn-link-button">%s</button>',
 			esc_html__( 'Add', 'syndication-links' )
 		);
 		$html .= '</div>';
