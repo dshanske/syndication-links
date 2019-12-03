@@ -11,6 +11,8 @@ class Syn_Link_Domain_Icon_Map {
 		'micro.blog'        => 'microblog',
 		'wordpress.org'     => 'wordpress',
 		'itunes.apple.com'  => 'applemusic',
+		'reading.am'        => 'book',
+
 	);
 
 	public static function getName( $url ) {
