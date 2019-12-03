@@ -85,8 +85,9 @@ class Post_Syndication {
 
 	public static function register( $object ) {
 		if ( $object instanceof Syndication_Provider ) {
-			if ( ! empty( $object->get_uid() ) ) {
-				static::$targets[ $object->get_uid() ] = $object;
+			$uid = $object->get_uid();
+			if ( ! empty( $uid ) ) {
+				static::$targets[ $uid ] = $object;
 				return true;
 			}
 		}
