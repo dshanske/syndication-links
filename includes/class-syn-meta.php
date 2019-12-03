@@ -203,13 +203,24 @@ class Syn_Meta {
 		if ( ! $urls ) {
 			$urls = array( '' );
 		}
-		echo '<span class="button-primary" id="add-syn-link-button">' . esc_html__( 'Add', 'syndication-links' ) . '</span></br>';
-		echo '<p class="syndication_url_list"><label for="syndication_urls">';
-		esc_html_e( 'Add Links to this same content on other sites', 'syndication-links' );
+
+		$html  = '<div class="syndication_url_list">';
+		$html .= sprintf( '<label for="syndication_urls">%s</label>',
+			esc_html__( 'Add Links to this same content on other sites', 'syndication-links' )
+		);
+		$html .= '<ul>';
 		foreach ( $urls as $url ) {
-			echo '<input type="text" name="syndication_urls[]" class="widefat" id="syndication_urls" value="' . esc_url_raw( $url ) . '" /><br />';
+			$html .= sprintf( '<li><input type="text" name="syndication_urls[]" class="widefat" id="syndication_urls" value="%s" /></li>',
+				esc_url_raw( $url )
+			);
 		}
-		echo '</label></p>';
+		$html .= '</ul>';
+		$html .= sprintf( '<button class="button-primary" id="add-syn-link-button">%s</button>',
+			esc_html__( 'Add', 'syndication-links' )
+		);
+		$html .= '</div>';
+
+		print $html;
 	}
 
 	/* Save the meta box's metadata. */
