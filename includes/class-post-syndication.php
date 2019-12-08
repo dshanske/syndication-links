@@ -20,12 +20,13 @@ class Post_Syndication {
 		add_action( 'admin_init', array( $cls, 'admin_init' ) );
 
 		// Syndication Links POSSE/Syndication Options
+
 		register_setting(
 			'syndication_options',
-			'syndication_provider_disable',
+			'syndication_provider_enable',
 			array(
 				'type'         => 'string',
-				'description'  => 'Disable Display of these Providers',
+				'description'  => 'Enable Display of these Providers',
 				'show_in_rest' => true,
 				'default'      => array(),
 			)
@@ -46,8 +47,8 @@ class Post_Syndication {
 
 	public static function admin_init() {
 		add_settings_field(
-			'syndication_provider_disable',
-			__( 'Disable the Following Providers', 'syndication-links' ),
+			'syndication_provider_enable',
+			__( 'Enable the Following Providers', 'syndication-links' ),
 			array(
 				get_called_class(),
 				'provider_callback',
@@ -55,7 +56,7 @@ class Post_Syndication {
 			'links_options',
 			'syndication_posse_options',
 			array(
-				'name' => 'syndication_provider_disable',
+				'name' => 'syndication_provider_enable',
 			)
 		);
 
@@ -193,30 +194,32 @@ class Post_Syndication {
 
 	public static function provider_callback( $args ) {
 		$targets   = self::get_providers();
-		$blacklist = (array) get_option( 'syndication_provider_disable', array() );
+		$allowlist = (array) get_option( 'syndication_provider_enable', array() );
 		echo '<div>';
 		foreach ( $targets as $uid => $name ) {
 			if ( empty( $uid ) || empty( $name ) ) {
 				continue;
 			}
-			printf( '<p><input type="checkbox" name="syndication_provider_disable[]" id="%1$s" value="%1$s" %3$s /><label for="%1$s">%2$s</label></p>', esc_attr( $uid ), esc_html( $name ), checked( true, in_array( $uid, $blacklist, true ), false ) );
+			printf( '<p><input type="checkbox" name="syndication_provider_enable[]" id="%1$s" value="%1$s" %3$s /><label for="%1$s">%2$s</label></p>', esc_attr( $uid ), esc_html( $name ), checked( true, in_array( $uid, $allowlist, true ), false ) );
 			echo '</div>';
 		}
 	}
 
 	public static function checkboxes( $post_ID ) {
 		$targets   = self::get_providers();
-		$blacklist = get_option( 'syndication_provider_disable', array() );
-		if ( ! is_array( $blacklist ) ) {
-			$blacklist = array( $blacklist );
+		$allowlist = get_option( 'syndication_provider_enable', array() );
+		if ( ! is_array( $allowlist ) ) {
+			$allowlist = array();
 		}
 		if ( empty( $targets ) ) {
 			return __( 'No Syndication Targets Available', 'syndication-links' );
 		}
+
 		$string = '<ul>';
 		$meta   = get_post_meta( $post_ID, 'syndicate-to', true );
+
 		foreach ( $targets as $uid => $name ) {
-			if ( in_array( $uid, $blacklist, true ) ) {
+			if ( ! empty( $allowlist ) && ! in_array( $uid, $allowlist, true ) ) {
 				continue;
 			}
 			$string .= self::checkbox( $uid, $name, $post_ID );
