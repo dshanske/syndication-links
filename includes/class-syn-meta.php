@@ -399,7 +399,7 @@ class Syn_Meta {
 			if ( 'website' === $name ) {
 				$name = self::extract_domain_name( $url );
 			}
-			$syn = ( $r['icons'] ? $icon : '' ) . ( $r['text'] ? self::get_title( $name ) : '' );
+			$syn = ( $r['icons'] ? $icon : '' ) . ( $r['text'] ? Syn_Link_Domain_Icon_Map::get_title( $name ) : '' );
 
 			$links[] = sprintf( '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>', $name, $r['single-css'], esc_url( $url ), $rel, $syn );
 		}
