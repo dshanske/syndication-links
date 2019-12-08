@@ -17,11 +17,11 @@ abstract class Syndication_Provider {
 		$defaults  = array();
 		$defaults  = apply_filters( 'syn_provider_defaults', $defaults );
 		$r         = wp_parse_args( $args, $defaults );
-		$blacklist = get_option( 'syndication_provider_disable', array() );
-		if ( is_string( $blacklist ) && empty( $blacklist ) ) {
-			$blacklist = array();
+		$allowlist = get_option( 'syndication_provider_enable', array() );
+		if ( is_string( $allowlist ) && empty( $allowlist ) ) {
+			$allowlist = array();
 		}
-		if ( ! in_array( $this->uid, $blacklist, true ) ) {
+		if ( in_array( $this->uid, $allowlist, true ) ) {
 			add_filter( 'micropub_syndicate-to', array( $this, 'syndicate_to' ), 10, 2 );
 		}
 	}
