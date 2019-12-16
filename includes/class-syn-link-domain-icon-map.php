@@ -14,24 +14,25 @@ class Syn_Link_Domain_Icon_Map {
 		'podcasts.google.com' => 'googlepodcasts',
 		'podcasts.apple.com'  => 'applepodcasts',
 		'indieweb.xyz'        => 'info',
-		'news.indieweb.org'   => 'website',
 		'getpocket.com'       => 'pocket',
 		'flip.it'             => 'flipboard',
 		'micro.blog'          => 'micro-dot-blog',
 		'wordpress.org'       => 'wordpress',
+		'wordpress.com'       => 'wordpress',
 		'itunes.apple.com'    => 'applemusic',
 		'reading.am'          => 'book',
 
 	);
 
-	// Try to get the correct icon for the majority of sites by dropping
+	// Try to get the correct icon for the majority of sites
 	public static function split_domain( $string ) {
-		// Strip things we know we dont want. Not every TLD but the common ones in the fontset
-		$unwanted = array( '-', '.com', '.org', '.net', '.io', '.in', '.tv', '.fm', '.social' );
-		// Strip these
-		$string = str_replace( $unwanted, '', $string );
-		// Strip the dot if it is a TLD other than the above
-		$string = str_replace( '.', '', $string );
+		$explode = explode( '.', $string );
+		if ( 2 === count( $explode ) ) {
+			return $explode[0];
+		}
+		if ( 3 === count( $explode ) ) {
+			return $explode[1];
+		}
 		return $string;
 	}
 
@@ -80,7 +81,8 @@ class Syn_Link_Domain_Icon_Map {
 		if ( ( 'http' === $scheme ) || ( 'https' === $scheme ) ) {
 			$return = 'website'; // default for web links
 			$url    = strtolower( $url );
-			$domain = preg_replace( '/^([a-zA-Z0-9].*\.)?([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z.]{2,})$/', '$2', wp_parse_url( $url, PHP_URL_HOST ) );
+			$domain = wp_parse_url( $url, PHP_URL_HOST );
+
 			$domain = str_replace( 'www.', '', $domain ); // Always remove www
 
 			// If the domain is already on the pre-loaded list then use that
@@ -88,23 +90,34 @@ class Syn_Link_Domain_Icon_Map {
 				$return = self::$map[ $domain ];
 			} else {
 				// Remove extra info and try to map it to an icon
-				$strip   = self::split_domain( $domain );
-				$strings = array_keys( simpleicons_syn_get_names() );
-				if ( in_array( $strip, array_keys( $strings ), true ) ) {
+				$strip = self::split_domain( $domain );
+				if ( self::get_icon_filename( $strip ) ) {
 					$return = $strip;
-				} 				else if ( false !== stripos( $domain, 'wordpress' ) ) { // phpcs:ignore
+				} elseif ( self::get_icon_filename( str_replace( '.', '-dot-', $domain ) ) ) {
+					$return = str_replace( '.', '-dot-', $domain );
+				} elseif ( self::get_icon_filename( str_replace( '.', '', $domain ) ) ) {
+					$return = str_replace( '.', '', $domain );
+				} else if ( false !== stripos( $domain, 'wordpress' ) ) { // phpcs:ignore
 					// Anything with WordPress in the name that is not matched return WordPress
 					$return = 'wordpress'; // phpcs:ignore
+				} else if ( false !== stripos( $domain, 'read' ) ) { // phpcs:ignore
+					// Anything with read in the name that is not matched return a book
+					$return = 'book'; // phpcs:ignore
+				} else if ( false !== stripos( $domain, 'news' ) ) { // phpcs:ignore
+					// Anything with news in the name that is not matched return the summary icon
+					$return = 'summary'; // phpcs:ignore
 				} else {
 					// Some domains have the word app in them check for matches with that
 					$strip = str_replace( 'app', '', $strip );
-					if ( in_array( $strip, $strings, true ) ) {
+					if ( self::get_icon_filename( $strip ) ) {
 						$return = $strip;
 					}
 				}
 			}
 		}
-		return apply_filters( 'syn_link_mapping', $return, $url );
+		self::$map[ $domain ] = $return;
+		$return               = apply_filters( 'syn_link_mapping', $return, $url );
+		return $return;
 	}
 
 }
