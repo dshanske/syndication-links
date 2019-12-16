@@ -115,6 +115,7 @@ class Syn_Link_Domain_Icon_Map {
 				}
 			}
 		}
+		// Save the determined mapping into the map so that it will not have to look again on the same page load
 		self::$map[ $domain ] = $return;
 		$return               = apply_filters( 'syn_link_mapping', $return, $url );
 		return $return;

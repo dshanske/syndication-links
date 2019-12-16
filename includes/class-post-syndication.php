@@ -291,7 +291,7 @@ class Post_Syndication {
 		// If this property is set then trigger an action identical to the micropub action
 		if ( isset( $_POST['syndicate-to'] ) ) {
 			// Wait 15 seconds before posting to ensure the post is published
-			wp_schedule_single_event( time() + 60, 'syn_syndication', array( $post_id, $_POST['syndicate-to'] ) );
+			wp_schedule_single_event( time() + 15, 'syn_syndication', array( $post_id, $_POST['syndicate-to'] ) );
 		}
 	}
 
