@@ -142,33 +142,28 @@ class Syn_Meta {
 		if ( ! is_array( $urls ) ) {
 			return $urls;
 		}
-		$array = array_map( array( 'Syn_Meta', 'clean_url' ), $urls );
+		$array = array_map(
+			function( $string ) {
+				if ( is_array( $string ) ) {
+					return $string;
+				}
+				$url = trim( $string );
+				if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
+					return false;
+				}
+				// Rewrite these to https as needed
+				$secure = apply_filters( 'syn_rewrite_secure', array( 'facebook.com', 'twitter.com', 'huffduffer.com', 'foursquare.com' ) );
+				if ( in_array( self::extract_domain_name( $url ), $secure, true ) ) {
+					$url = preg_replace( '/^http:/i', 'https:', $url );
+				}
+				$url = esc_url_raw( $url );
+				return $url;
+			},
+			$urls
+		);
 		return array_filter( array_unique( $array ) );
 	}
 
-	/**
-	 * Filters a single syndication URL.
-	 *
-	 * @param string $string A string that is expected to be a syndication URL.
-	 * @return string|bool The filtered and escaped URL string, or FALSE if invalid.
-	 * @used-by clean_urls
-	 */
-	public static function clean_url( $string ) {
-		if ( is_array( $string ) ) {
-			return $string;
-		}
-		$url = trim( $string );
-		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			return false;
-		}
-		// Rewrite these to https as needed
-		$secure = apply_filters( 'syn_rewrite_secure', array( 'facebook.com', 'twitter.com', 'huffduffer.com', 'foursquare.com' ) );
-		if ( in_array( self::extract_domain_name( $url ), $secure, true ) ) {
-			$url = preg_replace( '/^http:/i', 'https:', $url );
-		}
-		$url = esc_url_raw( $url );
-		return $url;
-	}
 
 	/* Meta box setup function. */
 	public static function setup() {
@@ -477,13 +472,4 @@ class Syn_Meta {
 
 		return $textbefore . $before . join( $sep, $links ) . $after;
 	}
-
-	public static function get_post_syndication_links( $post_ID = null, $args = array() ) {
-		return get_syndication_links( $post_ID, $args );
-	}
-
-	public static function get_comment_syndication_links( $comment_id = null, $args = array() ) {
-		return get_syndication_links( get_comment( $comment_id ), $args );
-	}
-
 } // End Class
