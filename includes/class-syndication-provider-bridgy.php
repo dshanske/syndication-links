@@ -40,7 +40,7 @@ class Syndication_Provider_Bridgy extends Syndication_Provider_Webmention {
 	public static function admin_init() {
 		add_settings_section(
 			'bridgy_options',
-			__( 'Bridgy Publish  Options', 'syndication-links' ),
+			__( 'Bridgy Publish Options', 'syndication-links' ),
 			array( get_called_class(), 'options_callback' ),
 			'links_options'
 		);
