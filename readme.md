@@ -4,7 +4,7 @@
 **Requires at least:** 4.9  
 **Requires PHP:** 5.4  
 **Tested up to:** 5.3.2  
-**Stable tag:** 4.1.4  
+**Stable tag:** 4.2.0  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
