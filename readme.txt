@@ -153,7 +153,7 @@ In no particular order...
 
 == Changelog ==
 
-= Version 4.2.0 ( 2019-12-15 )
+= Version 4.2.0 ( 2019-12-15 ) =
 * Add support for Bridgy Mastodon ( props @CharlieRoseMarie )
 * Check for empty values ( props @glueckpress )
 * Enhance Syndication Metabox ( props @glueckpress )
@@ -164,56 +164,56 @@ In no particular order...
 * Add micro.blog POSSE support
 
 
-= Version 4.1.4 ( 2019-11-18 )
+= Version 4.1.4 ( 2019-11-18 ) =
 * Refresh icons
 * Fix icon association to news.indieweb.org
 
 
-= Version 4.1.3 ( 2019-07-01 )
+= Version 4.1.3 ( 2019-07-01 ) =
 * Fix issue with providers not loading because of name change in webmention plugin
 * Refresh icons
 
-= Version 4.1.2 ( 2019-05-12 )
+= Version 4.1.2 ( 2019-05-12 ) =
 * Update icon size to be relative
 * Reschedule syndication if post status is in future
 * Trigger edit post hook if syndication links are added to try to invalidate cache
 
-= Version 4.1.1 ( 2019-04-13 )
+= Version 4.1.1 ( 2019-04-13 ) =
 * Update icons
 * Fix minor typo
 * Attempt at cache busting
 
-= Version 4.1.0 ( 2019-02-09 )
+= Version 4.1.0 ( 2019-02-09 ) =
 * Switch to inline SVG over SVG sprites to reduce load size
 * Add ability to configure arbitrary webmention POSSE providers on the settings page
 
-= Version 4.0.5 ( 2019-01-05 )
+= Version 4.0.5 ( 2019-01-05 ) =
 * Fix minor bug introduced in customizer by original of widget
 
-= Version 4.0.4 ( 2018-12-29 ) 
+= Version 4.0.4 ( 2018-12-29 ) = 
 * Add setting to use the excerpt if set for Bridgy Publish to Twitter
 * Indienews(news.indieweb.org) will no longer be a bundled provider per request due spam issues
 * When automatically added to content wrap the links in an element for styling
 * Add function `get_original_of_form()` which creates a search for for the original of query which looks up posts by their syndication link
 * Added widget that calls new original of form function
 
-= Version 4.0.3 ( 2018-12-08 )
+= Version 4.0.3 ( 2018-12-08 ) =
 * Checks for 5.0 compatibility.
 
-= Version 4.0.2 ( 2018-11-05 )
+= Version 4.0.2 ( 2018-11-05 ) =
 * Fix PHP notice about incorrect setting
 * Restore Bridgy global settings options that were in the Bridgy plugin to disable the link back to the post and ignore whitespace
 
-= Version 4.0.1 ( 2018-11-03 )
+= Version 4.0.1 ( 2018-11-03 ) =
 * Fix issue with settings caused in previous version
 * Add base Bridgy class to store settings
 * Fix issue with display
 
-= Version 4.0.0 ( 2018-11-01 )
+= Version 4.0.0 ( 2018-11-01 ) =
 * Add support for syndicating posts using an interface to any arbitrary provider
 * include support for syndicating from Micropub to any arbitrary provider
 
-= Version 3.4.1 ( 2018-05-06 )
+= Version 3.4.1 ( 2018-05-06 ) = 
 * Refresh Simple Icons
 * Remove internationalization of icon names
 * Update development environment
@@ -222,7 +222,7 @@ In no particular order...
 * Add privacy policy and export data support for WordPress 4.9.6
 * Add privacy notice to readme
 
-= Version 3.4.0 ( 2018-03-03 )
+= Version 3.4.0 ( 2018-03-03 ) =
 * Updated Simple Icons to latest version
 * Switched Genericons Neue to a submodule as the svg version was not distributed in the npm package
 * Added support for Mastodon Auto Post per request. Unable to test due not using same
@@ -230,14 +230,14 @@ In no particular order...
 * Simplified saving of metadata
 * Changed Metabox to a dynamically generated array
 
-= Version 3.3.2 ( 2018-02-03 )
+= Version 3.3.2 ( 2018-02-03 ) =
 * Updated Simple Icons to latest version
 
-= Version 3.3.1 ( 2018-01-04 )
+= Version 3.3.1 ( 2018-01-04 ) =
 * Updated Simple Icons to latest version
 * Support for pulling data out for SNAP out of Post Meta without dependence on SNAP classes
 
-= Version 3.3.0 ( 2017-12-?? )
+= Version 3.3.0 ( 2017-12-?? ) =
 * Switched to Simple Icons as larger, updated, and maintained more frequently than Automattic's Social Icons repo
 * Added in the Genericon Neue pack for when there is no logo for a site with a series of generic icons
 * SVG Sprite only will be distributed instead of individual SVG files
@@ -249,7 +249,7 @@ In no particular order...
 * License information included for the plugin as well as dependencies
 * Again, automation automation automation
 
-= Version 3.2.4 ( 2017-11-23 )
+= Version 3.2.4 ( 2017-11-23 ) =
 * Changelog will now note a release date
 * Added/redid colors for many links
 
