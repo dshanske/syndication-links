@@ -3,7 +3,7 @@
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.9  
 **Requires PHP:** 5.4  
-**Tested up to:** 5.3  
+**Tested up to:** 5.3.2  
 **Stable tag:** 4.1.4  
 **License:** GPLv2 or later  
 
@@ -11,7 +11,7 @@ A simple way to link to copies of your [cross-posted](https://indieweb.org/cross
 
 ## Description ##
 
-It supports adding rel-syndication/u-syndication links to your posts, pages, and comments, indicating where a syndicated copy is. You can do this manually and some plugins support 
+It supports adding rel-syndication/u-syndication links to your WordPress posts, pages, and comments, indicating where a syndicated copy is. You can do this manually and some plugins support 
 automatically adding their links as well. The plugin contains a generic UI for syndicating to other sites through your site or a Micropub Client.
 
 ## Screenshots ##
@@ -70,8 +70,9 @@ The plugin supports automatically pulling data from plugins that syndicate your 
 
 Using the optional Syndication feature(disabled by default) you can syndicate your posts to:
 
-* [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, and Flickr
+* [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, Mastodon and Flickr
 * [Bridgy Fed](https://fed.brid.gy) - Bridgy Fed is a service that allows you to interact with federated social networks using webmentions.
+* [Micro.blog](https://micro.blog) - Micro.blog is a social network and publishing platform for independent microblogs, created by Manton Reece.
 * Custom Webmention Syndication - Add any site that supports publishing by sending a webmention by configuring it in the settings page
 
 Will be looking to integrate with other plugins to add more options and invite developers to add support if they wish as the interface is simple. 
@@ -114,6 +115,10 @@ Development and bug reports on this plugin is on Github at https://github.com/ds
 ###
 ## Upgrade Notice ##
 
+### Version 4.2.0 ###
+
+You will have to set up your enabled providers as this setting has changed
+
 ### Version 4.0.4 ###
 
 Support for Indienews is no longer bundled with this plugin due spam issues. Indienews is dedicated for Indieweb related news.
@@ -152,6 +157,17 @@ In no particular order...
 
 ## Changelog ##
 
+### Version 4.2.0 ( 2019-12-15 )
+* Add support for Bridgy Mastodon ( props @CharlieRoseMarie )
+* Check for empty values ( props @glueckpress )
+* Enhance Syndication Metabox ( props @glueckpress )
+* Refactor domain to icon mapping into separate class already there to map custom domains
+* Fix issue where PHPCS was rewriting wordpress to WordPress
+* Switch provider disable functionality to enable functionality
+* Redo domain to icon mapping logic
+* Add micro.blog POSSE support
+
+###
 ### Version 4.1.4 ( 2019-11-18 )
 * Refresh icons
 * Fix icon association to news.indieweb.org
