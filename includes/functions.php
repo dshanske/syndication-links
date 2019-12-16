@@ -1,15 +1,23 @@
 <?php
 
-function get_syndication_links( $meta_type, $object_id = null, $args = array() ) {
-	return Syn_Meta::get_syndication_links( $meta_type, $object_id, $args );
+function get_syndication_links( $object_id = null, $args = array() ) {
+	return Syn_Meta::get_syndication_links( $object_id, $args );
 }
 
 function get_post_syndication_links( $post_id = null, $args = array() ) {
-	return Syn_Meta::get_post_syndication_links( $post_id, $args );
+	$post = get_post( $post_id );
+	if ( $post ) {
+		return get_syndication_links( $post, $args );
+	}
+	return false;
 }
 
 function get_comment_syndication_links( $comment_id = null, $args = array() ) {
-	return Syn_Meta::get_comment_syndication_links( $comment_id, $args );
+	$comment = get_comment( $comment_id );
+	if ( $comment ) {
+		return get_syndication_links( $comment, $args );
+	}
+	return false;
 }
 
 function get_syndication_links_data( $object = null ) {
