@@ -57,6 +57,7 @@ abstract class Syndication_Provider {
 			'uid'     => $this->uid,
 			'service' => $this->service,
 			'user'    => $this->user,
+			'checked' => Post_Syndication::checked( $this->uid ),
 		);
 		return array_filter( $return );
 	}

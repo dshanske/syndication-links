@@ -205,6 +205,14 @@ class Post_Syndication {
 		}
 	}
 
+	public static function checked( $uid, $post_ID = 0 ) {
+		return apply_filters( 'syndication_link_checked', false, $uid, $post_ID );
+	}
+
+	public static function disabled( $uid, $post_ID = 0 ) {
+		return apply_filters( 'syndication_link_disabled', false, $uid, $post_ID );
+	}
+
 	public static function checkboxes( $post_ID ) {
 		$targets   = self::get_providers();
 		$allowlist = get_option( 'syndication_provider_enable', array() );
@@ -222,20 +230,24 @@ class Post_Syndication {
 			if ( ! empty( $allowlist ) && ! in_array( $uid, $allowlist, true ) ) {
 				continue;
 			}
-			$string .= self::checkbox( $uid, $name, $post_ID );
+			$checked  = self::checked( $uid, $post_ID );
+			$disabled = self::disabled( $uid, $post_ID );
+			$string  .= self::checkbox( $uid, $name, $checked, $disabled );
 		}
 		$string .= '</ul>';
 		return $string;
 	}
 
-	public static function checkbox( $uid, $name, $post_ID ) {
-		$checked = self::get_target( $post_ID, $uid );
+	public static function checkbox( $uid, $name, $checked = false, $disabled = false ) {
+		$properties   = array();
+		$properties[] = checked( $checked, true, false );
+		$properties[] = disabled( $disabled, true, false );
 		return sprintf(
 			'<li><input type="checkbox" name="syndicate-to[]" id="%1$s" value="%1$s" %3$s />
 			<label for="%1$s">%2$s</label></li>',
 			$uid,
 			$name,
-			checked( $uid, $checked, false )
+			implode( ' ', $properties )
 		);
 	}
 
@@ -245,9 +257,6 @@ class Post_Syndication {
 			$return[ $target->get_uid() ] = esc_html( $target->get_name() );
 		}
 		return $return;
-	}
-
-	public static function get_target( $post_ID ) {
 	}
 
 	public static function metabox( $object, $box ) {
