@@ -4,7 +4,7 @@
 **Requires at least:** 4.9  
 **Requires PHP:** 5.4  
 **Tested up to:** 5.3.2  
-**Stable tag:** 4.2.0  
+**Stable tag:** 4.2.1  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -108,6 +108,8 @@ originalofform.php in your theme folder the function will return it so you can c
 * `syn_network_strings( $strings )` - $strings is an array of descriptive text strings by domain name
 * `syn_add_links( $urls, $post_ID )` - $urls is an array of retrieved links from $post_ID
 * `syn_links_display_defaults( $defaults )` - Filter the defaults for displaying Syndication Links
+* `syndication_link_checked( $checked, $uid, $post_ID )` - Will check a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
+* `syndication_link_disabled( $disabled, $uid, $post_ID )` - Will disable the checkbox for a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
 
 ### How do I contribute or file bug reports?
 
@@ -156,6 +158,11 @@ In no particular order...
 9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
 
 ## Changelog ##
+
+### Version 4.2.1 ( 2019-12-21 ) ###
+* Fix escaping issue
+* Improve text for micro.blog syndication
+* Add filter to allow checkboxes to be disabled or checked or both
 
 ### Version 4.2.0 ( 2019-12-15 ) ###
 * Add support for Bridgy Mastodon ( props @CharlieRoseMarie )
