@@ -21,7 +21,7 @@ class Syn_Link_Domain_Icon_Map {
 		'wordpress.com'       => 'wordpress',
 		'itunes.apple.com'    => 'applemusic',
 		'reading.am'          => 'book',
-
+		'blogspot.com'        => 'blogger',
 	);
 
 	// Try to get the correct icon for the majority of sites
