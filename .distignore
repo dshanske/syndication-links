@@ -1,7 +1,13 @@
-sass
+/.wordpress-org
+/.git
+/.github
+/node_modules
+/bin
+/sass
+/vendor
+/test
+.eslintrc.js
 readme.md
-tests
-bin
 package.json
 composer.json
 composer.lock
@@ -12,8 +18,5 @@ phpcs.xml
 README.md
 readme.md
 .travis.yml
-genericons-neue
-vendor
-css/*.map
-node_modules
-simpleicons.js
+.distignore
+.gitignore
