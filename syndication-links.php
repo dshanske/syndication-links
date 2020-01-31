@@ -35,6 +35,7 @@ function syndication_links_init() {
 			'class-social-plugins.php', // Social Plugin Add-Ons
 			'functions.php', // Global Functions
 			'class-original-of-widget.php', // Original Of Widget
+			'compatibility.php', // Compatibility with other POSSE plugins.
 		)
 	);
 	if ( 1 === intval( get_option( 'syndication_posse_enable', 0 ) ) ) {
