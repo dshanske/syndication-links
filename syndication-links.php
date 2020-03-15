@@ -54,6 +54,7 @@ function syndication_links_init() {
 					'class-syndication-provider-bridgy-github.php', // Github via Bridgy
 					'class-syndication-provider-bridgy-flickr.php', // Flickr via Bridgy
 					'class-syndication-provider-bridgy-mastodon.php', // Mastodon via Bridgy
+					'class-syndication-provider-bridgy-meetup.php', // Meetup via Bridgy
 					'class-syndication-provider-bridgy-fed.php', // Bridgy Fed
 					'class-syndication-provider-microdotblog.php', // Micro.blog
 				)
