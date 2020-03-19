@@ -1,17 +1,18 @@
-# Copyright (C) 2019 David Shanske
+# Copyright (C) 2020 David Shanske
 # This file is distributed under the same license as the Syndication Links package.
 msgid ""
 msgstr ""
 "Project-Id-Version: Syndication Links 4.2.1\n"
-"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/syndication-links\n"
-"POT-Creation-Date: 2019-12-23 00:44:09+00:00\n"
+"Report-Msgid-Bugs-To: "
+"https://wordpress.org/support/plugin/syndication-links\n"
+"POT-Creation-Date: 2020-03-19 02:43:35+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2019-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2020-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"X-Generator: grunt-wp-i18n 0.4.9\n"
+"X-Generator: grunt-wp-i18n 1.0.3\n"
 
 #: includes/class-original-of-widget.php:16
 msgid "Original Of"
@@ -201,6 +202,10 @@ msgstr ""
 msgid "Tell Bridgy to Use Post Excerpt for Toots if set"
 msgstr ""
 
+#: includes/class-syndication-provider-bridgy-meetup.php:6
+msgid "Meetup via Bridgy"
+msgstr ""
+
 #: includes/class-syndication-provider-bridgy-twitter.php:6
 msgid "Twitter via Bridgy"
 msgstr ""
@@ -264,7 +269,7 @@ msgstr ""
 msgid "Unknown %1$s Error"
 msgstr ""
 
-#: syndication-links.php:70
+#: syndication-links.php:71
 msgid ""
 "Syndication Links, which are links to the same content on other sites, may "
 "be displayed on comments, but only if supplied by the submitter or if your "
