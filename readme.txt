@@ -4,15 +4,15 @@ Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Requires at least: 4.9
 Requires PHP: 5.4
 Tested up to: 5.3.2
-Stable tag: 4.2.1
+Stable tag: 4.2.2
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
 
 == Description == 
 
-It supports adding rel-syndication/u-syndication links to your WordPress posts, pages, and comments, indicating where a syndicated copy is. You can do this manually and some plugins support 
-automatically adding their links as well. The plugin contains a generic UI for syndicating to other sites through your site or a Micropub Client.
+It supports adding rel-syndication/u-syndication links to your WordPress posts, pages, and comments, indicating where a syndicated copy is, in the form of a text or icon link. You can do this 
+manually and some plugins support automatically adding their links as well. The plugin contains a generic UI for syndicating to other sites through your site or a Micropub Client.
 
 == Screenshots ==
 
@@ -30,8 +30,8 @@ Or install through the WordPress Plugin Directory.
 
 This plugin stores syndication links, which can be attached to any post, page, or comment. They can be added to custom post types by filter. 
 
-For webmention initiated comments, this information
-will be added by parsing the source of the webmention. It is assumed if you send a webmention, you consent to share this information if it is publicly shared on your page. Our recommendation
+For webmention initiated comments, this information will be added by parsing the source of the webmention. 
+It is assumed if you send a webmention, you consent to share this information if it is publicly shared on your page. Our recommendation
 is that site owners should take down information on request. 
 
 For comments initiated on the site, there is built-in way to add these links. For posts, they are typically added by retrieving information stored by other plugins for display. It is assumed
@@ -59,14 +59,13 @@ The settings include the following options as follows with either a set of butto
 The plugin supports automatically pulling data from plugins that syndicate your content so you don't need to do it manually. For anything not built in, integation is easy with a simple filter for potential use with any other plugin.
 
 * [Social Networks Autoposter](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) - Syndication Links supports Twitter, Facebook, and Tumblr since version 1.0.0
-* [Medium](https://wordpress.org/plugins/medium/) - Syndication Links supports since version 3.0.5
 * [Tumblr Crosspostr](https://wordpress.org/plugins/tumblr-crosspostr) - Supports Syndication Links since version 0.8.1
 * [WordPress Crossposter](https://wordpress.org/plugins/wp-crosspost) - Supports Syndication Links since version 0.3.2
 * [Diaposter](https://wordpress.org/plugins/diasposter/) - Supports Syndication Links since version 0.1.8
 
 Using the optional Syndication feature(disabled by default) you can syndicate your posts to:
 
-* [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, Mastodon and Flickr
+* [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, MeetUp.com, Mastodon and Flickr
 * [Bridgy Fed](https://fed.brid.gy) - Bridgy Fed is a service that allows you to interact with federated social networks using webmentions.
 * [Micro.blog](https://micro.blog) - Micro.blog is a social network and publishing platform for independent microblogs, created by Manton Reece.
 * Custom Webmention Syndication - Add any site that supports publishing by sending a webmention by configuring it in the settings page
@@ -154,6 +153,11 @@ In no particular order...
 9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.2.2 ( 2020-03-26 ) =
+* Add support for Meetup via Bridgy, props @ngm
+* Dependency and icon updates
+* Code organization cleanup, props @tw2113 and @asuh
 
 = Version 4.2.1 ( 2019-12-21 ) = 
 * Fix escaping issue
