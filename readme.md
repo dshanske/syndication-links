@@ -65,7 +65,7 @@ The plugin supports automatically pulling data from plugins that syndicate your 
 * [Social Networks Autoposter](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) - Syndication Links supports Twitter, Facebook, and Tumblr since version 1.0.0
 * [Tumblr Crosspostr](https://wordpress.org/plugins/tumblr-crosspostr) - Supports Syndication Links since version 0.8.1
 * [WordPress Crossposter](https://wordpress.org/plugins/wp-crosspost) - Supports Syndication Links since version 0.3.2
-* [Diaposter](https://wordpress.org/plugins/diasposter/) - Supports Syndication Links since version 0.1.8
+* [Diasposter](https://wordpress.org/plugins/diasposter/) - Supports Syndication Links since version 0.1.8
 
 Using the optional Syndication feature(disabled by default) you can syndicate your posts to:
 
