@@ -151,7 +151,7 @@ class Social_Plugins {
 		return $broadcasts;
 	}
 
-	function wptotwitter_to_syn_links( $connection, $id ) {
+	public static function wptotwitter_to_syn_links( $connection, $id ) {
 		// If someone is doing a a credentials check to twitter, we won't have an ID.
 		if ( false === $id ) {
 			return;
