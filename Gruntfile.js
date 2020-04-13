@@ -2,6 +2,14 @@ module.exports = function (grunt) {
 	// Project configuration.
 	grunt.initConfig(
 		{
+		       eslint: {
+		       	 options: {
+			    		fix: true
+				   },
+			 synlinks: {
+					src: ['js/synlinks.js' ]
+			 }
+			},
 			execute              : {
 				target: {
 					src: ['simpleicons.js']
@@ -80,30 +88,17 @@ module.exports = function (grunt) {
 						'css/syn-bw-large.min.css' : 'sass/main-bw-large.scss',
 					}
 				}
-			},
-
-			makepot: {
-				target: {
-					options: {
-						mainFile       : 'syndication-links.php', // Main project file.
-						domainPath     : '/languages', // Where to save the POT file.
-						potFilename    : 'syndication-links.pot',
-						exclude        : ['build/.*'],
-						type           : 'wp-plugin', // Type of project (wp-plugin or wp-theme).
-						updateTimestamp: true // Whether the POT-Creation-Date should be updated without other changes.
-					}
-				}
 			}
 		}
 	);
 
 	grunt.loadNpmTasks( 'grunt-wp-readme-to-markdown' );
-	grunt.loadNpmTasks( 'grunt-wp-i18n' );
 	grunt.loadNpmTasks( 'grunt-contrib-sass' );
+	grunt.loadNpmTasks( 'grunt-eslint' );
 	grunt.loadNpmTasks( 'grunt-checktextdomain' );
 	grunt.loadNpmTasks( 'grunt-execute' );
 	grunt.loadNpmTasks( 'grunt-contrib-copy' );
 
 	// Default task(s).
-	grunt.registerTask( 'default', ['wp_readme_to_markdown', 'makepot', 'copy', 'sass', 'checktextdomain'] );
+	grunt.registerTask( 'default', ['wp_readme_to_markdown', 'eslint', 'copy', 'sass', 'checktextdomain'] );
 };

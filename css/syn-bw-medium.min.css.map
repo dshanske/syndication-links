@@ -1,7 +1,1 @@
-{
-"version": 3,
-"mappings": "AAAA,SAAU,CACT,OAAO,CAAE,YAAY,CACrB,eAAe,CAAE,IAAI,CACrB,MAAM,CAAE,CAAC,CACT,OAAO,CAAE,GAAG,CACV,YAAG,CACJ,OAAO,CAAE,YAAY,CACrB,aAAa,CAAE,GAAG,CAClB,SAAS,CAAE,IAAI,CAKhB,aAAI,CACH,IAAI,CAAE,YAAY,CAClB,cAAc,CAAE,MAAM,CACtB,GAAG,CAAE,SAAS,CACd,oBAAO,CACN,MAAM,CAAE,eAAe,CAOxB,kBAAU,CACT,eAAe,CAAE,IAAI,CCxBvB,gBAAI,CACH,MAAM,CAAE,MAAM,CACd,KAAK,CAAE,MAAM,CCJf,aAAc,CACZ,UAAU,CAAE,IAAI,CAChB,iBAAI,CACL,OAAO,CAAE,MAAM,CAIhB,aAAc,CACb,SAAS,CAAE,IAAI,CACf,UAAU,CAAE,IAAI",
-"sources": ["../sass/_links.scss","../sass/_links-medium.scss","../sass/_widgets.scss"],
-"names": [],
-"file": "syn-bw-medium.min.css"
-}
+{"version":3,"sourceRoot":"","sources":["../sass/_links.scss","../sass/_links-medium.scss","../sass/_widgets.scss"],"names":[],"mappings":"AAAA,UACC,qBACA,qBACA,SACA,YACE,aACD,qBACA,kBACA,eAKD,cACC,kBACA,sBACA,cACA,qBACC,uBAOD,mBACC,qBCxBF,iBACC,cACA,aCJF,cACE,gBACA,kBACD,eAID,cACC,eACA","file":"syn-bw-medium.min.css"}
