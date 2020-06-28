@@ -6,6 +6,7 @@ class Social_Plugins {
 	public static function init() {
 		add_filter( 'syn_add_links', array( 'Social_Plugins', 'add_syn_plugins' ) );
 		add_filter( 'syn_links_url_to_name', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
+		add_action( 'wpt_tweet_posted', array( 'Social_Plugins', 'wptotwitter_to_syn_links' ), 10, 2 );
 	}
 
 	public static function url_to_name_plugins( $name, $url ) {
@@ -148,6 +149,21 @@ class Social_Plugins {
 			}
 		}
 		return $broadcasts;
+	}
+
+	public static function wptotwitter_to_syn_links( $connection, $id ) {
+		// If someone is doing a a credentials check to twitter, we won't have an ID.
+		if ( false === $id ) {
+			return;
+		}
+
+		$url = sprintf(
+			'https://twitter.com/%s/status/%s',
+			$connection->body->user->screen_name,
+			$connection->body->id_str
+		);
+
+		Syn_Meta::add_syndication_link( $id, $url );
 	}
 
 } // End Class
