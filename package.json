@@ -12,7 +12,7 @@
     "grunt-eslint": "^22.0.0",
     "grunt-execute": ">=0.2.2",
     "grunt-wp-readme-to-markdown": "^2.0.1",
-    "jshint": ">=2.9.5",
-    "simple-icons": "^2.7.0"
+    "jshint": "^2.11.1",
+    "simple-icons": "^2.19.0"
   }
 }
