@@ -3,8 +3,8 @@ Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Requires at least: 4.9
 Requires PHP: 5.4
-Tested up to: 5.3.2
-Stable tag: 4.2.2
+Tested up to: 5.4.2
+Stable tag: 4.2.3
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -61,7 +61,8 @@ The plugin supports automatically pulling data from plugins that syndicate your 
 * [Social Networks Autoposter](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/) - Syndication Links supports Twitter, Facebook, and Tumblr since version 1.0.0
 * [Tumblr Crosspostr](https://wordpress.org/plugins/tumblr-crosspostr) - Supports Syndication Links since version 0.8.1
 * [WordPress Crossposter](https://wordpress.org/plugins/wp-crosspost) - Supports Syndication Links since version 0.3.2
-* [Diaposter](https://wordpress.org/plugins/diasposter/) - Supports Syndication Links since version 0.1.8
+* [Diasposter](https://wordpress.org/plugins/diasposter/) - Supports Syndication Links since version 0.1.8
+* [WP-To_Twitter](https://wordpress.org/plugins/wp-to-twitter/) - Supported by the plugin since version 4.2.3
 
 Using the optional Syndication feature(disabled by default) you can syndicate your posts to:
 
@@ -153,6 +154,12 @@ In no particular order...
 9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.2.3 ( 2020-06-28 ) =
+* Add support for Reddit Via Bridgy
+* Dependency and icon updates
+* Add support for importing links from WP-To-Twitter ( props @tw2113)
+* Removal of master branch in favor of trunk branch.
 
 = Version 4.2.2 ( 2020-03-26 ) =
 * Add support for Meetup via Bridgy, props @ngm
