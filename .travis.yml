@@ -7,6 +7,13 @@ dist: xenial
 # @link https://about.travis-ci.org/docs/user/languages/php/
 language: php
 
+services:   
+  - mysql
+
+branches:   
+  only:
+    - trunk
+
 cache:
   directories:
     - vendor
