@@ -29,12 +29,12 @@
   },
   "prefer-stable": true,
   "scripts": {
-    "lint:phpcpd": "./vendor/bin/phpcpd --fuzzy --exclude .git --exclude vendor --exclude node_modules .",
+    "lint:phpcpd": "./vendor/bin/phpcpd --fuzzy --exclude .git --exclude vendor --exclude tests --exclude node_modules .",
     "lint:wpcs": "./vendor/bin/phpcs",
     "lint:wpcs-fix": "./vendor/bin/phpcbf",
     "make-pot": "./vendor/bin/wp i18n make-pot . languages/syndication-links.pot",
     "lint:php": "@php ./vendor/bin/parallel-lint --exclude .git --exclude vendor --exclude node_modules .",
-    "lint": "phpcs",
+    "lint": "./vendor/bin/phpcs -p",
     "install-codestandards": [
       "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
     ]

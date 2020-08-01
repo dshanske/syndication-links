@@ -8,26 +8,47 @@ dist: trusty
 # @link https://about.travis-ci.org/docs/user/languages/php/
 language: php
 
-# Declare versions of PHP to use. Use one decimal max.
-# @link https://docs.travis-ci.com/user/build-configuration/
-matrix:
-  fast_finish: true
-
-  include:
- #  - php: 5.4
- #   env: WP_VERSION=4.9.9 WP_MULTISITE=0
-    # WordPress 5.2 removes support for WordPress 5.4. Testing for 4.9.9 as many people did not move to 5.0 due Gutenberg concerns
-  - php: 5.6
-  - php: 7.0
-  - php: 7.2
-  - php: 7.3
-    env: WP_TRAVISCI=travis:phpcs
-  - php: 7.4
-
 cache:
   directories:
     - vendor
     - $HOME/.composer/cache
+
+# Receive notifications for build results.
+# @link https://docs.travis-ci.com/user/notifications/#Email-notifications
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+
+env:
+  matrix:
+    - WP_VERSION=latest WP_MULTISITE=0
+      global:
+     - WP_TRAVISCI=travis:phpunit
+php:
+  - 5.6
+  - 7.0
+  - 7.2
+  - 7.3
+  - 7.4
+
+jobs:
+  include:
+  - stage: lint
+    php: 7.4
+    script:
+      - composer install
+      - composer lint
+  - stage: previousversion
+    php: 7.4
+    env: WP_VERSION=5.3 WP_MULTISITE=0
+  - stage: oldestsupport
+    php: 5.6
+    env: WP_VERSION=4.9.9 WP_MULTISITE=0
+    # WordPress 5.2 removes support for WordPress 5.4. Testing for 4.9.9 as many people did not move to 5.0 due Gutenberg concerns
+  - stage: multisite
+    php: 7.4
+    env: WP_VERSION=latest WP_MULTISITE=1
 
 # Use this to prepare the system to install prerequisites or dependencies.
 # e.g. sudo apt-get update.
@@ -56,7 +77,11 @@ before_script:
   # Install the specified version of PHPUnit depending on the PHP version:
   if [[ "$WP_TRAVISCI" == "travis:phpunit" ]]; then
     case "$TRAVIS_PHP_VERSION" in
-      7.4|7.3|7.2|7.1|7.0|nightly)
+      7.4|7.3|7.2|7.1|nightly)
+        echo "Using PHPUnit 7.x"
+        composer global require "phpunit/phpunit:^7"
+        ;;
+      7.0)
         echo "Using PHPUnit 6.x"
         composer global require "phpunit/phpunit:^6"
         ;;
@@ -73,9 +98,6 @@ before_script:
         exit 1
         ;;
     esac
-  fi
-  if [[ "$WP_TRAVISCI" == "travis:phpcs" ]] ; then
-      composer install
   fi
 
 - mysql --version
@@ -107,18 +129,3 @@ script:
       ./bin/test.sh
     fi
   - |
-    if [[ "$WP_TRAVISCI" == "travis:phpcs" ]] ; then
-      ./vendor/bin/phpcs -p -s -v -n --standard=./phpcs.xml --extensions=php
-    fi
-
-env:
-  matrix:
-  - WP_VERSION=latest WP_MULTISITE=0
-  global:
-  - WP_TRAVISCI=travis:phpunit
-# Receive notifications for build results.
-# @link https://docs.travis-ci.com/user/notifications/#Email-notifications
-notifications:
-  email:
-    on_success: never
-    on_failure: change
