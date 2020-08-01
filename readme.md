@@ -1,8 +1,8 @@
 # Syndication Links #
 **Contributors:** [dshanske](https://profiles.wordpress.org/dshanske)  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
-**Requires at least:** 4.9  
-**Requires PHP:** 5.4  
+**Requires at least:** 4.9.9  
+**Requires PHP:** 5.6  
 **Tested up to:** 5.4.2  
 **Stable tag:** 4.2.3  
 **License:** GPLv2 or later  
