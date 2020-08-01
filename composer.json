@@ -34,7 +34,7 @@
     "lint:wpcs-fix": "./vendor/bin/phpcbf",
     "make-pot": "./vendor/bin/wp i18n make-pot . languages/syndication-links.pot",
     "lint:php": "@php ./vendor/bin/parallel-lint --exclude .git --exclude vendor --exclude node_modules .",
-    "lint": "./vendor/bin/phpcs -p",
+    "lint": "./vendor/bin/phpcs -q -n",
     "install-codestandards": [
       "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
     ]
