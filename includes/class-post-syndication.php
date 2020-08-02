@@ -114,6 +114,9 @@ class Post_Syndication {
 		if ( $current < $time ) {
 			wp_schedule_single_event( $time + 60, 'syn_syndication', array( $post_ID, $syndicate_to ) );
 			return;
+		} elseif ( ( $current - $time ) > 300 ) {
+			// If it is more than 5 minutes in the past, do not try to publish it.
+			return;
 		}
 
 		$targets = static::$targets;
