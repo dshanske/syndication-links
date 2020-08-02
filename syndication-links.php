@@ -34,6 +34,7 @@ function syndication_links_init() {
 			'class-syn-config.php', // Configuration Options
 			'class-social-plugins.php', // Social Plugin Add-Ons
 			'functions.php', // Global Functions
+			'compat-functions.php', // Compat Functions
 			'class-original-of-widget.php', // Original Of Widget
 		)
 	);

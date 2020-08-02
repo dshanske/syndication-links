@@ -102,17 +102,20 @@ class Post_Syndication {
 		if ( ! $post ) {
 			return;
 		}
+		$current = time();
+		$time    = get_post_timestamp( $post );
+
+		// Ensure this will not fire if the status is not publish or future.
+		if ( ! array_key_exists( $post->post_status, array( 'publish', 'future' ) ) ) {
+			return;
+		}
+
 		// If post is scheduled then reschedule the event
-		if ( 'future' === $post->post_status ) {
-			$time = get_post_time( 'U', true, $post_ID );
+		if ( $current < $time ) {
 			wp_schedule_single_event( $time + 60, 'syn_syndication', array( $post_ID, $syndicate_to ) );
 			return;
 		}
 
-		// Ensure this will not fire if the status is not publish
-		if ( 'publish' !== $post->post_status ) {
-			return;
-		}
 		$targets = static::$targets;
 		if ( empty( $targets ) || ! is_array( $targets ) ) {
 			return;
