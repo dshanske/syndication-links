@@ -5,9 +5,10 @@ add_action( 'init', array( 'Syn_Meta', 'init' ) );
 // The Syn_Meta class sets up post meta boxes for data associated with Syndication
 class Syn_Meta {
 	public static function init() {
-		add_action( 'admin_init', array( 'Syn_Meta', 'setup' ) );
-		add_action( 'save_post', array( 'Syn_Meta', 'save_post_meta' ) );
-		add_action( 'edit_comment', array( 'Syn_Meta', 'save_comment_meta' ) );
+		$cls = get_called_class();
+		add_action( 'admin_init', array( $cls, 'setup' ) );
+		add_action( 'save_post', array( $cls, 'save_post_meta' ) );
+		add_action( 'edit_comment', array( $cls, 'save_comment_meta' ) );
 		$args = array(
 			'type'         => 'string',
 			'description'  => 'Syndication URLs',
@@ -15,16 +16,17 @@ class Syn_Meta {
 			'show_in_rest' => true,
 		);
 		register_meta( 'post', 'mf2_syndication', $args );
-		add_filter( 'query_vars', array( 'Syn_Meta', 'query_var' ) );
-		add_action( 'parse_query', array( 'Syn_Meta', 'parse_query' ) );
+		add_filter( 'query_vars', array( $cls, 'query_var' ) );
+		add_action( 'parse_query', array( $cls, 'parse_query' ) );
+		add_action( 'pre_get_posts', array( $cls, 'syndication_filter_query' ) );
 
-		add_filter( 'wp_privacy_personal_data_exporters', array( 'Syn_Meta', 'wp_privacy_personal_data_exporters' ), 10 );
+		add_filter( 'wp_privacy_personal_data_exporters', array( $cls, 'wp_privacy_personal_data_exporters' ), 10 );
 	}
 
 	public static function wp_privacy_personal_data_exporters( $exporters ) {
 		$exporters['syndication-links'] = array(
 			'exporter_friendly_name' => __( 'Syndication Links Plugin', 'syndication-links' ),
-			'callback'               => array( 'Syn_Meta', 'data_exporter' ),
+			'callback'               => array( $cls, 'data_exporter' ),
 		);
 		return $exporters;
 	}
@@ -74,10 +76,6 @@ class Syn_Meta {
 		);
 	}
 
-
-
-
-
 	public static function screens() {
 		$screens = array( 'post', 'page', 'comment', 'indieweb_page_syndication_links' );
 		return apply_filters( 'syn_metabox_types', $screens );
@@ -99,35 +97,68 @@ class Syn_Meta {
 
 	public static function query_var( $vars ) {
 		$vars[] = 'original-of';
-			return $vars;
+		$vars[] = 'syndication';
+		return $vars;
 	}
 
 	public static function parse_query( $wp ) {
-		if ( ! array_key_exists( 'original-of', $wp->query_vars ) ) {
-			return;
-		}
-		$url = $wp->get( 'original-of' );
-		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-			include get_404_template();
+		if ( array_key_exists( 'original-of', $wp->query_vars ) ) {
+			$url = $wp->get( 'original-of' );
+			if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
+				include get_404_template();
+				exit;
+			}
+			$url   = esc_url_raw( $url );
+			$args  = array(
+				'fields'     => 'ids',
+				'meta_key'   => 'mf2_syndication',
+				'meta_query' => array(
+					'key'     => 'mf2_syndication',
+					'value'   => $url,
+					'compare' => 'LIKE',
+				),
+			);
+			$posts = get_posts( $args );
+			if ( empty( $posts ) ) {
+				include get_404_template();
+				exit;
+			}
+			wp_safe_redirect( get_permalink( $posts[0] ) );
 			exit;
 		}
-		$url   = esc_url_raw( $url );
-		$args  = array(
-			'fields'     => 'ids',
-			'meta_key'   => 'mf2_syndication',
-			'meta_query' => array(
+	}
+
+
+	/**
+	 * Filter the query for syndications.
+	 *
+	 * @access public
+	 *
+	 * @param $query
+	 */
+	public static function syndication_filter_query( $query ) {
+		// check if the user is requesting an admin page
+		if ( is_admin() ) {
+			return;
+		}
+		$search = get_query_var( 'syndication' );
+
+		// If a URL, match the domain
+		if ( wp_http_validate_url( $search ) ) {
+			$search = wp_parse_url( $search, PHP_URL_HOST );
+		}
+
+		if ( empty( $search ) ) {
+			return;
+		}
+		$meta_query = array(
+			array(
 				'key'     => 'mf2_syndication',
-				'value'   => $url,
+				'value'   => $search,
 				'compare' => 'LIKE',
 			),
 		);
-		$posts = get_posts( $args );
-		if ( empty( $posts ) ) {
-			include get_404_template();
-			exit;
-		}
-		wp_safe_redirect( get_permalink( $posts[0] ) );
-		exit;
+		$query->set( 'meta_query', $meta_query );
 	}
 
 
