@@ -4,7 +4,7 @@ Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Requires at least: 4.9.9
 Requires PHP: 5.6
 Tested up to: 5.4.2
-Stable tag: 4.2.3
+Stable tag: 4.2.4
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -154,6 +154,10 @@ In no particular order...
 9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.2.4 ( 2020-08-01 ) =
+* Change how to decide to postpone syndication if post is scheduled as publish status can be in the future
+* Add ?syndication query variable to allow for filtering archives by syndication link type
 
 = Version 4.2.3 ( 2020-06-28 ) =
 * Add support for Reddit Via Bridgy
