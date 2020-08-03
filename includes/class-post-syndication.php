@@ -13,8 +13,10 @@ class Post_Syndication {
 		// Add meta box to new post/post pages only
 		add_action( 'load-post.php', array( $cls, 'metabox_setup' ) );
 		add_action( 'load-post-new.php', array( $cls, 'metabox_setup' ) );
-
-		add_action( 'save_post', array( $cls, 'save_post' ), 8, 3 );
+		add_action( 'do_pings', array( $cls, 'do_pings' ), 9, 2 );
+		foreach ( self::syndication_publish_post_types() as $type ) {
+			add_action( 'publish_' . $type, array( $cls, 'publish_post' ), 8, 2 );
+		}
 		add_action( 'micropub_syndication', array( $cls, 'syndication' ), 10, 2 );
 		add_action( 'syn_syndication', array( $cls, 'syndication' ), 10, 2 );
 		add_action( 'admin_init', array( $cls, 'admin_init' ) );
@@ -95,6 +97,26 @@ class Post_Syndication {
 		return false;
 	}
 
+	public static function do_pings() {
+		$syndicate = get_posts(
+			array(
+				'meta_key' => '_syndicate-to',
+				'fields'   => 'ids',
+				'nopaging' => true,
+			)
+		);
+
+		if ( empty( $syndicate ) ) {
+			return;
+		}
+
+		foreach ( $syndicate as $target ) {
+			// Send Syndications
+			self::syndication( $target, get_post_meta( $target, '_syndicate-to', true ) );
+			delete_post_meta( $target, '_syndicate-to' );
+		}
+	}
+
 	/* Syndicate To is an Array of UIDS */
 	public static function syndication( $post_ID, $syndicate_to ) {
 		$post = get_post( $post_ID );
@@ -102,20 +124,19 @@ class Post_Syndication {
 		if ( ! $post ) {
 			return;
 		}
-		$current = time();
-		$time    = get_post_timestamp( $post );
 
-		// Ensure this will not fire if the status is not publish or future.
-		if ( ! array_key_exists( $post->post_status, array( 'publish', 'future' ) ) ) {
-			return;
+		$timestamp = get_post_timestamp( $post_ID );
+		$current   = time();
+		$diff      = $current - $timestamp;
+
+		// If it is for later then schedule it for later.
+		if ( $diff < 0 ) {
+			wp_schedule_single_event( $timestamp, 'syn_syndication', array( $post_ID, $syndicate_to ) );
 		}
 
-		// If post is scheduled then reschedule the event
-		if ( $current < $time ) {
-			wp_schedule_single_event( $time + 60, 'syn_syndication', array( $post_ID, $syndicate_to ) );
-			return;
-		} elseif ( ( $current - $time ) > 300 ) {
-			// If it is more than 5 minutes in the past, do not try to publish it.
+		// Reject this
+		if ( $diff > DAY_IN_SECONDS ) {
+			error_log( sprintf( 'Post is %1$s days old - no syndication', $diff / DAY_IN_SECONDS ) ); // phpcs:ignore
 			return;
 		}
 
@@ -123,6 +144,7 @@ class Post_Syndication {
 		if ( empty( $targets ) || ! is_array( $targets ) ) {
 			return;
 		}
+
 		foreach ( $targets as $target ) {
 			if ( ! $target instanceof Syndication_Provider ) {
 				continue;
@@ -142,13 +164,17 @@ class Post_Syndication {
 		add_action( 'add_meta_boxes', array( get_called_class(), 'add_postmeta_boxes' ) );
 	}
 
+	public static function syndication_publish_post_types() {
+		return apply_filters( 'syndication_publish_post_types', array( 'post', 'page' ) );
+	}
+
 	/* Create one or more meta boxes to be displayed on the post editor screen. */
 	public static function add_postmeta_boxes() {
 		add_meta_box(
 			'syndicationbox-meta',      // Unique ID
 			esc_html__( 'Syndicate To', 'syndication-links' ),    // Title
 			array( get_called_class(), 'metabox' ),   // Callback function
-			apply_filters( 'syndication_publish_post_types', array( 'post', 'page' ) ),         // Admin page (or post type)
+			self::syndication_publish_post_types(),         // Admin page (or post type)
 			'side',         // Context
 			'default',      // Priority
 			array(
@@ -272,10 +298,10 @@ class Post_Syndication {
 	}
 
 	/* Save the meta box's post metadata. */
-	public static function save_post( $post_id, $post, $update ) {
+	public static function publish_post( $post_id ) {
 		/*
 		 * We need to verify this came from our screen and with proper authorization,
-		 * because the save_post action can be triggered at other times.
+		 * because the publish_post action can be triggered at other times.
 		 */
 		// Check if our nonce is set.
 		if ( ! isset( $_POST['synto_metabox_nonce'] ) ) {
@@ -303,10 +329,10 @@ class Post_Syndication {
 			}
 		}
 
-		// If this property is set then trigger an action identical to the micropub action
+		// If this property is set then set to
 		if ( isset( $_POST['syndicate-to'] ) ) {
 			// Wait 15 seconds before posting to ensure the post is published
-			wp_schedule_single_event( time() + 15, 'syn_syndication', array( $post_id, $_POST['syndicate-to'] ) );
+			add_post_meta( $post_id, '_syndicate-to', $_POST['syndicate-to'], true );
 		}
 	}
 

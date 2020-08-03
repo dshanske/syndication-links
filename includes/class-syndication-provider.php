@@ -1,9 +1,44 @@
 <?php
 
 abstract class Syndication_Provider {
+
+
+	/**
+	 * Unique Identifier for the Provider.
+	 *
+	 * @var string
+	 */
 	protected $uid;
+
+
+	/**
+	 * Display Name.
+	 *
+	 * @var string
+	 */
 	protected $name;
+
+
+	/**
+	 * Service.
+	 *
+	 * @param array {
+	 *  @type string $name Name of Provider.
+	 *  @type string $url URL of Provider.
+	 *  @type string $photo Icon/Photo of Service
+	 * }
+	 */
 	protected $service;
+
+	/**
+	 * User Information.
+	 *
+	 * @param array {
+	 *  @type string $name Username.
+	 *  @type string $url User URL.
+	 *  @type string $photo User Photo.
+	 * }
+	 */
 	protected $user;
 
 	/**
