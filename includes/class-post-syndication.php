@@ -334,6 +334,10 @@ class Post_Syndication {
 			// Wait 15 seconds before posting to ensure the post is published
 			add_post_meta( $post_id, '_syndicate-to', $_POST['syndicate-to'], true );
 		}
+
+		if ( ! wp_next_scheduled( 'do_pings' ) ) {
+			wp_schedule_single_event( time(), 'do_pings' );
+		}
 	}
 
 	public static function str_prefix( $source, $prefix ) {
