@@ -15,7 +15,7 @@ class Post_Syndication {
 		add_action( 'load-post-new.php', array( $cls, 'metabox_setup' ) );
 		add_action( 'do_pings', array( $cls, 'do_pings' ), 9, 2 );
 		foreach ( self::syndication_publish_post_types() as $type ) {
-			add_action( 'publish_' . $type, array( $cls, 'publish_post' ), 8, 2 );
+			add_action( 'publish_' . $type, array( $cls, 'publish_post' ), 4, 2 );
 		}
 		add_action( 'micropub_syndication', array( $cls, 'syndication' ), 10, 2 );
 		add_action( 'syn_syndication', array( $cls, 'syndication' ), 10, 2 );
@@ -335,9 +335,6 @@ class Post_Syndication {
 			add_post_meta( $post_id, '_syndicate-to', $_POST['syndicate-to'], true );
 		}
 
-		if ( ! wp_next_scheduled( 'do_pings' ) ) {
-			wp_schedule_single_event( time(), 'do_pings' );
-		}
 	}
 
 	public static function str_prefix( $source, $prefix ) {
