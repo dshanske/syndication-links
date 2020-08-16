@@ -117,37 +117,37 @@ ul.relsyn li svg {
   color: #EC1C24;
 }
 .relsyn li a .svg-adobeaftereffects {
-  color: #D291FF;
+  color: #9999FF;
 }
 .relsyn li a .svg-adobeaudition {
-  color: #4CC0AD;
+  color: #9999FF;
 }
 .relsyn li a .svg-adobecreativecloud {
   color: #DA1F26;
 }
 .relsyn li a .svg-adobedreamweaver {
-  color: #35FA00;
+  color: #FF61F6;
 }
 .relsyn li a .svg-adobefonts {
   color: #323232;
 }
 .relsyn li a .svg-adobeillustrator {
-  color: #F37021;
+  color: #FF9A00;
 }
 .relsyn li a .svg-adobeindesign {
   color: #EE3D8F;
 }
 .relsyn li a .svg-adobelightroomcc {
-  color: #3DF0F0;
+  color: #31A8FF;
 }
 .relsyn li a .svg-adobelightroomclassic {
-  color: #AED6EA;
+  color: #31A8FF;
 }
 .relsyn li a .svg-adobephonegap {
   color: #27A1C5;
 }
 .relsyn li a .svg-adobephotoshop {
-  color: #26C9FF;
+  color: #31A8FF;
 }
 .relsyn li a .svg-adobepremierepro {
   color: #EA77FF;
@@ -913,6 +913,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-dailymotion {
   color: #0066DC;
+}
+.relsyn li a .svg-darkreader {
+  color: #141E24;
 }
 .relsyn li a .svg-dart {
   color: #0175C2;
@@ -1964,6 +1967,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-kofax {
   color: #00558C;
 }
+.relsyn li a .svg-komoot {
+  color: #6AA127;
+}
 .relsyn li a .svg-kotlin {
   color: #0095D5;
 }
@@ -1975,6 +1981,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-kyocera {
   color: #ED1C24;
+}
+.relsyn li a .svg-lbry {
+  color: #2F9176;
 }
 .relsyn li a .svg-lg {
   color: #A50034;
@@ -2846,6 +2855,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-purescript {
   color: #14161A;
 }
+.relsyn li a .svg-pycharm {
+  color: #000000;
+}
 .relsyn li a .svg-pypi {
   color: #3775A9;
 }
@@ -2923,6 +2935,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-rstudio {
   color: #75AADB;
+}
+.relsyn li a .svg-rtl {
+  color: #E9113B;
 }
 .relsyn li a .svg-rtlzwei {
   color: #00BCF6;
@@ -3021,6 +3036,12 @@ ul.relsyn li svg {
   color: #662D91;
 }
 .relsyn li a .svg-roots {
+  color: #525DDC;
+}
+.relsyn li a .svg-rootsbedrock {
+  color: #525DDC;
+}
+.relsyn li a .svg-rootssage {
   color: #525DDC;
 }
 .relsyn li a .svg-roundcube {
@@ -3579,7 +3600,7 @@ ul.relsyn li svg {
   color: #FF0000;
 }
 .relsyn li a .svg-toyota {
-  color: #EB0A1E;
+  color: #282830;
 }
 .relsyn li a .svg-trainerroad {
   color: #E12726;
@@ -3613,6 +3634,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-trulia {
   color: #53B50A;
+}
+.relsyn li a .svg-trustedshops {
+  color: #FFDC0F;
 }
 .relsyn li a .svg-trustpilot {
   color: #00B67A;
@@ -4107,7 +4131,7 @@ ul.relsyn li svg {
   color: #556472;
 }
 .relsyn li a .svg-freecodecamp {
-  color: #006400;
+  color: #0A0A23;
 }
 .relsyn li a .svg-freedesktop-dot-org {
   color: #3B80AE;
