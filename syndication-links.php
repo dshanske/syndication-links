@@ -10,7 +10,7 @@
  * Domain Path:  /languages
  */
 
-define( 'SYNDICATION_LINKS_VERSION', '4.2.5' );
+define( 'SYNDICATION_LINKS_VERSION', '4.2.6' );
 
 
 function syndication_links_load( $files ) {
