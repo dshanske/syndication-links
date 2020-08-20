@@ -61,7 +61,7 @@ class Syn_Link_Domain_Icon_Map {
 		$icon  = self::get_icon_svg( $name );
 		$title = self::get_title( $name );
 		if ( $icon ) {
-			return sprintf( '<span class="svg-icon svg-%1$s" style="display: inline-block; max-width: 1rem; margin: 2px;" aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $title ), $icon );
+			return sprintf( '<span class="width: 20px;" style="display: inline-block; max-width: 1rem; margin: 2px;" aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $title ), $icon );
 		}
 		return $name;
 	}
