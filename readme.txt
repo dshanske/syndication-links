@@ -4,7 +4,7 @@ Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Requires at least: 4.9.9
 Requires PHP: 5.6
 Tested up to: 5.5
-Stable tag: 4.2.6
+Stable tag: 4.3.0
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -69,6 +69,7 @@ Using the optional Syndication feature(disabled by default) you can syndicate yo
 * [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, MeetUp.com, Mastodon and Flickr
 * [Bridgy Fed](https://fed.brid.gy) - Bridgy Fed is a service that allows you to interact with federated social networks using webmentions.
 * [Micro.blog](https://micro.blog) - Micro.blog is a social network and publishing platform for independent microblogs, created by Manton Reece.
+* [Pinboard](https://pinboard.in) - Pinboard is a bookmarking site. The support for this is currently only enabled if you have Post Kinds enabled, due to the difficulty in getting a URL. It will bookmark the URL of any object you are citing.
 * Custom Webmention Syndication - Add any site that supports publishing by sending a webmention by configuring it in the settings page
 
 Will be looking to integrate with other plugins to add more options and invite developers to add support if they wish as the interface is simple. 
@@ -154,6 +155,10 @@ In no particular order...
 9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.3.0 ( 2020-10-13 ) =
+* Refresh icons
+* Add optional Pinboard POSSE that is only enabled with Post Kinds
 
 = Version 4.2.6 ( 2020-08-15 ) =
 * Update dependencies
