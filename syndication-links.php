@@ -58,7 +58,8 @@ function syndication_links_init() {
 					'class-syndication-provider-bridgy-mastodon.php', // Mastodon via Bridgy
 					'class-syndication-provider-bridgy-meetup.php', // Meetup via Bridgy
 					'class-syndication-provider-bridgy-fed.php', // Bridgy Fed
-					'class-syndication-provider-microdotblog.php', // Micro.blog
+					'class-syndication-provider-microdotblog.php', // Micro.blob
+					'class-syndication-provider-pinboard.php', // Pinboard.in
 				)
 			);
 		}
