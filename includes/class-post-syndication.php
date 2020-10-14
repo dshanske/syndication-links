@@ -111,9 +111,10 @@ class Post_Syndication {
 		}
 
 		foreach ( $syndicate as $target ) {
+			$meta = get_post_meta( $target, '_syndicate-to', true );
 			// Send Syndications
-			self::syndication( $target, get_post_meta( $target, '_syndicate-to', true ) );
 			delete_post_meta( $target, '_syndicate-to' );
+			self::syndication( $target, $meta );
 		}
 	}
 
