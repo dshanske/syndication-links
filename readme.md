@@ -3,8 +3,8 @@
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.9.9  
 **Requires PHP:** 5.6  
-**Tested up to:** 5.5  
-**Stable tag:** 4.3.0  
+**Tested up to:** 5.6  
+**Stable tag:** 4.3.1  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -111,6 +111,9 @@ originalofform.php in your theme folder the function will return it so you can c
 * `syn_links_display_defaults( $defaults )` - Filter the defaults for displaying Syndication Links
 * `syndication_link_checked( $checked, $uid, $post_ID )` - Will check a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
 * `syndication_link_disabled( $disabled, $uid, $post_ID )` - Will disable the checkbox for a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
+* `syn_link_name( $title, $name )` - Allows you to set the title string for Links. Example, pinboard => Pinboard.
+* `syn_link_mapping( $icon, $url )` - Allows you to override or set the mapping from URL to icon name.
+* `pre_syn_link_icon( $icon, $name )` - Allows you to provide a custom icon. Icons by default are SVG, not URL or filenames.
 
 ### How do I contribute or file bug reports?
 
@@ -159,6 +162,11 @@ In no particular order...
 9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
 
 ## Changelog ##
+
+### Version 4.3.1 ( 2020-12-12 ) ###
+* Introduce `syn_link_name` filter that allows you to set the name string. 
+* Introduce `pre_syn_link_icon` filter to allow short circuiting the domain mapping and providing an SVG of your choice.
+* Save last return in post meta for diagnostic purposes.
 
 ### Version 4.3.0 ( 2020-10-13 ) ###
 * Refresh icons
