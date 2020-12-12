@@ -281,8 +281,8 @@ class Syn_Config {
 		$options = $args['list'];
 		echo '<fieldset>';
 		foreach ( $options as $key => $value ) {
-			echo '<input type="radio" name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '" value="' . esc_attr( $key ) . '" ' . checked( $key, $select, false ) . ' />';
-			echo '<label for="' . esc_attr( $args['name'] ) . '">' . esc_attr( $value ) . '</label>';
+			echo '<input type="radio" name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '-' . esc_attr( $key ) . '" value="' . esc_attr( $key ) . '" ' . checked( $key, $select, false ) . ' />';
+			echo '<label for="' . esc_attr( $args['name'] ) . '-' . esc_attr( $key ) . '">' . esc_attr( $value ) . '</label>';
 			echo '<br />';
 		}
 		echo '</fieldset>';
