@@ -269,7 +269,7 @@ class Post_Syndication {
 		if ( ! is_array( $allowlist ) ) {
 			$allowlist = array();
 		}
-		if ( empty( $targets ) ) {
+		if ( empty( $targets ) || empty( $allowlist ) ) {
 			return __( 'No Syndication Targets Available', 'syndication-links' );
 		}
 
