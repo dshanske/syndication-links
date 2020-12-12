@@ -47,6 +47,11 @@ class Syn_Link_Domain_Icon_Map {
 
 	// Return the retrieved svg based on name
 	public static function get_icon_svg( $name ) {
+		$icon = apply_filters( 'pre_syn_link_icon', null, $name );
+		if ( $icon ) {
+			return;
+		}
+
 		$file = self::get_icon_filename( $name );
 		if ( $file ) {
 			$icon = file_get_contents( $file ); // phpcs:ignore
@@ -69,9 +74,11 @@ class Syn_Link_Domain_Icon_Map {
 	public static function get_title( $name ) {
 		$strings = simpleicons_syn_get_names();
 		if ( isset( $strings[ $name ] ) ) {
-			return $strings[ $name ];
+			$return = $strings[ $name ];
+		} else {
+			$return = $name;
 		}
-		return $name;
+		return apply_filters( 'syn_link_title', $return, $name );
 	}
 
 	public static function url_to_name( $url ) {
