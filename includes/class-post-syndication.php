@@ -125,6 +125,7 @@ class Post_Syndication {
 		if ( ! $post ) {
 			return;
 		}
+		$returns = array();
 
 		$timestamp = get_post_timestamp( $post_ID );
 		$current   = time();
@@ -137,25 +138,41 @@ class Post_Syndication {
 
 		// Reject this
 		if ( $diff > DAY_IN_SECONDS ) {
-			error_log( sprintf( 'Post is %1$s days old - no syndication', $diff / DAY_IN_SECONDS ) ); // phpcs:ignore
-			return;
-		}
-
-		$targets = static::$targets;
-		if ( empty( $targets ) || ! is_array( $targets ) ) {
-			return;
-		}
-
-		foreach ( $targets as $target ) {
-			if ( ! $target instanceof Syndication_Provider ) {
-				continue;
+			$returns[] = new WP_Error( 'too_old', sprintf( 'Post is %1$s days old - no syndication', $diff / DAY_IN_SECONDS ) );
+		} else {
+			$targets = static::$targets;
+			if ( empty( $targets ) || ! is_array( $targets ) ) {
+				return false;
 			}
-			if ( in_array( $target->get_uid(), $syndicate_to, true ) ) {
-				$return = $target->posse( $post_ID );
-				if ( is_wp_error( $return ) ) {
-					error_log( $return->get_error_message() . wp_json_encode( $return->error_data ) ); // phpcs:ignore
+
+			foreach ( $targets as $target ) {
+				if ( ! $target instanceof Syndication_Provider ) {
+					continue;
+				}
+				if ( in_array( $target->get_uid(), $syndicate_to, true ) ) {
+					$return                        = $target->posse( $post_ID );
+					$returns[ $target->get_uid() ] = $return;
 				}
 			}
+		}
+		if ( ! empty( $returns ) ) {
+			update_post_meta( $post_ID, 'syndication_log', $returns );
+			foreach ( $returns as $return ) {
+				self::error_log( $return );
+			}
+			return $errors;
+		}
+		return true;
+	}
+
+	public static function error_log( $input ) {
+		if ( ! WP_DEBUG ) {
+			return;
+		}
+		if ( is_wp_error( $input ) ) {
+			error_log( sprintf( '%1$s: %2$s', $input->get_error_message(), wp_json_encode( $input->error_data ) ) ); // phpcs:ignore
+		} else {
+			error_log( sprintf( 'Success: %1$s', wp_json_encode( $input ) ) ); // phpcs:ignore
 		}
 	}
 
