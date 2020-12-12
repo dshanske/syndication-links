@@ -642,7 +642,7 @@ ul.relsyn li svg {
   color: #00D1B2;
 }
 .relsyn li a .svg-buymeacoffee {
-  color: #FF813F;
+  color: #FFDD00;
 }
 .relsyn li a .svg-buzzfeed {
   color: #EE3322;
@@ -1120,6 +1120,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-egnyte {
   color: #00968F;
+}
+.relsyn li a .svg-eljueves {
+  color: #BE312E;
 }
 .relsyn li a .svg-elastic {
   color: #005571;
@@ -2606,6 +2609,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-numpy {
   color: #013243;
 }
+.relsyn li a .svg-numba {
+  color: #00A3E0;
+}
 .relsyn li a .svg-nutanix {
   color: #024DA1;
 }
@@ -3205,6 +3211,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-seat {
   color: #33302E;
+}
+.relsyn li a .svg-smrt {
+  color: #EE2E24;
 }
 .relsyn li a .svg-spdx {
   color: #4398CC;
@@ -4146,7 +4155,7 @@ ul.relsyn li svg {
   color: #FB7A24;
 }
 .relsyn li a .svg-xdadevelopers {
-  color: #F59812;
+  color: #EA7100;
 }
 .relsyn li a .svg-xfce {
   color: #2284F2;
