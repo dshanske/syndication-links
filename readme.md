@@ -111,7 +111,7 @@ originalofform.php in your theme folder the function will return it so you can c
 * `syn_links_display_defaults( $defaults )` - Filter the defaults for displaying Syndication Links
 * `syndication_link_checked( $checked, $uid, $post_ID )` - Will check a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
 * `syndication_link_disabled( $disabled, $uid, $post_ID )` - Will disable the checkbox for a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
-* `syn_link_name( $title, $name )` - Allows you to set the title string for Links. Example, pinboard => Pinboard.
+* `syn_link_title( $title, $name )` - Allows you to set the title string for Links. Example, pinboard => Pinboard.
 * `syn_link_mapping( $icon, $url )` - Allows you to override or set the mapping from URL to icon name.
 * `pre_syn_link_icon( $icon, $name )` - Allows you to provide a custom icon. Icons by default are SVG, not URL or filenames.
 

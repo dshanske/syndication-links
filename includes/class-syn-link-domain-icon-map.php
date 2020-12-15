@@ -48,8 +48,8 @@ class Syn_Link_Domain_Icon_Map {
 	// Return the retrieved svg based on name
 	public static function get_icon_svg( $name ) {
 		$icon = apply_filters( 'pre_syn_link_icon', null, $name );
-		if ( $icon ) {
-			return;
+		if ( is_string( $icon ) ) {
+			return $icon;
 		}
 
 		$file = self::get_icon_filename( $name );
