@@ -10,10 +10,15 @@ class Syn_Meta {
 		add_action( 'save_post', array( $cls, 'save_post_meta' ) );
 		add_action( 'edit_comment', array( $cls, 'save_comment_meta' ) );
 		$args = array(
-			'type'         => 'string',
+			'type'         => 'array',
 			'description'  => 'Syndication URLs',
-			'single'       => false,
-			'show_in_rest' => true,
+			'single'       => true,
+			'show_in_rest' => array(
+				'type'  => 'array',
+				'items' => array(
+					'type' => 'string',
+				),
+			),
 		);
 		register_meta( 'post', 'mf2_syndication', $args );
 		add_filter( 'query_vars', array( $cls, 'query_var' ) );
