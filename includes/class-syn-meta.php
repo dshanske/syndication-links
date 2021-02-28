@@ -14,9 +14,11 @@ class Syn_Meta {
 			'description'  => 'Syndication URLs',
 			'single'       => true,
 			'show_in_rest' => array(
-				'type'  => 'array',
-				'items' => array(
-					'type' => 'string',
+				'schema' => array(
+					'type'  => 'array',
+					'items' => array(
+						'type' => 'string',
+					),
 				),
 			),
 		);
