@@ -44,8 +44,11 @@ class Syndication_Provider_Webmention extends Syndication_Provider {
 		$post = get_post( $post_id );
 		add_syndication_link( $post_id, $this->get_target() );
 
-		// Attempt at cache busting by classifying this as an edit
+		// Attempt at cache busting by running anything attached to 'edit_post'.
 		do_action( 'edit_post', $post_id, $post );
+
+		// Add a custom action to attach a manual clear cache to.
+		do_action( 'pre_syndication_links_webmention', $post_id );
 
 		$response = self::send_webmention( get_permalink( $post_id ) );
 		if ( ! is_wp_error( $response ) ) {
