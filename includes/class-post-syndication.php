@@ -160,7 +160,7 @@ class Post_Syndication {
 			foreach ( $returns as $return ) {
 				self::error_log( $return );
 			}
-			return $errors;
+			return $returns;
 		}
 		return true;
 	}
