@@ -190,7 +190,7 @@ class Syn_Meta {
 					return false;
 				}
 				// Rewrite these to https as needed
-				$secure = apply_filters( 'syn_rewrite_secure', array( 'facebook.com', 'twitter.com', 'huffduffer.com', 'foursquare.com' ) );
+				$secure = apply_filters( 'syn_rewrite_secure', array( 'facebook.com', 'twitter.com', 'huffduffer.com', 'foursquare.com', 'blogger.com', 'dailymotion.com', 'github.com', 'gitlab.com', 'google.com', 'tumblr.com', 'vimeo.com', 'wikipedia.org', 'wordpress.com', 'youtube.com' ) );
 				if ( in_array( self::extract_domain_name( $url ), $secure, true ) ) {
 					$url = preg_replace( '/^http:/i', 'https:', $url );
 				}
