@@ -3,8 +3,8 @@
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Requires at least:** 4.9.9  
 **Requires PHP:** 5.6  
-**Tested up to:** 5.6.2  
-**Stable tag:** 4.3.3  
+**Tested up to:** 5.7.2  
+**Stable tag:** 4.3.4  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -159,9 +159,13 @@ In no particular order...
 6. [Genericons Neue](http://genericons.com/) for their generic icon packs. Genericons Neue is licensed under the GPLv2.
 7. [Chris Aldrich](http://stream.boffosocko.com) for many suggestions on improving the display and for screenshots.
 8. [PHPCS](https://github.com/squizlabs/PHP_CodeSniffer) is used with the [WordPress](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards) and [PHP Compatibility](https://github.com/wimg/PHPCompatibility) Standards in order to ensure compatibility with supported versions of PHP and enact WordPress Coding Standards.
-9. [Travis-CI](https://travis-ci.org) is used to actively test against various PHP versions
+9. GitHub Actions is used to actively test against various PHP versions
 
 ## Changelog ##
+
+### Version 4.3.4 ( 2021-06-12 ) ###
+* Refresh icons
+* Switch from id to class for syndication links wrapper
 
 ### Version 4.3.3 ( 2021-02-28 ) ###
 * Fix issue with schema.
