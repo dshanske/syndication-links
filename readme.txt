@@ -3,8 +3,8 @@ Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Requires at least: 4.9.9
 Requires PHP: 5.6
-Tested up to: 5.7.2
-Stable tag: 4.3.4
+Tested up to: 5.8
+Stable tag: 4.3.5
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
