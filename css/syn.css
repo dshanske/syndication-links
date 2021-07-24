@@ -21,12 +21,12 @@ ul.relsyn li {
   font-size: 0.8em;
 }
 
-.svg-icon svg {
+.syndication-link-icon svg {
   fill: currentColor;
   vertical-align: middle;
   top: -0.0625em;
 }
-.svg-icon svg :hover {
+.syndication-link-icon svg :hover {
   filter: brightness(50%);
 }
 
