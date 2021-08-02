@@ -31,7 +31,10 @@ class Original_Of_Widget extends WP_Widget {
 	 * @param array $instance Saved values from database.
 	 */
 	public function widget( $args, $instance ) {
-		
+		if ( ! array_key_exists( 'title', $instance ) ) {
+			$instance['title'] = '';
+		}
+
 		/** This filter is documented in wp-includes/widgets/class-wp-widget-pages.php */
 		$title = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
 
