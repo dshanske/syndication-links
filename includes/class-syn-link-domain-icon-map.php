@@ -16,7 +16,7 @@ class Syn_Link_Domain_Icon_Map {
 		'indieweb.xyz'        => 'info',
 		'getpocket.com'       => 'pocket',
 		'flip.it'             => 'flipboard',
-		'micro.blog'          => 'micro-dot-blog',
+		'micro.blog'          => 'microdotblog',
 		'wordpress.org'       => 'wordpress',
 		'wordpress.com'       => 'wordpress',
 		'itunes.apple.com'    => 'applemusic',

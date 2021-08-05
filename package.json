@@ -13,6 +13,6 @@
     "grunt-execute": ">=0.2.2",
     "grunt-wp-readme-to-markdown": "^2.0.1",
     "jshint": "^2.13.0",
-    "simple-icons": "^5.7.0"
+    "simple-icons": "^5.8.1"
   }
 }
