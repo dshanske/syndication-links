@@ -7,6 +7,9 @@ ul.relsyn {
 		display: inline-block;
 		padding-right: 5px;
 		font-size: .8em;
+		a {
+			text-decoration: none;
+		}
 	}
 }
 
@@ -21,10 +24,8 @@ ul.relsyn {
 	}
 }
 
-a {
-	:hover {
-		.syn-link {
-			text-decoration: none;
-		}
-	}
+a.synlink, a.synlink:hover{
+	text-decoration: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
 }
