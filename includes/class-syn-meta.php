@@ -434,6 +434,10 @@ class Syn_Meta {
 			}
 			$syn = ( $r['icons'] ? $icon : '' ) . ( $r['text'] ? Syn_Link_Domain_Icon_Map::get_title( $name ) : '' );
 
+			if ( 'brid.gy' === wp_parse_url( PHP_URL_HOST ) ) {
+				$syn = '';
+			}
+
 			$links[] = sprintf( '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>', $name, $r['single-css'], esc_url( $url ), $rel, $syn );
 		}
 
