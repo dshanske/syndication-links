@@ -350,7 +350,7 @@ class Post_Syndication {
 		// If this property is set then set to
 		if ( isset( $_POST['syndicate-to'] ) ) {
 			// Wait 15 seconds before posting to ensure the post is published
-			add_post_meta( $post_id, '_syndicate-to', $_POST['syndicate-to'], true );
+			add_post_meta( $post_id, '_syndicate-to', sanitize_text_field( $_POST['syndicate-to'] ), true );
 		}
 
 	}

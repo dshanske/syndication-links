@@ -10,11 +10,6 @@ module.exports = function (grunt) {
 					src: ['js/synlinks.js' ]
 			 }
 			},
-			execute              : {
-				target: {
-					src: ['simpleicons.js']
-				}
-			},
 			checktextdomain      : {
 				options: {
 					text_domain: 'syndication-links',
@@ -96,7 +91,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks( 'grunt-contrib-sass' );
 	grunt.loadNpmTasks( 'grunt-eslint' );
 	grunt.loadNpmTasks( 'grunt-checktextdomain' );
-	grunt.loadNpmTasks( 'grunt-execute' );
 	grunt.loadNpmTasks( 'grunt-contrib-copy' );
 
 	// Default task(s).
