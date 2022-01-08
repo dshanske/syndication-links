@@ -330,7 +330,7 @@ class Syn_Meta {
 		return preg_replace( '/^([a-zA-Z0-9].*\.)?([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z.]{2,})$/', '$2', $parse );
 	}
 
-	public static function add_syndication_link( $object = null, $uri, $replace = false ) {
+	public static function add_syndication_link( $object = null, $uri = null, $replace = false ) {
 		if ( ! $object ) {
 			$object = get_post();
 		}
