@@ -25,8 +25,8 @@
     "php-parallel-lint/php-parallel-lint": "^1.2",
     "wp-cli/i18n-command": "^2.2",
     "sebastian/phpcpd": "*",
-    "phpunit/phpunit": "^7.5 | ^6.0 | ^5.0",
-    "yoast/phpunit-polyfills": "^1.0"
+    "yoast/phpunit-polyfills": "^1.0",
+    "phpunit/phpunit": "^5.7.21 || ^6.5 || ^7.5"
   },
   "prefer-stable": true,
   "scripts": {
