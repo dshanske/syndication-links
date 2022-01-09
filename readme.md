@@ -4,7 +4,7 @@
 **Requires at least:** 4.9.9  
 **Requires PHP:** 5.6  
 **Tested up to:** 5.8  
-**Stable tag:** 4.3.7  
+**Stable tag:** 4.3.8  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -162,6 +162,10 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 ## Changelog ##
+
+### Version 4.3.8 ( 2022-01-08 ) ###
+* Refresh icons
+* Fix issue where hidden links were still taking up space.
 
 ### Version 4.3.7 ( 2021-11-02 ) ###
 * Refresh icons
