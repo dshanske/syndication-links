@@ -456,7 +456,7 @@ class Syn_Meta {
 	public static function get_syndication_links_display_defaults() {
 		$display  = self::get_syndication_links_display_option();
 		$defaults = array(
-			'style'            => 'ul',
+			'style'            => ( 'hidden' === $display ) ? 'span' : 'ul',
 			'text'             => in_array( $display, array( 'text', 'iconstext' ), true ),
 			'icons'            => in_array( $display, array( 'icons', 'iconstext' ), true ),
 			'container-css'    => 'relsyn',
