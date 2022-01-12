@@ -12,7 +12,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		add_action( 'admin_init', array( $this, 'admin_init' ), 11 );
 
 		add_filter( 'user_contactmethods', array( $this, 'user_contactmethods' ) );
-		add_action( 'microdotblog_get_ids', array( $this, 'retrieve_json_feed' ), 10, 2 );
+		add_action( 'microdotblog_get_ids', array( $this, 'get_microblog_post' ), 10 );
 		// Parent Constructor
 		parent::__construct( $args );
 	}
@@ -64,19 +64,63 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		}
 	}
 
-	public static function retrieve_json_feed( $post_id = null, $user_id = null ) {
+	public static function get_microblog_post( $post_id = null ) {
+		$permalink = get_permalink( $post_id );
+
+		if ( ! $permalink ) {
+			return false;
+		}
+
+		$url = add_query_arg(
+			array(
+				'format' => 'jsonfeed',
+				'url'    => $permalink,
+			),
+			'https://micro.blog/conversation.js'
+		);
+
+		$args = array(
+			'headers'             => array(
+				'Accept' => 'application/json',
+			),
+			'timeout'             => 10,
+			'limit_response_size' => 1048576,
+			'redirection'         => 1,
+			// Use an explicit user-agent
+			'user-agent'          => sprintf( 'Syndication Links for WordPress(%1$s)', home_url() ),
+		);
+		$response = wp_remote_get( $url, $args );
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+		$code = wp_remote_retrieve_response_code( $response );
+		if ( ( $code / 100 ) !== 2 ) {
+			return new WP_Error( 'invalid_response', wp_remote_retrieve_body( $response ), array( 'status' => $code ) );
+		}
+		$json = json_decode( $response['body'], true );
+		if ( ! array_key_exists( 'home_page_url', $json ) ) {
+			return new WP_Error( 'not_found', __( 'URL Not Found', 'syndication-links' ), array( 'status' => 404 ) );
+		}
+
+		add_syndication_link( $post_id, esc_url( $json['home_page_url'] ) );
+
+		return $json['home_page_url'];
+	}
+
+
+	public static function retrieve_json_feed( $post_id = null ) {
 		if ( $post_id ) {
 			$permalink = get_permalink( $post_id );
 		} else {
 			$permalink = null;
 		}
-		if ( ! $user_id && $post_id ) {
-			$post    = get_post();
-			$user_id = $post->post_author;
-		}
+		$post    = get_post();
+		$user_id = $post->post_author;
+
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
 		}
+
 		$username = get_user_meta( $user_id, 'microblog', true );
 		if ( ! $username ) {
 			return false;
@@ -155,7 +199,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 			)
 		);
 
-		wp_schedule_single_event( time() + 15, 'microdotblog_get_ids', array( $post_ID, $post->post_author ) );
+		wp_schedule_single_event( time() + 15, 'microdotblog_get_ids', array( $post_ID ) );
 		return true;
 	}
 

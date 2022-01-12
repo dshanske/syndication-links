@@ -4,7 +4,7 @@
 **Requires at least:** 4.9.9  
 **Requires PHP:** 5.6  
 **Tested up to:** 5.8  
-**Stable tag:** 4.3.8  
+**Stable tag:** 4.3.9  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -162,6 +162,10 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 ## Changelog ##
+
+### Version 4.3.9 ( 2022-01-11 ) ###
+* Switch empty links to data tags.
+* Switch to new query https://github.com/microdotblog/issues/issues/81 for microdotblog to save on multiple polling requests.
 
 ### Version 4.3.8 ( 2022-01-08 ) ###
 * Refresh icons
