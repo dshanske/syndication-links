@@ -438,7 +438,13 @@ class Syn_Meta {
 				$syn = '';
 			}
 
-			$links[] = sprintf( '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>', $name, $r['single-css'], esc_url( $url ), $rel, $syn );
+			if ( 'hidden' === $display ) {
+				$link    = '<data class="u-syndication" value="%1$s"></data>';
+				$links[] = sprintf( $link, esc_url( $url ) );
+			} else {
+				$link    = '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>';
+				$links[] = sprintf( $link, $name, $r['single-css'], esc_url( $url ), $rel, $syn );
+			}
 		}
 
 		return $links;
