@@ -16,6 +16,10 @@ class Syndication_Provider_Webmention extends Syndication_Provider {
 		if ( 201 === $response_code ) {
 			return $location;
 		}
+
+		if ( 202 === $response_code ) {
+			return true;
+		}
 		$json = json_decode( $response['body'] );
 		return new WP_Error(
 			$this->uid . '_publish_error',

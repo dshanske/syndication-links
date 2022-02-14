@@ -15,7 +15,7 @@ class Post_Syndication {
 		add_action( 'load-post-new.php', array( $cls, 'metabox_setup' ) );
 		add_action( 'do_pings', array( $cls, 'do_pings' ), 9, 2 );
 		foreach ( self::syndication_publish_post_types() as $type ) {
-			add_action( 'publish_' . $type, array( $cls, 'publish_post' ), 4, 2 );
+			add_action( 'save_post_' . $type, array( $cls, 'save_post' ), 4, 2 );
 		}
 		add_action( 'micropub_syndication', array( $cls, 'syndication' ), 10, 2 );
 		add_action( 'syn_syndication', array( $cls, 'syndication' ), 10, 2 );
@@ -103,6 +103,7 @@ class Post_Syndication {
 				'meta_key' => '_syndicate-to',
 				'fields'   => 'ids',
 				'nopaging' => true,
+				'post_status' => 'publish'
 			)
 		);
 
@@ -133,7 +134,7 @@ class Post_Syndication {
 
 		// If it is for later then schedule it for later.
 		if ( $diff < 0 ) {
-			wp_schedule_single_event( $timestamp, 'syn_syndication', array( $post_ID, $syndicate_to ) );
+			wp_schedule_single_event( $timestamp + 5, 'syn_syndication', array( $post_ID, $syndicate_to ) );
 		}
 
 		// Reject this
@@ -316,7 +317,7 @@ class Post_Syndication {
 	}
 
 	/* Save the meta box's post metadata. */
-	public static function publish_post( $post_id ) {
+	public static function save_post( $post_id ) {
 		/*
 		 * We need to verify this came from our screen and with proper authorization,
 		 * because the publish_post action can be triggered at other times.
@@ -349,8 +350,7 @@ class Post_Syndication {
 
 		// If this property is set then set to
 		if ( isset( $_POST['syndicate-to'] ) ) {
-			// Wait 15 seconds before posting to ensure the post is published
-			add_post_meta( $post_id, '_syndicate-to', sanitize_text_field( $_POST['syndicate-to'] ), true );
+			add_post_meta( $post_id, '_syndicate-to', array_map( 'sanitize_key', $_POST['syndicate-to'] ), true );
 		}
 
 	}
