@@ -100,10 +100,10 @@ class Post_Syndication {
 	public static function do_pings() {
 		$syndicate = get_posts(
 			array(
-				'meta_key' => '_syndicate-to',
-				'fields'   => 'ids',
-				'nopaging' => true,
-				'post_status' => 'publish'
+				'meta_key'    => '_syndicate-to',
+				'fields'      => 'ids',
+				'nopaging'    => true,
+				'post_status' => 'publish',
 			)
 		);
 
