@@ -81,6 +81,37 @@ class Syn_Link_Domain_Icon_Map {
 		return apply_filters( 'syn_link_title', $return, $name );
 	}
 
+	public static function mastodon_urls() {
+		$mastodon = get_transient( 'syn_mastodon' );
+		if ( false !== $mastodon ) {
+			return $mastodon;
+		}
+		$args    = array(
+			'count_total' => false,
+			'meta_query'  => array(
+				array(
+					'key'     => 'mastodon',
+					'compare' => 'EXISTS',
+				),
+			),
+			'fields'      => 'ID',
+		);
+		$query   = new WP_User_Query( $args );
+		$results = $query->get_results();
+		if ( empty( $results ) ) {
+			$value = false;
+		} else {
+			$value = array();
+			foreach ( $results as $result ) {
+				$url = get_user_meta( $result, 'mastodon', true );
+				if ( ! empty( $url ) && wp_http_validate_url( $url ) ) {
+					$value[] = wp_parse_url( $value, PHP_URL_HOST );
+				}
+			}
+		}
+		set_transient( 'syn_mastodon', $value );
+	}
+
 	public static function url_to_name( $url ) {
 		$scheme = wp_parse_url( $url, PHP_URL_SCHEME );
 		// The default if not an http link is to return notice
@@ -95,6 +126,8 @@ class Syn_Link_Domain_Icon_Map {
 			// If the domain is already on the pre-loaded list then use that
 			if ( array_key_exists( $domain, self::$map ) ) {
 				$return = self::$map[ $domain ];
+			} elseif ( in_array( $domain, self::mastodon_urls(), true ) ) {
+				$return = 'mastodon';
 			} else {
 				// Remove extra info and try to map it to an icon
 				$strip = self::split_domain( $domain );
