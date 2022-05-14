@@ -83,7 +83,7 @@ class Syn_Link_Domain_Icon_Map {
 
 	public static function mastodon_urls() {
 		$mastodon = get_transient( 'syn_mastodon' );
-		if ( false !== $mastodon ) {
+		if ( false !== $mastodon && is_array( $mastodon ) ) {
 			return $mastodon;
 		}
 		$args    = array(
@@ -98,10 +98,8 @@ class Syn_Link_Domain_Icon_Map {
 		);
 		$query   = new WP_User_Query( $args );
 		$results = $query->get_results();
-		if ( empty( $results ) ) {
-			$value = false;
-		} else {
-			$value = array();
+		$value   = array();
+		if ( ! empty( $results ) ) {
 			foreach ( $results as $result ) {
 				$url = get_user_meta( $result, 'mastodon', true );
 				if ( ! empty( $url ) && wp_http_validate_url( $url ) ) {
@@ -110,6 +108,7 @@ class Syn_Link_Domain_Icon_Map {
 			}
 		}
 		set_transient( 'syn_mastodon', $value );
+		return $value;
 	}
 
 	public static function url_to_name( $url ) {
