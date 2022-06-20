@@ -8,7 +8,11 @@ class Syn_Config {
 	public static function init() {
 		$cls = get_called_class();
 		add_action( 'wp_enqueue_scripts', array( $cls, 'enqueue_scripts' ) );
-		add_filter( 'the_content', array( $cls, 'the_content' ), 30 );
+
+		if ( apply_filters( 'syndication_links_display', true ) ) {
+			add_filter( 'the_content', array( $cls, 'the_content' ), 30 );
+		}
+
 		if ( get_option( 'syndication-links_feed' ) ) {
 			add_filter( 'the_content_feed', array( $cls, 'the_content_feed' ), 20, 2 );
 		}
