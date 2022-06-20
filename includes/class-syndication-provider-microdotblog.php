@@ -6,13 +6,16 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 	public function __construct( $args = array() ) {
 		$this->name = __( 'Micro.blog', 'syndication-links' );
 		$this->uid  = 'microdotblog';
-		add_filter( 'query_vars', array( $this, 'query_var' ) );
-		add_action( 'pre_get_posts', array( $this, 'create_feed' ) );
-		add_action( 'init', array( $this, 'rewrite' ) );
-		add_action( 'admin_init', array( $this, 'admin_init' ), 11 );
 
-		add_filter( 'user_contactmethods', array( $this, 'user_contactmethods' ) );
-		add_action( 'microdotblog_get_ids', array( $this, 'get_microblog_post' ), 10 );
+		$enable = in_array( $this->uid, get_option( 'syndication_provider_enable' ) );
+		if (  $enable ) {
+			add_filter( 'query_vars', array( $this, 'query_var' ) );
+			add_action( 'pre_get_posts', array( $this, 'create_feed' ) );
+			add_action( 'init', array( $this, 'rewrite' ) );
+			add_action( 'admin_init', array( $this, 'admin_init' ), 11 );
+			add_filter( 'user_contactmethods', array( $this, 'user_contactmethods' ) );
+			add_action( 'microdotblog_get_ids', array( $this, 'get_microblog_post' ), 10 );
+		}
 		// Parent Constructor
 		parent::__construct( $args );
 	}
