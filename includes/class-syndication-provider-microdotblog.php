@@ -8,7 +8,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		$this->uid  = 'microdotblog';
 
 		$enable = in_array( $this->uid, get_option( 'syndication_provider_enable' ) );
-		if (  $enable ) {
+		if ( $enable ) {
 			add_filter( 'query_vars', array( $this, 'query_var' ) );
 			add_action( 'pre_get_posts', array( $this, 'create_feed' ) );
 			add_action( 'init', array( $this, 'rewrite' ) );

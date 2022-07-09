@@ -8,8 +8,8 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 	public function __construct( $args = array() ) {
 		$this->name = __( 'Pinboard', 'syndication-links' );
 		$this->uid  = 'pinboard';
-		$enable = in_array( $this->uid, get_option( 'syndication_provider_enable' ) );
-		if (  $enable ) {
+		$enable     = in_array( $this->uid, get_option( 'syndication_provider_enable' ) );
+		if ( $enable ) {
 			add_action( 'admin_init', array( $this, 'admin_init' ), 11 );
 		}
 

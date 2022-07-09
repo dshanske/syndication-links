@@ -5,8 +5,8 @@ class Syndication_Provider_Bridgy_Twitter extends Syndication_Provider_Bridgy {
 	public function __construct( $args = array() ) {
 		$this->name = __( 'Twitter via Bridgy', 'syndication-links' );
 		$this->uid  = 'twitter-bridgy';
-		$enable = in_array( $this->uid, get_option( 'syndication_provider_enable' ) );
-		if (  $enable ) {
+		$enable     = in_array( $this->uid, get_option( 'syndication_provider_enable' ) );
+		if ( $enable ) {
 			add_action( 'wp_footer', array( $this, 'wp_footer' ) );
 			add_action( 'admin_init', array( $this, 'twitter_admin_init' ), 12 );
 		}
