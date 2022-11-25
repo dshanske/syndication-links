@@ -86,7 +86,7 @@ function syndication_links_init() {
 			'class-social-plugins.php', // Social Plugin Add-Ons
 			'functions.php', // Global Functions
 			'compat-functions.php', // Compat Functions
-			'class-original-of-widget.php', // Original Of Widget
+			'class-widget-original-of.php', // Original Of Widget
 		)
 	);
 	if ( 1 === intval( get_option( 'syndication_posse_enable', 0 ) ) ) {
@@ -117,7 +117,6 @@ function syndication_links_init() {
 					'class-syndication-provider-bridgy-flickr.php', // Flickr via Bridgy
 					'class-syndication-provider-bridgy-reddit.php', // Reddit via Bridgy
 					'class-syndication-provider-bridgy-mastodon.php', // Mastodon via Bridgy
-					'class-syndication-provider-bridgy-meetup.php', // Meetup via Bridgy
 					'class-syndication-provider-bridgy-fed.php', // Bridgy Fed
 				)
 			);

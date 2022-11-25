@@ -3,16 +3,16 @@
 add_action( 'widgets_init', 'sl_register_original_widget' );
 
 function sl_register_original_widget() {
-	register_widget( 'Original_Of_Widget' );
+	register_widget( 'Widget_Original_Of' );
 }
 
-class Original_Of_Widget extends WP_Widget {
+class Widget_Original_Of extends WP_Widget {
 	/**
 	 * Register widget with WordPress.
 	 */
 	public function __construct() {
 		parent::__construct(
-			'Original_Of_Widget',                // Base ID
+			'Widget_Original_Of',                // Base ID
 			__( 'Original Of', 'syndication-links' ),        // Name
 			array(
 				'classname'   => 'original_of_widget',
