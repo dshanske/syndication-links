@@ -14,6 +14,3 @@ class Syndication_Provider_Bridgy_Fed extends Syndication_Provider_Bridgy {
 		return 'https://fed.brid.gy';
 	}
 }
-
-register_syndication_provider( new Syndication_Provider_Bridgy_Fed() );
-

@@ -14,5 +14,3 @@ class Syndication_Provider_Bridgy_Meetup extends Syndication_Provider_Bridgy {
 		return 'https://brid.gy/publish/meetup';
 	}
 }
-
-register_syndication_provider( new Syndication_Provider_Bridgy_Meetup() );

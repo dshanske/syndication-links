@@ -55,4 +55,3 @@ class Syndication_Provider_Bridgy_Twitter extends Syndication_Provider_Bridgy {
 	}
 }
 
-register_syndication_provider( new Syndication_Provider_Bridgy_Twitter() );

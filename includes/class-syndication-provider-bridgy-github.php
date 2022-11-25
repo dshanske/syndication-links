@@ -14,6 +14,3 @@ class Syndication_Provider_Bridgy_Github extends Syndication_Provider_Bridgy {
 		return 'https://brid.gy/publish/github';
 	}
 }
-
-register_syndication_provider( new Syndication_Provider_Bridgy_Github() );
-

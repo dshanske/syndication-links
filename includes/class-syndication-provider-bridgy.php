@@ -95,4 +95,3 @@ class Syndication_Provider_Bridgy extends Syndication_Provider_Webmention {
 		return $body;
 	}
 }
-

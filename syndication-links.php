@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
- * Description: Add Syndication Links to Your Content
+ * Description: Add Links to Syndicated Copies of Your Posts
  * Version: 4.3.12
  * Author: David Shanske
  * Author URI: http://david.shanske.com
@@ -13,14 +13,65 @@
 define( 'SYNDICATION_LINKS_VERSION', '4.3.12' );
 
 
-function syndication_links_load( $files ) {
+function syndication_links_load( $files, $dir = 'includes/' ) {
+	$dir = trailingslashit( $dir );
 	if ( empty( $files ) ) {
 		return;
 	}
-	$path = plugin_dir_path( __FILE__ ) . 'includes/';
+	$path = plugin_dir_path( __FILE__ ) . $dir;
 	foreach ( $files as $file ) {
 		if ( file_exists( $path . $file ) ) {
 			require_once $path . $file;
+		} else {
+			error_log( $path . $file );
+		}
+	}
+}
+
+/**
+ * Filename to Classname Function.
+ *
+ * @param string $filename.
+ *
+ */
+function syndication_links_filename_to_classname( $filename ) {
+	$class = str_replace( 'class-', '', $filename );
+	$class = str_replace( '.php', '', $class );
+	$class = ucwords( $class, '-' );
+	$class = str_replace( '-', '_', $class );
+	if ( class_exists( $class ) ) {
+			return $class;
+	}
+	return false;
+}
+
+/**
+ * Load and register files.
+ *
+ * Checks for the existence of and loads files, then registers them as providers.
+ * @param array  $files An array of filenames.
+ * @param string $dir The directory the files can be found in, relative to the current directory.
+ *
+ */
+function syndication_links_register_providers( $files, $dir = 'includes/' ) {
+	$dir = trailingslashit( $dir );
+	if ( empty( $files ) ) {
+		return;
+	}
+	$path = plugin_dir_path( __FILE__ ) . $dir;
+	foreach ( $files as $file ) {
+		if ( file_exists( $path . $file ) ) {
+			require_once $path . $file;
+			if ( str_contains( $file, 'provider' ) ) {
+				$class = syndication_links_filename_to_classname( $file );
+				if ( $class ) {
+					register_syndication_provider( new $class() );
+				} else {
+					error_log( 'Cannot register ' . $class );
+				}
+			}
+		} else {
+			error_log( $path . $file );
 		}
 	}
 }
@@ -45,8 +96,18 @@ function syndication_links_init() {
 				'class-post-syndication.php', // Post syndication logic
 			)
 		);
+
+
+		syndication_links_register_providers(
+			array(
+				'class-syndication-provider-microdotblog.php', // Micro.blob
+				'class-syndication-provider-pinboard.php', // Pinboard.in
+			)
+		);
+
+		// Webmention Only Providers
 		if ( function_exists( 'send_webmention' ) ) {
-			syndication_links_load(
+			syndication_links_register_providers(
 				array(
 					'class-syndication-provider-webmention.php', // Class for Any Webmention Based Service
 					'class-syndication-provider-webmention-custom.php', // Class for A Custom Webmention Based Service
@@ -58,8 +119,6 @@ function syndication_links_init() {
 					'class-syndication-provider-bridgy-mastodon.php', // Mastodon via Bridgy
 					'class-syndication-provider-bridgy-meetup.php', // Meetup via Bridgy
 					'class-syndication-provider-bridgy-fed.php', // Bridgy Fed
-					'class-syndication-provider-microdotblog.php', // Micro.blob
-					'class-syndication-provider-pinboard.php', // Pinboard.in
 				)
 			);
 		}
