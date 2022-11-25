@@ -71,3 +71,9 @@ function get_original_of_form( $echo = true ) {
 	}
 
 }
+
+if ( class_exists( 'Post_Syndication' ) ) {
+	function register_syndication_provider( $object ) {
+		return Post_Syndication::register( $object );
+	}
+}

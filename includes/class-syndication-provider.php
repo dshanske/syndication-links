@@ -121,8 +121,3 @@ abstract class Syndication_Provider {
 	abstract public function posse( $post_id = null );
 
 }
-
-function register_syndication_provider( $object ) {
-	return Post_Syndication::register( $object );
-}
-
