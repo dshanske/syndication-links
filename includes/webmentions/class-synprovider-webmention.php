@@ -1,6 +1,6 @@
 <?php
 
-class Syndication_Provider_Webmention extends Syndication_Provider {
+class SynProvider_Webmention extends Syndication_Provider {
 
 	public function send_webmention( $url ) {
 		$target = $this->get_target();

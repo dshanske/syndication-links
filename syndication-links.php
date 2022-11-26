@@ -97,29 +97,48 @@ function syndication_links_init() {
 			)
 		);
 
-
+		// Providers that require access to a third-party API or other method
 		syndication_links_register_providers(
 			array(
-				'class-syndication-provider-microdotblog.php', // Micro.blob
-				'class-syndication-provider-pinboard.php', // Pinboard.in
-			)
+				'class-syndication-provider-microdotblog.php', // Micro.blog
+			),
+			'/includes/apis'
 		);
+
+		// Providers that have a Post Kinds Dependency
+		if ( class_exists( 'Post_Kinds_Plugin' ) ) {
+			syndication_links_register_providers(
+				array(
+					'class-syndication-provider-pinboard.php', // Pinboard
+				),
+				'/includes/apis'
+			);
+		}
 
 		// Webmention Only Providers
 		if ( function_exists( 'send_webmention' ) ) {
 			syndication_links_register_providers(
 				array(
-					'class-syndication-provider-webmention.php', // Class for Any Webmention Based Service
-					'class-syndication-provider-webmention-custom.php', // Class for A Custom Webmention Based Service
-					'class-syndication-provider-bridgy.php', // Bridgy Base Class
-					'class-syndication-provider-bridgy-twitter.php', // Twitter via Bridgy
-					'class-syndication-provider-bridgy-github.php', // Github via Bridgy
-					'class-syndication-provider-bridgy-flickr.php', // Flickr via Bridgy
-					'class-syndication-provider-bridgy-reddit.php', // Reddit via Bridgy
-					'class-syndication-provider-bridgy-mastodon.php', // Mastodon via Bridgy
-					'class-syndication-provider-bridgy-fed.php', // Bridgy Fed
-				)
+					'class-synprovider-webmention.php', // Class for Any Webmention Based Service
+					'class-synprovider-webmention-custom.php', // Class for A Custom Webmention Based Service
+					'class-synprovider-webmention-bridgy.php', // Bridgy Base Class
+					'class-synprovider-webmention-bridgy-twitter.php', // Twitter via Bridgy
+					'class-synprovider-webmention-bridgy-github.php', // Github via Bridgy
+					'class-synprovider-webmention-bridgy-flickr.php', // Flickr via Bridgy
+					'class-synprovider-webmention-bridgy-reddit.php', // Reddit via Bridgy
+					'class-synprovider-webmention-bridgy-mastodon.php', // Mastodon via Bridgy
+					'class-synprovider-webmention-bridgy-fed.php', // Bridgy Fed
+				),
+				'/includes/webmentions'
 			);
+			if ( class_exists( 'SynProvider_Webmention_Custom' ) ) {
+				$custom = get_option( 'syndication_links_custom_posse' );
+				if ( ! empty( $custom ) && is_array( $custom ) ) {
+					foreach ( $custom as $c ) {
+						register_syndication_provider( new SynProvider_Webmention_Custom( $c ) );
+					}
+				}
+			}
 		}
 	}
 	load_plugin_textdomain( 'syndication-links', false, basename( dirname( __FILE__ ) ) . '/languages/' );

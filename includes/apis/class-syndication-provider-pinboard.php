@@ -139,7 +139,3 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 	}
 
 }
-
-if ( class_exists( 'Post_Kinds_Plugin' ) ) {
-	register_syndication_provider( new Syndication_Provider_Pinboard() );
-}

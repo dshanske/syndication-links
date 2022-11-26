@@ -1,10 +1,10 @@
 <?php
 
-class Syndication_Provider_Bridgy_Twitter extends Syndication_Provider_Bridgy {
+class SynProvider_Webmention_Bridgy_Twitter extends SynProvider_Webmention_Bridgy {
 
 	public function __construct( $args = array() ) {
-		$this->name = __( 'Twitter via Bridgy', 'syndication-links' );
-		$this->uid  = 'twitter-bridgy';
+		$this->name = __( 'Twitter via Bridgy Webmention', 'syndication-links' );
+		$this->uid  = 'webmention-twitter-bridgy';
 		$enable     = in_array( $this->uid, get_option( 'syndication_provider_enable' ) );
 		if ( $enable ) {
 			add_action( 'wp_footer', array( $this, 'wp_footer' ) );

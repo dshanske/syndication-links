@@ -1,6 +1,6 @@
 <?php
 
-class Syndication_Provider_Webmention_Custom extends Syndication_Provider_Webmention {
+class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 	protected $target;
 
 	public function __construct( $args = array() ) {
@@ -8,7 +8,7 @@ class Syndication_Provider_Webmention_Custom extends Syndication_Provider_Webmen
 			return null;
 		}
 		$this->name   = $args['name'];
-		$this->uid    = $args['uid'];
+		$this->uid    = sanitize_title( $args['uid'] );
 		$this->target = $args['target'];
 
 		// Parent Constructor
@@ -28,12 +28,5 @@ class Syndication_Provider_Webmention_Custom extends Syndication_Provider_Webmen
 
 	public function get_target() {
 		return esc_url_raw( $this->target );
-	}
-}
-
-$custom = get_option( 'syndication_links_custom_posse' );
-if ( ! empty( $custom ) && is_array( $custom ) ) {
-	foreach ( $custom as $c ) {
-		register_syndication_provider( new Syndication_Provider_Webmention_Custom( $c ) );
 	}
 }

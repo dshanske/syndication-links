@@ -1,5 +1,9 @@
 <?php
 
+/*
+ * Micro.Blog Provider enables a hidden feed that items can be added to in order to get published to micro.blog, then advises micro.blog to poll that feed.
+ */
+
 class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 
 
@@ -207,5 +211,3 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 	}
 
 }
-
-register_syndication_provider( new Syndication_Provider_MicroDotBlog() );

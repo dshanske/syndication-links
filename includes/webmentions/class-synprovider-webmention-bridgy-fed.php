@@ -1,6 +1,6 @@
 <?php
 
-class Syndication_Provider_Bridgy_Fed extends Syndication_Provider_Bridgy {
+class SynProvider_Webmention_Bridgy_Fed extends SynProvider_Webmention_Bridgy {
 
 	public function __construct( $args = array() ) {
 		$this->name = __( 'Bridgy Fed', 'syndication-links' );

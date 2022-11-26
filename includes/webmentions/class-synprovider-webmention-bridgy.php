@@ -1,6 +1,6 @@
 <?php
 
-class Syndication_Provider_Bridgy extends Syndication_Provider_Webmention {
+class SynProvider_Webmention_Bridgy extends SynProvider_Webmention {
 
 	public function __construct( $args = array() ) {
 		$this->register_setting();
