@@ -5,7 +5,10 @@ class SynProvider_Webmention_Bridgy_Twitter extends SynProvider_Webmention_Bridg
 	public function __construct( $args = array() ) {
 		$this->name = __( 'Twitter via Bridgy Webmention', 'syndication-links' );
 		$this->uid  = 'webmention-twitter-bridgy';
-		$enable     = in_array( $this->uid, get_option( 'syndication_provider_enable' ) );
+
+		$option = get_option( 'syndication_provider_enable' );
+		$enable = is_array( $option) ? in_array( $this->uid, $option ) : false;
+
 		if ( $enable ) {
 			add_action( 'wp_footer', array( $this, 'wp_footer' ) );
 			add_action( 'admin_init', array( $this, 'twitter_admin_init' ), 12 );
@@ -37,7 +40,7 @@ class SynProvider_Webmention_Bridgy_Twitter extends SynProvider_Webmention_Bridg
 				'Syn_Config',
 				'checkbox_callback',
 			),
-			'links_options',
+			'syndication_provider_options',
 			'bridgy_options',
 			array(
 				'name' => 'bridgy_twitterexcerpt',

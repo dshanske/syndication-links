@@ -21,7 +21,7 @@ class Syn_Config {
 
 		// Syndication Content Options
 		register_setting(
-			'syndication_options',
+			'syndication_display',
 			'syndication-links_bw',
 			array(
 				'type'         => 'boolean',
@@ -32,7 +32,7 @@ class Syn_Config {
 		);
 
 		register_setting(
-			'syndication_options',
+			'syndication_display',
 			'syndication-links_the_content',
 			array(
 				'type'         => 'boolean',
@@ -43,7 +43,7 @@ class Syn_Config {
 		);
 
 		register_setting(
-			'syndication_options',
+			'syndication_display',
 			'syndication-links_archives',
 			array(
 				'type'         => 'boolean',
@@ -54,7 +54,7 @@ class Syn_Config {
 		);
 
 		register_setting(
-			'syndication_options',
+			'syndication_display',
 			'syndication-links_feed',
 			array(
 				'type'         => 'boolean',
@@ -65,7 +65,7 @@ class Syn_Config {
 		);
 
 		register_setting(
-			'syndication_options',
+			'syndication_display',
 			'syndication-links_display',
 			array(
 				'type'         => 'string',
@@ -76,7 +76,7 @@ class Syn_Config {
 		);
 
 		register_setting(
-			'syndication_options',
+			'syndication_display',
 			'syndication-links_size',
 			array(
 				'type'         => 'string',
@@ -87,7 +87,7 @@ class Syn_Config {
 		);
 
 		register_setting(
-			'syndication_options',
+			'syndication_display',
 			'syndication-links_text_before',
 			array(
 				'type'         => 'string',
@@ -99,7 +99,7 @@ class Syn_Config {
 
 		// Syndication Links POSSE/Syndication Options
 		register_setting(
-			'syndication_options',
+			'syndication_provider',
 			'syndication_posse_enable',
 			array(
 				'type'         => 'number',
@@ -140,19 +140,18 @@ class Syn_Config {
 	}
 
 	public static function admin_init() {
-		$cls = get_called_class();
 		add_settings_section(
-			'syndication_content',
+			'syndication_display',
 			__( 'Content Options', 'syndication-links' ),
-			array( $cls, 'options_callback' ),
-			'links_options'
+			array( __CLASS__, 'options_callback' ),
+			'syndication_display_options'
 		);
 		add_settings_field(
 			'syndication-links_display',
 			__( 'Display', 'syndication-links' ),
-			array( $cls, 'radio_callback' ),
-			'links_options',
-			'syndication_content',
+			array( __CLASS__, 'radio_callback' ),
+			'syndication_display_options',
+			'syndication_display',
 			array(
 				'name' => 'syndication-links_display',
 				'list' => self::display_options(),
@@ -161,9 +160,9 @@ class Syn_Config {
 		add_settings_field(
 			'syndication-links_size',
 			__( 'Size', 'syndication-links' ),
-			array( $cls, 'radio_callback' ),
-			'links_options',
-			'syndication_content',
+			array( __CLASS__, 'radio_callback' ),
+			'syndication_display_options',
+			'syndication_display',
 			array(
 				'name' => 'syndication-links_size',
 				'list' => self::size_options(),
@@ -172,9 +171,9 @@ class Syn_Config {
 		add_settings_field(
 			'syndication-links_bw',
 			__( 'Black Icons', 'syndication-links' ),
-			array( $cls, 'checkbox_callback' ),
-			'links_options',
-			'syndication_content',
+			array( __CLASS__, 'checkbox_callback' ),
+			'syndication_display_options',
+			'syndication_display',
 			array(
 				'name' => 'syndication-links_bw',
 			)
@@ -182,9 +181,9 @@ class Syn_Config {
 		add_settings_field(
 			'syndication-links_archives',
 			__( 'Show on Front Page, Archive Pages, and Search Results', 'syndication-links' ),
-			array( $cls, 'checkbox_callback' ),
-			'links_options',
-			'syndication_content',
+			array( __CLASS__, 'checkbox_callback' ),
+			'syndication_display_options',
+			'syndication_display',
 			array(
 				'name' => 'syndication-links_archives',
 			)
@@ -192,9 +191,9 @@ class Syn_Config {
 		add_settings_field(
 			'syndication-links_feed',
 			__( 'Show on Feed', 'syndication-links' ),
-			array( $cls, 'checkbox_callback' ),
-			'links_options',
-			'syndication_content',
+			array( __CLASS__, 'checkbox_callback' ),
+			'syndication_display_options',
+			'syndication_display',
 			array(
 				'name' => 'syndication-links_feed',
 			)
@@ -202,26 +201,26 @@ class Syn_Config {
 		add_settings_field(
 			'syndication-links_text_before',
 			__( 'Text Before Links', 'syndication-links' ),
-			array( $cls, 'text_callback' ),
-			'links_options',
-			'syndication_content',
+			array( __CLASS__, 'text_callback' ),
+			'syndication_display_options',
+			'syndication_display',
 			array(
 				'name' => 'syndication-links_text_before',
 			)
 		);
 
 		add_settings_section(
-			'syndication_posse_options',
+			'syndication_providers',
 			__( 'Syndication/POSSE Options', 'syndication-links' ),
-			array( $cls, 'posse_options_callback' ),
-			'links_options'
+			array( __CLASS__, 'posse_options_callback' ),
+			'syndication_provider_options'
 		);
 		add_settings_field(
 			'syndication_posse_enable',
 			__( 'Enable Syndication to Other Sites', 'syndication-links' ),
-			array( $cls, 'checkbox_callback' ),
-			'links_options',
-			'syndication_posse_options',
+			array( __CLASS__, 'checkbox_callback' ),
+			'syndication_provider_options',
+			'syndication_providers',
 			array(
 				'name' => 'syndication_posse_enable',
 			)
@@ -316,17 +315,50 @@ class Syn_Config {
 	}
 
 
+	/**
+	 * Echoes link for tab on page
+ 	 *
+ 	 * @param string $tab The id of the tab.
+ 	 * @param string $name The label of the tab.
+ 	 * @param string $active Which tab is active.
+ 	 *
+	*/
+	public static function tab_link( $tab, $name, $active = 'display' ) {
+		$url    = add_query_arg( 'tab', $tab, menu_page_url( 'syndication_links', false ) );
+		$active = ( $active === $tab ) ? ' nav-tab-active' : '';
+		printf( '<a href="%1$s" class="nav-tab%2$s">%3$s</a>', esc_url( $url ), esc_attr( $active ), esc_html( $name ) );
+	}
+
 	public static function links_options() {
-		echo '<div class="wrap">';
-		echo '<h2>' . esc_html__( 'Syndication Links', 'syndication-links' ) . '</h2>';
-		echo '<p>';
-		esc_html_e( 'Adds optional syndication links for various sites. Syndication is the act of posting your content on other sites. You can either manually add these to the box in the post editor or automatically. Several plugins support or are supported.', 'syndication-links' );
-		echo '</p><hr />';
-		echo '<form method="post" action="options.php">';
-		settings_fields( 'syndication_options' );
-		do_settings_sections( 'links_options' );
-		submit_button();
-		echo '</form></div>';
+		$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'general';
+		?>
+		<div class="wrap">
+			<h2> <?php esc_html_e( 'Syndication Links', 'syndication-links' ); ?></h2>
+		<p><?php esc_html_e( 'Adds optional syndication links for various sites. Syndication is the act of posting your content on other sites. You can either manually add these to the box in the post editor or automatically. Several plugins support or are supported.', 'syndication-links' ); ?></p>
+
+		<h2 class="nav-tab-wrapper">
+			<?php self::tab_link( 'general', __( 'General', 'syndication-links' ), $active_tab ); ?>
+			<?php self::tab_link( 'providers', __( 'Providers', 'syndication-links' ), $active_tab ); ?>
+		</h2>
+		<hr />
+		<form method="post" action="options.php">
+			<?php
+				switch ( $active_tab ) {
+					case 'general':
+						settings_fields( 'syndication_display' );
+						do_settings_sections( 'syndication_display_options' );
+						break;
+					case 'providers':
+						settings_fields( 'syndication_providers' );
+						do_settings_sections( 'syndication_provider_options' );
+						break;
+
+				}
+				submit_button();
+			?>
+		</form>
+		</div>
+		<?php
 	}
 
 	public static function the_content( $content ) {

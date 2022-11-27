@@ -11,7 +11,10 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		$this->name = __( 'Micro.blog', 'syndication-links' );
 		$this->uid  = 'microdotblog';
 
-		$enable = in_array( $this->uid, get_option( 'syndication_provider_enable' ) );
+
+
+		$option = get_option( 'syndication_provider_enable' );
+		$enable = is_array( $option) ? in_array( $this->uid, $option ) : false;
 		if ( $enable ) {
 			add_filter( 'query_vars', array( $this, 'query_var' ) );
 			add_action( 'pre_get_posts', array( $this, 'create_feed' ) );
@@ -30,7 +33,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 			'microdotblog_options',
 			__( 'Micro.blog', 'syndication-links' ),
 			array( get_called_class(), 'options_callback' ),
-			'links_options'
+			'syndication_provider_options'
 		);
 	}
 

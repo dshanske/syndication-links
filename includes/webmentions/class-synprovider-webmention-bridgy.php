@@ -42,7 +42,7 @@ class SynProvider_Webmention_Bridgy extends SynProvider_Webmention {
 			'bridgy_options',
 			__( 'Bridgy Publish Options', 'syndication-links' ),
 			array( get_called_class(), 'options_callback' ),
-			'links_options'
+			'syndication_provider_options'
 		);
 
 		add_settings_field(
@@ -52,7 +52,7 @@ class SynProvider_Webmention_Bridgy extends SynProvider_Webmention {
 				'Syn_Config',
 				'select_callback',
 			),
-			'links_options',
+			'syndication_provider_options',
 			'bridgy_options',
 			array(
 				'name' => 'bridgy_backlink',
@@ -70,7 +70,7 @@ class SynProvider_Webmention_Bridgy extends SynProvider_Webmention {
 				'Syn_Config',
 				'checkbox_callback',
 			),
-			'links_options',
+			'syndication_provider_options',
 			'bridgy_options',
 			array(
 				'name' => 'bridgy_ignoreformatting',

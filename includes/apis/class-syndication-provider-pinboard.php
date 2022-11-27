@@ -8,7 +8,10 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 	public function __construct( $args = array() ) {
 		$this->name = __( 'Pinboard', 'syndication-links' );
 		$this->uid  = 'pinboard';
-		$enable     = in_array( $this->uid, get_option( 'syndication_provider_enable' ) );
+
+		$option = get_option( 'syndication_provider_enable' );
+		$enable = is_array( $option) ? in_array( $this->uid, $option ) : false;
+
 		if ( $enable ) {
 			add_action( 'admin_init', array( $this, 'admin_init' ), 11 );
 		}
@@ -35,7 +38,7 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 			'pinboard_options',
 			__( 'Pinboard.in Options', 'syndication-links' ),
 			array( get_called_class(), 'options_callback' ),
-			'links_options'
+			'syndication_provider_options'
 		);
 		add_settings_field(
 			'pinboard_token',
@@ -44,7 +47,7 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 				'Syn_Config',
 				'text_callback',
 			),
-			'links_options',
+			'syndication_provider_options',
 			'pinboard_options',
 			array(
 				'name' => 'pinboard_token',

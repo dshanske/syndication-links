@@ -5,7 +5,10 @@ class SynProvider_Webmention_Bridgy_Mastodon extends SynProvider_Webmention_Brid
 	public function __construct( $args = array() ) {
 		$this->name = __( 'Mastodon via Bridgy Webmention', 'syndication-links' );
 		$this->uid  = 'webmention-mastodon-bridgy';
-		$enable     = in_array( $this->uid, get_option( 'syndication_provider_enable' ) );
+
+		$option = get_option( 'syndication_provider_enable' );
+		$enable = is_array( $option) ? in_array( $this->uid, $option ) : false;
+
 		if ( $enable ) {
 			add_action( 'wp_footer', array( $this, 'wp_footer' ) );
 			add_action( 'admin_init', array( $this, 'mastodon_admin_init' ), 12 );
@@ -22,7 +25,7 @@ class SynProvider_Webmention_Bridgy_Mastodon extends SynProvider_Webmention_Brid
 			'bridgy_mastodonexcerpt',
 			array(
 				'type'         => 'boolean',
-				'description'  => 'Use Post Excerpt for Toots',
+				'description'  => 'Use Post Excerpt for Posts',
 				'show_in_rest' => true,
 				'default'      => '0',
 			)
@@ -32,12 +35,12 @@ class SynProvider_Webmention_Bridgy_Mastodon extends SynProvider_Webmention_Brid
 	public function mastodon_admin_init() {
 		add_settings_field(
 			'bridgy_mastodonexcerpt',
-			__( 'Tell Bridgy to Use Post Excerpt for Posts if set', 'syndication-links' ),
+			__( 'Tell Bridgy to Use Post Excerpt for Matodon Posts if set', 'syndication-links' ),
 			array(
 				'Syn_Config',
 				'checkbox_callback',
 			),
-			'links_options',
+			'syndication_provider_options',
 			'bridgy_options',
 			array(
 				'name' => 'bridgy_mastodonexcerpt',

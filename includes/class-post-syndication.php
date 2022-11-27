@@ -9,38 +9,33 @@ class Post_Syndication {
 	protected static $targets = array();
 
 	public static function init() {
-		$cls = get_called_class();
 		// Add meta box to new post/post pages only
-		add_action( 'load-post.php', array( $cls, 'metabox_setup' ) );
-		add_action( 'load-post-new.php', array( $cls, 'metabox_setup' ) );
-		add_action( 'do_pings', array( $cls, 'do_pings' ), 9, 2 );
+		add_action( 'load-post.php', array( __CLASS__, 'metabox_setup' ) );
+		add_action( 'load-post-new.php', array( __CLASS__, 'metabox_setup' ) );
+		add_action( 'do_pings', array( __CLASS__, 'do_pings' ), 9, 2 );
 		foreach ( self::syndication_publish_post_types() as $type ) {
-			add_action( 'save_post_' . $type, array( $cls, 'save_post' ), 4, 2 );
+			add_action( 'save_post_' . $type, array( __CLASS__, 'save_post' ), 4, 2 );
 		}
-		add_action( 'micropub_syndication', array( $cls, 'syndication' ), 10, 2 );
-		add_action( 'syn_syndication', array( $cls, 'syndication' ), 10, 2 );
-		add_action( 'admin_init', array( $cls, 'admin_init' ) );
+		add_action( 'micropub_syndication', array( __CLASS__, 'syndication' ), 10, 2 );
+		add_action( 'syn_syndication', array( __CLASS__, 'syndication' ), 10, 2 );
+		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
 
 		// Syndication Links POSSE/Syndication Options
 
 		register_setting(
-			'syndication_options',
+			'syndication_providers',
 			'syndication_provider_enable',
 			array(
-				'type'         => 'string',
+				'type'         => 'array',
 				'description'  => 'Enable Display of these Providers',
-				'show_in_rest' => true,
-				'default'      => array(),
-			)
-		);
-
-		register_setting(
-			'syndication_options',
-			'syndication_links_custom_posse',
-			array(
-				'type'         => 'string',
-				'description'  => 'Syndication Links Custom Webmention POSSE list',
-				'show_in_rest' => true,
+				'show_in_rest' => array(
+							'schema' => array(
+								'type' => 'array',
+								'items' => array(
+									'type' => 'string'
+								)
+							),
+				),
 				'default'      => array(),
 			)
 		);
@@ -52,38 +47,15 @@ class Post_Syndication {
 			'syndication_provider_enable',
 			__( 'Enable the Following Providers', 'syndication-links' ),
 			array(
-				get_called_class(),
+				__CLASS__,
 				'provider_callback',
 			),
-			'links_options',
-			'syndication_posse_options',
+			'syndication_provider_options',
+			'syndication_providers',
 			array(
 				'name' => 'syndication_provider_enable',
 			)
 		);
-
-		add_settings_section(
-			'webmention_provider_options',
-			__( 'Custom Webmention POSSE providers', 'syndication-links' ),
-			array( get_called_class(), 'webmention_heading' ),
-			'links_options'
-		);
-
-		add_settings_field(
-			'syndication_links_custom_posse',
-			__( 'Custom Providers', 'syndication-links' ),
-			array(
-				get_called_class(),
-				'webmention_callback',
-			),
-			'links_options',
-			'webmention_provider_options',
-			array()
-		);
-	}
-
-	public static function webmention_heading() {
-		esc_html_e( 'Set up Custom Webmention POSSE handling', 'syndication-links' );
 	}
 
 	public static function register( $object ) {
@@ -201,46 +173,6 @@ class Post_Syndication {
 				'__back_compat_meta_box'             => false,
 			)
 		);
-	}
-
-
-	public static function webmention_callback( $args ) {
-		$name   = 'syndication_links_custom_posse';
-		$custom = get_option( $name );
-		foreach ( $custom as $key => $value ) {
-			$custom[ $key ] = array_filter( $value );
-		}
-		$custom = array_filter( $custom );
-		esc_html_e( 'Enter Name, UID, and Target URL for all Custom Webmention POSSE options', 'syndication-links' );
-		printf( '<ul id="custom_webmention">' );
-		if ( empty( $custom ) ) {
-			self::webmention_inputs( '0' );
-
-		} else {
-			foreach ( $custom as $key => $value ) {
-				self::webmention_inputs( $key, $value );
-			}
-		}
-		printf( '</ul>' );
-		printf( '<span class="button button-primary" id="add-custom-webmention-button">%s</span>', esc_html__( 'Add', 'syndication-links' ) );
-		printf( '<span class="button button-secondary" id="delete-custom-webmention-button">%s</span>', esc_html__( 'Remove', 'syndication-links' ) );
-	}
-
-	public static function ifset( $array, $key ) {
-		if ( array_key_exists( $key, $array ) ) {
-			return $array[ $key ];
-		}
-		return '';
-	}
-
-	private static function webmention_inputs( $int, $value = array() ) {
-		$output = '<input type="text" name="%1$s[%2$s][%3$s]" id="%4$s" value="%5$s" placeholder="%6$s" />';
-		$name   = 'syndication_links_custom_posse';
-		echo '<li>';
-		printf( $output, $name, $int, 'name', esc_attr( $name ), esc_attr( self::ifset( $value, 'name' ) ), esc_html__( 'Name', 'syndication-links' ) ); // phpcs:ignore
-		printf( $output, $name, $int, 'uid', esc_attr( $name ), esc_attr( self::ifset( $value, 'uid' ) ), esc_html__( 'UID', 'syndication-links' ) ); // phpcs:ignore
-		printf( $output, $name, $int, 'target', esc_attr( $name ), esc_attr( self::ifset( $value, 'target' ) ), esc_html__( 'Target URL', 'syndication-links' ) ); // phpcs:ignore
-		echo '</li>';
 	}
 
 	public static function provider_callback( $args ) {
