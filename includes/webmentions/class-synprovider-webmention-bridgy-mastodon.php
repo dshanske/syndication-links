@@ -7,7 +7,7 @@ class SynProvider_Webmention_Bridgy_Mastodon extends SynProvider_Webmention_Brid
 		$this->uid  = 'webmention-mastodon-bridgy';
 
 		$option = get_option( 'syndication_provider_enable' );
-		$enable = is_array( $option) ? in_array( $this->uid, $option ) : false;
+		$enable = is_array( $option ) ? in_array( $this->uid, $option ) : false;
 
 		if ( $enable ) {
 			add_action( 'wp_footer', array( $this, 'wp_footer' ) );

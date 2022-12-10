@@ -29,12 +29,12 @@ class Post_Syndication {
 				'type'         => 'array',
 				'description'  => 'Enable Display of these Providers',
 				'show_in_rest' => array(
-							'schema' => array(
-								'type' => 'array',
-								'items' => array(
-									'type' => 'string'
-								)
-							),
+					'schema' => array(
+						'type'  => 'array',
+						'items' => array(
+							'type' => 'string',
+						),
+					),
 				),
 				'default'      => array(),
 			)

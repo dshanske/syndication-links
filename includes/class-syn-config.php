@@ -317,11 +317,11 @@ class Syn_Config {
 
 	/**
 	 * Echoes link for tab on page
- 	 *
- 	 * @param string $tab The id of the tab.
- 	 * @param string $name The label of the tab.
- 	 * @param string $active Which tab is active.
- 	 *
+	 *
+	 * @param string $tab The id of the tab.
+	 * @param string $name The label of the tab.
+	 * @param string $active Which tab is active.
+	 *
 	*/
 	public static function tab_link( $tab, $name, $active = 'display' ) {
 		$url    = add_query_arg( 'tab', $tab, menu_page_url( 'syndication_links', false ) );
@@ -343,17 +343,17 @@ class Syn_Config {
 		<hr />
 		<form method="post" action="options.php">
 			<?php
-				switch ( $active_tab ) {
-					case 'general':
-						settings_fields( 'syndication_display' );
-						do_settings_sections( 'syndication_display_options' );
-						break;
-					case 'providers':
-						settings_fields( 'syndication_providers' );
-						do_settings_sections( 'syndication_provider_options' );
-						break;
+			switch ( $active_tab ) {
+				case 'general':
+					settings_fields( 'syndication_display' );
+					do_settings_sections( 'syndication_display_options' );
+					break;
+				case 'providers':
+					settings_fields( 'syndication_providers' );
+					do_settings_sections( 'syndication_provider_options' );
+					break;
 
-				}
+			}
 				submit_button();
 			?>
 		</form>

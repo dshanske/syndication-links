@@ -10,7 +10,7 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 		$this->uid  = 'pinboard';
 
 		$option = get_option( 'syndication_provider_enable' );
-		$enable = is_array( $option) ? in_array( $this->uid, $option ) : false;
+		$enable = is_array( $option ) ? in_array( $this->uid, $option ) : false;
 
 		if ( $enable ) {
 			add_action( 'admin_init', array( $this, 'admin_init' ), 11 );

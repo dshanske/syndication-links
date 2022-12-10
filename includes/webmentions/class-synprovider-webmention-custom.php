@@ -20,24 +20,24 @@ class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 				'type'         => 'array',
 				'description'  => 'Syndication Links Custom Webmention POSSE list',
 				'show_in_rest' => array(
-							'schema' => array(
-								'type' => 'array',
-								'items' => array(
-									'type' => 'object',
-									'properties' => array(
-										'name' => array(
-											'type' => 'string'
-										),
-										'uid' => array(
-											'type' => 'string'
-										),
-										'target' => array(
-											'type' => 'string',
-											'format' => 'uri'
-										)
-									)
-								)
+					'schema' => array(
+						'type'  => 'array',
+						'items' => array(
+							'type'       => 'object',
+							'properties' => array(
+								'name'   => array(
+									'type' => 'string',
+								),
+								'uid'    => array(
+									'type' => 'string',
+								),
+								'target' => array(
+									'type'   => 'string',
+									'format' => 'uri',
+								),
 							),
+						),
+					),
 				),
 				'default'      => array(),
 			)
