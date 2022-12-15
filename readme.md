@@ -1,10 +1,8 @@
 # Syndication Links #
 **Contributors:** [dshanske](https://profiles.wordpress.org/dshanske/)  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
-**Requires at least:** 4.9.9  
-**Requires PHP:** 5.6  
-**Tested up to:** 6.0  
-**Stable tag:** 4.3.12  
+**Tested up to:** 6.1  
+**Stable tag:** 4.3.11  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -83,7 +81,7 @@ The goal of the interface is not only can you syndicate via Micropub, but in the
 
 ### How do I prevent the links from being automatically added to the content? ###
 
-You will have to remove the content filter `remove_filter( 'the_content', array( 'Syn_Config', 'the_content' ) , 30 )` and then you can call get_syndication_links() directly in your theme. You should add
+You will have to add the following code to your theme `add_filter( 'syndication_links_display', '__return_false' );` and then you can call get_syndication_links() directly in your theme. You should add
 this to the init hook.
 
 * `get_syndication_links( $object, $args ) - Returns the HTML for $object. $object can be a post_ID, a WP_Post object, or a WP_Comment object.
@@ -162,6 +160,13 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 ## Changelog ##
+
+### Version 4.x.x ( 2022-xx-xx )###
+* Add filter to disable content addition
+* Hide settings if not being used
+* Refresh icons
+* Decommission Meetup as no longer offered by Bridgy
+* New Tabbed Settings Page
 
 ### Version 4.3.11 ( 2022-05-14 ) ###
 * Refresh icons and CSS build logic

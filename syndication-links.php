@@ -3,14 +3,16 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add Links to Syndicated Copies of Your Posts
- * Version: 4.3.12
+ * Version: 4.3.11
+ * Requires at least: 4.9.9
+ * Requires PHP: 5.6
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  * Text Domain: syndication-links
  * Domain Path:  /languages
  */
 
-define( 'SYNDICATION_LINKS_VERSION', '4.3.12' );
+define( 'SYNDICATION_LINKS_VERSION', get_file_data( __FILE__, array( 'Version' => 'Version' ) )['Version'] );
 
 
 function syndication_links_load( $files, $dir = 'includes/' ) {
