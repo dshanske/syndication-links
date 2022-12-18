@@ -12,7 +12,7 @@ class SynProvider_Webmention_Bridgy extends SynProvider_Webmention {
 
 	public function register_setting() {
 		register_setting(
-			'syndication_options',
+			'syndication_providers',
 			'bridgy_backlink',
 			array(
 				'type'         => 'string',
@@ -22,7 +22,7 @@ class SynProvider_Webmention_Bridgy extends SynProvider_Webmention {
 			)
 		);
 		register_setting(
-			'syndication_options',
+			'syndication_providers',
 			'bridgy_ignoreformatting',
 			array(
 				'type'         => 'boolean',

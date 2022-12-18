@@ -21,7 +21,7 @@ class SynProvider_Webmention_Bridgy_Mastodon extends SynProvider_Webmention_Brid
 
 	public function register_mastodon_setting() {
 		register_setting(
-			'syndication_options',
+			'syndication_providers',
 			'bridgy_mastodonexcerpt',
 			array(
 				'type'         => 'boolean',

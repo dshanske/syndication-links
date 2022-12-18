@@ -23,7 +23,7 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 
 	public function register_setting() {
 		register_setting(
-			'syndication_options',
+			'syndication_providers',
 			'pinboard_token',
 			array(
 				'type'         => 'string',

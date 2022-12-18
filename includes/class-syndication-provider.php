@@ -46,7 +46,7 @@ abstract class Syndication_Provider {
 	 *
 	 * The default version of this just sets the parameters
 	 *
-	 * @param string $key API Key if Needed
+	 * @param array $args Array of Arguments
 	 */
 	public function __construct( $args = array() ) {
 		$defaults  = array();

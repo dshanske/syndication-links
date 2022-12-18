@@ -21,7 +21,7 @@ class SynProvider_Webmention_Bridgy_Twitter extends SynProvider_Webmention_Bridg
 
 	public function register_twitter_setting() {
 		register_setting(
-			'syndication_options',
+			'syndication_providers',
 			'bridgy_twitterexcerpt',
 			array(
 				'type'         => 'boolean',
