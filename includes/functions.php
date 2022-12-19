@@ -40,17 +40,17 @@ function get_comment_syndication_links_data( $comment_id ) {
 function add_post_syndication_link( $post_id, $uri, $replace = false ) {
 	$post = get_post( $post_id );
 	if ( $post ) {
-		return false;
+		return Syn_Meta::add_syndication_link( 'post', $post->ID, $uri, $replace );
 	}
-	return Syn_Meta::add_syndication_link( 'post', $post->ID, $uri, $replace );
+	return false;
 }
 
 function add_comment_syndication_link( $comment_id, $uri, $replace = false ) {
 	$comment = get_comment( $comment_id );
 	if ( $comment ) {
-		return false;
+		return Syn_Meta::add_syndication_link( 'comment', $comment->comment_ID, $uri, $replace );
 	}
-	return Syn_Meta::add_syndication_link( 'comment', $comment->comment_ID, $uri, $replace );
+	return false;
 }
 
 function get_the_content_syndication( $syndication_uid = null ) {
