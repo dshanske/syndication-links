@@ -348,12 +348,12 @@ class Syn_Meta {
 	/* Add Syndication Links to a Metadata Object
 	 *
 	 * @param string $type Metadata Type, e.g. post, comment, term.
-	 * @param int $object  Object ID.
+	 * @param int $id  Object ID.
 	 * @param string|array $uri Syndication URL or array of Syndication URLs.
 	 * @param boolean $replace Whether or not to replace the current data or not.a
 	 * @return boolean True if successful.
 	 */
-	public static function add_syndication_link( $type, $object, $uri, $replace = false ) {
+	public static function add_syndication_link( $type, $id, $uri, $replace = false ) {
 		if ( $replace ) {
 			return update_metadata( $type, $id, 'mf2_syndication', $uri );
 		}
@@ -378,13 +378,13 @@ class Syn_Meta {
 	/* Retrieve Syndication Link URLs from an Object
 	 *
 	 * @param string $type Metadata Type, e.g. post, comment, term.
-	 * @param int $object  Object ID.
+	 * @param int $id  Object ID.
 	 * @return array List of syndication link URLs or empty array if none.
 	 */
 
-	public static function get_syndication_links_data( $type, $object ) {
+	public static function get_syndication_links_data( $type, $id ) {
 		$urls = array();
-		$urls = get_metadata( $type, $object, 'mf2_syndication', true );
+		$urls = get_metadata( $type, $id, 'mf2_syndication', true );
 		if ( $urls ) {
 			if ( is_string( $urls ) ) {
 				$urls = explode( "\n", $urls );
@@ -392,32 +392,32 @@ class Syn_Meta {
 		} else {
 			$urls = array();
 		}
-		$old = get_metadata( $type, $object, 'syndication_urls', true );
+		$old = get_metadata( $type, $id, 'syndication_urls', true );
 		if ( $old ) {
 			$old = explode( "\n", $old );
 			if ( is_array( $old ) ) {
 				$urls = array_filter( array_unique( array_merge( $urls, $old ) ) );
-				update_metadata( $type, $object, 'mf2_syndication', $urls );
-				delete_metadata( $type, $object, 'syndication_urls' );
+				update_metadata( $type, $id, 'mf2_syndication', $urls );
+				delete_metadata( $type, $id, 'syndication_urls' );
 			}
 		}
 
 		/* Allow adding of additional links before display but ensuring they are unique
 
 		 */
-		$urls = apply_filters( "get_{$type}_syndication_links", $urls, $object );
+		$urls = apply_filters( "get_{$type}_syndication_links", $urls, $id );
 
 		/* Legacy filter kept for backcompat for now only works on posts */
 		if ( 'post' === $type ) {
-			$urls = apply_filters( 'syn_add_links', $urls, $object );
+			$urls = apply_filters( 'syn_add_links', $urls, $id );
 		}
 
 		$urls = array_unique( self::clean_urls( $urls ) );
 		return array_filter( $urls );
 	}
 
-	public static function get_syndication_links_elements( $type, $object = null, $args = array() ) {
-		$urls = self::get_syndication_links_data( $type, $object );
+	public static function get_syndication_links_elements( $type, $id = null, $args = array() ) {
+		$urls = self::get_syndication_links_data( $type, $id );
 		if ( empty( $urls ) ) {
 			return array();
 		}
@@ -483,10 +483,10 @@ class Syn_Meta {
 
 
 
-	public static function get_syndication_links( $type, $object = null, $args = array() ) {
+	public static function get_syndication_links( $type, $id = null, $args = array() ) {
 		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
 
-		$links = self::get_syndication_links_elements( $type, $object, $r );
+		$links = self::get_syndication_links_elements( $type, $id, $r );
 		if ( empty( $links ) ) {
 			return '';
 		}
