@@ -1,31 +1,56 @@
 <?php
 
-function get_syndication_links( $object_id = null, $args = array() ) {
-	return Syn_Meta::get_syndication_links( $object_id, $args );
-}
 
 function get_post_syndication_links( $post_id = null, $args = array() ) {
 	$post = get_post( $post_id );
 	if ( $post ) {
-		return get_syndication_links( $post, $args );
+		return Syn_Meta::get_syndication_links( 'post', $post->ID, $args );
 	}
 	return false;
+}
+
+function get_syndication_links( $post_id = null, $args = array() ) {
+	return Syn_Meta::get_syndication_links( $post_id, $args );
 }
 
 function get_comment_syndication_links( $comment_id = null, $args = array() ) {
 	$comment = get_comment( $comment_id );
 	if ( $comment ) {
-		return get_syndication_links( $comment, $args );
+		return Syn_Meta::get_syndication_links( 'comment', $comment->comment_ID, $args );
 	}
 	return false;
 }
 
-function get_syndication_links_data( $object = null ) {
-	return Syn_Meta::get_syndication_links_data( $object );
+function get_post_syndication_links_data( $post_id ) {
+	$post = get_post( $post_id );
+	if ( $post ) {
+		return Syn_Meta::get_syndication_links_data( 'post', $post->ID );
+	}
+	return false;
 }
 
-function add_syndication_link( $post_id, $uri, $replace = false ) {
-	return Syn_Meta::add_syndication_link( $post_id, $uri, $replace );
+function get_comment_syndication_links_data( $comment_id ) {
+	$comment = get_comment( $comment_id );
+	if ( $comment ) {
+		return Syn_Meta::get_syndication_links_data( 'comment', $comment->comment_ID );
+	}
+	return false;
+}
+
+function add_post_syndication_link( $post_id, $uri, $replace = false ) {
+	$post = get_post( $post_id );
+	if ( $post ) {
+		return false;
+	}
+	return Syn_Meta::add_syndication_link( 'post', $post->ID, $uri, $replace );
+}
+
+function add_comment_syndication_link( $comment_id, $uri, $replace = false ) {
+	$comment = get_comment( $comment_id );
+	if ( $comment ) {
+		return false;
+	}
+	return Syn_Meta::add_syndication_link( 'comment', $comment->comment_ID, $uri, $replace );
 }
 
 function get_the_content_syndication( $syndication_uid = null ) {

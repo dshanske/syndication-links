@@ -99,7 +99,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 				if ( ( $code / 100 ) === 2 ) {
 					$json = json_decode( $response['body'], true );
 					if ( array_key_exists( 'home_page_url', $json ) ) {
-						add_syndication_link( $post_id, esc_url( $json['home_page_url'] ) );
+						add_post_syndication_link( $post_id, esc_url( $json['home_page_url'] ) );
 						return $json['home_page_url'];
 					}
 				}
@@ -149,7 +149,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		foreach ( $json['items'] as $item ) {
 			$post_id = url_to_postid( $item['url'] );
 			if ( $post_id ) {
-				add_syndication_link( $post_id, sprintf( 'https://micro.blog/%1$s/%2$s', $username, $item['id'] ) );
+				add_post_syndication_link( $post_id, sprintf( 'https://micro.blog/%1$s/%2$s', $username, $item['id'] ) );
 			}
 			if ( $item['url'] === $permalink ) {
 				return true;

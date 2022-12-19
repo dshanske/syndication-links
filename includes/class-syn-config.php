@@ -99,13 +99,23 @@ class Syn_Config {
 
 		// Syndication Links POSSE/Syndication Options
 		register_setting(
-			'syndication_provider',
+			'syndication_providers',
 			'syndication_posse_enable',
 			array(
 				'type'         => 'number',
 				'description'  => 'Enable Syndication via Syndication Links',
 				'show_in_rest' => true,
 				'default'      => '0',
+			)
+		);
+		register_setting(
+			'syndication_providers',
+			'syndication_wp_cron',
+			array(
+				'type'         => 'number',
+				'description'  => 'Syndicate in the Background',
+				'show_in_rest' => true,
+				'default'      => '1',
 			)
 		);
 
@@ -223,6 +233,16 @@ class Syn_Config {
 			'syndication_providers',
 			array(
 				'name' => 'syndication_posse_enable',
+			)
+		);
+		add_settings_field(
+			'syndication_wp_cron',
+			__( 'Syndication Runs in the Background', 'syndication-links' ),
+			array( __CLASS__, 'checkbox_callback' ),
+			'syndication_provider_options',
+			'syndication_providers',
+			array(
+				'name' => 'syndication_wp_cron',
 			)
 		);
 
@@ -417,9 +437,9 @@ class Syn_Config {
 	}
 
 	public static function json_feed_item( $feed_item, $post ) {
-		$syn = get_syndication_links_data( $post );
+		$syn = get_post_syndication_links_data( $post );
 		if ( $syn ) {
-			$feed_item['syndication'] = get_syndication_links_data( $post );
+			$feed_item['syndication'] = get_post_syndication_links_data( $post );
 		}
 		return $feed_item;
 	}

@@ -46,7 +46,7 @@ class SynProvider_Webmention extends Syndication_Provider {
 			$post_id = get_the_ID();
 		}
 		$post = get_post( $post_id );
-		add_syndication_link( $post_id, $this->get_target() );
+		add_post_syndication_link( $post_id, $this->get_target() );
 
 		// Attempt at cache busting by running anything attached to 'edit_post'.
 		do_action( 'edit_post', $post_id, $post );
@@ -63,7 +63,7 @@ class SynProvider_Webmention extends Syndication_Provider {
 			}
 			if ( is_string( $response ) ) {
 				$links[] = $response;
-				add_syndication_link( $post_id, $links, true );
+				add_post_syndication_link( $post_id, $links, true );
 
 				// Attempt at cache busting by classifying this as an edit
 				do_action( 'edit_post', $post_id, $post );

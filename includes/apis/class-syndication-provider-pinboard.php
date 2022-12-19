@@ -136,7 +136,7 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 		if ( empty( $link ) ) {
 			return false;
 		}
-		add_syndication_link( $post_id, 'https://pinboard.in' . $link, true );
+		add_post_syndication_link( $post_id, 'https://pinboard.in' . $link, true );
 
 		return true;
 	}

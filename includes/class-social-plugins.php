@@ -163,7 +163,7 @@ class Social_Plugins {
 			$connection->body->id_str
 		);
 
-		Syn_Meta::add_syndication_link( $id, $url );
+		return add_post_syndication_link( $id, $url );
 	}
 
 } // End Class
