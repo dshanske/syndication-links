@@ -10,7 +10,7 @@ function get_post_syndication_links( $post_id = null, $args = array() ) {
 }
 
 function get_syndication_links( $post_id = null, $args = array() ) {
-	return Syn_Meta::get_syndication_links( $post_id, $args );
+	return get_post_syndication_links( $post_id, $args );
 }
 
 function get_comment_syndication_links( $comment_id = null, $args = array() ) {
