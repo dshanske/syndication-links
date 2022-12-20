@@ -287,7 +287,7 @@ class Syn_Meta {
 				$meta = explode( PHP_EOL, $_POST['syndication_urls'] );
 			}
 			$meta = self::clean_urls( $meta );
-			self::add_syndication_link( $type, $id, 'mf2_syndication', $meta, true );
+			self::add_syndication_link( $type, $id, $meta, true );
 		}
 	}
 
