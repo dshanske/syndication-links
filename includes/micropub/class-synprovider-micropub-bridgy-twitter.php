@@ -92,10 +92,13 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 	 */
 	public static function post_to_mf2( $post ) {
 		$mf2 = parent::post_to_mf2( $post );
-		// If length is over 280 bytes then replace content with link plus the title 
+		// If length is over 280 bytes then replace content with link plus the title
 		if ( ! empty( $post->post_content ) & 280 < strlen( $post->post_content ) ) {
-			$content = get_the_title( $post ) . ' - ' . get_permalink( $post );
+			$content                      = get_the_title( $post ) . ' - ' . get_permalink( $post );
 			$mf2['properties']['content'] = array( $content );
+		}
+		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'bridgy_twitterexcerpt' ) ) {
+			$content = $post->post_excerpt;
 		}
 
 		return $mf2;

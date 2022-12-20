@@ -108,7 +108,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 	public static function post_to_mf2( $post ) {
 		$post = get_post( $post );
 
-		$mf2 = array();
+		$mf2               = array();
 		$mf2['properties'] = array();
 		foreach ( get_post_meta( $post->ID ) as $field => $val ) {
 			$val = maybe_unserialize( $val[0] );
@@ -217,7 +217,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 		$response = self::post_micropub( $post_id, $this->endpoint );
 		if ( is_string( $response ) ) {
 			$return = add_post_syndication_link( $post_id, $response );
-		} else if( is_wp_error( $response ) ) {
+		} elseif ( is_wp_error( $response ) ) {
 			error_log( wp_json_encode( $response ) );
 		}
 
