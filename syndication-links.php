@@ -3,7 +3,7 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add Links to Syndicated Copies of Your Posts
- * Version: 4.3.11
+ * Version: 4.4.0
  * Requires at least: 4.9.9
  * Requires PHP: 5.6
  * Author: David Shanske
@@ -112,6 +112,9 @@ function syndication_links_init() {
 			array(
 				'class-synprovider-micropub.php', // Class for any Micropub Based Service
 				'class-synprovider-micropub-bridgy-twitter.php',
+				'class-synprovider-micropub-bridgy-flickr.php',
+				'class-synprovider-micropub-bridgy-github.php',
+				'class-synprovider-micropub-bridgy-mastodon.php',
 			),
 			'/includes/micropub'
 		);
