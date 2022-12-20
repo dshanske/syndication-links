@@ -93,7 +93,8 @@ class Syn_Meta {
 	}
 
 	public static function screens() {
-		$screens = array( 'post', 'page', 'comment', 'indieweb_page_syndication_links' );
+		$screens = array( 'comment', 'indieweb_page_syndication_links' );
+		$screens = array_merge( $screens, syndication_post_types() );
 		return apply_filters( 'syn_metabox_types', $screens );
 	}
 
@@ -109,6 +110,8 @@ class Syn_Meta {
 			);
 		}
 	}
+
+
 
 
 	public static function query_var( $vars ) {

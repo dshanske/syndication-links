@@ -107,6 +107,15 @@ function syndication_links_init() {
 			'/includes/apis'
 		);
 
+		// Providers that require Micropub
+		syndication_links_register_providers(
+			array(
+				'class-synprovider-micropub.php', // Class for any Micropub Based Service
+				'class-synprovider-micropub-bridgy-twitter.php',
+			),
+			'/includes/micropub'
+		);
+
 		// Providers that have a Post Kinds Dependency
 		if ( class_exists( 'Post_Kinds_Plugin' ) ) {
 			syndication_links_register_providers(

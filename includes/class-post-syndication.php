@@ -13,8 +13,9 @@ class Post_Syndication {
 		add_action( 'load-post.php', array( __CLASS__, 'metabox_setup' ) );
 		add_action( 'load-post-new.php', array( __CLASS__, 'metabox_setup' ) );
 		add_action( 'do_pings', array( __CLASS__, 'do_pings' ), 9, 2 );
-		foreach ( self::syndication_publish_post_types() as $type ) {
-			add_action( 'save_post_' . $type, array( __CLASS__, 'save_post' ), 4, 2 );
+		$priority = get_option( 'syndication_wp_cron', 1 ) ? 4 : 99;
+		foreach ( syndication_post_types() as $type ) {
+			add_action( 'save_post_' . $type, array( __CLASS__, 'save_post' ), $priority, 2 );
 		}
 		add_action( 'micropub_syndication', array( __CLASS__, 'syndication' ), 10, 2 );
 		add_action( 'syn_syndication', array( __CLASS__, 'syndication' ), 10, 2 );
@@ -155,17 +156,13 @@ class Post_Syndication {
 		add_action( 'add_meta_boxes', array( get_called_class(), 'add_postmeta_boxes' ) );
 	}
 
-	public static function syndication_publish_post_types() {
-		return apply_filters( 'syndication_publish_post_types', array( 'post', 'page' ) );
-	}
-
 	/* Create one or more meta boxes to be displayed on the post editor screen. */
 	public static function add_postmeta_boxes() {
 		add_meta_box(
 			'syndicationbox-meta',      // Unique ID
 			esc_html__( 'Syndicate To', 'syndication-links' ),    // Title
 			array( get_called_class(), 'metabox' ),   // Callback function
-			self::syndication_publish_post_types(),         // Admin page (or post type)
+			syndication_post_types(),         // Admin page (or post type)
 			'side',         // Context
 			'default',      // Priority
 			array(
@@ -282,16 +279,13 @@ class Post_Syndication {
 
 		// If this property is set then set to
 		if ( isset( $_POST['syndicate-to'] ) ) {
-			add_post_meta( $post_id, '_syndicate-to', array_map( 'sanitize_key', $_POST['syndicate-to'] ), true );
+			$syndication = array_map( 'sanitize_key', $_POST['syndicate-to'] );
+			if ( get_option( 'syndication_wp_cron', 1 ) ) {
+				add_post_meta( $post_id, '_syndicate-to', $syndication, true );
+			} else {
+				self::syndication( $post_id, $syndication );
+			}
 		}
 
 	}
-
-	public static function str_prefix( $source, $prefix ) {
-		if ( ! is_string( $source ) || ! is_string( $prefix ) ) {
-			return false;
-		}
-		return strncmp( $source, $prefix, strlen( $prefix ) ) === 0;
-	}
-
 } // End Class

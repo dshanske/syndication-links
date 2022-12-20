@@ -97,6 +97,24 @@ class Syn_Config {
 			)
 		);
 
+		register_setting(
+			'syndication_display',
+			'syndication_post_types',
+			array(
+				'type'         => 'array',
+				'description'  => 'Supported Post Types for Syndication',
+				'show_in_rest' => array(
+					'schema' => array(
+						'type'  => 'array',
+						'items' => array(
+							'type' => 'string',
+						),
+					),
+				),
+				'default'      => array( 'post', 'page' ),
+			)
+		);
+
 		// Syndication Links POSSE/Syndication Options
 		register_setting(
 			'syndication_providers',
@@ -219,6 +237,17 @@ class Syn_Config {
 			)
 		);
 
+		add_settings_field(
+			'syndication_post_types',
+			__( 'Post Types to Offer Syndication For', 'syndication-links' ),
+			array( __CLASS__, 'post_type_callback' ),
+			'syndication_display_options',
+			'syndication_display',
+			array(
+				'name' => 'syndication_post_types',
+			)
+		);
+
 		add_settings_section(
 			'syndication_providers',
 			__( 'Syndication/POSSE Options', 'syndication-links' ),
@@ -311,6 +340,19 @@ class Syn_Config {
 		echo '</fieldset>';
 	}
 
+	public static function post_type_callback( array $args ) {
+		echo '<ul>';
+		$option = get_option( $args['name'], array( 'post', 'page' ) );
+		foreach ( get_post_types( array( 'public' => true ), 'objects' ) as $post_type ) {
+			?>
+			 <li><input name='<?php esc_attr_e( $args['name'] ); ?>[]' type='checkbox' value='<?php echo $post_type->name; ?>' <?php checked( in_array( $post_type->name, $option ), true ); ?>/> 
+			 <?php echo $post_type->label; ?>
+			</li> 
+			<?php
+		}
+		echo '</ul>';
+
+	}
 
 	public static function text_callback( $args ) {
 		$name = $args['name'];
