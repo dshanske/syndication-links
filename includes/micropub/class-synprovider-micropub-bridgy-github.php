@@ -45,7 +45,7 @@ class SynProvider_Micropub_Bridgy_Github extends SynProvider_Micropub {
 		);
 	}
 
-	public function _admin_init() {
+	public function admin_init() {
 		add_settings_field(
 			'bridgy_github_token',
 			__( 'Micropub Token for Bridgy GitHub Publish', 'syndication-links' ),

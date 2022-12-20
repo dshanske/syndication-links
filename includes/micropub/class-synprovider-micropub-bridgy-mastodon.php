@@ -55,7 +55,7 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 		);
 	}
 
-	public function _admin_init() {
+	public function admin_init() {
 		add_settings_field(
 			'bridgy_mastodon_token',
 			__( 'Micropub Token for Bridgy Mastodon Publish', 'syndication-links' ),

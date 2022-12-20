@@ -55,7 +55,7 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 		);
 	}
 
-	public function twitter_admin_init() {
+	public function admin_init() {
 		add_settings_field(
 			'bridgy_twitter_token',
 			__( 'Micropub Token for Twitter via Bridgy', 'syndication-links' ),

@@ -45,7 +45,7 @@ class SynProvider_Micropub_Bridgy_Flickr extends SynProvider_Micropub {
 		);
 	}
 
-	public function _admin_init() {
+	public function admin_init() {
 		add_settings_field(
 			'bridgy_flickr_token',
 			__( 'Micropub Token for Bridgy Flickr Publish', 'syndication-links' ),
