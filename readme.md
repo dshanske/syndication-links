@@ -2,7 +2,7 @@
 **Contributors:** [dshanske](https://profiles.wordpress.org/dshanske/)  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Tested up to:** 6.1  
-**Stable tag:** 4.3.11  
+**Stable tag:** 4.4.0  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -68,9 +68,9 @@ The plugin supports automatically pulling data from plugins that syndicate your 
 
 Using the optional Syndication feature(disabled by default) you can syndicate your posts to:
 
-* [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, MeetUp.com, Mastodon and Flickr
+* [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, Mastodon and Flickr. The plugin supports Bridgy Publish via webmention and via Micropub.
 * [Bridgy Fed](https://fed.brid.gy) - Bridgy Fed is a service that allows you to interact with federated social networks using webmentions.
-* [Micro.blog](https://micro.blog) - Micro.blog is a social network and publishing platform for independent microblogs, created by Manton Reece.
+* [Micro.blog](https://micro.blog) - Micro.blog is a social network and publishing platform for independent microblogs, created by Manton Reece. It uses a custom feed you can add to Micro.blog to support this.
 * [Pinboard](https://pinboard.in) - Pinboard is a bookmarking site. The support for this is currently only enabled if you have Post Kinds enabled, due to the difficulty in getting a URL. It will bookmark the URL of any object you are citing.
 * Custom Webmention Syndication - Add any site that supports publishing by sending a webmention by configuring it in the settings page
 
@@ -84,7 +84,8 @@ The goal of the interface is not only can you syndicate via Micropub, but in the
 You will have to add the following code to your theme `add_filter( 'syndication_links_display', '__return_false' );` and then you can call get_syndication_links() directly in your theme. You should add
 this to the init hook.
 
-* `get_syndication_links( $object, $args ) - Returns the HTML for $object. $object can be a post_ID, a WP_Post object, or a WP_Comment object.
+* `get_post_syndication_links( $post, $args ) - Returns the HTML for a post.
+* `get_comment_syndication_links( $comment, $args ) - Returns the HTML for a comment.
 ** $args
 *** `style` - Defaults to ul
 *** `text` - Display text, defaults to settings option
@@ -105,19 +106,26 @@ originalofform.php in your theme folder the function will return it so you can c
 * `syn_rewrite_secure( $domains )` - $domains is an array of domain names to rewrite to https if found
 * `syn_metabox_types( $screens )` - $screens would be an array of post types to add the Syndication Link metabox to.
 * `syn_network_strings( $strings )` - $strings is an array of descriptive text strings by domain name
-* `syn_add_links( $urls, $post_ID )` - $urls is an array of retrieved links from $post_ID
+* `syn_add_links( $urls, $post_ID )` - (Deprecated) $urls is an array of retrieved links from $post_ID
+* `get_post_syndication_links( $urls, $post_ID)` - Replaces syn_add_links. 
+* `get_comment_syndication_links( $urls, $comment_ID` - Filters an array of retrieved comment syndication links.
 * `syn_links_display_defaults( $defaults )` - Filter the defaults for displaying Syndication Links
 * `syndication_link_checked( $checked, $uid, $post_ID )` - Will check a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
 * `syndication_link_disabled( $disabled, $uid, $post_ID )` - Will disable the checkbox for a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
 * `syn_link_title( $title, $name )` - Allows you to set the title string for Links. Example, pinboard => Pinboard.
 * `syn_link_mapping( $icon, $url )` - Allows you to override or set the mapping from URL to icon name.
 * `pre_syn_link_icon( $icon, $name )` - Allows you to provide a custom icon. Icons by default are SVG, not URL or filenames.
+* `syndication_links_display( true )` - Adds Syndication Links to content display. Set to false if the theme supports this.
 
 ### How do I contribute or file bug reports?
 
 Development and bug reports on this plugin is on Github at https://github.com/dshanske/syndication-links
 ###
 ## Upgrade Notice ##
+
+### Version 4.4.0 ###
+
+Several core function and filter signatures have changed and may cause some compatability issues.
 
 ### Version 4.2.0 ###
 
@@ -161,12 +169,16 @@ In no particular order...
 
 ## Changelog ##
 
-### Version 4.x.x ( 2022-xx-xx )###
+### Version 4.4.0 ( 2022-12-19 ) ###
 * Add filter to disable content addition
 * Hide settings if not being used
 * Refresh icons
 * Decommission Meetup as no longer offered by Bridgy
 * New Tabbed Settings Page
+* Add options to select which post types will offer syndication and links
+* Add option to disable use of wp cron and publish immediately
+* Introduce support for Bridgy via Micropub
+* Fix issue with Mastodon Autoposter
 
 ### Version 4.3.11 ( 2022-05-14 ) ###
 * Refresh icons and CSS build logic
