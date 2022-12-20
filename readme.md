@@ -2,7 +2,7 @@
 **Contributors:** [dshanske](https://profiles.wordpress.org/dshanske/)  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Tested up to:** 6.1  
-**Stable tag:** 4.4.0  
+**Stable tag:** 4.4.1  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -168,6 +168,12 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 ## Changelog ##
+
+### Version 4.4.1 ( 2022-12-20 ) ###
+* Add function to shorten content to title for Twitter Micropub if longer than 280 characters
+* Add function to shorten content to title for Mastodon Micropub if longer than 500 characters
+* Fix respecting of excerpt settings for Twitter and Mastodon
+* Fix issue with saving Syndication Links
 
 ### Version 4.4.0 ( 2022-12-19 ) ###
 * Add filter to disable content addition
