@@ -4,7 +4,7 @@ add_action( 'init', array( 'Social_Plugins', 'init' ) );
 
 class Social_Plugins {
 	public static function init() {
-		add_filter( 'syn_add_links', array( 'Social_Plugins', 'add_syn_plugins' ) );
+		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_syn_plugins' ) );
 		add_filter( 'syn_links_url_to_name', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
 		add_action( 'wpt_tweet_posted', array( 'Social_Plugins', 'wptotwitter_to_syn_links' ), 10, 2 );
 	}
@@ -62,11 +62,15 @@ class Social_Plugins {
 			$see_on[]    = $medium_post->url;
 		}
 		// Support for Mastodon Autopost https://github.com/dshanske/syndication-links/issues/75
-		if ( function_exists( 'mastodon_autopost_ajax_handler' ) ) {
+		if ( class_exists( 'autopostToMastodon' ) ) {
 			$mastodon = get_post_meta( get_the_ID(), 'mastodonAutopostLastSuccessfullPostURL', true );
+			if ( ! $mastodon ) {
+				$mastodon = get_post_meta( get_the_ID(), 'mastodonAutopostLastSuccessfullTootURL', true );
+			}
 			if ( $mastodon ) {
 				$see_on[] = $mastodon;
 			}
+
 		}
 		// Support for Keyring Social Importer fields https://github.com/dshanske/syndication-links/issues/73
 		if ( class_exists( 'Keyring_Importer_Base' ) ) {
