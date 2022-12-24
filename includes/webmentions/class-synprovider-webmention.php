@@ -56,7 +56,7 @@ class SynProvider_Webmention extends Syndication_Provider {
 
 		$response = self::send_webmention( get_permalink( $post_id ) );
 		if ( ! is_wp_error( $response ) ) {
-			$links  = get_syndication_links_data( $post_id );
+			$links  = get_post_syndication_links_data( $post_id );
 			$search = array_search( $this->get_target(), $links, true );
 			if ( false !== $search ) {
 				unset( $links[ $search ] );
