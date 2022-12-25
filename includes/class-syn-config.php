@@ -356,7 +356,7 @@ class Syn_Config {
 
 	public static function text_callback( $args ) {
 		$name = $args['name'];
-		echo "<input name='" . esc_attr( $name ) . "' type='text' value='" . esc_attr( get_option( $name ) ) . "' /> ";
+		echo "<input name='" . esc_attr( $name ) . "' class='widefat' type='text' value='" . esc_attr( get_option( $name ) ) . "' /> ";
 	}
 
 	public static function display_options() {

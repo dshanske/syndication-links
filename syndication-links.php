@@ -96,6 +96,7 @@ function syndication_links_init() {
 			array(
 				'class-syndication-provider.php', // Syndication Provider Base Class
 				'class-post-syndication.php', // Post syndication logic
+				'trait-bridgy-config.php' // Bridgy Config Traits
 			)
 		);
 
@@ -131,11 +132,18 @@ function syndication_links_init() {
 
 		// Webmention Only Providers
 		if ( function_exists( 'send_webmention' ) ) {
-			syndication_links_register_providers(
+			
+			syndication_links_load(
 				array(
 					'class-synprovider-webmention.php', // Class for Any Webmention Based Service
-					'class-synprovider-webmention-custom.php', // Class for A Custom Webmention Based Service
 					'class-synprovider-webmention-bridgy.php', // Bridgy Base Class
+				),
+				'/includes/webmentions'
+			);
+
+			syndication_links_register_providers(
+				array(
+					'class-synprovider-webmention-custom.php', // Class for A Custom Webmention Based Service
 					'class-synprovider-webmention-bridgy-twitter.php', // Twitter via Bridgy
 					'class-synprovider-webmention-bridgy-github.php', // Github via Bridgy
 					'class-synprovider-webmention-bridgy-flickr.php', // Flickr via Bridgy

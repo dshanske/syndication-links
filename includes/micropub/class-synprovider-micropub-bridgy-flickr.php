@@ -5,6 +5,10 @@
  */
 
 class SynProvider_Micropub_Bridgy_Flickr extends SynProvider_Micropub {
+	use Bridgy_Config {
+		register_setting as bridgy_register_setting;
+		admin_init as bridgy_admin_init;
+	}
 	/**
 	 * Constructor
 	 *
@@ -33,6 +37,7 @@ class SynProvider_Micropub_Bridgy_Flickr extends SynProvider_Micropub {
 	}
 
 	public function register_setting() {
+		$this->bridgy_register_setting();
 		register_setting(
 			'syndication_providers',
 			'bridgy_flickr_token',
@@ -46,6 +51,7 @@ class SynProvider_Micropub_Bridgy_Flickr extends SynProvider_Micropub {
 	}
 
 	public function admin_init() {
+		$this->bridgy_admin_init();
 		add_settings_field(
 			'bridgy_flickr_token',
 			__( 'Micropub Token for Bridgy Flickr Publish', 'syndication-links' ),

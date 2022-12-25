@@ -5,6 +5,10 @@
  */
 
 class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
+	use Bridgy_Config {
+		register_setting as bridgy_register_setting;
+		admin_init as bridgy_admin_init;
+	}
 	/**
 	 * Constructor
 	 *
@@ -33,6 +37,7 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 	}
 
 	public function register_setting() {
+		$this->bridgy_register_setting();
 		register_setting(
 			'syndication_providers',
 			'bridgy_twitter_token',
@@ -56,6 +61,7 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 	}
 
 	public function admin_init() {
+		$this->bridgy_admin_init();
 		add_settings_field(
 			'bridgy_twitter_token',
 			__( 'Micropub Token for Twitter via Bridgy', 'syndication-links' ),
@@ -93,7 +99,7 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 	public static function post_to_mf2( $post ) {
 		$mf2 = parent::post_to_mf2( $post );
 		// If length is over 280 bytes then replace content with link plus the title
-		if ( ! empty( $post->post_content ) & 280 < strlen( $post->post_content ) ) {
+		if ( ! empty( $post->post_content ) & 280 < strlen( $post->post_content ) && ) {
 			$content                      = get_the_title( $post ) . ' - ' . get_permalink( $post );
 			$mf2['properties']['content'] = array( $content );
 		}
