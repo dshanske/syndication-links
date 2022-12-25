@@ -2,7 +2,7 @@
 Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Tested up to: 6.1
-Stable tag: 4.4.1
+Stable tag: 4.4.2
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -164,6 +164,11 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.4.2 ( 2022-12-25 ) =
+* Fix a miscalled function
+* Adjust the load of options to better display
+* Add notation regarding difference between Micropub and Webmention for Bridgy
 
 = Version 4.4.1 ( 2022-12-20 ) = 
 * Add function to shorten content to title for Twitter Micropub if longer than 280 characters
