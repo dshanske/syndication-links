@@ -96,7 +96,7 @@ function syndication_links_init() {
 			array(
 				'class-syndication-provider.php', // Syndication Provider Base Class
 				'class-post-syndication.php', // Post syndication logic
-				'trait-bridgy-config.php' // Bridgy Config Traits
+				'trait-bridgy-config.php', // Bridgy Config Traits
 			)
 		);
 
@@ -132,7 +132,7 @@ function syndication_links_init() {
 
 		// Webmention Only Providers
 		if ( function_exists( 'send_webmention' ) ) {
-			
+
 			syndication_links_load(
 				array(
 					'class-synprovider-webmention.php', // Class for Any Webmention Based Service

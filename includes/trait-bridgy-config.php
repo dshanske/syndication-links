@@ -30,9 +30,9 @@ trait Bridgy_Config {
 
 	public static function options_callback() {
 		?>
-		<p><?php esc_html_e( 'Bridgy Publish can either use Webmentions or Micropub to trigger syndication. To use Micropub, a token must be provided. This token can be found on the Bridgy user page. If using Webmention, the elements of the post will be determined by Bridgy using Microformats in the page. If using Micropub, then the plugin will send the elements of the post to Bridgy directly, which gives the site more control over this'); ?></p>
+		<p><?php esc_html_e( 'Bridgy Publish can either use Webmentions or Micropub to trigger syndication. To use Micropub, a token must be provided. This token can be found on the Bridgy user page. If using Webmention, the elements of the post will be determined by Bridgy using Microformats in the page. If using Micropub, then the plugin will send the elements of the post to Bridgy directly, which gives the site more control over this' ); ?></p>
 
-		<?php 
+		<?php
 	}
 
 	public static function admin_init() {
