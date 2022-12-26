@@ -111,8 +111,11 @@ class SynProvider_Micropub extends Syndication_Provider {
 		$mf2               = array();
 		$mf2['properties'] = array();
 		foreach ( get_post_meta( $post->ID ) as $field => $val ) {
-			$val = maybe_unserialize( $val[0] );
 			if ( 'mf2_' === substr( $field, 0, 4 ) ) {
+				$val = maybe_unserialize( $val[0] );
+				if ( is_array( $val ) ) {
+					$val = array_values( $val );
+				}
 				$mf2['properties'][ substr( $field, 4 ) ] = $val;
 			}
 		}
