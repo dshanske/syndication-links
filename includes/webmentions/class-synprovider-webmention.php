@@ -8,6 +8,9 @@ class SynProvider_Webmention extends Syndication_Provider {
 			return;
 		}
 		$response      = send_webmention( $url, $target );
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
 		$response_code = wp_remote_retrieve_response_code( $response );
 		$location      = wp_remote_retrieve_header( $response, 'location' );
 		if ( empty( $location ) ) {
