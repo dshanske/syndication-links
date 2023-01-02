@@ -127,7 +127,7 @@ class Post_Syndication {
 				if ( in_array( $target->get_uid(), $syndicate_to, true ) ) {
 					$return = $target->posse( $post_ID );
 					self::error_log( $return );
-					$returns[] = self::syndication_log( $return, $target->get_uid() );
+					$returns[] = self::syndication_log( $return, $target );
 				}
 			}
 		}
@@ -142,15 +142,20 @@ class Post_Syndication {
 		return true;
 	}
 
-	public static function syndication_log( $input, $uid ) {
+	public static function syndication_log( $input, $target ) {
 		if ( is_wp_error( $input ) ) {
 			$data            = $input->error_data;
 			$data['message'] = $input->get_error_message();
 		} else {
 			$data = array();
 			if ( array_key_exists( 'http_response', $input ) && $input['http_response'] instanceof WP_HTTP_Requests_Response ) {
+				$body = $input['http_response']->get_data();
+				$json = json_decode( $body, true );
+				if ( ! is_null( $json ) ) {
+					$body = $json;
+				}
 				$data        = array(
-					'body' => $input['http_response']->get_data(),
+					'body' => $body,
 					'code' => $input['http_response']->get_status(),
 				);
 				$data['url'] = wp_remote_retrieve_header( $input, 'location' );
@@ -158,7 +163,8 @@ class Post_Syndication {
 		}
 		return array(
 			'date' => time(),
-			'uid'  => $uid,
+			'uid'  => $target->get_uid(),
+			'name' => $target->get_name(),
 			'data' => $data,
 		);
 
@@ -173,6 +179,24 @@ class Post_Syndication {
 		} else {
 			error_log( sprintf( 'Success: %1$s', wp_json_encode( $input ) ) ); // phpcs:ignore
 		}
+	}
+
+	public static function syndication_log_output( $post_id ) {
+		$logs = get_post_meta( $post_id, 'syndication_log', true );
+		if ( empty( $logs ) ) {
+			_e( 'No Logs Found', 'syndication-links' );
+			return;
+		}
+		foreach ( $logs as $log ) {
+			if ( array_key_exists( 'date', $log ) ) {
+				$date = new DateTime();
+				$date->setTimestamp( $log['date'] );
+				$date->setTimezone( wp_timezone() );
+				$name = array_key_exists( 'name', $log ) ? $log['name'] : $log['uid'];
+				printf( '<p><details><summary>%1$s: %2$s</summary><pre>%3$s</pre></details></p>', $date->format( DATE_W3C ), $name, esc_html( wp_json_encode( $log['data'], JSON_PRETTY_PRINT ) ) );
+			}
+		}
+
 	}
 
 	/* Meta box setup function. */
@@ -195,6 +219,23 @@ class Post_Syndication {
 				'__back_compat_meta_box'             => false,
 			)
 		);
+		add_meta_box(
+			'syndicationlog-meta',      // Unique ID
+			esc_html__( 'Syndicate Logs', 'syndication-links' ),    // Title
+			array( get_called_class(), 'syndication_log_metabox' ),   // Callback function
+			syndication_post_types(),         // Admin page (or post type)
+			'advanced',         // Context
+			'default',      // Priority
+			array(
+				'__block_editor_compatible_meta_box' => true,
+				'__back_compat_meta_box'             => false,
+			)
+		);
+	}
+
+
+	public static function syndication_log_metabox( $object, $box ) {
+		self::syndication_log_output( $object->ID ); // phpcs:ignore
 	}
 
 	public static function provider_callback( $args ) {
@@ -269,6 +310,8 @@ class Post_Syndication {
 
 		echo self::checkboxes( $object->ID ); // phpcs:ignore
 	}
+
+
 
 	/* Save the meta box's post metadata. */
 	public static function save_post( $post_id ) {

@@ -116,7 +116,7 @@ abstract class Syndication_Provider {
 	/**
 	 * Given a post try to POSSE it to a given network
 	 *
-	 * @return array of results
+	 * @return array to extract log data from.
 	 */
 	abstract public function posse( $post_id = null );
 
