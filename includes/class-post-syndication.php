@@ -188,7 +188,7 @@ class Post_Syndication {
 			return;
 		}
 		foreach ( $logs as $log ) {
-			if ( array_key_exists( 'date', $log ) ) {
+			if ( is_array( $log ) && array_key_exists( 'date', $log ) ) {
 				$date = new DateTime();
 				$date->setTimestamp( $log['date'] );
 				$date->setTimezone( wp_timezone() );
