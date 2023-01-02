@@ -135,7 +135,7 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
-		$link     = wp_remote_retrieve_header( $response, 'Location' );
+		$link = wp_remote_retrieve_header( $response, 'Location' );
 		if ( ! empty( $link ) ) {
 			add_post_syndication_link( $post_id, 'https://pinboard.in' . $link, true );
 		}

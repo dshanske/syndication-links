@@ -51,14 +51,14 @@ class SynProvider_Webmention extends Syndication_Provider {
 			);
 		}
 
-		$json = json_decode( $response['body'] );
+		$json   = json_decode( $response['body'] );
 		$links  = get_post_syndication_links_data( $post_id );
 		$search = array_search( $this->get_target(), $links, true );
 		if ( false !== $search ) {
 			unset( $links[ $search ] );
 		}
 
-		$location      = wp_remote_retrieve_header( $response, 'location' );
+		$location = wp_remote_retrieve_header( $response, 'location' );
 		if ( ! empty( $location ) ) {
 			$links[] = $location;
 		}
