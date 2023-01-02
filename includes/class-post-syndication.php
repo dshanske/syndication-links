@@ -99,6 +99,7 @@ class Post_Syndication {
 		if ( ! $post ) {
 			return;
 		}
+
 		$returns = array();
 
 		$timestamp = get_post_timestamp( $post_ID );
@@ -124,19 +125,43 @@ class Post_Syndication {
 					continue;
 				}
 				if ( in_array( $target->get_uid(), $syndicate_to, true ) ) {
-					$return                        = $target->posse( $post_ID );
-					$returns[ $target->get_uid() ] = $return;
+					$return = $target->posse( $post_ID );
+					self::error_log( $return );
+					$returns[] = self::syndication_log( $return, $target->get_uid() );
 				}
 			}
 		}
 		if ( ! empty( $returns ) ) {
-			update_post_meta( $post_ID, 'syndication_log', $returns );
-			foreach ( $returns as $return ) {
-				self::error_log( $return );
+			$log = get_post_meta( $post_ID, 'syndication_log', true );
+			if ( empty( $log ) ) {
+				$log = array();
 			}
-			return $returns;
+			update_post_meta( $post_ID, 'syndication_log', array_merge( $log, $returns ) );
+			return $log;
 		}
 		return true;
+	}
+
+	public static function syndication_log( $input, $uid ) {
+		if ( is_wp_error( $input ) ) {
+			$data            = $input->error_data;
+			$data['message'] = $input->get_error_message();
+		} else {
+			$data = array();
+			if ( array_key_exists( 'http_response', $input ) && $input['http_response'] instanceof WP_HTTP_Requests_Response ) {
+				$data        = array(
+					'body' => $input['http_response']->get_data(),
+					'code' => $input['http_response']->get_status(),
+				);
+				$data['url'] = wp_remote_retrieve_header( $input, 'location' );
+			}
+		}
+		return array(
+			'date' => time(),
+			'uid'  => $uid,
+			'data' => $data,
+		);
+
 	}
 
 	public static function error_log( $input ) {

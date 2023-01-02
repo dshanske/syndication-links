@@ -184,26 +184,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 		}
 
 		$response = wp_remote_post( $endpoint, $args );
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		}
-
-		$code     = wp_remote_retrieve_response_code( $response );
-		$location = wp_remote_retrieve_header( $response, 'location' );
-
-		if ( ! empty( $location ) ) {
-			return $location;
-		}
-
-		return new WP_Error(
-			'invalid_response',
-			wp_remote_retrieve_body( $response ),
-			array(
-				'status'   => $code,
-				'endpoint' => $endpoint,
-			)
-		);
-
+		return $response;
 	}
 
 	/**
@@ -218,10 +199,14 @@ class SynProvider_Micropub extends Syndication_Provider {
 		$post = get_post( $post_id );
 
 		$response = self::post_micropub( $post_id, $this->endpoint );
-		if ( is_string( $response ) ) {
-			$return = add_post_syndication_link( $post_id, $response );
-		} elseif ( is_wp_error( $response ) ) {
-			error_log( wp_json_encode( $response ) );
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+
+		$location = wp_remote_retrieve_header( $response, 'location' );
+
+		if ( ! empty( $location ) ) {
+			add_post_syndication_link( $post_id, $location );
 		}
 
 		return $response;

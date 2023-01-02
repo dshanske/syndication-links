@@ -7,7 +7,7 @@ class Syn_Meta {
 	public static function init() {
 		$cls = get_called_class();
 		add_action( 'admin_init', array( $cls, 'setup' ) );
-		add_action( 'save_post', array( $cls, 'save_post_meta' ) );
+		add_action( 'save_post', array( $cls, 'save_post_meta' ), 11 );
 		add_action( 'edit_comment', array( $cls, 'save_comment_meta' ) );
 		$args = array(
 			'type'         => 'array',
@@ -279,15 +279,19 @@ class Syn_Meta {
 
 	/* Save the meta box's metadata. */
 	public static function save_meta( $type, $id ) {
-		if ( empty( $_POST['syndication_urls'] ) ) {
+		if ( ! array_key_exists( 'syndication_urls', $_POST ) ) {
+			return;
+		}
+
+		$syn = array_filter( $_POST['syndication_urls'] );
+
+		error_log( wp_json_encode( $syn ) );
+
+		if ( empty( $syn ) ) {
 			delete_metadata( $type, $id, 'mf2_syndication' );
 		} else {
-			$meta = $_POST['syndication_urls'];
-			if ( is_string( $meta ) ) {
-				$meta = explode( PHP_EOL, $_POST['syndication_urls'] );
-			}
-			$meta = self::clean_urls( $meta );
-			self::add_syndication_link( $type, $id, $meta, true );
+			$syn = self::clean_urls( $syn );
+			self::add_syndication_link( $type, $id, $syn, true );
 		}
 	}
 

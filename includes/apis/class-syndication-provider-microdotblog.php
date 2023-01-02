@@ -201,7 +201,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		);
 
 		wp_schedule_single_event( time() + 15, 'microdotblog_get_ids', array( $post_id ) );
-		return true;
+		return array( 'message' => __( 'Posted to Micro.blog', 'syndication-link' ) );
 	}
 
 	public static function options_callback() {

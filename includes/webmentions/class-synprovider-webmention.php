@@ -7,32 +7,7 @@ class SynProvider_Webmention extends Syndication_Provider {
 		if ( ! $target ) {
 			return;
 		}
-		$response      = send_webmention( $url, $target );
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		}
-		$response_code = wp_remote_retrieve_response_code( $response );
-		$location      = wp_remote_retrieve_header( $response, 'location' );
-		if ( empty( $location ) ) {
-			$location = $url;
-		}
-		if ( 201 === $response_code ) {
-			return $location;
-		}
-
-		if ( 202 === $response_code ) {
-			return true;
-		}
-		$json = json_decode( $response['body'] );
-		return new WP_Error(
-			$this->uid . '_publish_error',
-			/* translators: Syndication Target */
-			sprintf( __( 'Unknown %1$s Error', 'syndication-links' ), $this->name ),
-			array(
-				'status' => $response_code,
-				'data'   => $json,
-			)
-		);
+		return send_webmention( $url, $target );
 	}
 
 	public function get_target() {
@@ -58,25 +33,38 @@ class SynProvider_Webmention extends Syndication_Provider {
 		do_action( 'pre_syndication_links_webmention', $post_id );
 
 		$response = self::send_webmention( get_permalink( $post_id ) );
-		if ( ! is_wp_error( $response ) ) {
-			$links  = get_post_syndication_links_data( $post_id );
-			$search = array_search( $this->get_target(), $links, true );
-			if ( false !== $search ) {
-				unset( $links[ $search ] );
-			}
-			if ( is_string( $response ) ) {
-				$links[] = $response;
 
-				// Attempt at cache busting by classifying this as an edit
-				do_action( 'edit_post', $post_id, $post );
-			} else {
-				error_log( $response );
-			}
-			add_post_syndication_link( $post_id, $links, true );
-		} else {
+		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
-		return true;
+
+		$response_code = wp_remote_retrieve_response_code( $response );
+		if ( ! in_array( $response_code, array( 201, 202 ) ) ) {
+			return new WP_Error(
+				$this->uid . '_publish_error',
+				/* translators: Syndication Target */
+				sprintf( __( 'Unknown %1$s Error', 'syndication-links' ), $this->name ),
+				array(
+					'status' => $response_code,
+					'data'   => $json,
+				)
+			);
+		}
+
+		$json = json_decode( $response['body'] );
+		$links  = get_post_syndication_links_data( $post_id );
+		$search = array_search( $this->get_target(), $links, true );
+		if ( false !== $search ) {
+			unset( $links[ $search ] );
+		}
+
+		$location      = wp_remote_retrieve_header( $response, 'location' );
+		if ( ! empty( $location ) ) {
+			$links[] = $location;
+		}
+
+		add_post_syndication_link( $post_id, $links, true );
+		return $response;
 	}
 
 }
