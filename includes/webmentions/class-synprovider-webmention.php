@@ -66,13 +66,13 @@ class SynProvider_Webmention extends Syndication_Provider {
 			}
 			if ( is_string( $response ) ) {
 				$links[] = $response;
-				add_post_syndication_link( $post_id, $links, true );
 
 				// Attempt at cache busting by classifying this as an edit
 				do_action( 'edit_post', $post_id, $post );
 			} else {
 				error_log( $response );
 			}
+			add_post_syndication_link( $post_id, $links, true );
 		} else {
 			return $response;
 		}
