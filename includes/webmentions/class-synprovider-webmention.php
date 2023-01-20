@@ -39,6 +39,11 @@ class SynProvider_Webmention extends Syndication_Provider {
 		}
 
 		$response_code = wp_remote_retrieve_response_code( $response );
+		$data          = json_decode( $response['body'] );
+		if ( ! $data ) {
+			$data = $response['body'];
+		}
+
 		if ( ! in_array( $response_code, array( 201, 202 ) ) ) {
 			return new WP_Error(
 				$this->uid . '_publish_error',
@@ -46,12 +51,11 @@ class SynProvider_Webmention extends Syndication_Provider {
 				sprintf( __( 'Unknown %1$s Error', 'syndication-links' ), $this->name ),
 				array(
 					'status' => $response_code,
-					'data'   => $json,
+					'data'   => $data,
 				)
 			);
 		}
 
-		$json   = json_decode( $response['body'] );
 		$links  = get_post_syndication_links_data( $post_id );
 		$search = array_search( $this->get_target(), $links, true );
 		if ( false !== $search ) {
