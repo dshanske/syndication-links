@@ -3,7 +3,7 @@
 class SynProvider_Webmention_Bridgy_Mastodon extends SynProvider_Webmention_Bridgy {
 
 	public function __construct( $args = array() ) {
-		$this->name = __( 'Mastodon via Bridgy Webmention', 'syndication-links' );
+		$this->name = __( 'Mastodon via Bridgy', 'syndication-links' );
 		$this->uid  = 'webmention-mastodon-bridgy';
 
 		$option = get_option( 'syndication_provider_enable' );

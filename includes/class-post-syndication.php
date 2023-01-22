@@ -40,10 +40,35 @@ class Post_Syndication {
 				'default'      => array(),
 			)
 		);
+		register_setting(
+			'syndication_providers',
+			'syndication_provider_micropub',
+			array(
+				'type'         => 'boolean',
+				'description'  => 'U',
+				'show_in_rest' => true,
+				'default'      => true
+			)
+		);
 
 	}
 
 	public static function admin_init() {
+		if ( WP_DEBUG ) {
+			add_settings_field(
+				'syndication_provider_micropub',
+				__( 'Disable to Use Alternate Bridgy Syndication Method (Requires Webmention Plugin)', 'syndication-links' ),
+				array(
+					'Syn_Config',
+					'checkbox_callback',
+				),
+				'syndication_provider_options',
+				'syndication_providers',
+				array(
+					'name' => 'syndication_provider_micropub',
+				)
+			);
+		}
 		add_settings_field(
 			'syndication_provider_enable',
 			__( 'Enable the Following Providers', 'syndication-links' ),
@@ -252,11 +277,13 @@ class Post_Syndication {
 	}
 
 	public static function checked( $uid, $post_ID = 0 ) {
-		return apply_filters( 'syndication_link_checked', false, $uid, $post_ID );
+		$checked = static::$targets[ $uid ]->is_checked();
+		return apply_filters( 'syndication_link_checked', $checked, $uid, $post_ID );
 	}
 
 	public static function disabled( $uid, $post_ID = 0 ) {
-		return apply_filters( 'syndication_link_disabled', false, $uid, $post_ID );
+		$disabled = static::$targets[ $uid ]->is_disabled();
+		return apply_filters( 'syndication_link_disabled', $disabled, $uid, $post_ID );
 	}
 
 	public static function checkboxes( $post_ID ) {
@@ -276,8 +303,12 @@ class Post_Syndication {
 			if ( ! empty( $allowlist ) && ! in_array( $uid, $allowlist, true ) ) {
 				continue;
 			}
-			$checked  = self::checked( $uid, $post_ID );
 			$disabled = self::disabled( $uid, $post_ID );
+			if ( ! $disabled ) {
+				$checked  = self::checked( $uid, $post_ID );
+			} else {
+				$checked = false;
+			}
 			$string  .= self::checkbox( $uid, $name, $checked, $disabled );
 		}
 		$string .= '</ul>';

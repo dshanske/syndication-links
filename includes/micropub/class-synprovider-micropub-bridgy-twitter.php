@@ -17,7 +17,7 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 	 * @param array $args Array of Arguments
 	 */
 	public function __construct( $args = array() ) {
-		$this->name     = __( 'Twitter via Bridgy Micropub', 'syndication-links' );
+		$this->name     = __( 'Twitter via Bridgy', 'syndication-links' );
 		$this->uid      = 'micropub-twitter-bridgy';
 		$this->endpoint = 'https://brid.gy/micropub';
 
@@ -64,7 +64,7 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 		$this->bridgy_admin_init();
 		add_settings_field(
 			'bridgy_twitter_token',
-			__( 'Micropub Token for Twitter via Bridgy', 'syndication-links' ),
+			__( 'Micropub Token to Enable Twitter via Bridgy', 'syndication-links' ),
 			array(
 				'Syn_Config',
 				'text_callback',

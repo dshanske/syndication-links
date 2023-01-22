@@ -44,6 +44,14 @@ class SynProvider_Micropub extends Syndication_Provider {
 	}
 
 	/**
+	 * Check if token is set
+	 *
+	 */
+	public function is_disabled() {
+		return empty( $this->token );
+	}
+
+	/**
 	 * Set Endpoint
 	 *
 	 */

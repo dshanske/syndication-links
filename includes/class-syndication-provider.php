@@ -114,6 +114,22 @@ abstract class Syndication_Provider {
 	}
 
 	/**
+	 * Should checkbox be disabled
+	 *
+	 */
+	public function is_disabled() {
+		return false;
+	}
+
+	/**
+	 * Should checkbox be checked
+	 *
+	 */
+	public function is_checked() {
+		return false;
+	}
+
+	/**
 	 * Given a post try to POSSE it to a given network
 	 *
 	 * @return array to extract log data from.

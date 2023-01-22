@@ -17,7 +17,7 @@ class SynProvider_Micropub_Bridgy_Flickr extends SynProvider_Micropub {
 	 * @param array $args Array of Arguments
 	 */
 	public function __construct( $args = array() ) {
-		$this->name     = __( 'Flickr via Bridgy Micropub', 'syndication-links' );
+		$this->name     = __( 'Flickr via Bridgy', 'syndication-links' );
 		$this->uid      = 'micropub-flickr-bridgy';
 		$this->endpoint = 'https://brid.gy/micropub';
 
@@ -54,7 +54,7 @@ class SynProvider_Micropub_Bridgy_Flickr extends SynProvider_Micropub {
 		$this->bridgy_admin_init();
 		add_settings_field(
 			'bridgy_flickr_token',
-			__( 'Micropub Token for Bridgy Flickr Publish', 'syndication-links' ),
+			__( 'Micropub Token to Enable Bridgy Flickr Publish', 'syndication-links' ),
 			array(
 				'Syn_Config',
 				'text_callback',

@@ -3,7 +3,7 @@
 class SynProvider_Webmention_Bridgy_Flickr extends SynProvider_Webmention_Bridgy {
 
 	public function __construct( $args = array() ) {
-		$this->name = __( 'Flickr via Bridgy Webmention', 'syndication-links' );
+		$this->name = __( 'Flickr via Bridgy', 'syndication-links' );
 		$this->uid  = 'webmention-flickr-bridgy';
 
 		// Parent Constructor

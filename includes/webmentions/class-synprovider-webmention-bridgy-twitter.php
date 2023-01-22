@@ -3,7 +3,7 @@
 class SynProvider_Webmention_Bridgy_Twitter extends SynProvider_Webmention_Bridgy {
 
 	public function __construct( $args = array() ) {
-		$this->name = __( 'Twitter via Bridgy Webmention', 'syndication-links' );
+		$this->name = __( 'Twitter via Bridgy', 'syndication-links' );
 		$this->uid  = 'webmention-twitter-bridgy';
 
 		$option = get_option( 'syndication_provider_enable' );

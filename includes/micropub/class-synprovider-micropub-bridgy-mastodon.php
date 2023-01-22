@@ -17,7 +17,7 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 	 * @param array $args Array of Arguments
 	 */
 	public function __construct( $args = array() ) {
-		$this->name     = __( 'Mastodon via Bridgy Micropub', 'syndication-links' );
+		$this->name     = __( 'Mastodon via Bridgy', 'syndication-links' );
 		$this->uid      = 'micropub-mastodon-bridgy';
 		$this->endpoint = 'https://brid.gy/micropub';
 
@@ -64,7 +64,7 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 		$this->bridgy_admin_init();
 		add_settings_field(
 			'bridgy_mastodon_token',
-			__( 'Micropub Token for Bridgy Mastodon Publish', 'syndication-links' ),
+			__( 'Micropub Token to enable Bridgy Mastodon Publish', 'syndication-links' ),
 			array(
 				'Syn_Config',
 				'text_callback',
