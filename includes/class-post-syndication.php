@@ -47,7 +47,7 @@ class Post_Syndication {
 				'type'         => 'boolean',
 				'description'  => 'U',
 				'show_in_rest' => true,
-				'default'      => true
+				'default'      => true,
 			)
 		);
 
@@ -305,11 +305,11 @@ class Post_Syndication {
 			}
 			$disabled = self::disabled( $uid, $post_ID );
 			if ( ! $disabled ) {
-				$checked  = self::checked( $uid, $post_ID );
+				$checked = self::checked( $uid, $post_ID );
 			} else {
 				$checked = false;
 			}
-			$string  .= self::checkbox( $uid, $name, $checked, $disabled );
+			$string .= self::checkbox( $uid, $name, $checked, $disabled );
 		}
 		$string .= '</ul>';
 		return $string;

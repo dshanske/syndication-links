@@ -108,7 +108,6 @@ function syndication_links_init() {
 			'/includes/apis'
 		);
 
-
 		// Micropub Base Class
 			syndication_links_register_providers(
 				array(
@@ -116,7 +115,6 @@ function syndication_links_init() {
 				),
 				'/includes/micropub'
 			);
-
 
 		// Webmention Only Providers
 		if ( function_exists( 'send_webmention' ) ) {
@@ -128,7 +126,6 @@ function syndication_links_init() {
 				),
 				'/includes/webmentions'
 			);
-
 
 			if ( class_exists( 'SynProvider_Webmention_Custom' ) ) {
 				$custom = get_option( 'syndication_links_custom_posse' );
@@ -151,7 +148,7 @@ function syndication_links_init() {
 				),
 				'/includes/micropub'
 			);
-		} else if ( function_exists( 'send_webmention' ) ) {
+		} elseif ( function_exists( 'send_webmention' ) ) {
 				syndication_links_register_providers(
 					array(
 						'class-synprovider-webmention-bridgy.php', // Bridgy Base Class
@@ -165,7 +162,6 @@ function syndication_links_init() {
 				);
 		}
 
-
 		// Providers that have a Post Kinds Dependency
 		if ( class_exists( 'Post_Kinds_Plugin' ) ) {
 			syndication_links_register_providers(
@@ -175,7 +171,6 @@ function syndication_links_init() {
 				'/includes/apis'
 			);
 		}
-
 	}
 	load_plugin_textdomain( 'syndication-links', false, basename( dirname( __FILE__ ) ) . '/languages/' );
 }
