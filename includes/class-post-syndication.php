@@ -209,7 +209,7 @@ class Post_Syndication {
 	public static function syndication_log_output( $post_id ) {
 		$logs = get_post_meta( $post_id, 'syndication_log', true );
 		if ( empty( $logs ) ) {
-			_e( 'No Logs Found', 'syndication-links' );
+			esc_html_e( 'No Logs Found', 'syndication-links' );
 			return;
 		}
 		foreach ( $logs as $log ) {
@@ -218,7 +218,7 @@ class Post_Syndication {
 				$date->setTimestamp( $log['date'] );
 				$date->setTimezone( wp_timezone() );
 				$name = array_key_exists( 'name', $log ) ? $log['name'] : $log['uid'];
-				printf( '<p><details><summary>%1$s: %2$s</summary><pre>%3$s</pre></details></p>', $date->format( DATE_W3C ), $name, esc_html( wp_json_encode( $log['data'], JSON_PRETTY_PRINT ) ) );
+				printf( '<p><details><summary>%1$s: %2$s</summary><pre>%3$s</pre></details></p>', esc_html( $date->format( DATE_W3C ) ), esc_html( $name ), esc_html( wp_json_encode( $log['data'], JSON_PRETTY_PRINT ) ) );
 			}
 		}
 
