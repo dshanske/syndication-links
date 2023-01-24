@@ -98,13 +98,25 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 	 */
 	public static function post_to_mf2( $post ) {
 		$mf2 = parent::post_to_mf2( $post );
-		// If length is over 280 bytes then replace content with link plus the title
-		if ( ! empty( $post->post_content ) & 280 < strlen( $post->post_content ) ) {
-			$content                      = get_the_title( $post ) . ' - ' . get_permalink( $post );
-			$mf2['properties']['content'] = array( $content );
-		}
+
+		$content = '';
+
 		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'bridgy_twitterexcerpt' ) ) {
 			$content = $post->post_excerpt;
+		} elseif ( 280 < strlen( $post->post_content ) ) {
+			// If length is over 280 bytes then replace content with link plus the title
+			$link = get_permalink( $post );
+			if ( function_exists( 'kind_get_the_title' ) ) {
+				$content = kind_get_the_title( $post ) . ' - ' . $link;
+			} elseif ( ! empty( get_the_title( $post ) ) ) {
+				$content = get_the_title( $post ) . ' - ' . $link;
+			} else {
+				$content = substr( $post->post_content, 0, 277 - strlen( $link ) ) . ' - ' . $link;
+			}
+		}
+
+		if ( ! empty( $content ) ) {
+			$mf2['properties']['content'] = array( $content );
 		}
 
 		return $mf2;
