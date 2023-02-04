@@ -126,6 +126,14 @@ function syndication_links_init() {
 				),
 				'/includes/webmentions'
 			);
+			syndication_links_register_providers(
+				array(
+					'class-synprovider-webmention-bridgy-fed.php', // Bridgy Fed
+				),
+					'/includes/webmentions'
+				);
+
+
 
 			if ( class_exists( 'SynProvider_Webmention_Custom' ) ) {
 				$custom = get_option( 'syndication_links_custom_posse' );
@@ -156,7 +164,6 @@ function syndication_links_init() {
 						'class-synprovider-webmention-bridgy-github.php', // Github via Bridgy
 						'class-synprovider-webmention-bridgy-flickr.php', // Flickr via Bridgy
 						'class-synprovider-webmention-bridgy-mastodon.php', // Mastodon via Bridgy
-						'class-synprovider-webmention-bridgy-fed.php', // Bridgy Fed
 					),
 					'/includes/webmentions'
 				);

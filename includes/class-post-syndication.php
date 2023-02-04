@@ -45,7 +45,7 @@ class Post_Syndication {
 			'syndication_provider_micropub',
 			array(
 				'type'         => 'boolean',
-				'description'  => 'U',
+				'description'  => 'Disable to Use Webmention where Both Options Available',
 				'show_in_rest' => true,
 				'default'      => true,
 			)
