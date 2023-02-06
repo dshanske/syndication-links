@@ -5,10 +5,6 @@
  */
 
 class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
-	use Bridgy_Config {
-		register_setting as bridgy_register_setting;
-		admin_init as bridgy_admin_init;
-	}
 	/**
 	 * Constructor
 	 *
@@ -37,7 +33,6 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 	}
 
 	public function register_setting() {
-		$this->bridgy_register_setting();
 		register_setting(
 			'syndication_providers',
 			'bridgy_mastodon_token',
@@ -48,20 +43,9 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 				'default'      => '',
 			)
 		);
-		register_setting(
-			'syndication_providers',
-			'bridgy_mastodonexcerpt',
-			array(
-				'type'         => 'boolean',
-				'description'  => 'Use Post Excerpt for Posts',
-				'show_in_rest' => true,
-				'default'      => '0',
-			)
-		);
 	}
 
 	public function admin_init() {
-		$this->bridgy_admin_init();
 		add_settings_field(
 			'bridgy_mastodon_token',
 			__( 'Micropub Token to enable Bridgy Mastodon Publish', 'syndication-links' ),
@@ -70,25 +54,11 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 				'text_callback',
 			),
 			'syndication_provider_options',
-			'bridgy_options',
+			'syndication_providers',
 			array(
 				'name' => 'bridgy_mastodon_token',
 			)
 		);
-		add_settings_field(
-			'bridgy_mastodonexcerpt',
-			__( 'Tell Bridgy to Use Post Excerpt for Matodon Posts if set', 'syndication-links' ),
-			array(
-				'Syn_Config',
-				'checkbox_callback',
-			),
-			'syndication_provider_options',
-			'bridgy_options',
-			array(
-				'name' => 'bridgy_mastodonexcerpt',
-			)
-		);
-
 	}
 
 	/**
@@ -101,7 +71,7 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 		$mf2     = parent::post_to_mf2( $post );
 		$content = '';
 
-		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'bridgy_mastodonexcerpt' ) ) {
+		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'syndication_use_excerpt' ) ) {
 			$content = $post->post_excerpt;
 		} elseif ( ! empty( $post->post_content ) & 500 < strlen( $post->post_content ) ) {
 			// If length is over 500 characters then replace content with link plus the title

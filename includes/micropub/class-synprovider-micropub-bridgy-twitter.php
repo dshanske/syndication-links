@@ -5,10 +5,6 @@
  */
 
 class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
-	use Bridgy_Config {
-		register_setting as bridgy_register_setting;
-		admin_init as bridgy_admin_init;
-	}
 	/**
 	 * Constructor
 	 *
@@ -37,7 +33,6 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 	}
 
 	public function register_setting() {
-		$this->bridgy_register_setting();
 		register_setting(
 			'syndication_providers',
 			'bridgy_twitter_token',
@@ -48,20 +43,9 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 				'default'      => '',
 			)
 		);
-		register_setting(
-			'syndication_providers',
-			'bridgy_twitterexcerpt',
-			array(
-				'type'         => 'boolean',
-				'description'  => 'Use Post Excerpt for Tweets',
-				'show_in_rest' => true,
-				'default'      => '0',
-			)
-		);
 	}
 
 	public function admin_init() {
-		$this->bridgy_admin_init();
 		add_settings_field(
 			'bridgy_twitter_token',
 			__( 'Micropub Token to Enable Twitter via Bridgy', 'syndication-links' ),
@@ -70,22 +54,9 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 				'text_callback',
 			),
 			'syndication_provider_options',
-			'bridgy_options',
+			'syndication_providers',
 			array(
 				'name' => 'bridgy_twitter_token',
-			)
-		);
-		add_settings_field(
-			'bridgy_twitterexcerpt',
-			__( 'Tell Bridgy to Use Post Excerpt for Tweets if set', 'syndication-links' ),
-			array(
-				'Syn_Config',
-				'checkbox_callback',
-			),
-			'syndication_provider_options',
-			'bridgy_options',
-			array(
-				'name' => 'bridgy_twitterexcerpt',
 			)
 		);
 	}
@@ -101,7 +72,7 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 
 		$content = '';
 
-		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'bridgy_twitterexcerpt' ) ) {
+		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'syndication_use_excerpt' ) ) {
 			$content = $post->post_excerpt;
 		} elseif ( 280 < strlen( $post->post_content ) ) {
 			// If length is over 280 bytes then replace content with link plus the title

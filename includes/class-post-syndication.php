@@ -51,6 +51,38 @@ class Post_Syndication {
 			)
 		);
 
+		register_setting(
+			'syndication_providers',
+			'syndication_use_excerpt',
+			array(
+				'type'         => 'boolean',
+				'description'  => 'Use Post Excerpt for Content',
+				'show_in_rest' => true,
+				'default'      => '0',
+			)
+		);
+		register_setting(
+			'syndication_providers',
+			'syndication_backlink',
+			array(
+				'type'         => 'string',
+				'description'  => 'Insert link back to original post',
+				'show_in_rest' => true,
+				'default'      => 'maybe',
+			)
+		);
+
+		/* register_setting(
+			'syndication_providers',
+			'bridgy_ignoreformatting',
+			array(
+				'type'         => 'boolean',
+				'description'  => 'Tell Bridgy to Ignore Formatting when Publishing',
+				'show_in_rest' => true,
+				'default'      => false,
+			)
+		); */
+
 	}
 
 	public static function admin_init() {
@@ -82,6 +114,51 @@ class Post_Syndication {
 				'name' => 'syndication_provider_enable',
 			)
 		);
+		add_settings_field(
+			'syndication_use_excerpt',
+			__( 'Use Post Excerpt for Content if Set', 'syndication-links' ),
+			array(
+				'Syn_Config',
+				'checkbox_callback',
+			),
+			'syndication_provider_options',
+			'syndication_providers',
+			array(
+				'name' => 'syndication_use_excerpt',
+			)
+		);
+		add_settings_field(
+			'syndication_backlink',
+			__( 'Posts should link back to site posts', 'syndication-links' ),
+			array(
+				'Syn_Config',
+				'select_callback',
+			),
+			'syndication_provider_options',
+			'syndication_providers',
+			array(
+				'name' => 'syndication_backlink',
+				'list' => array(
+					''      => __( 'Enable', 'syndication-links' ),
+					'true'  => __( 'Disable', 'syndication-links' ),
+					'maybe' => __( 'If too long', 'syndication-links' ),
+				),
+			)
+		);
+
+		/* add_settings_field(
+			'bridgy_ignoreformatting',
+			__( 'Tell Bridgy to Ignore Formatting', 'syndication-links' ),
+			array(
+				'Syn_Config',
+				'checkbox_callback',
+			),
+			'syndication_provider_options',
+			'bridgy_options',
+			array(
+				'name' => 'bridgy_ignoreformatting',
+			)
+		); */
 	}
 
 	public static function register( $object ) {

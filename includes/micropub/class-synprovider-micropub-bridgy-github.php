@@ -5,10 +5,6 @@
  */
 
 class SynProvider_Micropub_Bridgy_Github extends SynProvider_Micropub {
-	use Bridgy_Config {
-		register_setting as bridgy_register_setting;
-		admin_init as bridgy_admin_init;
-	}
 	/**
 	 * Constructor
 	 *
@@ -37,7 +33,6 @@ class SynProvider_Micropub_Bridgy_Github extends SynProvider_Micropub {
 	}
 
 	public function register_setting() {
-		$this->bridgy_register_setting();
 		register_setting(
 			'syndication_providers',
 			'bridgy_github_token',
@@ -51,7 +46,6 @@ class SynProvider_Micropub_Bridgy_Github extends SynProvider_Micropub {
 	}
 
 	public function admin_init() {
-		$this->bridgy_admin_init();
 		add_settings_field(
 			'bridgy_github_token',
 			__( 'Micropub Token to Enable for Bridgy GitHub Publish', 'syndication-links' ),
@@ -60,7 +54,7 @@ class SynProvider_Micropub_Bridgy_Github extends SynProvider_Micropub {
 				'text_callback',
 			),
 			'syndication_provider_options',
-			'bridgy_options',
+			'syndication_providers',
 			array(
 				'name' => 'bridgy_github_token',
 			)

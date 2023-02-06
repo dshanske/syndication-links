@@ -1,7 +1,6 @@
 <?php
 
 class SynProvider_Webmention_Bridgy extends SynProvider_Webmention {
-	use Bridgy_Config;
 	public function __construct( $args = array() ) {
 
 		$option = get_option( 'syndication_provider_enable' );
@@ -20,7 +19,7 @@ class SynProvider_Webmention_Bridgy extends SynProvider_Webmention {
 			$post_id = get_the_ID();
 		}
 		if ( $this->get_target() === urldecode( $body['target'] ) ) {
-			$backlink = get_option( 'bridgy_backlink' );
+			$backlink = get_option( 'syndication_backlink' );
 			if ( ! empty( $backlink ) ) {
 				$body['bridgy_omit_link'] = $backlink;
 			}
