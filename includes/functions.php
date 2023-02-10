@@ -104,6 +104,6 @@ function register_syndication_provider( $object ) {
 }
 
 function syndication_post_types() {
-	$post_types = get_option( 'syndication_post_types' );
+	$post_types = get_option( 'syndication_post_types', array() );
 	return apply_filters( 'syndication_post_types', $post_types );
 }

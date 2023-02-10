@@ -182,6 +182,7 @@ class Syn_Config {
 			'syndication_display',
 			array(
 				'name' => 'syndication-links_display',
+				'label_for' => 'syndication-links_display',
 				'list' => self::display_options(),
 			)
 		);
@@ -193,6 +194,7 @@ class Syn_Config {
 			'syndication_display',
 			array(
 				'name' => 'syndication-links_size',
+				'label_for' => 'syndication-links_size',
 				'list' => self::size_options(),
 			)
 		);
@@ -204,6 +206,7 @@ class Syn_Config {
 			'syndication_display',
 			array(
 				'name' => 'syndication-links_bw',
+				'label_for' => 'syndication-links_bw',
 			)
 		);
 		add_settings_field(
@@ -214,6 +217,7 @@ class Syn_Config {
 			'syndication_display',
 			array(
 				'name' => 'syndication-links_archives',
+				'label_for' => 'syndication-links_archives',
 			)
 		);
 		add_settings_field(
@@ -224,6 +228,7 @@ class Syn_Config {
 			'syndication_display',
 			array(
 				'name' => 'syndication-links_feed',
+				'label_for' => 'syndication-links_feed',
 			)
 		);
 		add_settings_field(
@@ -234,6 +239,7 @@ class Syn_Config {
 			'syndication_display',
 			array(
 				'name' => 'syndication-links_text_before',
+				'label_for' => 'syndication-links_text_before',
 			)
 		);
 
@@ -245,6 +251,7 @@ class Syn_Config {
 			'syndication_display',
 			array(
 				'name' => 'syndication_post_types',
+				'label_for' => 'syndication_post_types',
 			)
 		);
 
@@ -262,6 +269,7 @@ class Syn_Config {
 			'syndication_providers',
 			array(
 				'name' => 'syndication_posse_enable',
+				'label_for' => 'syndication_posse_enable',
 			)
 		);
 		add_settings_field(
@@ -272,6 +280,7 @@ class Syn_Config {
 			'syndication_providers',
 			array(
 				'name' => 'syndication_wp_cron',
+				'label_for' => 'syndication_wp_cron',
 			)
 		);
 
