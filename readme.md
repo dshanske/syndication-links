@@ -2,7 +2,7 @@
 **Contributors:** [dshanske](https://profiles.wordpress.org/dshanske/)  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Tested up to:** 6.1  
-**Stable tag:** 4.4.5  
+**Stable tag:** 4.4.6  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -168,6 +168,9 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 ## Changelog ##
+
+### Version 4.4.6 ( 2023-02-10 ) ###
+* Emergency release to deal with critical error caused by removal of Bridgy settings.
 
 ### Version 4.4.5 ( 2023-02-10 ) ###
 * Add labels to settings

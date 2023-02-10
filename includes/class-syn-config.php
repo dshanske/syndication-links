@@ -181,9 +181,9 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name' => 'syndication-links_display',
+				'name'      => 'syndication-links_display',
 				'label_for' => 'syndication-links_display',
-				'list' => self::display_options(),
+				'list'      => self::display_options(),
 			)
 		);
 		add_settings_field(
@@ -193,9 +193,9 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name' => 'syndication-links_size',
+				'name'      => 'syndication-links_size',
 				'label_for' => 'syndication-links_size',
-				'list' => self::size_options(),
+				'list'      => self::size_options(),
 			)
 		);
 		add_settings_field(
@@ -205,7 +205,7 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name' => 'syndication-links_bw',
+				'name'      => 'syndication-links_bw',
 				'label_for' => 'syndication-links_bw',
 			)
 		);
@@ -216,7 +216,7 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name' => 'syndication-links_archives',
+				'name'      => 'syndication-links_archives',
 				'label_for' => 'syndication-links_archives',
 			)
 		);
@@ -227,7 +227,7 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name' => 'syndication-links_feed',
+				'name'      => 'syndication-links_feed',
 				'label_for' => 'syndication-links_feed',
 			)
 		);
@@ -238,7 +238,7 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name' => 'syndication-links_text_before',
+				'name'      => 'syndication-links_text_before',
 				'label_for' => 'syndication-links_text_before',
 			)
 		);
@@ -250,7 +250,7 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name' => 'syndication_post_types',
+				'name'      => 'syndication_post_types',
 				'label_for' => 'syndication_post_types',
 			)
 		);
@@ -268,7 +268,7 @@ class Syn_Config {
 			'syndication_provider_options',
 			'syndication_providers',
 			array(
-				'name' => 'syndication_posse_enable',
+				'name'      => 'syndication_posse_enable',
 				'label_for' => 'syndication_posse_enable',
 			)
 		);
@@ -279,7 +279,7 @@ class Syn_Config {
 			'syndication_provider_options',
 			'syndication_providers',
 			array(
-				'name' => 'syndication_wp_cron',
+				'name'      => 'syndication_wp_cron',
 				'label_for' => 'syndication_wp_cron',
 			)
 		);

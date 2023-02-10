@@ -3,7 +3,7 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add Links to Syndicated Copies of Your Posts
- * Version: 4.4.5
+ * Version: 4.4.6
  * Requires at least: 4.9.9
  * Requires PHP: 5.6
  * Author: David Shanske
@@ -130,10 +130,8 @@ function syndication_links_init() {
 				array(
 					'class-synprovider-webmention-bridgy-fed.php', // Bridgy Fed
 				),
-					'/includes/webmentions'
-				);
-
-
+				'/includes/webmentions'
+			);
 
 			if ( class_exists( 'SynProvider_Webmention_Custom' ) ) {
 				$custom = get_option( 'syndication_links_custom_posse' );
