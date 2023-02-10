@@ -13,9 +13,10 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 	 * @param array $args Array of Arguments
 	 */
 	public function __construct( $args = array() ) {
-		$this->name     = __( 'Twitter via Bridgy', 'syndication-links' );
-		$this->uid      = 'micropub-twitter-bridgy';
-		$this->endpoint = 'https://brid.gy/micropub';
+		$this->name           = __( 'Twitter via Bridgy', 'syndication-links' );
+		$this->uid            = 'micropub-twitter-bridgy';
+		$this->endpoint       = 'https://brid.gy/micropub';
+		$this->content_length = 280;
 
 		if ( ! array_key_exists( 'token', $args ) ) {
 			$this->token = get_option( 'bridgy_twitter_token' );
@@ -59,37 +60,5 @@ class SynProvider_Micropub_Bridgy_Twitter extends SynProvider_Micropub {
 				'name' => 'bridgy_twitter_token',
 			)
 		);
-	}
-
-	/**
-	 * Convert post to Microformats for Micropub
-	 *
-	 * @param int|WP_Post $post WordPress Post
-	 * @return array|false Microformats
-	 */
-	public static function post_to_mf2( $post ) {
-		$mf2 = parent::post_to_mf2( $post );
-
-		$content = '';
-
-		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'syndication_use_excerpt' ) ) {
-			$content = $post->post_excerpt;
-		} elseif ( 280 < strlen( $post->post_content ) ) {
-			// If length is over 280 bytes then replace content with link plus the title
-			$link = get_permalink( $post );
-			if ( function_exists( 'kind_get_the_title' ) ) {
-				$content = kind_get_the_title( $post ) . ' - ' . $link;
-			} elseif ( ! empty( get_the_title( $post ) ) ) {
-				$content = get_the_title( $post ) . ' - ' . $link;
-			} else {
-				$content = substr( $post->post_content, 0, 277 - strlen( $link ) ) . ' - ' . $link;
-			}
-		}
-
-		if ( ! empty( $content ) ) {
-			$mf2['properties']['content'] = array( $content );
-		}
-
-		return $mf2;
 	}
 }

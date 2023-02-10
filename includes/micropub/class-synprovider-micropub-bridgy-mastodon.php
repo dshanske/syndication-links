@@ -13,9 +13,10 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 	 * @param array $args Array of Arguments
 	 */
 	public function __construct( $args = array() ) {
-		$this->name     = __( 'Mastodon via Bridgy', 'syndication-links' );
-		$this->uid      = 'micropub-mastodon-bridgy';
-		$this->endpoint = 'https://brid.gy/micropub';
+		$this->name           = __( 'Mastodon via Bridgy', 'syndication-links' );
+		$this->uid            = 'micropub-mastodon-bridgy';
+		$this->endpoint       = 'https://brid.gy/micropub';
+		$this->content_length = 500;
 
 		if ( ! array_key_exists( 'token', $args ) ) {
 			$this->token = get_option( 'bridgy_mastodon_token' );
@@ -61,34 +62,4 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 		);
 	}
 
-	/**
-	 * Convert post to Microformats for Micropub
-	 *
-	 * @param int|WP_Post $post WordPress Post
-	 * @return array|false Microformats
-	 */
-	public static function post_to_mf2( $post ) {
-		$mf2     = parent::post_to_mf2( $post );
-		$content = '';
-
-		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'syndication_use_excerpt' ) ) {
-			$content = $post->post_excerpt;
-		} elseif ( ! empty( $post->post_content ) & 500 < strlen( $post->post_content ) ) {
-			// If length is over 500 characters then replace content with link plus the title
-			$link = get_permalink( $post );
-			if ( function_exists( 'kind_get_the_title' ) ) {
-				$content = kind_get_the_title( $post ) . ' - ' . $link;
-			} elseif ( ! empty( get_the_title( $post ) ) ) {
-				$content = get_the_title( $post ) . ' - ' . $link;
-			} else {
-				$content = substr( $post->post_content, 0, 497 - strlen( $link ) ) . ' - ' . $link;
-			}
-		}
-
-		if ( ! empty( $content ) ) {
-			$mf2['properties']['content'] = array( $content );
-		}
-
-		return $mf2;
-	}
 }

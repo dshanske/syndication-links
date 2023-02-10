@@ -20,6 +20,13 @@ class SynProvider_Micropub extends Syndication_Provider {
 	 */
 	protected $endpoint;
 
+	/**
+	 * Maximum Content Length
+	 *
+	 * @var int
+	 */
+	protected $content_length = 10000;
+
 
 	/**
 	 * Constructor for the Abstract Class
@@ -108,6 +115,33 @@ class SynProvider_Micropub extends Syndication_Provider {
 	}
 
 	/**
+	 * Generate Content
+	 *
+	 * @param int|WP_Post $post WordPress post
+	 * @return string Content string
+	 */
+	public static function get_content( $post ) {
+		$content  = '';
+		$backlink = get_option( 'syndication_backlink' );
+		$link     = get_permalink( $post );
+		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'syndication_use_excerpt' ) ) {
+			$content = $post->post_excerpt;
+		} elseif ( $this->content_length < strlen( $post->post_content ) && 'maybe' === $backlink ) {
+			// If length is over $content_length then replace content with link plus the title
+			if ( function_exists( 'kind_get_the_title' ) ) {
+				$content = kind_get_the_title( $post ) . ' - ' . $link;
+			} elseif ( ! empty( get_the_title( $post ) ) ) {
+				$content = get_the_title( $post ) . ' - ' . $link;
+			} else {
+				$content = substr( $post->post_content, 0, ( $this->content_length - 3 ) - strlen( $link ) ) . ' - ' . $link;
+			}
+		} elseif ( 'true' !== $backlink ) {
+			$content = $post->content . ' (' . $link . ')';
+		}
+		return $content;
+	}
+
+	/**
 	 * Convert post to Microformats for Micropub
 	 *
 	 * @param int|WP_Post $post WordPress Post
@@ -147,8 +181,10 @@ class SynProvider_Micropub extends Syndication_Provider {
 			$mf2['properties']['summary'] = array( $post->post_excerpt );
 		}
 
-		if ( ! empty( $post->post_content ) ) {
-			$mf2['properties']['content'] = array( $post->post_content );
+		$content = $this->get_content( $post );
+
+		if ( ! empty( $content ) ) {
+			$mf2['properties']['content'] = array( $content );
 		}
 
 		$mf2['type'] = array( 'h-entry' );
