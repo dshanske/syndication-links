@@ -15,7 +15,6 @@ class SynProvider_Webmention_Bridgy_Mastodon extends SynProvider_Webmention_Brid
 
 		// Parent Constructor
 		parent::__construct( $args );
-		$this->register_mastodon_setting();
 	}
 
 	public function wp_footer() {
