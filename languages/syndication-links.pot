@@ -2,22 +2,22 @@
 # This file is distributed under the same license as the Syndication Links plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Syndication Links 4.4.4\n"
+"Project-Id-Version: Syndication Links 4.4.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/syndication-links\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-01-24T04:55:18+00:00\n"
+"POT-Creation-Date: 2023-02-10T05:23:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: syndication-links\n"
 
 #. Plugin Name of the plugin
-#: includes/class-syn-config.php:286
-#: includes/class-syn-config.php:287
-#: includes/class-syn-config.php:398
+#: includes/class-syn-config.php:295
+#: includes/class-syn-config.php:296
+#: includes/class-syn-config.php:407
 #: includes/class-syn-meta.php:74
 #: includes/class-syn-meta.php:229
 msgid "Syndication Links"
@@ -72,27 +72,47 @@ msgstr ""
 msgid "Your Pinboard token can be found under your account settings, in the password tab."
 msgstr ""
 
-#: includes/class-post-syndication.php:60
+#: includes/class-post-syndication.php:92
 msgid "Disable to Use Alternate Bridgy Syndication Method (Requires Webmention Plugin)"
 msgstr ""
 
-#: includes/class-post-syndication.php:74
+#: includes/class-post-syndication.php:106
 msgid "Enable the Following Providers"
 msgstr ""
 
-#: includes/class-post-syndication.php:212
+#: includes/class-post-syndication.php:119
+msgid "Use Post Excerpt for Content if Set"
+msgstr ""
+
+#: includes/class-post-syndication.php:132
+msgid "Posts should link back to site posts"
+msgstr ""
+
+#: includes/class-post-syndication.php:142
+msgid "Enable"
+msgstr ""
+
+#: includes/class-post-syndication.php:143
+msgid "Disable"
+msgstr ""
+
+#: includes/class-post-syndication.php:144
+msgid "If too long"
+msgstr ""
+
+#: includes/class-post-syndication.php:289
 msgid "No Logs Found"
 msgstr ""
 
-#: includes/class-post-syndication.php:237
+#: includes/class-post-syndication.php:314
 msgid "Syndicate To"
 msgstr ""
 
-#: includes/class-post-syndication.php:249
+#: includes/class-post-syndication.php:326
 msgid "Syndicate Logs"
 msgstr ""
 
-#: includes/class-post-syndication.php:296
+#: includes/class-post-syndication.php:373
 msgid "No Syndication Targets Available"
 msgstr ""
 
@@ -104,95 +124,95 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-#: includes/class-syn-config.php:190
+#: includes/class-syn-config.php:191
 msgid "Size"
 msgstr ""
 
-#: includes/class-syn-config.php:201
+#: includes/class-syn-config.php:203
 msgid "Black Icons"
 msgstr ""
 
-#: includes/class-syn-config.php:211
+#: includes/class-syn-config.php:214
 msgid "Show on Front Page, Archive Pages, and Search Results"
 msgstr ""
 
-#: includes/class-syn-config.php:221
+#: includes/class-syn-config.php:225
 msgid "Show on Feed"
 msgstr ""
 
-#: includes/class-syn-config.php:231
+#: includes/class-syn-config.php:236
 msgid "Text Before Links"
 msgstr ""
 
-#: includes/class-syn-config.php:242
+#: includes/class-syn-config.php:248
 msgid "Post Types to Offer Syndication For"
 msgstr ""
 
-#: includes/class-syn-config.php:253
+#: includes/class-syn-config.php:260
 msgid "Syndication/POSSE Options"
 msgstr ""
 
-#: includes/class-syn-config.php:259
+#: includes/class-syn-config.php:266
 msgid "Enable Syndication to Other Sites"
 msgstr ""
 
-#: includes/class-syn-config.php:269
+#: includes/class-syn-config.php:277
 msgid "Syndication Runs in the Background"
 msgstr ""
 
-#: includes/class-syn-config.php:298
+#: includes/class-syn-config.php:307
 msgid "Options for Presenting Syndication Links in Posts."
 msgstr ""
 
-#: includes/class-syn-config.php:300
+#: includes/class-syn-config.php:309
 msgid "Syndication Links by default will add links to the content. You can disable this for theme support."
 msgstr ""
 
-#: includes/class-syn-config.php:305
+#: includes/class-syn-config.php:314
 msgid "Options for Syndicating to Other Sites"
 msgstr ""
 
-#: includes/class-syn-config.php:307
+#: includes/class-syn-config.php:316
 msgid "Syndication Links offers an interface to syndicate your content to other sites via the Post Editor or Micropub"
 msgstr ""
 
-#: includes/class-syn-config.php:364
+#: includes/class-syn-config.php:373
 msgid "Icons Only"
 msgstr ""
 
-#: includes/class-syn-config.php:365
+#: includes/class-syn-config.php:374
 msgid "Text Only"
 msgstr ""
 
-#: includes/class-syn-config.php:366
+#: includes/class-syn-config.php:375
 msgid "Icons and Text"
 msgstr ""
 
-#: includes/class-syn-config.php:367
+#: includes/class-syn-config.php:376
 msgid "Hidden Links"
 msgstr ""
 
-#: includes/class-syn-config.php:373
+#: includes/class-syn-config.php:382
 msgid "Small"
 msgstr ""
 
-#: includes/class-syn-config.php:374
+#: includes/class-syn-config.php:383
 msgid "Medium"
 msgstr ""
 
-#: includes/class-syn-config.php:375
+#: includes/class-syn-config.php:384
 msgid "Large"
 msgstr ""
 
-#: includes/class-syn-config.php:399
+#: includes/class-syn-config.php:408
 msgid "Adds optional syndication links for various sites. Syndication is the act of posting your content on other sites. You can either manually add these to the box in the post editor or automatically. Several plugins support or are supported."
 msgstr ""
 
-#: includes/class-syn-config.php:402
+#: includes/class-syn-config.php:411
 msgid "General"
 msgstr ""
 
-#: includes/class-syn-config.php:403
+#: includes/class-syn-config.php:412
 msgid "Providers"
 msgstr ""
 
@@ -235,77 +255,43 @@ msgctxt "submit button"
 msgid "Lookup Original"
 msgstr ""
 
-#: includes/micropub/class-synprovider-micropub-bridgy-flickr.php:20
+#: includes/micropub/class-synprovider-micropub-bridgy-flickr.php:16
 #: includes/webmentions/class-synprovider-webmention-bridgy-flickr.php:6
 msgid "Flickr via Bridgy"
 msgstr ""
 
-#: includes/micropub/class-synprovider-micropub-bridgy-flickr.php:57
+#: includes/micropub/class-synprovider-micropub-bridgy-flickr.php:51
 msgid "Micropub Token to Enable Bridgy Flickr Publish"
 msgstr ""
 
-#: includes/micropub/class-synprovider-micropub-bridgy-github.php:20
+#: includes/micropub/class-synprovider-micropub-bridgy-github.php:16
 msgid "GitHub via Bridgy"
 msgstr ""
 
-#: includes/micropub/class-synprovider-micropub-bridgy-github.php:57
+#: includes/micropub/class-synprovider-micropub-bridgy-github.php:51
 msgid "Micropub Token to Enable for Bridgy GitHub Publish"
 msgstr ""
 
-#: includes/micropub/class-synprovider-micropub-bridgy-mastodon.php:20
+#: includes/micropub/class-synprovider-micropub-bridgy-mastodon.php:16
 #: includes/webmentions/class-synprovider-webmention-bridgy-mastodon.php:6
 msgid "Mastodon via Bridgy"
 msgstr ""
 
-#: includes/micropub/class-synprovider-micropub-bridgy-mastodon.php:67
+#: includes/micropub/class-synprovider-micropub-bridgy-mastodon.php:52
 msgid "Micropub Token to enable Bridgy Mastodon Publish"
 msgstr ""
 
-#: includes/micropub/class-synprovider-micropub-bridgy-mastodon.php:80
-#: includes/webmentions/class-synprovider-webmention-bridgy-mastodon.php:38
-msgid "Tell Bridgy to Use Post Excerpt for Matodon Posts if set"
-msgstr ""
-
-#: includes/micropub/class-synprovider-micropub-bridgy-twitter.php:20
+#: includes/micropub/class-synprovider-micropub-bridgy-twitter.php:16
 #: includes/webmentions/class-synprovider-webmention-bridgy-twitter.php:6
 msgid "Twitter via Bridgy"
 msgstr ""
 
-#: includes/micropub/class-synprovider-micropub-bridgy-twitter.php:67
+#: includes/micropub/class-synprovider-micropub-bridgy-twitter.php:52
 msgid "Micropub Token to Enable Twitter via Bridgy"
 msgstr ""
 
-#: includes/micropub/class-synprovider-micropub-bridgy-twitter.php:80
-#: includes/webmentions/class-synprovider-webmention-bridgy-twitter.php:38
-msgid "Tell Bridgy to Use Post Excerpt for Tweets if set"
-msgstr ""
-
-#: includes/micropub/class-synprovider-micropub.php:171
+#: includes/micropub/class-synprovider-micropub.php:207
 msgid "Invalid Post Provided"
-msgstr ""
-
-#: includes/trait-bridgy-config.php:41
-msgid "Bridgy Publish Options"
-msgstr ""
-
-#: includes/trait-bridgy-config.php:48
-msgid "Bridgy Posts should link back to site posts"
-msgstr ""
-
-#: includes/trait-bridgy-config.php:58
-msgid "True"
-msgstr ""
-
-#: includes/trait-bridgy-config.php:59
-msgid "False"
-msgstr ""
-
-#: includes/trait-bridgy-config.php:60
-msgid "If too long"
-msgstr ""
-
-#: includes/trait-bridgy-config.php:66
-msgid "Tell Bridgy to Ignore Formatting"
 msgstr ""
 
 #: includes/webmentions/class-synprovider-webmention-bridgy-fed.php:6
@@ -353,7 +339,7 @@ msgstr ""
 msgid "Unknown %1$s Error"
 msgstr ""
 
-#: syndication-links.php:187
+#: syndication-links.php:189
 msgid ""
 "Syndication Links, which are links to the same content on other sites, may be displayed on comments, but only if supplied by the submitter or if your comment was\n"
 "\t\t\tgenerated by webmention, if they appear on your site."
