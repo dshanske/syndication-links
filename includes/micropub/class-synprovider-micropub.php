@@ -120,7 +120,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 	 * @param int|WP_Post $post WordPress post
 	 * @return string Content string
 	 */
-	public static function get_content( $post ) {
+	public function get_content( $post ) {
 		$content  = '';
 		$backlink = get_option( 'syndication_backlink' );
 		$link     = get_permalink( $post );
@@ -147,7 +147,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 	 * @param int|WP_Post $post WordPress Post
 	 * @return array|false Microformats
 	 */
-	public static function post_to_mf2( $post ) {
+	public function post_to_mf2( $post ) {
 		$post = get_post( $post );
 
 		$mf2               = array();
