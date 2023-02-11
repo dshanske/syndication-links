@@ -67,7 +67,7 @@ class SynProvider_Micropub_Bridgy_Github extends SynProvider_Micropub {
 	 * @param int|WP_Post $post WordPress Post
 	 * @return array|false Microformats
 	 */
-	public static function post_to_mf2( $post ) {
+	public function post_to_mf2( $post ) {
 		$mf2 = parent::post_to_mf2( $post );
 
 		return $mf2;
