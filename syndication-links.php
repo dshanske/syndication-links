@@ -96,7 +96,6 @@ function syndication_links_init() {
 			array(
 				'class-syndication-provider.php', // Syndication Provider Base Class
 				'class-post-syndication.php', // Post syndication logic
-				'trait-bridgy-config.php', // Bridgy Config Traits
 			)
 		);
 
