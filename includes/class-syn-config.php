@@ -355,7 +355,7 @@ class Syn_Config {
 		foreach ( get_post_types( array( 'public' => true ), 'objects' ) as $post_type ) {
 			?>
 			 <li><input name='<?php echo esc_attr( $args['name'] ); ?>[]' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option ), true ); ?>/> 
-			 <?php echo esc_html( $post_type->label ); ?>
+			 <label for="<?php echo esc_attr( $post_type->name ); ?>"><?php echo esc_html( $post_type->label ); ?></label>
 			</li> 
 			<?php
 		}
