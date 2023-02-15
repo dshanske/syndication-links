@@ -351,7 +351,10 @@ class Syn_Config {
 
 	public static function post_type_callback( array $args ) {
 		echo '<ul>';
-		$option = get_option( $args['name'], array( 'post', 'page' ) );
+		$option = get_option( $args['name'] );
+		if ( ! is_array( $option ) ) {
+			$option = array();
+		}
 		foreach ( get_post_types( array( 'public' => true ), 'objects' ) as $post_type ) {
 			?>
 			 <li><input name='<?php echo esc_attr( $args['name'] ); ?>[]' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option ), true ); ?>/> 
