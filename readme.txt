@@ -2,7 +2,7 @@
 Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Tested up to: 6.1
-Stable tag: 4.4.6
+Stable tag: 4.4.7
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -164,6 +164,9 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.4.7 ( 2023-02-18 ) =
+* Make posts always enabled for Syndication Links by default to try to address issues people had with same.
 
 = Version 4.4.6 ( 2023-02-10 ) =
 * Emergency release to deal with critical error caused by removal of Bridgy settings.
