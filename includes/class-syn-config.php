@@ -245,7 +245,7 @@ class Syn_Config {
 
 		add_settings_field(
 			'syndication_post_types',
-			__( 'Post Types to Offer Syndication For', 'syndication-links' ),
+			__( 'Other Post Types to Offer Syndication For', 'syndication-links' ),
 			array( __CLASS__, 'post_type_callback' ),
 			'syndication_display_options',
 			'syndication_display',
@@ -356,6 +356,9 @@ class Syn_Config {
 			$option = array();
 		}
 		foreach ( get_post_types( array( 'public' => true ), 'objects' ) as $post_type ) {
+			if ( 'post' === $post_type->name ) {
+				continue;
+			}
 			?>
 			 <li><input name='<?php echo esc_attr( $args['name'] ); ?>[]' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option ), true ); ?>/> 
 			 <label for="<?php echo esc_attr( $post_type->name ); ?>"><?php echo esc_html( $post_type->label ); ?></label>
