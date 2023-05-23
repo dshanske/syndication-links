@@ -2,7 +2,7 @@
 **Contributors:** [dshanske](https://profiles.wordpress.org/dshanske/)  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Tested up to:** 6.2  
-**Stable tag:** 4.4.7  
+**Stable tag:** 4.4.8  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
