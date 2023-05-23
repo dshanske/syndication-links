@@ -57,6 +57,7 @@ class SynProvider_Micropub_Bridgy_Github extends SynProvider_Micropub {
 			'syndication_providers',
 			array(
 				'name' => 'bridgy_github_token',
+				'label_for' => 'bridgy_github_token',
 			)
 		);
 	}

@@ -146,7 +146,6 @@ function syndication_links_init() {
 			// Providers that require Micropub
 			syndication_links_register_providers(
 				array(
-					'class-synprovider-micropub-bridgy-twitter.php',
 					'class-synprovider-micropub-bridgy-flickr.php',
 					'class-synprovider-micropub-bridgy-github.php',
 					'class-synprovider-micropub-bridgy-mastodon.php',
@@ -157,7 +156,6 @@ function syndication_links_init() {
 				syndication_links_register_providers(
 					array(
 						'class-synprovider-webmention-bridgy.php', // Bridgy Base Class
-						'class-synprovider-webmention-bridgy-twitter.php', // Twitter via Bridgy
 						'class-synprovider-webmention-bridgy-github.php', // Github via Bridgy
 						'class-synprovider-webmention-bridgy-flickr.php', // Flickr via Bridgy
 						'class-synprovider-webmention-bridgy-mastodon.php', // Mastodon via Bridgy
