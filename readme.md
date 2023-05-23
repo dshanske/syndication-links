@@ -68,7 +68,7 @@ The plugin supports automatically pulling data from plugins that syndicate your 
 
 Using the optional Syndication feature(disabled by default) you can syndicate your posts to:
 
-* [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Twitter, Github, Mastodon and Flickr. The plugin supports Bridgy Publish via webmention and via Micropub.
+* [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Github, Mastodon and Flickr. The plugin supports Bridgy Publish via Micropub and can be enabled to use Webmentions.
 * [Bridgy Fed](https://fed.brid.gy) - Bridgy Fed is a service that allows you to interact with federated social networks using webmentions.
 * [Micro.blog](https://micro.blog) - Micro.blog is a social network and publishing platform for independent microblogs, created by Manton Reece. It uses a custom feed you can add to Micro.blog to support this.
 * [Pinboard](https://pinboard.in) - Pinboard is a bookmarking site. The support for this is currently only enabled if you have Post Kinds enabled, due to the difficulty in getting a URL. It will bookmark the URL of any object you are citing.
@@ -168,6 +168,10 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 ## Changelog ##
+
+### Version 4.4.8 ( 2023-05-22 ) ###
+* Add labels to settings
+* Remove Twitter Bridgy support due Bridgy removing it.
 
 ### Version 4.4.7 ( 2023-02-18 ) ###
 * Make posts always enabled for Syndication Links by default to try to address issues people had with same.

@@ -51,6 +51,7 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 			'pinboard_options',
 			array(
 				'name' => 'pinboard_token',
+				'label_for' => 'pinboard_token',
 			)
 		);
 	}
