@@ -50,8 +50,8 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 			'syndication_provider_options',
 			'pinboard_options',
 			array(
-				'name' => 'pinboard_token',
 				'label_for' => 'pinboard_token',
+				'type' => 'password'
 			)
 		);
 	}

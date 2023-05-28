@@ -56,8 +56,8 @@ class SynProvider_Micropub_Bridgy_Flickr extends SynProvider_Micropub {
 			'syndication_provider_options',
 			'syndication_providers',
 			array(
-				'name' => 'bridgy_flickr_token',
 				'label_for' => 'bridgy_flickr_token',
+				'type' => 'password'
 			)
 		);
 	}

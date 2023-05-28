@@ -97,7 +97,6 @@ class Post_Syndication {
 				'syndication_provider_options',
 				'syndication_providers',
 				array(
-					'name' => 'syndication_provider_micropub',
 					'label_for' => 'syndication_provider_micropub',
 				)
 			);
@@ -112,7 +111,6 @@ class Post_Syndication {
 			'syndication_provider_options',
 			'syndication_providers',
 			array(
-				'name' => 'syndication_provider_enable',
 				'label_for' => 'syndication_provider_enable',
 			)
 		);
@@ -126,7 +124,6 @@ class Post_Syndication {
 			'syndication_provider_options',
 			'syndication_providers',
 			array(
-				'name' => 'syndication_use_excerpt',
 				'label_for' => 'syndication_use_excerpt',
 			)
 		);
@@ -140,7 +137,6 @@ class Post_Syndication {
 			'syndication_provider_options',
 			'syndication_providers',
 			array(
-				'name' => 'syndication_backlink',
 				'label_for' => 'syndication_backlink',
 				'list' => array(
 					''      => __( 'Enable', 'syndication-links' ),

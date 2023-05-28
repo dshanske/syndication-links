@@ -18,6 +18,7 @@ class Syn_Config {
 		}
 		add_filter( 'comment_text', array( $cls, 'comment_text' ), 20, 2 );
 		add_filter( 'json_feed_item', array( $cls, 'json_feed_item' ), 10, 2 );
+		add_action( 'admin_enqueue_scripts', array( $cls, 'admin_enqueue' ) );
 
 		// Syndication Content Options
 		register_setting(
@@ -165,6 +166,21 @@ class Syn_Config {
 			}
 		}
 		wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname( __FILE__ ) ) . $css, array(), SYNDICATION_LINKS_VERSION );
+
+	}
+
+
+	public static function admin_enqueue( $hook_suffix ) {
+		$hooks = array( 'indieweb_page_syndication_links' );
+		if ( in_array( $hook_suffix, $hooks, true ) ) {
+			wp_enqueue_script(
+				'syndication_links_password',
+				plugins_url( 'js/password.js', dirname( __FILE__ ) ),
+				array(),
+				SYNDICATION_LINKS_VERSION,
+				true
+			);
+		}
 	}
 
 	public static function admin_init() {
@@ -181,7 +197,6 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name'      => 'syndication-links_display',
 				'label_for' => 'syndication-links_display',
 				'list'      => self::display_options(),
 			)
@@ -193,7 +208,6 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name'      => 'syndication-links_size',
 				'label_for' => 'syndication-links_size',
 				'list'      => self::size_options(),
 			)
@@ -205,7 +219,6 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name'      => 'syndication-links_bw',
 				'label_for' => 'syndication-links_bw',
 			)
 		);
@@ -216,7 +229,6 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name'      => 'syndication-links_archives',
 				'label_for' => 'syndication-links_archives',
 			)
 		);
@@ -227,7 +239,6 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name'      => 'syndication-links_feed',
 				'label_for' => 'syndication-links_feed',
 			)
 		);
@@ -238,7 +249,6 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name'      => 'syndication-links_text_before',
 				'label_for' => 'syndication-links_text_before',
 			)
 		);
@@ -250,7 +260,6 @@ class Syn_Config {
 			'syndication_display_options',
 			'syndication_display',
 			array(
-				'name'      => 'syndication_post_types',
 				'label_for' => 'syndication_post_types',
 			)
 		);
@@ -268,7 +277,6 @@ class Syn_Config {
 			'syndication_provider_options',
 			'syndication_providers',
 			array(
-				'name'      => 'syndication_posse_enable',
 				'label_for' => 'syndication_posse_enable',
 			)
 		);
@@ -279,7 +287,6 @@ class Syn_Config {
 			'syndication_provider_options',
 			'syndication_providers',
 			array(
-				'name'      => 'syndication_wp_cron',
 				'label_for' => 'syndication_wp_cron',
 			)
 		);
@@ -319,14 +326,14 @@ class Syn_Config {
 
 
 	public static function checkbox_callback( array $args ) {
-		$name    = $args['name'];
-		$checked = get_option( $args['name'] );
+		$name    = $args['label_for'];
+		$checked = get_option( $args['label_for'] );
 		echo "<input name='" . esc_attr( $name ) . "' type='hidden' value='0' />";
 		echo "<input name='" . esc_attr( $name ) . "' type='checkbox' value='1' " . checked( 1, $checked, false ) . ' /> ';
 	}
 
 	public static function select_callback( array $args ) {
-		$name    = $args['name'];
+		$name    = $args['label_for'];
 		$select  = get_option( $name );
 		$options = $args['list'];
 		echo "<select name='" . esc_attr( $name ) . "' id='" . esc_attr( $name ) . "'>";
@@ -337,13 +344,13 @@ class Syn_Config {
 	}
 
 	public static function radio_callback( array $args ) {
-		$name    = $args['name'];
+		$name    = $args['label_for'];
 		$select  = get_option( $name );
 		$options = $args['list'];
 		echo '<fieldset>';
 		foreach ( $options as $key => $value ) {
 			echo '<input type="radio" name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '-' . esc_attr( $key ) . '" value="' . esc_attr( $key ) . '" ' . checked( $key, $select, false ) . ' />';
-			echo '<label for="' . esc_attr( $args['name'] ) . '-' . esc_attr( $key ) . '">' . esc_attr( $value ) . '</label>';
+			echo '<label for="' . esc_attr( $name ) . '-' . esc_attr( $key ) . '">' . esc_attr( $value ) . '</label>';
 			echo '<br />';
 		}
 		echo '</fieldset>';
@@ -351,7 +358,7 @@ class Syn_Config {
 
 	public static function post_type_callback( array $args ) {
 		echo '<ul>';
-		$option = get_option( $args['name'] );
+		$option = get_option( $args['label_for'] );
 		if ( ! is_array( $option ) ) {
 			$option = array();
 		}
@@ -360,7 +367,7 @@ class Syn_Config {
 				continue;
 			}
 			?>
-			 <li><input name='<?php echo esc_attr( $args['name'] ); ?>[]' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option ), true ); ?>/> 
+			 <li><input name='<?php echo esc_attr( $args['label_for'] ); ?>[]' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option ), true ); ?>/> 
 			 <label for="<?php echo esc_attr( $post_type->name ); ?>"><?php echo esc_html( $post_type->label ); ?></label>
 			</li> 
 			<?php
@@ -370,8 +377,16 @@ class Syn_Config {
 	}
 
 	public static function text_callback( $args ) {
-		$name = $args['name'];
-		echo "<input name='" . esc_attr( $name ) . "' class='widefat' type='text' value='" . esc_attr( get_option( $name ) ) . "' /> ";
+		$name = $args['label_for'];
+		if ( ! isset( $args['type'] ) ) {
+			$args['type'] = 'text';
+		}
+		$value = get_option( $name );
+		if ( 'password' === $args['type'] ) {
+			printf( '<input name="%1$s" id="%1$s" size="50" autocomplete="off" class="regular-text" type="password" autocomplete="off" data-lpignore="true" autofill="off" value="%2$s"/>', esc_attr( $name ), esc_attr( $value ) );
+		} else {
+			printf( '<input name="%1$s" id="%1$s" size="50" autocomplete="off" class="regular-text" type="%2$s" value="%3$s" />', esc_attr( $name ), esc_attr( $args['type'] ), esc_attr( $value ) );
+		}
 	}
 
 	public static function display_options() {
