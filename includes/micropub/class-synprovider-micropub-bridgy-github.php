@@ -25,7 +25,7 @@ class SynProvider_Micropub_Bridgy_Github extends SynProvider_Micropub {
 		$enable = is_array( $option ) ? in_array( $this->uid, $option ) : false;
 
 		if ( $enable ) {
-			add_action( 'admin_init', array( $this, 'admin_init' ), 12 );
+			add_action( 'admin_init', array( $this, 'admin_init' ), 11 );
 		}
 
 		parent::__construct( $args );
