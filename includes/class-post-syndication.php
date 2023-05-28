@@ -40,16 +40,6 @@ class Post_Syndication {
 				'default'      => array(),
 			)
 		);
-		register_setting(
-			'syndication_providers',
-			'syndication_provider_micropub',
-			array(
-				'type'         => 'boolean',
-				'description'  => 'Disable to Use Webmention where Both Options Available',
-				'show_in_rest' => true,
-				'default'      => true,
-			)
-		);
 
 		register_setting(
 			'syndication_providers',
@@ -86,21 +76,6 @@ class Post_Syndication {
 	}
 
 	public static function admin_init() {
-		if ( WP_DEBUG ) {
-			add_settings_field(
-				'syndication_provider_micropub',
-				__( 'Disable to Use Alternate Bridgy Syndication Method (Requires Webmention Plugin)', 'syndication-links' ),
-				array(
-					'Syn_Config',
-					'checkbox_callback',
-				),
-				'syndication_provider_options',
-				'syndication_providers',
-				array(
-					'label_for' => 'syndication_provider_micropub',
-				)
-			);
-		}
 		add_settings_field(
 			'syndication_provider_enable',
 			__( 'Enable the Following Providers', 'syndication-links' ),
