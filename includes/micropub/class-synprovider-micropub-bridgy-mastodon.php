@@ -58,7 +58,7 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 			'syndication_providers',
 			array(
 				'label_for' => 'bridgy_mastodon_token',
-				'type' => 'password'
+				'type'      => 'password',
 			)
 		);
 	}
