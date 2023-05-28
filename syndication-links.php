@@ -3,7 +3,7 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add Links to Syndicated Copies of Your Posts
- * Version: 4.4.9
+ * Version: 4.4.10
  * Requires at least: 4.9.9
  * Requires PHP: 5.6
  * Author: David Shanske
