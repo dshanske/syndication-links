@@ -173,6 +173,12 @@ class Syn_Config {
 	public static function admin_enqueue( $hook_suffix ) {
 		$hooks = array( 'indieweb_page_syndication_links' );
 		if ( in_array( $hook_suffix, $hooks, true ) ) {
+			wp_enqueue_style(
+				'syn_admin',
+				plugins_url( 'css/syn-admin.min.css', dirname( __FILE__ ) ),
+				array(),
+				SYNDICATION_LINKS_VERSION
+			);
 			wp_enqueue_script(
 				'syndication_links_password',
 				plugins_url( 'js/password.js', dirname( __FILE__ ) ),

@@ -81,6 +81,7 @@ module.exports = function (grunt) {
 						'css/syn-bw.min.css'       : 'sass/main-bw.scss',
 						'css/syn-bw-medium.min.css': 'sass/main-bw-medium.scss',
 						'css/syn-bw-large.min.css' : 'sass/main-bw-large.scss',
+						'css/syn-admin.min.css': 'sass/admin.scss'
 					}
 				}
 			}
