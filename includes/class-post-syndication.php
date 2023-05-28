@@ -159,6 +159,16 @@ class Post_Syndication {
 				'name' => 'bridgy_ignoreformatting',
 			)
 		); */
+		add_settings_section(
+			'syndication_apis',
+			__( 'Syndication API Keys', 'syndication-links' ),
+			array( __CLASS__, 'syndication_apis_callback' ),
+			'syndication_api_keys'
+		);
+	}
+
+	public static function syndication_apis_callback() {
+		_e( 'API Keys', 'syndication-links' );
 	}
 
 	public static function register( $object ) {

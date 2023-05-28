@@ -437,6 +437,7 @@ class Syn_Config {
 		<h2 class="nav-tab-wrapper">
 			<?php self::tab_link( 'general', __( 'General', 'syndication-links' ), $active_tab ); ?>
 			<?php self::tab_link( 'providers', __( 'Providers', 'syndication-links' ), $active_tab ); ?>
+			<?php self::tab_link( 'apis', __( 'API Keys', 'syndication-links' ), $active_tab ); ?>
 		</h2>
 		<hr />
 		<form method="post" action="options.php">
@@ -449,6 +450,10 @@ class Syn_Config {
 				case 'providers':
 					settings_fields( 'syndication_providers' );
 					do_settings_sections( 'syndication_provider_options' );
+					break;
+				case  'apis':
+					settings_fields( 'syndication_apis' );
+					do_settings_sections( 'syndication_api_keys' );
 					break;
 
 			}

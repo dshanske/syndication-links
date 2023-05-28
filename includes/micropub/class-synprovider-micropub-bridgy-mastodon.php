@@ -35,7 +35,7 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 
 	public function register_setting() {
 		register_setting(
-			'syndication_providers',
+			'syndication_apis',
 			'bridgy_mastodon_token',
 			array(
 				'type'         => 'string',
@@ -54,8 +54,8 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 				'Syn_Config',
 				'text_callback',
 			),
-			'syndication_provider_options',
-			'syndication_providers',
+			'syndication_api_keys',
+			'syndication_apis',
 			array(
 				'label_for' => 'bridgy_mastodon_token',
 				'type'      => 'password',

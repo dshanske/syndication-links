@@ -40,7 +40,7 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 
 	public function register_setting() {
 		register_setting(
-			'syndication_providers',
+			'syndication_apis',
 			'pinboard_token',
 			array(
 				'type'         => 'string',
@@ -64,8 +64,8 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 				'Syn_Config',
 				'text_callback',
 			),
-			'syndication_provider_options',
-			'pinboard_options',
+			'syndication_api_keys',
+			'syndication_apis',
 			array(
 				'label_for' => 'pinboard_token',
 				'type'      => 'password',
