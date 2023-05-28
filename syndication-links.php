@@ -3,7 +3,7 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add Links to Syndicated Copies of Your Posts
- * Version: 4.4.10
+ * Version: 4.4.11
  * Requires at least: 4.9.9
  * Requires PHP: 5.6
  * Author: David Shanske
@@ -12,8 +12,11 @@
  * Domain Path:  /languages
  */
 
+// Version Number Constant.
 define( 'SYNDICATION_LINKS_VERSION', get_file_data( __FILE__, array( 'Version' => 'Version' ) )['Version'] );
 
+// If set to 0 disable the webmention version of Bridgy in favor of Micropub.
+defined( 'SYNDICATION_LINKS_BRIDGY_WEBMENTION' ) || define( 'SYNDICATION_LINKS_BRIDGY_WEBMENTION', 0 );
 
 function syndication_links_load( $files, $dir = 'includes/' ) {
 	$dir = trailingslashit( $dir );
@@ -142,7 +145,7 @@ function syndication_links_init() {
 			}
 		}
 
-		if ( 1 === intval( get_option( 'syndication_provider_micropub', 1 ) ) ) {
+		if ( 0 === SYNDICATION_LINKS_BRIDGY_WEBMENTION ) {
 			// Providers that require Micropub
 			syndication_links_register_providers(
 				array(

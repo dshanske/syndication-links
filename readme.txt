@@ -2,7 +2,7 @@
 Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Tested up to: 6.2
-Stable tag: 4.4.10
+Stable tag: 4.4.11
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -64,7 +64,7 @@ The plugin supports automatically pulling data from plugins that syndicate your 
 
 Using the optional Syndication feature(disabled by default) you can syndicate your posts to:
 
-* [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Github, Mastodon and Flickr. The plugin supports Bridgy Publish via Micropub and can be enabled to use Webmentions.
+* [Bridgy](https://brid.gy) - Bridgy is a service that allows you to post to various sites. Signup is required. It currently supports Github, Mastodon and Flickr. The plugin supports Bridgy Publish via Micropub by default.
 * [Bridgy Fed](https://fed.brid.gy) - Bridgy Fed is a service that allows you to interact with federated social networks using webmentions.
 * [Micro.blog](https://micro.blog) - Micro.blog is a social network and publishing platform for independent microblogs, created by Manton Reece. It uses a custom feed you can add to Micro.blog to support this.
 * [Pinboard](https://pinboard.in) - Pinboard is a bookmarking site. The support for this is currently only enabled if you have Post Kinds enabled, due to the difficulty in getting a URL. It will bookmark the URL of any object you are citing.
@@ -164,6 +164,9 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.4.11 ( 2023-5-28 ) =
+* Disable the option to use the webmention version of Bridgy where Micropub is available and use constant instead.
 
 = Version 4.4.10 ( 2023-05-28 ) =
 * Add API Key tab to the settings page
