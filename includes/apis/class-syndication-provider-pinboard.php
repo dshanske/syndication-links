@@ -4,6 +4,12 @@
  */
 class Syndication_Provider_Pinboard extends Syndication_Provider {
 
+	/**
+	 * Bearer Token for the Micropub transaction
+	 *
+	 * @var string
+	 */
+	protected $token;
 
 	public function __construct( $args = array() ) {
 		$this->name = __( 'Pinboard', 'syndication-links' );
@@ -16,10 +22,21 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 			add_action( 'admin_init', array( $this, 'admin_init' ), 11 );
 		}
 
+		$this->token = get_option( 'pinboard_token' );
+
 		// Parent Constructor
 		parent::__construct( $args );
 		$this->register_setting();
 	}
+
+	/**
+	 * Check if token is set
+	 *
+	 */
+	public function is_disabled() {
+		return empty( $this->token );
+	}
+
 
 	public function register_setting() {
 		register_setting(
@@ -78,8 +95,7 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 			return false;
 		}
 
-		$token = get_option( 'pinboard_token' );
-		if ( ! $token ) {
+		if ( ! $this->token ) {
 			return false;
 		}
 
@@ -103,7 +119,7 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 		}
 
 		$bookmark = array(
-			'auth_token'  => $token,
+			'auth_token'  => $this->token,
 			'format'      => 'json',
 			'url'         => $cite['url'],
 			'description' => $cite['name'],
