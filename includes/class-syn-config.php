@@ -451,7 +451,7 @@ class Syn_Config {
 					settings_fields( 'syndication_providers' );
 					do_settings_sections( 'syndication_provider_options' );
 					break;
-				case  'apis':
+				case 'apis':
 					settings_fields( 'syndication_apis' );
 					do_settings_sections( 'syndication_api_keys' );
 					break;

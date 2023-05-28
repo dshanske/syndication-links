@@ -138,7 +138,7 @@ class Post_Syndication {
 			'syndication_providers',
 			array(
 				'label_for' => 'syndication_backlink',
-				'list' => array(
+				'list'      => array(
 					''      => __( 'Enable', 'syndication-links' ),
 					'true'  => __( 'Disable', 'syndication-links' ),
 					'maybe' => __( 'If too long', 'syndication-links' ),
@@ -168,7 +168,7 @@ class Post_Syndication {
 	}
 
 	public static function syndication_apis_callback() {
-		_e( 'API Keys', 'syndication-links' );
+		esc_html_e( 'API Keys', 'syndication-links' );
 	}
 
 	public static function register( $object ) {
