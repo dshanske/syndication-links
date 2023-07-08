@@ -335,7 +335,7 @@ class Syn_Config {
 		$name    = $args['label_for'];
 		$checked = get_option( $args['label_for'] );
 		echo "<input name='" . esc_attr( $name ) . "' type='hidden' value='0' />";
-		echo "<input name='" . esc_attr( $name ) . "' type='checkbox' value='1' " . checked( 1, $checked, false ) . ' /> ';
+		echo "<input name='" . esc_attr( $name ) . "' type='checkbox' value='1' id='" . esc_attr( $name ) . "' " . checked( 1, $checked, false ) . ' /> ';
 	}
 
 	public static function select_callback( array $args ) {
@@ -355,8 +355,8 @@ class Syn_Config {
 		$options = $args['list'];
 		echo '<fieldset>';
 		foreach ( $options as $key => $value ) {
-			echo '<input type="radio" name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '-' . esc_attr( $key ) . '" value="' . esc_attr( $key ) . '" ' . checked( $key, $select, false ) . ' />';
-			echo '<label for="' . esc_attr( $name ) . '-' . esc_attr( $key ) . '">' . esc_attr( $value ) . '</label>';
+			echo '<label><input type="radio" name="' . esc_attr( $name ) . '" value="' . esc_attr( $key ) . '" ' . checked( $key, $select, false ) . ' />';
+			echo ' ' . esc_attr( $value ) . '</label>';
 			echo '<br />';
 		}
 		echo '</fieldset>';
@@ -373,9 +373,9 @@ class Syn_Config {
 				continue;
 			}
 			?>
-			 <li><input name='<?php echo esc_attr( $args['label_for'] ); ?>[]' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option ), true ); ?>/> 
-			 <label for="<?php echo esc_attr( $post_type->name ); ?>"><?php echo esc_html( $post_type->label ); ?></label>
-			</li> 
+			<li><label><input name='<?php echo esc_attr( $args['label_for'] ); ?>[]' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option ), true ); ?>/>
+			<?php echo esc_html( $post_type->label ); ?></label>
+			</li>
 			<?php
 		}
 		echo '</ul>';
