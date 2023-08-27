@@ -1,7 +1,7 @@
 === Syndication Links ===
 Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
-Tested up to: 6.2
+Tested up to: 6.3
 Stable tag: 4.4.11
 License: GPLv2 or later
 
