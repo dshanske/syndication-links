@@ -12,7 +12,7 @@
     "grunt-eslint": "^24.0.0",
     "grunt-wp-readme-to-markdown": "^2.1.0",
     "jshint": "^2.13.0",
-    "simple-icons": "^8.15.0"
+    "simple-icons": "^9.16.1"
   },
   "scripts": {
     "build-icons": "node js/simpleicons.js"

@@ -137,7 +137,6 @@ class Syn_Config {
 				'default'      => '1',
 			)
 		);
-
 	}
 
 	public static function enqueue_scripts() {
@@ -165,8 +164,7 @@ class Syn_Config {
 					$css = 'css/syn.min.css';
 			}
 		}
-		wp_enqueue_style( 'syndication-style', plugin_dir_url( dirname( __FILE__ ) ) . $css, array(), SYNDICATION_LINKS_VERSION );
-
+		wp_enqueue_style( 'syndication-style', plugin_dir_url( __DIR__ ) . $css, array(), SYNDICATION_LINKS_VERSION );
 	}
 
 
@@ -175,13 +173,13 @@ class Syn_Config {
 		if ( in_array( $hook_suffix, $hooks, true ) ) {
 			wp_enqueue_style(
 				'syn_admin',
-				plugins_url( 'css/syn-admin.min.css', dirname( __FILE__ ) ),
+				plugins_url( 'css/syn-admin.min.css', __DIR__ ),
 				array(),
 				SYNDICATION_LINKS_VERSION
 			);
 			wp_enqueue_script(
 				'syndication_links_password',
-				plugins_url( 'js/password.js', dirname( __FILE__ ) ),
+				plugins_url( 'js/password.js', __DIR__ ),
 				array(),
 				SYNDICATION_LINKS_VERSION,
 				true
@@ -296,7 +294,6 @@ class Syn_Config {
 				'label_for' => 'syndication_wp_cron',
 			)
 		);
-
 	}
 
 	public static function admin_menu() {
@@ -373,13 +370,12 @@ class Syn_Config {
 				continue;
 			}
 			?>
-			 <li><input name='<?php echo esc_attr( $args['label_for'] ); ?>[]' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option ), true ); ?>/> 
-			 <label for="<?php echo esc_attr( $post_type->name ); ?>"><?php echo esc_html( $post_type->label ); ?></label>
+			<li><input name='<?php echo esc_attr( $args['label_for'] ); ?>[]' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option ), true ); ?>/> 
+			<label for="<?php echo esc_attr( $post_type->name ); ?>"><?php echo esc_html( $post_type->label ); ?></label>
 			</li> 
 			<?php
 		}
 		echo '</ul>';
-
 	}
 
 	public static function text_callback( $args ) {
@@ -526,5 +522,4 @@ class Syn_Config {
 		}
 		return $feed_item;
 	}
-
 } // End Class

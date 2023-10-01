@@ -70,5 +70,4 @@ class SynProvider_Webmention extends Syndication_Provider {
 		add_post_syndication_link( $post_id, $links, true );
 		return $response;
 	}
-
 }

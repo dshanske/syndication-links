@@ -19,7 +19,6 @@ class Widget_Original_Of extends WP_Widget {
 				'description' => __( 'Displays a search box to search for posts by their syndicated URLs', 'syndication-links' ),
 			)
 		);
-
 	} // end constructor
 
 	/**

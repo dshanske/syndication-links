@@ -94,7 +94,6 @@ function get_original_of_form( $echo = true ) {
 	} else {
 		return $form;
 	}
-
 }
 
 function register_syndication_provider( $object ) {

@@ -135,5 +135,4 @@ abstract class Syndication_Provider {
 	 * @return array to extract log data from.
 	 */
 	abstract public function posse( $post_id = null );
-
 }

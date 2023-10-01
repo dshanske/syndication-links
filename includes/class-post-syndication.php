@@ -72,7 +72,6 @@ class Post_Syndication {
 				'default'      => false,
 			)
 		); */
-
 	}
 
 	public static function admin_init() {
@@ -254,7 +253,6 @@ class Post_Syndication {
 			'name' => $target->get_name(),
 			'data' => $data,
 		);
-
 	}
 
 	public static function error_log( $input ) {
@@ -283,7 +281,6 @@ class Post_Syndication {
 				printf( '<p><details><summary>%1$s: %2$s</summary><pre>%3$s</pre></details></p>', esc_html( $date->format( DATE_W3C ) ), esc_html( $name ), esc_html( wp_json_encode( $log['data'], JSON_PRETTY_PRINT ) ) );
 			}
 		}
-
 	}
 
 	/* Meta box setup function. */
@@ -432,10 +429,8 @@ class Post_Syndication {
 			if ( ! current_user_can( 'edit_page', $post_id ) ) {
 				return;
 			}
-		} else {
-			if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		} elseif ( ! current_user_can( 'edit_post', $post_id ) ) {
 				return;
-			}
 		}
 
 		// If this property is set then set to
@@ -447,6 +442,5 @@ class Post_Syndication {
 				self::syndication( $post_id, $syndication );
 			}
 		}
-
 	}
 } // End Class

@@ -62,5 +62,4 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 			)
 		);
 	}
-
 }

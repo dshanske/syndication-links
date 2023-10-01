@@ -5,7 +5,7 @@
  * Description: Add Links to Syndicated Copies of Your Posts
  * Version: 4.4.11
  * Requires at least: 4.9.9
- * Requires PHP: 5.6
+ * Requires PHP: 7.0
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  * Text Domain: syndication-links
@@ -177,7 +177,7 @@ function syndication_links_init() {
 			);
 		}
 	}
-	load_plugin_textdomain( 'syndication-links', false, basename( dirname( __FILE__ ) ) . '/languages/' );
+	load_plugin_textdomain( 'syndication-links', false, basename( __DIR__ ) . '/languages/' );
 }
 
 	add_action( 'plugins_loaded', 'syndication_links_init', 11 );

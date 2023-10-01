@@ -159,6 +159,4 @@ class Syn_Link_Domain_Icon_Map {
 		$return               = apply_filters( 'syn_link_mapping', $return, $url );
 		return $return;
 	}
-
 }
-

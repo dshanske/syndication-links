@@ -159,5 +159,4 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 
 		return $response;
 	}
-
 }

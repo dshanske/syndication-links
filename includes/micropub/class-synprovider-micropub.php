@@ -255,5 +255,4 @@ class SynProvider_Micropub extends Syndication_Provider {
 
 		return $response;
 	}
-
 }

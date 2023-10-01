@@ -27,4 +27,3 @@ class SynProvider_Webmention_Bridgy_Mastodon extends SynProvider_Webmention_Brid
 		return 'https://brid.gy/publish/mastodon';
 	}
 }
-

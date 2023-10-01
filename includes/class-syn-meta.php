@@ -103,7 +103,7 @@ class Syn_Meta {
 		if ( in_array( get_current_screen()->id, $screens, true ) ) {
 			wp_enqueue_script(
 				'synlinks',
-				plugins_url( 'js/synlinks.js', dirname( __FILE__ ) ),
+				plugins_url( 'js/synlinks.js', __DIR__ ),
 				array( 'jquery' ),
 				SYNDICATION_LINKS_VERSION,
 				true
@@ -193,7 +193,7 @@ class Syn_Meta {
 			return $urls;
 		}
 		$array = array_map(
-			function( $string ) {
+			function ( $string ) {
 				if ( is_array( $string ) ) {
 					return $string;
 				}
@@ -319,10 +319,8 @@ class Syn_Meta {
 			if ( ! current_user_can( 'edit_page', $post_id ) ) {
 				return;
 			}
-		} else {
-			if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		} elseif ( ! current_user_can( 'edit_post', $post_id ) ) {
 				return;
-			}
 		}
 		self::save_meta( 'post', $post_id );
 	}
@@ -344,7 +342,6 @@ class Syn_Meta {
 			return;
 		}
 		self::save_meta( 'comment', $comment_id );
-
 	}
 
 	public static function extract_domain_name( $url ) {
