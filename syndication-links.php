@@ -94,6 +94,16 @@ function syndication_links_init() {
 			'class-widget-original-of.php', // Original Of Widget
 		)
 	);
+
+	if ( class_exists( 'Widget_Original_Of' ) ) {
+		add_action(
+			'widgets_init',
+			function () {
+				register_widget( 'Widget_Original_Of' );
+			}
+		);
+	}
+
 	if ( 1 === intval( get_option( 'syndication_posse_enable', 0 ) ) ) {
 		syndication_links_load(
 			array(

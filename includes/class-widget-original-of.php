@@ -1,11 +1,5 @@
 <?php
 
-add_action( 'widgets_init', 'sl_register_original_widget' );
-
-function sl_register_original_widget() {
-	register_widget( 'Widget_Original_Of' );
-}
-
 class Widget_Original_Of extends WP_Widget {
 	/**
 	 * Register widget with WordPress.
