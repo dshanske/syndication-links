@@ -438,7 +438,7 @@ class Post_Syndication {
 			$syndication = array_map( 'sanitize_key', $_POST['syndicate-to'] );
 			if ( get_option( 'syndication_wp_cron', 1 ) ) {
 				add_post_meta( $post_id, '_syndicate-to', $syndication, true );
-			} else {
+			} else if ( 'publish' === get_post_status( $post_id ) ) {
 				self::syndication( $post_id, $syndication );
 			}
 		}
