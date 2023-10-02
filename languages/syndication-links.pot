@@ -2,22 +2,22 @@
 # This file is distributed under the same license as the Syndication Links plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Syndication Links 4.4.10\n"
+"Project-Id-Version: Syndication Links 4.4.12\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/syndication-links\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-05-28T05:44:10+00:00\n"
+"POT-Creation-Date: 2023-10-02T03:44:25+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.7.1\n"
+"X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: syndication-links\n"
 
 #. Plugin Name of the plugin
-#: includes/class-syn-config.php:308
-#: includes/class-syn-config.php:309
-#: includes/class-syn-config.php:434
+#: includes/class-syn-config.php:305
+#: includes/class-syn-config.php:306
+#: includes/class-syn-config.php:430
 #: includes/class-syn-meta.php:74
 #: includes/class-syn-meta.php:229
 msgid "Syndication Links"
@@ -72,156 +72,152 @@ msgstr ""
 msgid "Your Pinboard token can be found under your account settings, in the password tab."
 msgstr ""
 
-#: includes/class-post-syndication.php:92
-msgid "Disable to Use Alternate Bridgy Syndication Method (Requires Webmention Plugin)"
-msgstr ""
-
-#: includes/class-post-syndication.php:106
+#: includes/class-post-syndication.php:80
 msgid "Enable the Following Providers"
 msgstr ""
 
-#: includes/class-post-syndication.php:119
+#: includes/class-post-syndication.php:93
 msgid "Use Post Excerpt for Content if Set"
 msgstr ""
 
-#: includes/class-post-syndication.php:132
+#: includes/class-post-syndication.php:106
 msgid "Posts should link back to site posts"
 msgstr ""
 
-#: includes/class-post-syndication.php:142
+#: includes/class-post-syndication.php:116
 msgid "Enable"
 msgstr ""
 
-#: includes/class-post-syndication.php:143
+#: includes/class-post-syndication.php:117
 msgid "Disable"
 msgstr ""
 
-#: includes/class-post-syndication.php:144
+#: includes/class-post-syndication.php:118
 msgid "If too long"
 msgstr ""
 
-#: includes/class-post-syndication.php:164
+#: includes/class-post-syndication.php:138
 msgid "Syndication API Keys"
 msgstr ""
 
-#: includes/class-post-syndication.php:171
-#: includes/class-syn-config.php:440
+#: includes/class-post-syndication.php:145
+#: includes/class-syn-config.php:436
 msgid "API Keys"
 msgstr ""
 
-#: includes/class-post-syndication.php:299
+#: includes/class-post-syndication.php:272
 msgid "No Logs Found"
 msgstr ""
 
-#: includes/class-post-syndication.php:324
+#: includes/class-post-syndication.php:296
 msgid "Syndicate To"
 msgstr ""
 
-#: includes/class-post-syndication.php:336
+#: includes/class-post-syndication.php:308
 msgid "Syndicate Logs"
 msgstr ""
 
-#: includes/class-post-syndication.php:383
+#: includes/class-post-syndication.php:355
 msgid "No Syndication Targets Available"
 msgstr ""
 
-#: includes/class-syn-config.php:195
+#: includes/class-syn-config.php:193
 msgid "Content Options"
 msgstr ""
 
-#: includes/class-syn-config.php:201
+#: includes/class-syn-config.php:199
 msgid "Display"
 msgstr ""
 
-#: includes/class-syn-config.php:212
+#: includes/class-syn-config.php:210
 msgid "Size"
 msgstr ""
 
-#: includes/class-syn-config.php:223
+#: includes/class-syn-config.php:221
 msgid "Black Icons"
 msgstr ""
 
-#: includes/class-syn-config.php:233
+#: includes/class-syn-config.php:231
 msgid "Show on Front Page, Archive Pages, and Search Results"
 msgstr ""
 
-#: includes/class-syn-config.php:243
+#: includes/class-syn-config.php:241
 msgid "Show on Feed"
 msgstr ""
 
-#: includes/class-syn-config.php:253
+#: includes/class-syn-config.php:251
 msgid "Text Before Links"
 msgstr ""
 
-#: includes/class-syn-config.php:264
+#: includes/class-syn-config.php:262
 msgid "Other Post Types to Offer Syndication For"
 msgstr ""
 
-#: includes/class-syn-config.php:275
+#: includes/class-syn-config.php:273
 msgid "Syndication/POSSE Options"
 msgstr ""
 
-#: includes/class-syn-config.php:281
+#: includes/class-syn-config.php:279
 msgid "Enable Syndication to Other Sites"
 msgstr ""
 
-#: includes/class-syn-config.php:291
+#: includes/class-syn-config.php:289
 msgid "Syndication Runs in the Background"
 msgstr ""
 
-#: includes/class-syn-config.php:320
+#: includes/class-syn-config.php:317
 msgid "Options for Presenting Syndication Links in Posts."
 msgstr ""
 
-#: includes/class-syn-config.php:322
+#: includes/class-syn-config.php:319
 msgid "Syndication Links by default will add links to the content. You can disable this for theme support."
 msgstr ""
 
-#: includes/class-syn-config.php:327
+#: includes/class-syn-config.php:324
 msgid "Options for Syndicating to Other Sites"
 msgstr ""
 
-#: includes/class-syn-config.php:329
+#: includes/class-syn-config.php:326
 msgid "Syndication Links offers an interface to syndicate your content to other sites via the Post Editor or Micropub"
 msgstr ""
 
-#: includes/class-syn-config.php:400
+#: includes/class-syn-config.php:396
 msgid "Icons Only"
 msgstr ""
 
-#: includes/class-syn-config.php:401
+#: includes/class-syn-config.php:397
 msgid "Text Only"
 msgstr ""
 
-#: includes/class-syn-config.php:402
+#: includes/class-syn-config.php:398
 msgid "Icons and Text"
 msgstr ""
 
-#: includes/class-syn-config.php:403
+#: includes/class-syn-config.php:399
 msgid "Hidden Links"
 msgstr ""
 
-#: includes/class-syn-config.php:409
+#: includes/class-syn-config.php:405
 msgid "Small"
 msgstr ""
 
-#: includes/class-syn-config.php:410
+#: includes/class-syn-config.php:406
 msgid "Medium"
 msgstr ""
 
-#: includes/class-syn-config.php:411
+#: includes/class-syn-config.php:407
 msgid "Large"
 msgstr ""
 
-#: includes/class-syn-config.php:435
+#: includes/class-syn-config.php:431
 msgid "Adds optional syndication links for various sites. Syndication is the act of posting your content on other sites. You can either manually add these to the box in the post editor or automatically. Several plugins support or are supported."
 msgstr ""
 
-#: includes/class-syn-config.php:438
+#: includes/class-syn-config.php:434
 msgid "General"
 msgstr ""
 
-#: includes/class-syn-config.php:439
+#: includes/class-syn-config.php:435
 msgid "Providers"
 msgstr ""
 
@@ -250,7 +246,7 @@ msgstr ""
 msgid "Displays a search box to search for posts by their syndicated URLs"
 msgstr ""
 
-#: includes/class-widget-original-of.php:79
+#: includes/class-widget-original-of.php:78
 msgid "Title: "
 msgstr ""
 
@@ -339,7 +335,7 @@ msgstr ""
 msgid "Unknown %1$s Error"
 msgstr ""
 
-#: syndication-links.php:184
+#: syndication-links.php:187
 msgid ""
 "Syndication Links, which are links to the same content on other sites, may be displayed on comments, but only if supplied by the submitter or if your comment was\n"
 "\t\t\tgenerated by webmention, if they appear on your site."
