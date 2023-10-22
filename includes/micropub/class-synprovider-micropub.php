@@ -168,6 +168,9 @@ class SynProvider_Micropub extends Syndication_Provider {
 		$published                      = get_post_datetime( $post );
 		$updated                        = get_post_datetime( $post, 'modified' );
 		$mf2['properties']['published'] = array( $published->format( DATE_W3C ) );
+		if ( has_post_thumbnail( $post ) ) {
+			$mf2['properties']['featured'] = array( get_the_post_thumbnail_url( $post, 'full' );
+		}
 
 		if ( $published->getTimestamp() !== $updated->getTimestamp() ) {
 			$mf2['properties']['updated'] = array( $updated->format( DATE_W3C ) );
