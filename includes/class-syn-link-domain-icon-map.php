@@ -30,6 +30,9 @@ class Syn_Link_Domain_Icon_Map {
 		'primal.net'          => 'nostr',
 		'habla.news'          => 'nostr',
 		'nostr.band'          => 'nostr',
+		'news.indieweb.org'   => 'indieweb',
+		'bsky.app'            => 'bsky',
+		'bsky.social'         => 'bsky',
 
 	);
 
