@@ -22,6 +22,15 @@ class Syn_Link_Domain_Icon_Map {
 		'itunes.apple.com'    => 'applemusic',
 		'reading.am'          => 'book',
 		'blogspot.com'        => 'blogger',
+		'astral.ninja'        => 'nostr',
+		'nos.social'          => 'nostr',
+		'iris.to'             => 'nostr',
+		'snort.social'        => 'nostr',
+		'app.coracle.social'  => 'nostr',
+		'primal.net'          => 'nostr',
+		'habla.news'          => 'nostr',
+		'nostr.band'          => 'nostr',
+
 	);
 
 	// Try to get the correct icon for the majority of sites
