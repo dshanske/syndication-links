@@ -2,7 +2,7 @@
 Contributors: dshanske
 Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
 Tested up to: 6.3
-Stable tag: 4.4.12
+Stable tag: 4.4.13
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -164,6 +164,12 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.4.13 ( 2023-10-21 ) = 
+* Add featured derived from the thumbnail of the post for the micropub syndication mf2.
+* Add nostr icon
+* Add cloud icon colored blue as placeholder for Bluesky
+* Add map from indieweb news to indieweb icon
 
 = Version 4.4.12 ( 2023-10-01 ) =
 * Only alow for immediate publishing if the post status is publish
