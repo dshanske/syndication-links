@@ -1,8 +1,8 @@
 # Syndication Links #
 **Contributors:** [dshanske](https://profiles.wordpress.org/dshanske/)  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
-**Tested up to:** 6.3  
-**Stable tag:** 4.4.13  
+**Tested up to:** 6.4  
+**Stable tag:** 4.4.14  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
@@ -168,6 +168,9 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 ## Changelog ##
+
+### Version 4.4.14 ( 2023-12-01 ) ###
+* Update support for WP-To-Twitter plugin, now Xposter.
 
 ### Version 4.4.13 ( 2023-10-21 ) ###
 * Add featured derived from the thumbnail of the post for the micropub syndication mf2.
