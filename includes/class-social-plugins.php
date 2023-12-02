@@ -161,10 +161,16 @@ class Social_Plugins {
 			return;
 		}
 
+		$account = get_option( 'wtt_twitter_username' );
+		$uid = get_post_meta( $id, _wpt_tweet_id, true );
+		if ( ! $account || ! $uid ) {
+			return;
+		}
+
 		$url = sprintf(
 			'https://twitter.com/%s/status/%s',
-			$connection->body->user->screen_name,
-			$connection->body->id_str
+			$account,
+			$uid
 		);
 
 		return add_post_syndication_link( $id, $url );
