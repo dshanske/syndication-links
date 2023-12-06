@@ -162,7 +162,7 @@ class Social_Plugins {
 		}
 
 		$account = get_option( 'wtt_twitter_username' );
-		$uid = get_post_meta( $id, _wpt_tweet_id, true );
+		$uid = get_post_meta( $id, '_wpt_tweet_id', true );
 		if ( ! $account || ! $uid ) {
 			return;
 		}
