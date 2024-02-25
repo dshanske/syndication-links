@@ -1,1 +1,7 @@
-{"version":3,"sourceRoot":"","sources":["../sass/_links.scss","../sass/_links-small.scss","../sass/_bw.scss","../sass/_widgets.scss"],"names":[],"mappings":"AAAA,UACC,qBACA,qBACA,SACA,YACE,aACD,qBACA,kBACA,eACA,eACC,qBAMF,2BACC,kBACA,sBACA,cACA,kCACC,uBAKH,0BACC,qBACA,wBACA,gBC3BA,iBACC,YACA,WCJF,aACE,WACc,0BCFhB,cACE,gBACA,kBACD,eAID,cACC,eACA","file":"syn-bw.min.css"}
+{
+"version": 3,
+"mappings": "AAAA,SAAU,CACT,OAAO,CAAE,YAAY,CACrB,eAAe,CAAE,IAAI,CACrB,MAAM,CAAE,CAAC,CACT,OAAO,CAAE,GAAG,CACV,YAAG,CACJ,OAAO,CAAE,YAAY,CACrB,aAAa,CAAE,GAAG,CAClB,SAAS,CAAE,IAAI,CACf,cAAE,CACD,eAAe,CAAE,IAAI,CAMvB,0BAAI,CACH,IAAI,CAAE,YAAY,CAClB,cAAc,CAAE,MAAM,CACtB,GAAG,CAAE,SAAS,CACd,iCAAO,CACN,MAAM,CAAE,eAAe,CAK1B,yBAA0B,CACzB,eAAe,CAAE,IAAI,CACrB,kBAAkB,CAAE,IAAI,CACxB,UAAU,CAAE,IAAI,CC3BhB,gBAAI,CACH,MAAM,CAAE,IAAI,CACZ,KAAK,CAAE,IAAI,CCJb,YAAa,CACX,KAAK,CAAE,KAAK,CACE,cAAc,CAAE,UAAU,CCF1C,aAAc,CACZ,UAAU,CAAE,IAAI,CAChB,iBAAI,CACL,OAAO,CAAE,MAAM,CAIhB,aAAc,CACb,SAAS,CAAE,IAAI,CACf,UAAU,CAAE,IAAI",
+"sources": ["../sass/_links.scss","../sass/_links-small.scss","../sass/_bw.scss","../sass/_widgets.scss"],
+"names": [],
+"file": "syn-bw.min.css"
+}

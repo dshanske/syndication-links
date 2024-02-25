@@ -31,8 +31,8 @@ class Syn_Link_Domain_Icon_Map {
 		'habla.news'          => 'nostr',
 		'nostr.band'          => 'nostr',
 		'news.indieweb.org'   => 'indieweb',
-		'bsky.app'            => 'bsky',
-		'bsky.social'         => 'bsky',
+		'bsky.app'            => 'bluesky',
+		'bsky.social'         => 'bluesky',
 
 	);
 
