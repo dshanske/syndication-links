@@ -2,14 +2,14 @@
 **Contributors:** [dshanske](https://profiles.wordpress.org/dshanske/)  
 **Tags:** syndication, indieweb, indiewebcamp, POSSE, social media, sharing  
 **Tested up to:** 6.4  
-**Stable tag:** 4.4.15  
+**Stable tag:** 4.4.16  
 **License:** GPLv2 or later  
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
 
 ## Description ##
 
-It supports adding rel-syndication/u-syndication links to your WordPress posts, pages, and comments, indicating where a syndicated copy is, in the form of a text or icon link. You can do this 
+It supports adding rel-syndication/u-syndication links to your WordPress posts, pages, and comments, indicating where a syndicated copy is, in the form of a text or icon link. You can do this
 manually and some plugins support automatically adding their links as well. The plugin contains a generic UI for syndicating to other sites through your site or a Micropub Client.
 
 ## Screenshots ##
@@ -30,11 +30,11 @@ Or install through the WordPress Plugin Directory.
 
 ## Privacy and Data Storage Information ##
 
-This plugin stores syndication links, which can be attached to any post, page, or comment. They can be added to custom post types by filter. 
+This plugin stores syndication links, which can be attached to any post, page, or comment. They can be added to custom post types by filter.
 
-For webmention initiated comments, this information will be added by parsing the source of the webmention. 
+For webmention initiated comments, this information will be added by parsing the source of the webmention.
 It is assumed if you send a webmention, you consent to share this information if it is publicly shared on your page. Our recommendation
-is that site owners should take down information on request. 
+is that site owners should take down information on request.
 
 For comments initiated on the site, there is built-in way to add these links. For posts, they are typically added by retrieving information stored by other plugins for display. It is assumed
 that by installing this plugin, as its intent is to display these links, that you wish to display them.
@@ -48,7 +48,7 @@ The settings include the following options as follows with either a set of butto
 
 * **Display Text** -  Offers options to display text only, icons only, icons and text, and no display(hidden icons).
 * **Size** - Choice of small, medium, or large size icons.
-* **Black Icons** - Checking the box defaults to a "black" social media icon set. 
+* **Black Icons** - Checking the box defaults to a "black" social media icon set.
 * **Show on Front Page, Archive Page, and Search Results** - If checked the icons will show on pages other than a single view. If not checked, the icons will be hidden by the links will remain.
 * **Show on Feed** - If checked the icons will show in your RSS feed as well
 * **Text Before Links** - This is the text that appears before the Display Text/Icons (as indicated above). The default text is "Syndicated to:" but can be modified if desired.
@@ -74,7 +74,7 @@ Using the optional Syndication feature(disabled by default) you can syndicate yo
 * [Pinboard](https://pinboard.in) - Pinboard is a bookmarking site. The support for this is currently only enabled if you have Post Kinds enabled, due to the difficulty in getting a URL. It will bookmark the URL of any object you are citing.
 * Custom Webmention Syndication - Add any site that supports publishing by sending a webmention by configuring it in the settings page
 
-Will be looking to integrate with other plugins to add more options and invite developers to add support if they wish as the interface is simple. 
+Will be looking to integrate with other plugins to add more options and invite developers to add support if they wish as the interface is simple.
 The goal of the interface is not only can you syndicate via Micropub, but in the editor using a simple checkbox.
 
 ## Frequently Asked Questions ##
@@ -107,7 +107,7 @@ originalofform.php in your theme folder the function will return it so you can c
 * `syn_metabox_types( $screens )` - $screens would be an array of post types to add the Syndication Link metabox to.
 * `syn_network_strings( $strings )` - $strings is an array of descriptive text strings by domain name
 * `syn_add_links( $urls, $post_ID )` - (Deprecated) $urls is an array of retrieved links from $post_ID
-* `get_post_syndication_links( $urls, $post_ID)` - Replaces syn_add_links. 
+* `get_post_syndication_links( $urls, $post_ID)` - Replaces syn_add_links.
 * `get_comment_syndication_links( $urls, $comment_ID` - Filters an array of retrieved comment syndication links.
 * `syn_links_display_defaults( $defaults )` - Filter the defaults for displaying Syndication Links
 * `syndication_link_checked( $checked, $uid, $post_ID )` - Will check a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
@@ -120,7 +120,7 @@ originalofform.php in your theme folder the function will return it so you can c
 ### How do I contribute or file bug reports?
 
 Development and bug reports on this plugin is on Github at https://github.com/dshanske/syndication-links
-###
+###
 ## Upgrade Notice ##
 
 ### Version 4.4.0 ###
@@ -157,7 +157,7 @@ Removes H-Card Widget as does not fit into this plugin. Moving over to the Indie
 
 In no particular order...
 
-1. The [Indieweb](https://indieweb.org) community of users and all users of this plugin 
+1. The [Indieweb](https://indieweb.org) community of users and all users of this plugin
 2. [Meitar Moscovitz](https://github.com/meitar) for fixes and code contributions related to support of the plugin in his various plugins.
 3. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2) design.
 4. Jihaisse and Peter Molnar for the [SNAP](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/), courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
@@ -168,6 +168,13 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 ## Changelog ##
+
+### Version 4.4.16 ( 2024-02-25 ) ###
+* Update Simple Icons to latest
+* Remove custom bluesky icon in favor of current one
+* Generate minimal CSS file with just the icon colors for Bridgy supported services that can be manually queued
+* Add support for 10ups Twitter Autoshare plugin
+* Add Syndication provider for Bluesky via Bridgy
 
 ### Version 4.4.15 ( 2023-12-05 ) ###
 * Fix issue with constant
@@ -276,7 +283,7 @@ In no particular order...
 * Fix various PHP errors.
 
 ### Version 4.3.1 ( 2020-12-12 ) ###
-* Introduce `syn_link_name` filter that allows you to set the name string. 
+* Introduce `syn_link_name` filter that allows you to set the name string.
 * Introduce `pre_syn_link_icon` filter to allow short circuiting the domain mapping and providing an SVG of your choice.
 * Save last return in post meta for diagnostic purposes.
 
@@ -498,25 +505,25 @@ In no particular order...
 	* Add support for pages and a filter to add additional content types
 ### Version 1.0.0 ###
 	* Refinements
-	* Addition of h-card widget. 
+	* Addition of h-card widget.
 	* Improvements to hooks
-	* Addition of automatic information from SNAP and Social(courtesy WordPress Syndication). 
+	* Addition of automatic information from SNAP and Social(courtesy WordPress Syndication).
 	* Now supports second font choice and choice of color or black.
 ### Version 0.6.0 ###
 	* Add hooks and functions to allow additional urls to  be added
 ### Version 0.5.0 ###
 	* Clean up the plugin for initial release to WordPress repository.
 ### Version 0.5 ###
-	* Moved to simplified data structure. 
+	* Moved to simplified data structure.
 	* Hidden migration function
 ### Version 0.4 ###
 	* Rewriting using Grunt/SASS for more flexibility
 ### Version 0.3 ###
-	* Customizable Networks finished. 
+	* Customizable Networks finished.
 	* Changed social icons CSS to automatically add only if the class for the list has social-icon in it.
 ### Version 0.2 ###
-	* Settings Screen rewritten using WordPress Settings API. 
-	* Going to rewrite with customizable networks and thus option to disable sites you do not syndicate to. 
+	* Settings Screen rewritten using WordPress Settings API.
+	* Going to rewrite with customizable networks and thus option to disable sites you do not syndicate to.
 	* Added social icons CSS to automatically add icons to anything in a <LI>
 ### Version 0.1 ###
 	* Forked from the Semantic Comments plugin. Start of configurable options.
