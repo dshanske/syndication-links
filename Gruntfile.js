@@ -76,6 +76,7 @@ module.exports = function (grunt) {
 					},
 					files  : { // Dictionary of files.
 						'css/syn.min.css'          : 'sass/main.scss', // 'destination': 'source'
+						'css/syn-minimal.min.css'          : 'sass/min.scss', // 'destination': 'source'
 						'css/syn-medium.min.css'   : 'sass/main-medium.scss',
 						'css/syn-large.min.css'    : 'sass/main-large.scss',
 						'css/syn-bw.min.css'       : 'sass/main-bw.scss',

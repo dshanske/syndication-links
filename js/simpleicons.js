@@ -15,9 +15,11 @@ const TITLE_TO_SLUG_REPLACEMENTS = {
 };
 
 const TITLE_TO_SLUG_CHARS_REGEX = RegExp(
-  `[${Object.keys(TITLE_TO_SLUG_REPLACEMENTS).join('')}]`,
-  'g',
+	  `[${Object.keys(TITLE_TO_SLUG_REPLACEMENTS).join('')}]`,
+	  'g',
 );
+
+const icons = [ "twitter", "swarm", "facebook", "instagram", "microdotblog", "bluesky", "github", "flickr", "mastodon", "wordpress", "tumblr", "blogger", "medium", "reddit" ];
 
 const TITLE_TO_SLUG_RANGE_REGEX = /[^a-z0-9]/g;
 
@@ -120,9 +122,11 @@ function readFile(path, callback) {
 }
 
 var sass = "// Brand colors from simpleicons.org\n";
+var min = "// Brand colors from simpleicons.org\n";
 var names = "";
 var textdomain = "syndication-links";
 sass += ".relsyn li a {\n";
+min += ".relsyn li a {\n";
 names += "<?php\n\nfunction simpleicons_syn_get_names() {\n\treturn array(";
 var maxNameLength = 0;
 
@@ -153,9 +157,13 @@ for (var i = 0; i < source.icons.length; i++) {
     }
 
     sass += "\n\t.svg-" + fileName.toLowerCase() + spacing + "{" + "\n\t\tcolor: #" + source.icons[i].hex.toUpperCase() + ";" + "\n\t}";
+    if  ( icons.includes( fileName.toLowerCase() ) ) {
+	min += "\n\t.svg-" + fileName.toLowerCase() + spacing + "{" + "\n\t\tcolor: #" + source.icons[i].hex.toUpperCase() + ";" + "\n\t}";
+    }
     names += "\n\t\t'" + fileName.toLowerCase() + "'" + spacing + "=>" + spacing + "'" + source.icons[i].title.replace(/&amp;/g, "&").replace("'", /&apos;/g ) + "',";
 }
 sass += "\n}"
+min += "\n}"
 names += "\n\t);\n}"
 
 // Generate Sass file with color variables
@@ -164,6 +172,13 @@ fs.writeFile("./sass/_simple-icons.scss", sass, function(err) {
         return console.log(err);
     }
     console.log("The Sass file was built");
+});
+
+fs.writeFile("./sass/_simple-icons-min.scss", min, function(err) {
+    if(err) {
+        return console.log(err);
+    }
+    console.log("The Minimal Sass file was built");
 });
 
 // Generate PHP file with names
