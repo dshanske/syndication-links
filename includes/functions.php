@@ -110,3 +110,69 @@ function syndication_post_types() {
 	$post_types = array_merge( array( 'post' ), $post_types );
 	return apply_filters( 'syndication_post_types', $post_types );
 }
+
+/* Return post content ready for excerpting
+ *
+ * @param int|WP_Post $post Post Object or ID.
+ * @return string String ready for excerpting.
+ *
+ */
+function syn_get_post_content( $post ) {
+	$post = get_post( $post );
+	if ( ! $post ) {
+		return '';
+	}
+	$text = get_the_content( '', false, $post );
+
+	$text = strip_shortcodes( $text );
+	$text = excerpt_remove_blocks( $text );
+	$text = excerpt_remove_footnotes( $text );
+	/*
+	 * Temporarily unhook wp_filter_content_tags() since any tags
+	 * within the excerpt are stripped out. Modifying the tags here
+	 * is wasteful and can lead to bugs in the image counting logic.
+	 */
+	$filter_image_removed = remove_filter( 'the_content', 'wp_filter_content_tags', 12 );
+
+	/*
+	 * Temporarily unhook do_blocks() since excerpt_remove_blocks( $text )
+	 * handles block rendering needed for excerpt.
+	 */
+	$filter_block_removed = remove_filter( 'the_content', 'do_blocks', 9 );
+
+	/** This filter is documented in wp-includes/post-template.php */
+	$text = apply_filters( 'the_content', $text );
+
+	// Restore the original filter if removed.
+	if ( $filter_block_removed ) {
+		add_filter( 'the_content', 'do_blocks', 9 );
+	}
+
+	/*
+	 * Only restore the filter callback if it was removed above. The logic
+	 * to unhook and restore only applies on the default priority of 10,
+	 * which is generally used for the filter callback in WordPress core.
+	 */
+	if ( $filter_image_removed ) {
+		add_filter( 'the_content', 'wp_filter_content_tags', 12 );
+	}
+
+	return $text;
+}
+
+/* Customized Excerpt Function for Syndication
+ *
+ * @param text Text to excerpt.
+ * @param int Character Count. Optional.
+ * @return string Excerpted String.
+ *
+ */
+function syn_excerpt( $text, $count = 200 ) {
+	$text = wp_strip_all_tags( $text );
+	if ( $count > strlen( $text ) ) {
+		return $text;
+	}
+	$wrap = wordwrap( $text, $count );
+	$wrap = explode( "\n", $wrap );
+	return $wrap[0];
+}
