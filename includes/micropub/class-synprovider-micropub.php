@@ -121,7 +121,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 	 * @return string Content string
 	 */
 	public function get_content( $post ) {
-		$content  = syn_post_content( $post );
+		$content  = syn_get_post_content( $post );
 		$length   = strlen( $content );
 		$backlink = get_option( 'syndication_backlink' );
 		$link     = wp_get_shortlink( $post );
