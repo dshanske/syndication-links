@@ -136,7 +136,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 				$content = substr( $post->post_content, 0, ( $this->content_length - 3 ) - strlen( $link ) ) . ' - ' . $link;
 			}
 		} elseif ( 'true' !== $backlink ) {
-			$content = $post->content . ' (' . $link . ')';
+			$content = $post->post_content . ' (' . $link . ')';
 		}
 		return $content;
 	}
