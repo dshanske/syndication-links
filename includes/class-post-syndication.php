@@ -142,7 +142,7 @@ class Post_Syndication {
 	}
 
 	public static function syndication_apis_callback() {
-		esc_html_e( 'API Keys', 'syndication-links' );
+		esc_html_e( 'For Bridgy, once you have enabled publish on your Bridgy user page, there will be a Get token button, put that into the field for the token for the service', 'syndication-links' );
 	}
 
 	public static function register( $object ) {

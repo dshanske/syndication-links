@@ -2,19 +2,20 @@
 # This file is distributed under the same license as the Syndication Links plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Syndication Links 4.4.16\n"
+"Project-Id-Version: Syndication Links 4.4.20\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/syndication-links\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-02-25T10:04:48+00:00\n"
+"POT-Creation-Date: 2024-05-12T08:12:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.8.1\n"
+"X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: syndication-links\n"
 
 #. Plugin Name of the plugin
+#: syndication-links.php
 #: includes/class-syn-config.php:305
 #: includes/class-syn-config.php:306
 #: includes/class-syn-config.php:430
@@ -24,18 +25,22 @@ msgid "Syndication Links"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: syndication-links.php
 msgid "http://wordpress.org/plugins/syndication-links"
 msgstr ""
 
 #. Description of the plugin
+#: syndication-links.php
 msgid "Add Links to Syndicated Copies of Your Posts"
 msgstr ""
 
 #. Author of the plugin
+#: syndication-links.php
 msgid "David Shanske"
 msgstr ""
 
 #. Author URI of the plugin
+#: syndication-links.php
 msgid "http://david.shanske.com"
 msgstr ""
 
@@ -101,8 +106,7 @@ msgid "Syndication API Keys"
 msgstr ""
 
 #: includes/class-post-syndication.php:145
-#: includes/class-syn-config.php:436
-msgid "API Keys"
+msgid "For Bridgy, once you have enabled publish on your Bridgy user page, there will be a Get token button, put that into the field for the token for the service"
 msgstr ""
 
 #: includes/class-post-syndication.php:272
@@ -221,6 +225,10 @@ msgstr ""
 msgid "Providers"
 msgstr ""
 
+#: includes/class-syn-config.php:436
+msgid "API Keys"
+msgstr ""
+
 #: includes/class-syn-meta.php:44
 msgid "Syndication Links Plugin"
 msgstr ""
@@ -294,7 +302,7 @@ msgstr ""
 msgid "Micropub Token to enable Bridgy Mastodon Publish"
 msgstr ""
 
-#: includes/micropub/class-synprovider-micropub.php:210
+#: includes/micropub/class-synprovider-micropub.php:214
 msgid "Invalid Post Provided"
 msgstr ""
 
