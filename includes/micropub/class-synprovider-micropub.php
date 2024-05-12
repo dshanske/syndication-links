@@ -239,6 +239,45 @@ class SynProvider_Micropub extends Syndication_Provider {
 	}
 
 	/**
+	 * Post JSON from a remote endpoint.
+	 *
+	 * @param string $url URL to Delete.
+	 * @param string $endpoint Micropub Endpoint
+	 * @param array  $headers Headers.
+	 * @return WP_Error|array Either the associated array response or error.
+	*
+	*/
+	public function delete_micropub( $url, $endpoint, $headers = null ) {
+		$args = array(
+			'headers'             => array(
+				'Content-type' => 'application/json',
+			),
+			'body'                => wp_json_encode(
+				array(
+					'action' => 'delete',
+					'url'    => $url,
+				)
+			),
+			'timeout'             => 10,
+			'limit_response_size' => 1048576,
+			// Use an explicit user-agent for Syndication Links.
+			'user-agent'          => 'Syndication Links for WordPress',
+
+		);
+
+		if ( is_array( $headers ) ) {
+			$args['headers'] = array_merge( $args['headers'], $headers );
+		}
+
+		if ( ! array_key_exists( 'Authorization', $args['headers'] ) && ! empty( $this->token ) ) {
+			$args['headers']['Authorization'] = 'Bearer ' . $this->token;
+		}
+
+		$response = wp_remote_post( $endpoint, $args );
+		return $response;
+	}
+
+	/**
 	 * Given a post try to POSSE it to a given network
 	 *
 	 * @return array of results
