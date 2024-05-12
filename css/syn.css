@@ -160,6 +160,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-awsamplify {
   color: #FF9900;
 }
+.relsyn li a .svg-awselasticloadbalancing {
+  color: #8C4FFF;
+}
 .relsyn li a .svg-awsfargate {
   color: #FF9900;
 }
@@ -168,6 +171,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-awsorganizations {
   color: #E7157B;
+}
+.relsyn li a .svg-awssecretsmanager {
+  color: #DD344C;
 }
 .relsyn li a .svg-abbott {
   color: #008FC7;
@@ -323,7 +329,7 @@ ul.relsyn li svg {
   color: #002157;
 }
 .relsyn li a .svg-airindia {
-  color: #D9000D;
+  color: #DA0E29;
 }
 .relsyn li a .svg-airtransat {
   color: #172B54;
@@ -366,6 +372,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-akaunting {
   color: #6DA252;
+}
+.relsyn li a .svg-akiflow {
+  color: #AF38F9;
 }
 .relsyn li a .svg-alacritty {
   color: #F46D01;
@@ -416,7 +425,7 @@ ul.relsyn li svg {
   color: #1677FF;
 }
 .relsyn li a .svg-alltrails {
-  color: #428813;
+  color: #142800;
 }
 .relsyn li a .svg-allegro {
   color: #FF5A00;
@@ -460,6 +469,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-amazoncloudwatch {
   color: #FF4F8B;
 }
+.relsyn li a .svg-amazoncognito {
+  color: #DD344C;
+}
 .relsyn li a .svg-amazondocumentdb {
   color: #C925D1;
 }
@@ -474,6 +486,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-amazoneks {
   color: #FF9900;
+}
+.relsyn li a .svg-amazonelasticache {
+  color: #C925D1;
 }
 .relsyn li a .svg-amazonfiretv {
   color: #FC4C02;
@@ -577,8 +592,17 @@ ul.relsyn li svg {
 .relsyn li a .svg-antena3 {
   color: #FF7328;
 }
+.relsyn li a .svg-anthropic {
+  color: #191919;
+}
 .relsyn li a .svg-anydesk {
   color: #EF443B;
+}
+.relsyn li a .svg-anycubic {
+  color: #476695;
+}
+.relsyn li a .svg-anytype {
+  color: #FF6A7B;
 }
 .relsyn li a .svg-apache {
   color: #D22128;
@@ -832,6 +856,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-authelia {
   color: #113155;
 }
+.relsyn li a .svg-authentik {
+  color: #FD4B2D;
+}
 .relsyn li a .svg-authy {
   color: #EC1C24;
 }
@@ -987,6 +1014,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-bereal {
   color: #000000;
+}
+.relsyn li a .svg-beatstars {
+  color: #EB0000;
 }
 .relsyn li a .svg-beatport {
   color: #01FF95;
@@ -1264,6 +1294,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-buymeacoffee {
   color: #FFDD00;
 }
+.relsyn li a .svg-buysellads {
+  color: #EB4714;
+}
 .relsyn li a .svg-buzzfeed {
   color: #EE3322;
 }
@@ -1468,11 +1501,17 @@ ul.relsyn li svg {
 .relsyn li a .svg-chedraui {
   color: #E0832F;
 }
+.relsyn li a .svg-cheerio {
+  color: #E88C1F;
+}
 .relsyn li a .svg-chef {
   color: #F09820;
 }
 .relsyn li a .svg-chemex {
   color: #4D2B1A;
+}
+.relsyn li a .svg-chessdotcom {
+  color: #81B64C;
 }
 .relsyn li a .svg-chevrolet {
   color: #CD9834;
@@ -1585,6 +1624,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-cloudflarepages {
   color: #F38020;
 }
+.relsyn li a .svg-cloudflareworkers {
+  color: #F38020;
+}
 .relsyn li a .svg-cloudinary {
   color: #3448C5;
 }
@@ -1596,6 +1638,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-cloudways {
   color: #2C39BD;
+}
+.relsyn li a .svg-clubforce {
+  color: #191176;
 }
 .relsyn li a .svg-clubhouse {
   color: #FFE450;
@@ -1786,6 +1831,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-contentstack {
   color: #E74C3D;
 }
+.relsyn li a .svg-contributorcovenant {
+  color: #5E0D73;
+}
 .relsyn li a .svg-conventionalcommits {
   color: #FE5196;
 }
@@ -1798,11 +1846,17 @@ ul.relsyn li svg {
 .relsyn li a .svg-coolermaster {
   color: #1E1E28;
 }
+.relsyn li a .svg-copaairlines {
+  color: #0032A0;
+}
 .relsyn li a .svg-coppel {
   color: #0266AE;
 }
 .relsyn li a .svg-cora {
   color: #E61845;
+}
+.relsyn li a .svg-coreldraw {
+  color: #000000;
 }
 .relsyn li a .svg-coronaengine {
   color: #F96F29;
@@ -1875,6 +1929,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-crunchyroll {
   color: #F47521;
+}
+.relsyn li a .svg-cryptpad {
+  color: #0087FF;
 }
 .relsyn li a .svg-crystal {
   color: #000000;
@@ -2003,7 +2060,7 @@ ul.relsyn li svg {
   color: #000000;
 }
 .relsyn li a .svg-datastax {
-  color: #3A3A42;
+  color: #000000;
 }
 .relsyn li a .svg-databricks {
   color: #FF3621;
@@ -2023,6 +2080,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-datto {
   color: #199ED9;
 }
+.relsyn li a .svg-dazhongdianping {
+  color: #FF6633;
+}
 .relsyn li a .svg-delonghi {
   color: #072240;
 }
@@ -2031,6 +2091,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-decapcms {
   color: #FF0082;
+}
+.relsyn li a .svg-decentraland {
+  color: #FF2D55;
 }
 .relsyn li a .svg-deepcool {
   color: #068584;
@@ -2347,6 +2410,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-electronfiddle {
   color: #E79537;
 }
+.relsyn li a .svg-elegoo {
+  color: #2C3A83;
+}
 .relsyn li a .svg-element {
   color: #0DBD8B;
 }
@@ -2354,7 +2420,7 @@ ul.relsyn li svg {
   color: #92003B;
 }
 .relsyn li a .svg-eleventy {
-  color: #000000;
+  color: #222222;
 }
 .relsyn li a .svg-elgato {
   color: #101010;
@@ -2391,6 +2457,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-empirekred {
   color: #72BE50;
+}
+.relsyn li a .svg-endeavouros {
+  color: #7F7FFF;
 }
 .relsyn li a .svg-engadget {
   color: #000000;
@@ -2430,6 +2499,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-ethereum {
   color: #3C3C3D;
+}
+.relsyn li a .svg-ethers {
+  color: #2535A0;
 }
 .relsyn li a .svg-ethiopianairlines {
   color: #648B1A;
@@ -2557,6 +2629,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-fantom {
   color: #0928FF;
 }
+.relsyn li a .svg-farcaster {
+  color: #855DCD;
+}
 .relsyn li a .svg-fareharbor {
   color: #0A6ECE;
 }
@@ -2665,6 +2740,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-fiverr {
   color: #1DBF73;
 }
+.relsyn li a .svg-flashforge {
+  color: #000000;
+}
 .relsyn li a .svg-flask {
   color: #000000;
 }
@@ -2729,7 +2807,7 @@ ul.relsyn li svg {
   color: #02B78F;
 }
 .relsyn li a .svg-fontawesome {
-  color: #528DD7;
+  color: #538DD7;
 }
 .relsyn li a .svg-fontbase {
   color: #3D03A7;
@@ -2812,6 +2890,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-fubo {
   color: #C83D1E;
 }
+.relsyn li a .svg-fueler {
+  color: #09C9E3;
+}
 .relsyn li a .svg-fugacloud {
   color: #242F4B;
 }
@@ -2838,6 +2919,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-g2a {
   color: #F05F00;
+}
+.relsyn li a .svg-g2g {
+  color: #ED1C24;
 }
 .relsyn li a .svg-gdal {
   color: #5CAE58;
@@ -2916,6 +3000,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-gatsby {
   color: #663399;
+}
+.relsyn li a .svg-gcore {
+  color: #FF4C00;
 }
 .relsyn li a .svg-geeksforgeeks {
   color: #2F8D46;
@@ -3073,6 +3160,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-googleassistant {
   color: #4285F4;
 }
+.relsyn li a .svg-googleauthenticator {
+  color: #4285F4;
+}
 .relsyn li a .svg-googlebard {
   color: #886FBF;
 }
@@ -3095,6 +3185,9 @@ ul.relsyn li svg {
   color: #34A853;
 }
 .relsyn li a .svg-googlechrome {
+  color: #4285F4;
+}
+.relsyn li a .svg-googlechronicle {
   color: #4285F4;
 }
 .relsyn li a .svg-googleclassroom {
@@ -3607,6 +3700,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-igdb {
   color: #9147FF;
 }
+.relsyn li a .svg-ign {
+  color: #BF1313;
+}
 .relsyn li a .svg-ikea {
   color: #0058A3;
 }
@@ -3667,6 +3763,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-icons8 {
   color: #1FB141;
 }
+.relsyn li a .svg-imagedotsc {
+  color: #039CB2;
+}
 .relsyn li a .svg-imagej {
   color: #00D8E0;
 }
@@ -3693,6 +3792,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-indigo {
   color: #09009B;
+}
+.relsyn li a .svg-indiansuperleague {
+  color: #ED2F21;
 }
 .relsyn li a .svg-indiehackers {
   color: #0E2439;
@@ -3723,6 +3825,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-inkscape {
   color: #000000;
+}
+.relsyn li a .svg-inoreader {
+  color: #1875F3;
 }
 .relsyn li a .svg-insomnia {
   color: #4000BF;
@@ -3820,6 +3925,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-jfrogpipelines {
   color: #40BE46;
 }
+.relsyn li a .svg-jhipster {
+  color: #3E8ACC;
+}
 .relsyn li a .svg-jouav {
   color: #E1B133;
 }
@@ -3837,6 +3945,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-jsonwebtokens {
   color: #000000;
+}
+.relsyn li a .svg-jsr {
+  color: #F7DF1E;
 }
 .relsyn li a .svg-jss {
   color: #F7DF1E;
@@ -4039,6 +4150,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-keybase {
   color: #33A0FF;
 }
+.relsyn li a .svg-keycloak {
+  color: #4D4D4D;
+}
 .relsyn li a .svg-keystone {
   color: #166BFF;
 }
@@ -4143,6 +4257,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-krita {
   color: #3BABFF;
+}
+.relsyn li a .svg-ktor {
+  color: #087CFA;
 }
 .relsyn li a .svg-kucoin {
   color: #01BC8D;
@@ -4291,6 +4408,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-letterboxd {
   color: #202830;
 }
+.relsyn li a .svg-lining {
+  color: #C5242C;
+}
 .relsyn li a .svg-liberadotchat {
   color: #FF55DD;
 }
@@ -4370,7 +4490,7 @@ ul.relsyn li svg {
   color: #333333;
 }
 .relsyn li a .svg-linuxfoundation {
-  color: #003366;
+  color: #003778;
 }
 .relsyn li a .svg-linuxmint {
   color: #87CF3E;
@@ -4446,6 +4566,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-lubuntu {
   color: #0068C8;
+}
+.relsyn li a .svg-lucia {
+  color: #5F57FF;
 }
 .relsyn li a .svg-lucid {
   color: #282C33;
@@ -4576,6 +4699,12 @@ ul.relsyn li svg {
 .relsyn li a .svg-makerbot {
   color: #FF1E0D;
 }
+.relsyn li a .svg-malt {
+  color: #FC5757;
+}
+.relsyn li a .svg-malwarebytes {
+  color: #0D3ECC;
+}
 .relsyn li a .svg-mambaui {
   color: #6D28D9;
 }
@@ -4705,6 +4834,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-meituan {
   color: #FFD100;
 }
+.relsyn li a .svg-meizu {
+  color: #FF4132;
+}
 .relsyn li a .svg-mendeley {
   color: #9D1620;
 }
@@ -4830,6 +4962,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-microstation {
   color: #62BB47;
+}
+.relsyn li a .svg-migadu {
+  color: #0043CE;
 }
 .relsyn li a .svg-mikrotik {
   color: #293239;
@@ -5056,6 +5191,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-namemc {
   color: #12161A;
 }
+.relsyn li a .svg-namesilo {
+  color: #031B4E;
+}
 .relsyn li a .svg-namebase {
   color: #0068FF;
 }
@@ -5201,7 +5339,7 @@ ul.relsyn li svg {
   color: #8F0000;
 }
 .relsyn li a .svg-nodedotjs {
-  color: #339933;
+  color: #5FA04E;
 }
 .relsyn li a .svg-nodemon {
   color: #76D04B;
@@ -5269,6 +5407,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-nunjucks {
   color: #1C4913;
 }
+.relsyn li a .svg-nushell {
+  color: #4E9A06;
+}
 .relsyn li a .svg-nutanix {
   color: #024DA1;
 }
@@ -5306,7 +5447,7 @@ ul.relsyn li svg {
   color: #2CB9F1;
 }
 .relsyn li a .svg-osgeo {
-  color: #5CAE58;
+  color: #4CB05B;
 }
 .relsyn li a .svg-osmc {
   color: #17394A;
@@ -5605,6 +5746,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-paritysubstrate {
   color: #282828;
 }
+.relsyn li a .svg-parrotsecurity {
+  color: #15E0ED;
+}
 .relsyn li a .svg-parsedotly {
   color: #5BA745;
 }
@@ -5778,6 +5922,12 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-pixabay {
   color: #2EC66D;
+}
+.relsyn li a .svg-pixelfed {
+  color: #6366F1;
+}
+.relsyn li a .svg-pixlr {
+  color: #3EBBDF;
 }
 .relsyn li a .svg-plangrid {
   color: #0085DE;
@@ -6034,6 +6184,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-prometheus {
   color: #E6522C;
 }
+.relsyn li a .svg-pronounsdotpage {
+  color: #C71585;
+}
 .relsyn li a .svg-proteus {
   color: #1C79B3;
 }
@@ -6226,6 +6379,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-qwant {
   color: #5C97FF;
 }
+.relsyn li a .svg-qwik {
+  color: #AC7EF4;
+}
 .relsyn li a .svg-qwiklabs {
   color: #F5CD0E;
 }
@@ -6397,6 +6553,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-redhatopenshift {
   color: #EE0000;
 }
+.relsyn li a .svg-redash {
+  color: #FF7964;
+}
 .relsyn li a .svg-redbubble {
   color: #E41321;
 }
@@ -6499,6 +6658,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-rhinoceros {
   color: #801010;
 }
+.relsyn li a .svg-rich {
+  color: #FAE742;
+}
 .relsyn li a .svg-rider {
   color: #000000;
 }
@@ -6537,6 +6699,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-robotframework {
   color: #000000;
+}
+.relsyn li a .svg-rocket {
+  color: #D33847;
 }
 .relsyn li a .svg-rocketdotchat {
   color: #F5455C;
@@ -6789,6 +6954,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-scipy {
   color: #8CAAE6;
+}
+.relsyn li a .svg-scilab {
+  color: #CD1925;
 }
 .relsyn li a .svg-scopus {
   color: #E9711C;
@@ -7171,6 +7339,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-spacemacs {
   color: #9266CC;
 }
+.relsyn li a .svg-spaceship {
+  color: #394EFF;
+}
 .relsyn li a .svg-sparkar {
   color: #FF5C83;
 }
@@ -7312,6 +7483,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-statamic {
   color: #FF269E;
 }
+.relsyn li a .svg-statista {
+  color: #001327;
+}
 .relsyn li a .svg-statuspage {
   color: #172B4D;
 }
@@ -7344,6 +7518,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-stellar {
   color: #7D00FF;
+}
+.relsyn li a .svg-stencil {
+  color: #5530FF;
 }
 .relsyn li a .svg-stencyl {
   color: #8E1C04;
@@ -7420,6 +7597,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-sumologic {
   color: #000099;
 }
+.relsyn li a .svg-sunrise {
+  color: #DA291C;
+}
 .relsyn li a .svg-supabase {
   color: #3FCF8E;
 }
@@ -7474,6 +7654,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-symphony {
   color: #0098FF;
 }
+.relsyn li a .svg-syncthing {
+  color: #0891D1;
+}
 .relsyn li a .svg-synology {
   color: #B5B5B6;
 }
@@ -7516,6 +7699,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-tvtime {
   color: #FFD400;
 }
+.relsyn li a .svg-tv4play {
+  color: #E0001C;
+}
 .relsyn li a .svg-typo3 {
   color: #FF8700;
 }
@@ -7551,6 +7737,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-talenthouse {
   color: #000000;
+}
+.relsyn li a .svg-talos {
+  color: #FF7300;
 }
 .relsyn li a .svg-tamiya {
   color: #000000;
@@ -7897,6 +8086,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-truenas {
   color: #0095D5;
 }
+.relsyn li a .svg-trueup {
+  color: #4E71DA;
+}
 .relsyn li a .svg-trustedshops {
   color: #FFDC0F;
 }
@@ -7910,7 +8102,7 @@ ul.relsyn li svg {
   color: #212C42;
 }
 .relsyn li a .svg-tubi {
-  color: #000000;
+  color: #7408FF;
 }
 .relsyn li a .svg-tumblr {
   color: #36465D;
@@ -8248,6 +8440,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-vite {
   color: #646CFF;
 }
+.relsyn li a .svg-vitepress {
+  color: #5C73E7;
+}
 .relsyn li a .svg-vitess {
   color: #F16728;
 }
@@ -8368,6 +8563,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-wasmer {
   color: #4946DD;
 }
+.relsyn li a .svg-watchtower {
+  color: #416271;
+}
 .relsyn li a .svg-wattpad {
   color: #FF500A;
 }
@@ -8447,7 +8645,7 @@ ul.relsyn li svg {
   color: #D71E28;
 }
 .relsyn li a .svg-westerndigital {
-  color: #000000;
+  color: #995DFF;
 }
 .relsyn li a .svg-westernunion {
   color: #FFDD00;
@@ -8623,6 +8821,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-xero {
   color: #13B5EA;
 }
+.relsyn li a .svg-xiaohongshu {
+  color: #FF2442;
+}
 .relsyn li a .svg-xiaomi {
   color: #FF6900;
 }
@@ -8725,6 +8926,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-zebratechnologies {
   color: #000000;
 }
+.relsyn li a .svg-zedindustries {
+  color: #084CCF;
+}
 .relsyn li a .svg-zelle {
   color: #6D1ED4;
 }
@@ -8806,6 +9010,9 @@ ul.relsyn li svg {
 .relsyn li a .svg-zyte {
   color: #B02CCE;
 }
+.relsyn li a .svg-abusedotch {
+  color: #00465B;
+}
 .relsyn li a .svg-arxiv {
   color: #B31B1B;
 }
@@ -8821,8 +9028,14 @@ ul.relsyn li svg {
 .relsyn li a .svg-awesomewm {
   color: #535D6C;
 }
+.relsyn li a .svg-bat {
+  color: #31369E;
+}
 .relsyn li a .svg-bigbasket {
   color: #A5CD39;
+}
+.relsyn li a .svg-boat {
+  color: #E20722;
 }
 .relsyn li a .svg-boulanger {
   color: #FD5300;
@@ -8908,6 +9121,12 @@ ul.relsyn li svg {
 .relsyn li a .svg-figshare {
   color: #556472;
 }
+.relsyn li a .svg-fishshell {
+  color: #34C534;
+}
+.relsyn li a .svg-foobar2000 {
+  color: #000000;
+}
 .relsyn li a .svg-foodpanda {
   color: #D70F64;
 }
@@ -8958,6 +9177,9 @@ ul.relsyn li svg {
 }
 .relsyn li a .svg-iheartradio {
   color: #C6002B;
+}
+.relsyn li a .svg-imessage {
+  color: #34DA50;
 }
 .relsyn li a .svg-ios {
   color: #000000;
@@ -9139,6 +9361,15 @@ ul.relsyn li svg {
 .relsyn li a .svg-teratail {
   color: #F4C51C;
 }
+.relsyn li a .svg-thirdweb {
+  color: #F213A4;
+}
+.relsyn li a .svg-tinygrad {
+  color: #FFFFFF;
+}
+.relsyn li a .svg-tldraw {
+  color: #FAFAFA;
+}
 .relsyn li a .svg-tmux {
   color: #1BB91F;
 }
@@ -9210,10 +9441,6 @@ ul.relsyn li svg {
 
 .nostr {
   fill: #662482;
-}
-
-.svg-bsky {
-  fill: #0085ff;
 }
 
 /*--------------------------------------------------------------
