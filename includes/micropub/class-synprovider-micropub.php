@@ -121,22 +121,26 @@ class SynProvider_Micropub extends Syndication_Provider {
 	 * @return string Content string
 	 */
 	public function get_content( $post ) {
-		$content  = '';
+		$content  = syn_get_post_content( $post );
+		$length   = strlen( $content );
 		$backlink = get_option( 'syndication_backlink' );
-		$link     = get_permalink( $post );
+		$link     = wp_get_shortlink( $post );
+		if ( true !== $backlink ) {
+			$content = syn_excerpt( $content, ( $this->content_length - 3 ) - strlen( $link ) );
+		}
 		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'syndication_use_excerpt' ) ) {
 			$content = $post->post_excerpt;
-		} elseif ( $this->content_length < strlen( $post->post_content ) && 'maybe' === $backlink ) {
+		} elseif ( $this->content_length < $length && 'maybe' === $backlink ) {
 			// If length is over $content_length then replace content with link plus the title
 			if ( function_exists( 'kind_get_the_title' ) ) {
 				$content = kind_get_the_title( $post ) . ' - ' . $link;
 			} elseif ( ! empty( get_the_title( $post ) ) ) {
 				$content = get_the_title( $post ) . ' - ' . $link;
 			} else {
-				$content = substr( $post->post_content, 0, ( $this->content_length - 3 ) - strlen( $link ) ) . ' - ' . $link;
+				$content = $content . ' - ' . $link;
 			}
 		} elseif ( 'true' !== $backlink ) {
-			$content = $post->content . ' (' . $link . ')';
+			$content = $content . ' (' . $link . ')';
 		}
 		return $content;
 	}
