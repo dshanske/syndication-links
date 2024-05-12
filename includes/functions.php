@@ -118,46 +118,114 @@ function syndication_post_types() {
  *
  */
 function syn_get_post_content( $post ) {
+	$allowed = array(
+		'a'          => array(
+			'href' => array(),
+		),
+		'abbr'       => array(),
+		'b'          => array(),
+		'br'         => array(),
+		'code'       => array(),
+		'ins'        => array(),
+		'del'        => array(),
+		'em'         => array(),
+		'i'          => array(),
+		'q'          => array(),
+		'strike'     => array(),
+		'strong'     => array(),
+		'time'       => array(
+			'datetime' => array(),
+		),
+		'blockquote' => array(),
+		'pre'        => array(),
+		'p'          => array(),
+		'h1'         => array(),
+		'h2'         => array(),
+		'h3'         => array(),
+		'h4'         => array(),
+		'h5'         => array(),
+		'h6'         => array(),
+		'ul'         => array(),
+		'li'         => array(),
+		'ol'         => array(),
+		'span'       => array(),
+		'img'        => array(
+			'src'    => array(),
+			'alt'    => array(),
+			'title'  => array(),
+			'width'  => array(),
+			'height' => array(),
+			'srcset' => array(),
+		),
+		'figure'     => array(),
+		'figcaption' => array(),
+		'picture'    => array(
+			'srcset' => array(),
+			'type'   => array(),
+		),
+		'video'      => array(
+			'poster' => array(),
+			'src'    => array(),
+		),
+		'audio'      => array(
+			'duration' => array(),
+			'src'      => array(),
+		),
+		'track'      => array(
+			'label'   => array(),
+			'src'     => array(),
+			'srclang' => array(),
+			'kind'    => array(),
+		),
+		'source'     => array(
+			'src'    => array(),
+			'srcset' => array(),
+			'type'   => array(),
+
+		),
+		'hr'         => array(),
+	);
+
 	$post = get_post( $post );
 	if ( ! $post ) {
 		return '';
 	}
-	$text = get_the_content( '', false, $post );
+		$text = get_the_content( '', false, $post );
 
-	$text = strip_shortcodes( $text );
-	$text = excerpt_remove_blocks( $text );
-	$text = excerpt_remove_footnotes( $text );
-	/*
-	 * Temporarily unhook wp_filter_content_tags() since any tags
-	 * within the excerpt are stripped out. Modifying the tags here
-	 * is wasteful and can lead to bugs in the image counting logic.
-	 */
-	$filter_image_removed = remove_filter( 'the_content', 'wp_filter_content_tags', 12 );
+		$text = strip_shortcodes( $text );
+		$text = excerpt_remove_blocks( $text );
+		$text = excerpt_remove_footnotes( $text );
+		/*
+		* Temporarily unhook wp_filter_content_tags() since any tags
+		* within the excerpt are stripped out. Modifying the tags here
+		* is wasteful and can lead to bugs in the image counting logic.
+		*/
+		$filter_image_removed = remove_filter( 'the_content', 'wp_filter_content_tags', 12 );
 
-	/*
-	 * Temporarily unhook do_blocks() since excerpt_remove_blocks( $text )
-	 * handles block rendering needed for excerpt.
-	 */
-	$filter_block_removed = remove_filter( 'the_content', 'do_blocks', 9 );
+		/*
+		* Temporarily unhook do_blocks() since excerpt_remove_blocks( $text )
+		* handles block rendering needed for excerpt.
+		*/
+		$filter_block_removed = remove_filter( 'the_content', 'do_blocks', 9 );
 
-	/** This filter is documented in wp-includes/post-template.php */
-	$text = apply_filters( 'the_content', $text );
+		/** This filter is documented in wp-includes/post-template.php */
+		$text = apply_filters( 'the_content', $text );
 
-	// Restore the original filter if removed.
+		// Restore the original filter if removed.
 	if ( $filter_block_removed ) {
 		add_filter( 'the_content', 'do_blocks', 9 );
 	}
 
-	/*
-	 * Only restore the filter callback if it was removed above. The logic
-	 * to unhook and restore only applies on the default priority of 10,
-	 * which is generally used for the filter callback in WordPress core.
-	 */
+		/*
+		* Only restore the filter callback if it was removed above. The logic
+		* to unhook and restore only applies on the default priority of 10,
+		* which is generally used for the filter callback in WordPress core.
+		*/
 	if ( $filter_image_removed ) {
 		add_filter( 'the_content', 'wp_filter_content_tags', 12 );
 	}
 
-	return $text;
+	return wp_kses( $text, $allowed );
 }
 
 /* Customized Excerpt Function for Syndication
