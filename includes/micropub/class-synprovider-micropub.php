@@ -191,7 +191,9 @@ class SynProvider_Micropub extends Syndication_Provider {
 		$content = $this->get_content( $post );
 
 		if ( ! empty( $content ) ) {
-			$mf2['properties']['content'] = array( $content );
+			$mf2['properties']['content'] = array(
+				'html' => $content,
+			);
 		}
 
 		$mf2['type'] = array( 'h-entry' );
