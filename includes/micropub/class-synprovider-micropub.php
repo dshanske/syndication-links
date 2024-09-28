@@ -125,6 +125,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 		$length   = strlen( $content );
 		$backlink = get_option( 'syndication_backlink' );
 		$link     = wp_get_shortlink( $post );
+		$link     = sprintf( '<a href="%1s">%1s</a>', $link );
 		if ( true !== $backlink ) {
 			$content = syn_excerpt( $content, ( $this->content_length - 3 ) - strlen( $link ) );
 		}
