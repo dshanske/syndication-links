@@ -1,0 +1,16 @@
+name: 'WordPress Plugin Check'
+on: # rebuild any PRs and trunk branch changes
+  pull_request:
+  push:
+    branches:
+    - trunk
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Run plugin check
+      uses: wordpress/plugin-check-action@v1
