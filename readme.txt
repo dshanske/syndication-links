@@ -1,16 +1,16 @@
-=== Syndication Links ===
+== Syndication Links ===
 Contributors: dshanske
-Tags: syndication, indieweb, indiewebcamp, POSSE, social media, sharing
-Tested up to: 6.5
-Stable tag: 4.4.20
+Tags: syndication, indieweb, POSSE, sharing
+Tested up to: 6.6
+Stable tag: 4.4.21
 License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
 
 == Description ==
 
-It supports adding rel-syndication/u-syndication links to your WordPress posts, pages, and comments, indicating where a syndicated copy is, in the form of a text or icon link. You can do this
-manually and some plugins support automatically adding their links as well. The plugin contains a generic UI for syndicating to other sites through your site or a Micropub Client.
+It supports addinglinks to your WordPress posts, pages, and comments, indicating where a syndicated copy is, in the form of a text or icon link. You can do this
+manually or with supported plugins. Also contains a generic UI for syndicating to other sites through your site or a Micropub Client.
 
 == Screenshots ==
 
@@ -164,6 +164,9 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.4.21 ( 2024-09-28 ) =
+* Send Micropub content as HTML over plaintext
 
 = Version 4.4.20 ( 2024-05-12 ) =
 * Refresh icons

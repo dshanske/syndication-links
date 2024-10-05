@@ -3,7 +3,7 @@
  * Plugin Name: Syndication Links
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add Links to Syndicated Copies of Your Posts
- * Version: 4.4.20
+ * Version: 4.4.21
  * Requires at least: 4.9.9
  * Requires PHP: 7.0
  * Author: David Shanske
@@ -37,7 +37,6 @@ function syndication_links_load( $files, $dir = 'includes/' ) {
  * Filename to Classname Function.
  *
  * @param string $filename.
- *
  */
 function syndication_links_filename_to_classname( $filename ) {
 	$class = str_replace( 'class-', '', $filename );
@@ -54,9 +53,9 @@ function syndication_links_filename_to_classname( $filename ) {
  * Load and register files.
  *
  * Checks for the existence of and loads files, then registers them as providers.
+ *
  * @param array  $files An array of filenames.
  * @param string $dir The directory the files can be found in, relative to the current directory.
- *
  */
 function syndication_links_register_providers( $files, $dir = 'includes/' ) {
 	$dir = trailingslashit( $dir );
