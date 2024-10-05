@@ -18,5 +18,4 @@ jobs:
         exclude-directories: |
           './bin'
           './.github'
-        exclude-checks: |
-          'file_type': # Dev files in repo
+        exclude-checks: 'file_type'
