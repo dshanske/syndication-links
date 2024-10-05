@@ -14,11 +14,12 @@ jobs:
 
     - name: Run plugin check
       uses: wordpress/plugin-check-action@v1
-      exclude-directories: |
-        './bin'
-        './.github'
-      exclude-files: |
-        '.gitmodules'
-        '.gitattributes'
-        '.editorconfig'
-        '.eslintrc.js'
+      with:
+        exclude-directories: |
+          './bin'
+          './.github'
+        exclude-files: |
+          '.gitmodules'
+          '.gitattributes'
+          '.editorconfig'
+          '.eslintrc.js'

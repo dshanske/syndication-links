@@ -10,6 +10,7 @@
  * Author URI: http://david.shanske.com
  * Text Domain: syndication-links
  * Domain Path:  /languages
+ * License: GPLv2 or later
  */
 
 // Version Number Constant.
