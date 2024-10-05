@@ -3,12 +3,15 @@
 	<description>Syndication Link Standards</description>
 	<!-- Check up to 8 files simultanously. -->
 	<arg name="parallel" value="8"/>
-	
+
 	<file>./includes/</file>
 	<file>./syndication-links.php</file>
 	<exclude-pattern>*/includes/class-social-plugins.php</exclude-pattern>
 	<!-- Only check the PHP, CSS and SCSS files. -->
 	<arg name="extensions" value="php,css,scss/css"/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+	<arg name="parallel" value="50"/>
 
         <rule ref="PHPCompatibility"/>
         <config name="testVersion" value="7.0-"/>
@@ -16,15 +19,19 @@
         <config name="minimum_supported_wp_version" value="4.9"/>
         <rule ref="WordPress.WP.DeprecatedFunctions" />
 
-        <rule ref="WordPress-Core">
+        <rule ref="WordPress">
                 <exclude name="WordPress.Security.ValidatedSanitizedInput" />
-                <exclude name="WordPress.Security.NonceVerification" />
+		<exclude name="WordPress.Security.NonceVerification" />
+		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter"/>
+		<exclude name="Squiz.Commenting"/>
+		<exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames"/>
         </rule>
         <rule ref="WordPress.Files.FileName">
-        <properties>
-        <property name="strict_class_file_names" value="false" />
-        </properties>
-        </rule>
+		<properties>
+			<property name="strict_class_file_names" value="false" />
+		</properties>
+	</rule>
+	<rule ref="VariableAnalysis"/>
 
         <rule ref="WordPress-Extra" />
         <rule ref="WordPress.WP.I18n"/>

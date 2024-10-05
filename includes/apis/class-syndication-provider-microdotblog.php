@@ -164,7 +164,6 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 
 	/**
 	 * Return micro.blog feed link
-	 *
 	 */
 	public static function get_feed() {
 		if ( function_exists( 'json_feed_content_type' ) ) {

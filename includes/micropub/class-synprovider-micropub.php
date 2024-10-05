@@ -44,7 +44,6 @@ class SynProvider_Micropub extends Syndication_Provider {
 
 	/**
 	 * Set Token
-	 *
 	 */
 	public function set_token( $token ) {
 		$this->token = $token;
@@ -52,7 +51,6 @@ class SynProvider_Micropub extends Syndication_Provider {
 
 	/**
 	 * Check if token is set
-	 *
 	 */
 	public function is_disabled() {
 		return empty( $this->token );
@@ -60,7 +58,6 @@ class SynProvider_Micropub extends Syndication_Provider {
 
 	/**
 	 * Set Endpoint
-	 *
 	 */
 	public function set_endpoint( $endpoint ) {
 		$this->endpoint = $endpoint;
@@ -73,7 +70,6 @@ class SynProvider_Micropub extends Syndication_Provider {
 	 * @param array  $query Query parameters.
 	 * @param array  $headers Headers.
 	 * @return WP_Error|array Either the associated array response or error.
-	*
 	*/
 	public function fetch_micropub( $url, $query, $headers = null ) {
 		$fetch = add_query_arg( $query, $url );
@@ -209,7 +205,6 @@ class SynProvider_Micropub extends Syndication_Provider {
 	 * @param string $endpoint Micropub Endpoint
 	 * @param array  $headers Headers.
 	 * @return WP_Error|array Either the associated array response or error.
-	*
 	*/
 	public function post_micropub( $post, $endpoint, $headers = null ) {
 		$post = get_post( $post );
@@ -248,7 +243,6 @@ class SynProvider_Micropub extends Syndication_Provider {
 	 * @param string $endpoint Micropub Endpoint
 	 * @param array  $headers Headers.
 	 * @return WP_Error|array Either the associated array response or error.
-	*
 	*/
 	public function delete_micropub( $url, $endpoint, $headers = null ) {
 		$args = array(

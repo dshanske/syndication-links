@@ -60,10 +60,8 @@ function get_the_content_syndication( $syndication_uid = null ) {
 	/**
 	 * Filters the post content for use in syndication.
 	 *
-	 *
 	 * @param string $content   The current post content.
 	 * @param string $syndication_uid The UID for this syndication
-	 *
 	 */
 	return apply_filters( 'the_content_syndication', $content, $syndication_uid );
 }

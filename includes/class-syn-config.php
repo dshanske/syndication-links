@@ -415,7 +415,6 @@ class Syn_Config {
 	 * @param string $tab The id of the tab.
 	 * @param string $name The label of the tab.
 	 * @param string $active Which tab is active.
-	 *
 	*/
 	public static function tab_link( $tab, $name, $active = 'display' ) {
 		$url    = add_query_arg( 'tab', $tab, menu_page_url( 'syndication_links', false ) );
