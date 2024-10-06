@@ -120,10 +120,10 @@ class SynProvider_Micropub extends Syndication_Provider {
 		$content  = syn_get_post_content( $post );
 		$length   = strlen( $content );
 		$backlink = get_option( 'syndication_backlink' );
-		$link     = wp_get_shortlink( $post );
-		$link     = sprintf( '<a href="%1s">%1s</a>', $link );
+		$shortlink     = wp_get_shortlink( $post );
+		$link     = '<a href="' . $shortlink . '">' . $shortlink . '</a>';
 		if ( true !== $backlink ) {
-			$content = syn_excerpt( $content, ( $this->content_length - 3 ) - strlen( $link ) );
+			$content = syn_excerpt( $content, ( $this->content_length - 3 ) - strlen( $shortlink ) );
 		}
 		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'syndication_use_excerpt' ) ) {
 			$content = $post->post_excerpt;
