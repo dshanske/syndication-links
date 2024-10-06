@@ -40,6 +40,7 @@
     "lint:wpcs": "./vendor/bin/phpcs",
     "lint:wpcs-fix": "./vendor/bin/phpcbf",
     "make-pot": "./vendor/bin/wp i18n make-pot . languages/syndication-links.pot",
+    "plugin-check": "./vendor/bin/wp plugin check syndication-links --exclude-checks=file_type --exclude-directories='./bin','./.github'",
     "lint:php": "@php ./vendor/bin/parallel-lint --exclude .git --exclude vendor --exclude node_modules .",
     "lint": "./vendor/bin/phpcs -q -n",
     "phpunit": "./vendor/bin/phpunit",
