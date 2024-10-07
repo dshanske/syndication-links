@@ -189,7 +189,9 @@ class SynProvider_Micropub extends Syndication_Provider {
 
 		if ( ! empty( $content ) ) {
 			$mf2['properties']['content'] = array(
-				'html' => $content,
+				array(
+					'html' => $content,
+				)
 			);
 		}
 
