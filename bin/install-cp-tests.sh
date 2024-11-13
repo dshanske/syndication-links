@@ -41,9 +41,9 @@ CP_RELEASE=y
 if [[ "$CP_VERSION" == latest ]]; then
 	# Find the version number of the latest release
 	download \
-		https://www.classicpress.net/latest.json \
+		https://www.classicpress.net/wp-json/cp/v1/latest \
 		"$TMPDIR/cp-latest.json"
-	CP_VERSION=$(grep -o '"version":"[^"]*' /tmp/cp-latest.json | sed 's/"version":"//')
+	CP_VERSION=$(grep -o '"version":"[^"]*' $TMPDIR/cp-latest.json | sed 's/"version":"//')
 
 	if [ -z "$CP_VERSION" ]; then
 		echo "ClassicPress version not detected correctly!"

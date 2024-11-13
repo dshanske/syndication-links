@@ -2,7 +2,14 @@
 
 $_tests_dir = getenv( 'WP_TESTS_DIR' );
 if ( ! $_tests_dir ) {
+	$_tests_dir = getenv( 'CP_TESTS_DIR' );
+}
+if ( ! $_tests_dir ) {
 	$_tests_dir = rtrim( sys_get_temp_dir(), '/\\' ) . '/wordpress-tests-lib';
+}
+
+if ( ! is_dir( $_tests_dir ) ) {
+	$_tests_dir = rtrim( sys_get_temp_dir(), '/\\' ) . '/classicpress-tests-lib';
 }
 
 // Forward custom PHPUnit Polyfills configuration to PHPUnit bootstrap file.
