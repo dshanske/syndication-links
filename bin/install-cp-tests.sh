@@ -43,7 +43,7 @@ if [[ "$CP_VERSION" == latest ]]; then
 	download \
 		https://api.github.com/repos/ClassicPress/ClassicPress-release/releases/latest \
 		"$TMPDIR/cp-latest.json"
-	CP_VERSION=$(grep -o '"tag_name":"[^"]*' $TMPDIR/cp-latest.json | sed 's/"version":"//')
+	CP_VERSION=$(grep -o '"tag_name":"[^"]*' $TMPDIR/cp-latest.json | sed 's/"tag_name":"//')
 
 	if [ -z "$CP_VERSION" ]; then
 		echo "ClassicPress version not detected correctly!"
