@@ -44,7 +44,8 @@
     "lint:php": "@php ./vendor/bin/parallel-lint --exclude .git --exclude vendor --exclude node_modules .",
     "lint": "./vendor/bin/phpcs -q -n",
     "phpunit": "./vendor/bin/phpunit",
-    "setup-local-tests": "bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest",
+    "setup-wp-tests": "bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest",
+    "setup-cp-tests": "bash bin/install-cp-tests.sh cpc_test root root 127.0.0.1 latest",
     "install-codestandards": [
       "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
     ]
