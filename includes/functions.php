@@ -188,28 +188,35 @@ function syn_get_post_content( $post ) {
 	if ( ! $post ) {
 		return '';
 	}
-		$text = get_the_content( '', false, $post );
 
-		$text = strip_shortcodes( $text );
+	$text = get_the_content( '', false, $post );
+
+	$text = strip_shortcodes( $text );
+
+	if ( function_exists( 'excerpt_remove_blocks' ) ) {
 		$text = excerpt_remove_blocks( $text );
+	}
+	if ( function_exists( 'excerpt_remove_footnotes' ) ) {
 		$text = excerpt_remove_footnotes( $text );
-		/*
-		* Temporarily unhook wp_filter_content_tags() since any tags
-		* within the excerpt are stripped out. Modifying the tags here
-		* is wasteful and can lead to bugs in the image counting logic.
-		*/
-		$filter_image_removed = remove_filter( 'the_content', 'wp_filter_content_tags', 12 );
+	}
 
-		/*
-		* Temporarily unhook do_blocks() since excerpt_remove_blocks( $text )
-		* handles block rendering needed for excerpt.
-		*/
-		$filter_block_removed = remove_filter( 'the_content', 'do_blocks', 9 );
+	/*
+	* Temporarily unhook wp_filter_content_tags() since any tags
+	* within the excerpt are stripped out. Modifying the tags here
+	* is wasteful and can lead to bugs in the image counting logic.
+	*/
+	$filter_image_removed = remove_filter( 'the_content', 'wp_filter_content_tags', 12 );
 
-		/** This filter is documented in wp-includes/post-template.php */
-		$text = apply_filters( 'the_content', $text );
+	/*
+	* Temporarily unhook do_blocks() since excerpt_remove_blocks( $text )
+	* handles block rendering needed for excerpt.
+	*/
+	$filter_block_removed = remove_filter( 'the_content', 'do_blocks', 9 );
 
-		// Restore the original filter if removed.
+	/** This filter is documented in wp-includes/post-template.php */
+	$text = apply_filters( 'the_content', $text );
+
+	// Restore the original filter if removed.
 	if ( $filter_block_removed ) {
 		add_filter( 'the_content', 'do_blocks', 9 );
 	}
