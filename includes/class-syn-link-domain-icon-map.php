@@ -49,11 +49,27 @@ class Syn_Link_Domain_Icon_Map {
 		return $string;
 	}
 
+	// Return directories for icon files
+	public static function get_icon_file_dirs() {
+		$dir  = sprintf( '%1$ssvgs/', plugin_dir_path( __DIR__ ) );
+		$dirs = array(
+			$dir,
+			$dir . 'genericons-neue',
+			$dir . 'simple-icons',
+		);
+		return apply_filters( 'syn_icon_file_dirs', $dirs );
+	}
+
+
 	// Return the filename of an icon based on name if the file exists
 	public static function get_icon_filename( $name ) {
-		$svg = sprintf( '%1$ssvgs/%2$s.svg', plugin_dir_path( __DIR__ ), $name );
-		if ( file_exists( $svg ) ) {
-			return $svg;
+		$dir  = sprintf( '%1$ssvgs/', plugin_dir_path( __DIR__ ) );
+		$dirs = self::get_icon_file_dirs();
+		$svg  = $name . '.svg';
+		foreach ( $dirs as $dir ) {
+			if ( file_exists( $dir . $svg ) ) {
+				return $dir . $svg;
+			}
 		}
 		return null;
 	}
