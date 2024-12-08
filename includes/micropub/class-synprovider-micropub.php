@@ -117,11 +117,11 @@ class SynProvider_Micropub extends Syndication_Provider {
 	 * @return string Content string
 	 */
 	public function get_content( $post ) {
-		$content  = syn_get_post_content( $post );
-		$length   = strlen( $content );
-		$backlink = get_option( 'syndication_backlink' );
-		$shortlink     = wp_get_shortlink( $post );
-		$link     = '<a href="' . $shortlink . '">' . $shortlink . '</a>';
+		$content   = syn_get_post_content( $post );
+		$length    = strlen( $content );
+		$backlink  = get_option( 'syndication_backlink' );
+		$shortlink = wp_get_shortlink( $post );
+		$link      = '<a href="' . $shortlink . '">' . $shortlink . '</a>';
 		if ( true !== $backlink ) {
 			$content = syn_excerpt( $content, ( $this->content_length - 3 ) - strlen( $shortlink ) );
 		}
@@ -191,7 +191,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 			$mf2['properties']['content'] = array(
 				array(
 					'html' => $content,
-				)
+				),
 			);
 		}
 
