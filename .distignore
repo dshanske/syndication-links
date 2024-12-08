@@ -15,8 +15,6 @@ Gruntfile.js
 push.sh
 phpunit.xml
 phpcs.xml
-README.md
-readme.md
 .travis.yml
 .distignore
 .gitignore

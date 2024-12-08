@@ -67,6 +67,7 @@ class Syn_Link_Domain_Icon_Map {
 		$dirs = self::get_icon_file_dirs();
 		$svg  = $name . '.svg';
 		foreach ( $dirs as $dir ) {
+			$dir = trailingslashit( $dir );
 			if ( file_exists( $dir . $svg ) ) {
 				return $dir . $svg;
 			}

@@ -1,9 +1,10 @@
 ## Syndication Links ##
-**Contributors:** [dshanske](https://profiles.wordpress.org/dshanske/)  
-**Tags:** syndication, indieweb, POSSE, sharing  
-**Tested up to:** 6.6  
-**Stable tag:** 4.4.21  
-**License:** GPLv2 or later  
+**Contributors:** [dshanske](https://profiles.wordpress.org/dshanske/)
+**Tags:** syndication, indieweb, POSSE, sharing
+**Tested up to:** 6.7
+**Requires PHP:** 7.0
+**Stable tag:** 4.5
+**License:** GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
 

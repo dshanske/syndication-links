@@ -32,7 +32,9 @@
     "wp-cli/i18n-command": "^2.3",
     "sebastian/phpcpd": "*",
     "yoast/phpunit-polyfills": "^1.0",
-    "sirbrillig/phpcs-variable-analysis": "^2.11"
+    "sirbrillig/phpcs-variable-analysis": "^2.11",
+    "simple-icons/simple-icons": "*",
+    "scssphp/scssphp": "^1.13.0"
   },
   "prefer-stable": true,
   "scripts": {
@@ -46,8 +48,19 @@
     "phpunit": "./vendor/bin/phpunit",
     "setup-wp-tests": "bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest",
     "setup-cp-tests": "bash bin/install-cp-tests.sh cpc_test root root 127.0.0.1 latest",
+    "copy-simple-icons": "cp vendor/simple-icons/simple-icons/icons/*.svg svgs/simple-icons",
     "install-codestandards": [
       "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
+    ],
+    "build-css": [
+      "vendor/bin/pscss --style=expanded sass/main.scss css/syn.css",
+      "vendor/bin/pscss --style=compressed sass/main.scss css/syn.min.css",
+      "vendor/bin/pscss --style=compressed sass/min.scss css/syn-minimal.min.css",
+      "vendor/bin/pscss --style=compressed sass/main-medium.scss css/syn-medium.min.css",
+      "vendor/bin/pscss --style=compressed sass/main-large.scss css/syn-large.min.css",
+      "vendor/bin/pscss --style=compressed sass/main-bw.scss css/syn-bw.min.css",
+      "vendor/bin/pscss --style=compressed sass/main-bw-medium.scss css/syn-bw-medium.min.css",
+      "vendor/bin/pscss --style=compressed sass/main-bw-large.scss css/syn-bw-large.min.css"
     ]
   }
 }
