@@ -53,9 +53,9 @@ class Syn_Link_Domain_Icon_Map {
 	public static function get_icon_file_dirs() {
 		$dir  = sprintf( '%1$ssvgs/', plugin_dir_path( __DIR__ ) );
 		$dirs = array(
-			$dir,
-			$dir . 'genericons-neue',
 			$dir . 'simple-icons',
+			$dir . 'genericons-neue',
+			$dir,
 		);
 		return apply_filters( 'syn_icon_file_dirs', $dirs );
 	}
