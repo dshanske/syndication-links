@@ -3,7 +3,7 @@
   - Tags: syndication, indieweb, POSSE, sharing
   - Tested up to: 6.7
   - Requires PHP: 7.0
-  - Stable tag: 4.5.0
+  - Stable tag: 4.5.1
   - License: GPLv2 or later
 
 A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
@@ -165,6 +165,9 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 ## Changelog
+
+### Version 4.5.1 ( 2024-12-08 )
+* Issue with new readme.
 
 ### Version 4.5.0 ( 2024-12-08 )
 * Redo the dev system for icons
