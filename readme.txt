@@ -2,7 +2,7 @@
 Contributors: dshanske
 Tags: syndication, indieweb, POSSE, sharing
 Tested up to: 6.7
-Stable tag: 4.5
+Stable tag: 4.5.1
 License: GPLv2 or later
 
 Link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
