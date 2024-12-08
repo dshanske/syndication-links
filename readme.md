@@ -3,10 +3,10 @@
 **Tags:** syndication, indieweb, POSSE, sharing
 **Tested up to:** 6.7
 **Requires PHP:** 7.0
-**Stable tag:** 4.5
+**Stable tag:** 4.5.0
 **License:** GPLv2 or later
 
-A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites. Now with posting UI.
+A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
 
 ## Description ##
 
@@ -165,6 +165,11 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 ## Changelog ##
+
+### Version 4.5.0 ( 2024-12-08 ) ###
+* Redo the dev system for icons
+* Add ability to search for icons in multiple directories and thus override an entire set of icons
+* Remove Grunt as a build system
 
 ### Version 4.4.21 ( 2024-09-28 ) ###
 * Send Micropub content as HTML over plaintext
