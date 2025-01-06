@@ -7,7 +7,6 @@ class Social_Plugins {
 		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_syn_plugins' ) );
 		add_filter( 'syn_links_url_to_name', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
 		add_action( 'wpt_tweet_posted', array( 'Social_Plugins', 'wptotwitter_to_syn_links' ), 10, 2 );
-		add_action( 'autoshare_for_twitter_after_status_update', array( 'Social_Plugins', 'autoshare_for_twitter_after_status_update' ), 10, 3 );
 	}
 
 	public static function url_to_name_plugins( $name, $url ) {
@@ -21,18 +20,18 @@ class Social_Plugins {
 		}
 	}
 
-	public static function array_flatten( $array ) { 
-		if ( ! is_array( $array ) ) { 	 
-			return false; 
-		} 
-		$result = array(); 
-		foreach ($array as $key => $value) { 
-			if (is_array($value)) { 
-			$result = array_merge($result, self::array_flatten($value)); 
-			} else { 
-			$result[$key] = $value; 
-			} 
-		} 
+	public static function array_flatten( $array ) {
+		if ( ! is_array( $array ) ) {
+			return false;
+		}
+		$result = array();
+		foreach ($array as $key => $value) {
+			if (is_array($value)) {
+			$result = array_merge($result, self::array_flatten($value));
+			} else {
+			$result[$key] = $value;
+			}
+		}
 		return $result;
 	}
 
@@ -46,7 +45,7 @@ class Social_Plugins {
 			return $urls;
 		}
 		$keys = array_keys( $keys );
-		
+
 		foreach(  $keys as $key ) {
 			if ( 0 === strpos( $key, 'snap' ) && 6 === strlen( $key ) ) {
 				$meta = get_post_meta( get_the_ID(), $key, true );
@@ -84,17 +83,6 @@ class Social_Plugins {
 			}
 		}
 		return array_merge( $see_on, $urls );
-	}
-
-	public static function autoshare_for_twitter_after_status_update( $response, $update_data, $post ) {
-		$post = get_post( $post );
-		if ( $post ) {
-			$data = get_post_meta( $post->ID, 'autoshare_status', true );
-			$tweet_id = $tweet_status['twitter_id'] ?? '';
-			$handle   = $tweet_status['handle'] ?? 'i/web';
-			$url = esc_url( 'https://twitter.com/' . $handle . '/status/' . $tweet_id );
-			add_post_syndication_link( $post->ID, $url );
-		}
 	}
 
 	public static function add_links_from_snap() {
