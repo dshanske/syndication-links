@@ -7,6 +7,7 @@ class Social_Plugins {
 		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_syn_plugins' ) );
 		add_filter( 'syn_links_url_to_name', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
 		add_action( 'wpt_tweet_posted', array( 'Social_Plugins', 'wptotwitter_to_syn_links' ), 10, 2 );
+		add_action( 'autoshare_for_twitter_post_tweet_status_updated', array( 'Social_Plugins', 'handle_syndication_after_tweet_status_updated' ), 10, 2 );
 	}
 
 	public static function url_to_name_plugins( $name, $url ) {
@@ -174,6 +175,47 @@ class Social_Plugins {
 		);
 
 		return add_post_syndication_link( $id, $url );
+	}
+
+	/**
+	 * Check if URL is a valid tweet URL.
+	 *
+	 * @param string $url URL to check.
+	 * @return bool
+	 */
+	private static function is_valid_tweet_url( $url ) {
+		return (
+			! empty( $url ) &&
+			false !== strpos( $url, '/status/' ) &&
+			strlen( $url ) > 30 &&
+			wp_http_validate_url( $url )
+		);
+	}
+
+	/**
+	 * Handle syndication after tweet status meta is updated.
+	 *
+	 * @param int   $post_id    The post ID.
+	 * @param array $tweet_meta The tweet meta array containing tweet status data.
+	 */
+	public static function handle_syndication_after_tweet_status_updated( $post_id, $tweet_meta ) {
+		if ( empty( $tweet_meta ) ) {
+			return;
+		}
+
+		// Handle both single and multiple tweet formats.
+		$tweets = isset( $tweet_meta['twitter_id'] ) ? array( $tweet_meta ) : $tweet_meta;
+
+		foreach ( $tweets as $tweet ) {
+			if ( 'published' === $tweet['status'] && ! empty( $tweet['twitter_id'] ) ) {
+				$uri = \TenUp\AutoshareForTwitter\Utils\link_from_twitter( $tweet );
+
+				// Only add valid tweet URLs.
+				if ( self::is_valid_tweet_url( $uri ) ) {
+					Syn_Meta::add_syndication_link( get_post_type( $post_id ), $post_id, $uri );
+				}
+			}
+		}
 	}
 
 } // End Class
