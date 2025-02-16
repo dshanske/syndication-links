@@ -433,10 +433,10 @@ class Syn_Meta {
 			if ( empty( $url ) || ! is_string( $url ) ) {
 				continue; }
 			$name = Syn_Link_Domain_Icon_Map::url_to_name( $url );
+			$icon = Syn_Link_Domain_Icon_Map::get_icon( $name );
 			if ( 'website' === $name ) {
 				$name = self::extract_domain_name( $url );
 			}
-			$icon = Syn_Link_Domain_Icon_Map::get_icon( $name );
 			$syn = ( $r['icons'] ? $icon : '' ) . ( $r['text'] ? Syn_Link_Domain_Icon_Map::get_title( $name ) : '' );
 
 			if ( 'brid.gy' === wp_parse_url( PHP_URL_HOST ) ) {
