@@ -2,7 +2,7 @@
 Contributors: dshanske
 Tags: syndication, indieweb, POSSE, sharing
 Tested up to: 6.7
-Stable tag: 4.5.1
+Stable tag: 4.5.2
 License: GPLv2 or later
 
 Link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
@@ -164,6 +164,9 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.5.2 ( 2025-02-16 ) =
+* Map Twitter to X icon as Twitter icon removed from set
 
 = Version 4.5.1 ( 2024-12-08 ) =
 * Issue with new readme.

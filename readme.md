@@ -1,22 +1,28 @@
-# Syndication Links
-  - Contributors: [dshanske](https://profiles.wordpress.org/dshanske/)
-  - Tags: syndication, indieweb, POSSE, sharing
-  - Tested up to: 6.7
-  - Requires PHP: 7.0
-  - Stable tag: 4.5.1
-  - License: GPLv2 or later
+## Syndication Links
 
-A simple way to link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
+**Contributors:** dshanske \
+**Tags:** syndication, indieweb, POSSE, sharing \
+**Tested up to:** 6.7 \
+**Stable tag:** 4.5.2 \
+**License:** GPLv2 or later
+
+Link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
 
 ## Description
 
-It supports addinglinks to your WordPress posts, pages, and comments, indicating where a syndicated copy is, in the form of a text or icon link. You can do this
+It supports adding links to your WordPress posts, pages, and comments, indicating where a syndicated copy is, in the form of a text or icon link. You can do this
 manually or with supported plugins. Also contains a generic UI for syndicating to other sites through your site or a Micropub Client.
 
 ## Screenshots
 
-1. Example of Syndication Links metabox with links filled in
-2. Example of output display on website
+### 1. Example of Syndication Links metabox with links filled in
+
+![Example of Syndication Links metabox with links filled in](https://ps.w.org/#-syndication-links/assets/screenshot-1.png)
+
+### 2. Example of output display on website
+
+![Example of output display on website](https://ps.w.org/#-syndication-links/assets/screenshot-2.png)
+
 
 ## Installation
 
@@ -100,21 +106,21 @@ originalofform.php in your theme folder the function will return it so you can c
 
 ### What filters are available to modify output?
 
-- `syn_rewrite_secure( $domains )` - $domains is an array of domain names to rewrite to https if found
-- `syn_metabox_types( $screens )` - $screens would be an array of post types to add the Syndication Link metabox to.
-- `syn_network_strings( $strings )` - $strings is an array of descriptive text strings by domain name
-- `syn_add_links( $urls, $post_ID )` - (Deprecated) $urls is an array of retrieved links from $post_ID
-- `get_post_syndication_links( $urls, $post_ID)` - Replaces syn_add_links.
-- `get_comment_syndication_links( $urls, $comment_ID` - Filters an array of retrieved comment syndication links.
-- `syn_links_display_defaults( $defaults )` - Filter the defaults for displaying Syndication Links
-- `syndication_link_checked( $checked, $uid, $post_ID )` - Will check a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
-- `syndication_link_disabled( $disabled, $uid, $post_ID )` - Will disable the checkbox for a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
-- `syn_link_title( $title, $name )` - Allows you to set the title string for Links. Example, pinboard => Pinboard.
-- `syn_link_mapping( $icon, $url )` - Allows you to override or set the mapping from URL to icon name.
-- `pre_syn_link_icon( $icon, $name )` - Allows you to provide a custom icon. Icons by default are SVG, not URL or filenames.
-- `syndication_links_display( true )` - Adds Syndication Links to content display. Set to false if the theme supports this.
+* `syn_rewrite_secure( $domains )` - $domains is an array of domain names to rewrite to https if found
+* `syn_metabox_types( $screens )` - $screens would be an array of post types to add the Syndication Link metabox to.
+* `syn_network_strings( $strings )` - $strings is an array of descriptive text strings by domain name
+* `syn_add_links( $urls, $post_ID )` - (Deprecated) $urls is an array of retrieved links from $post_ID
+* `get_post_syndication_links( $urls, $post_ID)` - Replaces syn_add_links.
+* `get_comment_syndication_links( $urls, $comment_ID` - Filters an array of retrieved comment syndication links.
+* `syn_links_display_defaults( $defaults )` - Filter the defaults for displaying Syndication Links
+* `syndication_link_checked( $checked, $uid, $post_ID )` - Will check a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
+* `syndication_link_disabled( $disabled, $uid, $post_ID )` - Will disable the checkbox for a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
+* `syn_link_title( $title, $name )` - Allows you to set the title string for Links. Example, pinboard => Pinboard.
+* `syn_link_mapping( $icon, $url )` - Allows you to override or set the mapping from URL to icon name.
+* `pre_syn_link_icon( $icon, $name )` - Allows you to provide a custom icon. Icons by default are SVG, not URL or filenames.
+* `syndication_links_display( true )` - Adds Syndication Links to content display. Set to false if the theme supports this.
 
-### How do I contribute or file bug report?
+### How do I contribute or file bug reports?
 
 Development and bug reports on this plugin is on Github at https://github.com/dshanske/syndication-links
 
@@ -166,32 +172,44 @@ In no particular order...
 
 ## Changelog
 
+### Version 4.5.2 ( 2025-02-16 )
+
+* Map Twitter to X icon as Twitter icon removed from set
+
 ### Version 4.5.1 ( 2024-12-08 )
+
 * Issue with new readme.
 
 ### Version 4.5.0 ( 2024-12-08 )
+
 * Redo the dev system for icons
 * Add ability to search for icons in multiple directories and thus override an entire set of icons
 * Remove Grunt as a build system
 
 ### Version 4.4.21 ( 2024-09-28 )
+
 * Send Micropub content as HTML over plaintext
 
 ### Version 4.4.20 ( 2024-05-12 )
+
 * Refresh icons
 * Add filtering of some HTML tags for publishing
 * Update Micropub token text
 
 ### Version 4.4.19 ( 2024-03-12 )
+
 * One final tweak today
 
 ### Version 4.4.18 ( 2024-03-12 )
+
 * Introduce custom excerpting function for syndication
 
 ### Version 4.4.17 ( 2024-03-12 )
+
 * Fix for issue in not properly passing content to Micropub.
 
 ### Version 4.4.16 ( 2024-02-25 )
+
 * Update Simple Icons to latest
 * Remove custom bluesky icon in favor of current one
 * Generate minimal CSS file with just the icon colors for Bridgy supported services that can be manually queued
@@ -199,68 +217,84 @@ In no particular order...
 * Add Syndication provider for Bluesky via Bridgy
 
 ### Version 4.4.15 ( 2023-12-05 )
+
 * Fix issue with constant
 
 ### Version 4.4.14 ( 2023-12-01 )
+
 * Update support for WP-To-Twitter plugin, now Xposter.
 
 ### Version 4.4.13 ( 2023-10-21 )
+
 * Add featured derived from the thumbnail of the post for the micropub syndication mf2.
 * Add nostr icon
 * Add cloud icon colored blue as placeholder for Bluesky
 * Add map from indieweb news to indieweb icon
 
 ### Version 4.4.12 ( 2023-10-01 )
+
 * Only alow for immediate publishing if the post status is publish
 * Refresh dependencies
 * Bump minimum version to PHP 7.0
 
 ### Version 4.4.11 ( 2023-5-28 )
+
 * Disable the option to use the webmention version of Bridgy where Micropub is available and use constant instead.
 
 ### Version 4.4.10 ( 2023-05-28 )
+
 * Add API Key tab to the settings page
 * Minor tweaks to improve the rendering of the settings page
 
 ### Version 4.4.9 ( 2023-05-22 )
+
 * Refresh Simple Icon set
 
 ### Version 4.4.8 ( 2023-05-22 )
+
 * Add labels to settings
 * Remove Twitter Bridgy support due Bridgy removing it.
 
 ### Version 4.4.7 ( 2023-02-18 )
+
 * Make posts always enabled for Syndication Links by default to try to address issues people had with same.
 
 ### Version 4.4.6 ( 2023-02-10 )
+
 * Emergency release to deal with critical error caused by removal of Bridgy settings.
 
 ### Version 4.4.5 ( 2023-02-10 )
+
 * Add labels to settings
 * Fix load issues introduced in previous version
 * Migrate Bridgy Specific settings to universal settings by reimplementing them for Micropub.
 
 ### Version 4.4.4 ( 2023-01-24 )
+
 * Remove support for Reddit which does not have a publishing option
 * Per request developer of Bridgy only offer Micropub as a basic action
 * Improve disabled and checkbox handling
 * Improve WordPress to Micropub conversion and use function from Post Kinds
 
 ### Version 4.4.3 ( 2023-01-02 )
+
 * Improve response to error and store logs in a metafield.
 
 ### Version 4.4.2 ( 2022-12-25 )
+
 * Fix a miscalled function
 * Adjust the load of options to better display
 * Add notation regarding difference between Micropub and Webmention for Bridgy
 
 ### Version 4.4.1 ( 2022-12-20 )
+
 * Add function to shorten content to title for Twitter Micropub if longer than 280 characters
 * Add function to shorten content to title for Mastodon Micropub if longer than 500 characters
 * Fix respecting of excerpt settings for Twitter and Mastodon
 * Fix issue with saving Syndication Links
 
 ### Version 4.4.0 ( 2022-12-19 )
+
 * Add filter to disable content addition
 * Hide settings if not being used
 * Refresh icons
@@ -272,75 +306,93 @@ In no particular order...
 * Fix issue with Mastodon Autoposter
 
 ### Version 4.3.11 ( 2022-05-14 )
+
 * Refresh icons and CSS build logic
 * Add function to determine mastodon URLs using the mastodon fields in user profiles
 
 ### Version 4.3.10 ( 2022-02-13 )
+
 * Refresh icons and other dependencies
 * Save syndication on save, and publish on publish, whereas previously it would only save if you published.
 
 ### Version 4.3.9 ( 2022-01-11 )
+
 * Switch empty links to data tags.
 * Switch to new query https://github.com/microdotblog/issues/issues/81 for microdotblog to save on multiple polling requests.
 
 ### Version 4.3.8 ( 2022-01-08 )
+
 * Refresh icons
 * Fix issue where hidden links were still taking up space.
 
 ### Version 4.3.7 ( 2021-11-02 )
+
 * Refresh icons
 
 ### Version 4.3.6 ( 2021-07-24 )
+
 * Style change
 
 ### Version 4.3.4 ( 2021-06-12 )
+
 * Refresh icons
 * Switch from id to class for syndication links wrapper
 
 ### Version 4.3.3 ( 2021-02-28 )
+
 * Fix issue with schema.
 
 ### Version 4.3.2 ( 2021-02-28 )
+
 * Introduce `pre_syndication_links_webmention` hook to allow you to clear cache before sending webmention.
 * Fix various PHP errors.
 
 ### Version 4.3.1 ( 2020-12-12 )
+
 * Introduce `syn_link_name` filter that allows you to set the name string.
 * Introduce `pre_syn_link_icon` filter to allow short circuiting the domain mapping and providing an SVG of your choice.
 * Save last return in post meta for diagnostic purposes.
 
 ### Version 4.3.0 ( 2020-10-13 )
+
 * Refresh icons
 * Add optional Pinboard POSSE that is only enabled with Post Kinds
 
 ### Version 4.2.6 ( 2020-08-15 )
+
 * Update dependencies
 * Adjust publish hook to try to improve success
 
 ### Version 4.2.5 ( 2020-08-03 )
+
 * Change time delay syndication code to behave more like the ping/webmention code
 
 ### Version 4.2.4 ( 2020-08-01 )
+
 * Change how to decide to postpone syndication if post is scheduled as publish status can be in the future
 * Add ?syndication query variable to allow for filtering archives by syndication link type
 
 ### Version 4.2.3 ( 2020-06-28 )
+
 * Add support for Reddit Via Bridgy
 * Dependency and icon updates
 * Add support for importing links from WP-To-Twitter ( props @tw2113)
 * Removal of master branch in favor of trunk branch.
 
 ### Version 4.2.2 ( 2020-03-26 )
+
 * Add support for Meetup via Bridgy, props @ngm
 * Dependency and icon updates
 * Code organization cleanup, props @tw2113 and @asuh
 
 ### Version 4.2.1 ( 2019-12-21 )
+
 * Fix escaping issue
 * Improve text for micro.blog syndication
 * Add filter to allow checkboxes to be disabled or checked or both
 
 ### Version 4.2.0 ( 2019-12-15 )
+
 * Add support for Bridgy Mastodon ( props @CharlieRoseMarie )
 * Check for empty values ( props @glueckpress )
 * Enhance Syndication Metabox ( props @glueckpress )
@@ -350,33 +402,41 @@ In no particular order...
 * Redo domain to icon mapping logic
 * Add micro.blog POSSE support
 
+
 ### Version 4.1.4 ( 2019-11-18 )
+
 * Refresh icons
 * Fix icon association to news.indieweb.org
 
 
 ### Version 4.1.3 ( 2019-07-01 )
+
 * Fix issue with providers not loading because of name change in webmention plugin
 * Refresh icons
 
 ### Version 4.1.2 ( 2019-05-12 )
+
 * Update icon size to be relative
 * Reschedule syndication if post status is in future
 * Trigger edit post hook if syndication links are added to try to invalidate cache
 
 ### Version 4.1.1 ( 2019-04-13 )
+
 * Update icons
 * Fix minor typo
 * Attempt at cache busting
 
 ### Version 4.1.0 ( 2019-02-09 )
+
 * Switch to inline SVG over SVG sprites to reduce load size
 * Add ability to configure arbitrary webmention POSSE providers on the settings page
 
 ### Version 4.0.5 ( 2019-01-05 )
+
 * Fix minor bug introduced in customizer by original of widget
 
 ### Version 4.0.4 ( 2018-12-29 )
+
 * Add setting to use the excerpt if set for Bridgy Publish to Twitter
 * Indienews(news.indieweb.org) will no longer be a bundled provider per request due spam issues
 * When automatically added to content wrap the links in an element for styling
@@ -384,19 +444,18 @@ In no particular order...
 * Added widget that calls new original of form function
 
 ### Version 4.0.3 ( 2018-12-08 )
+
 * Checks for 5.0 compatibility.
 
 ### Version 4.0.2 ( 2018-11-05 )
+
 * Fix PHP notice about incorrect setting
 * Restore Bridgy global settings options that were in the Bridgy plugin to disable the link back to the post and ignore whitespace
 
 ### Version 4.0.1 ( 2018-11-03 )
+
 * Fix issue with settings caused in previous version
 * Add base Bridgy class to store settings
 * Fix issue with display
 
-### Version 4.0.0 ( 2018-11-01 )
-* Add support for syndicating posts using an interface to any arbitrary provider
-* include support for syndicating from Micropub to any arbitrary provider
-
-Everything prior to this can be found in the changelog.md file.
+Earlier changelog in the changelog.md file

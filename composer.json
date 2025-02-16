@@ -34,7 +34,8 @@
     "yoast/phpunit-polyfills": "^1.0",
     "sirbrillig/phpcs-variable-analysis": "^2.11",
     "simple-icons/simple-icons": "*",
-    "scssphp/scssphp": "^1.13.0"
+    "scssphp/scssphp": "^1.13.0",
+    "wpreadme2markdown/wp2md": "^4.1"
   },
   "prefer-stable": true,
   "scripts": {
@@ -49,6 +50,7 @@
     "setup-wp-tests": "bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest",
     "setup-cp-tests": "bash bin/install-cp-tests.sh cpc_test root root 127.0.0.1 latest",
     "copy-simple-icons": "cp vendor/simple-icons/simple-icons/icons/*.svg svgs/simple-icons",
+    "wp2md": "vendor/bin/wp2md -i readme.txt -o readme.md",
     "install-codestandards": [
       "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
     ],
