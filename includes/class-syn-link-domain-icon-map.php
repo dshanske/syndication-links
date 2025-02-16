@@ -5,7 +5,7 @@ class Syn_Link_Domain_Icon_Map {
 
 	// Common mappings and custom mappings
 	private static $map = array(
-		'twitter.com'         => 'twitter',
+		'twitter.com'         => 'x',
 		'facebook.com'        => 'facebook',
 		'swarmapp.com'        => 'swarm',
 		'instagram.com'       => 'instagram',
