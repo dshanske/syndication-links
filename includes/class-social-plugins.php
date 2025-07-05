@@ -7,7 +7,7 @@ class Social_Plugins {
 		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_syn_plugins' ) );
 		add_filter( 'syn_links_url_to_name', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
 		add_action( 'wpt_tweet_posted', array( 'Social_Plugins', 'wptotwitter_to_syn_links' ), 10, 2 );
-		add_action( 'autoshare_for_twitter_after_status_update', array( 'Social_Plugins', 'autoshare_for_twitter_after_status_update' ), 10, 3 );
+		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_autopost_for_x_links' ) );
 	}
 
 	public static function url_to_name_plugins( $name, $url ) {
@@ -21,18 +21,18 @@ class Social_Plugins {
 		}
 	}
 
-	public static function array_flatten( $array ) { 
-		if ( ! is_array( $array ) ) { 	 
-			return false; 
-		} 
-		$result = array(); 
-		foreach ($array as $key => $value) { 
-			if (is_array($value)) { 
-			$result = array_merge($result, self::array_flatten($value)); 
-			} else { 
-			$result[$key] = $value; 
-			} 
-		} 
+	public static function array_flatten( $array ) {
+		if ( ! is_array( $array ) ) {
+			return false;
+		}
+		$result = array();
+		foreach ($array as $key => $value) {
+			if (is_array($value)) {
+			$result = array_merge($result, self::array_flatten($value));
+			} else {
+			$result[$key] = $value;
+			}
+		}
 		return $result;
 	}
 
@@ -46,7 +46,7 @@ class Social_Plugins {
 			return $urls;
 		}
 		$keys = array_keys( $keys );
-		
+
 		foreach(  $keys as $key ) {
 			if ( 0 === strpos( $key, 'snap' ) && 6 === strlen( $key ) ) {
 				$meta = get_post_meta( get_the_ID(), $key, true );
@@ -84,17 +84,6 @@ class Social_Plugins {
 			}
 		}
 		return array_merge( $see_on, $urls );
-	}
-
-	public static function autoshare_for_twitter_after_status_update( $response, $update_data, $post ) {
-		$post = get_post( $post );
-		if ( $post ) {
-			$data = get_post_meta( $post->ID, 'autoshare_status', true );
-			$tweet_id = $tweet_status['twitter_id'] ?? '';
-			$handle   = $tweet_status['handle'] ?? 'i/web';
-			$url = esc_url( 'https://twitter.com/' . $handle . '/status/' . $tweet_id );
-			add_post_syndication_link( $post->ID, $url );
-		}
 	}
 
 	public static function add_links_from_snap() {
@@ -186,6 +175,58 @@ class Social_Plugins {
 		);
 
 		return add_post_syndication_link( $id, $url );
+	}
+
+	/**
+	 * Add the Autopost for X links to the syndication links.
+	 *
+	 * @see https://wordpress.org/plugins/autoshare-for-twitter/ for more information on plugin.
+	 *
+	 * @param array $urls The array of URLs to syndicate to.
+	 * @return array The array of URLs to syndicate to.
+	 */
+	public static function add_autopost_for_x_links( $urls ) {
+		$post_id = get_the_ID();
+		if ( empty( $post_id ) ) {
+			return $urls;
+		}
+
+		// Only add tweet URLs to the syndication links on the front end.
+		if ( ( is_admin() ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+			return $urls;
+		}
+
+		try {
+			$links  = array();
+			$tweets = get_post_meta( $post_id, 'autoshare_status', true );
+			if ( ! empty( $tweets ) && is_array( $tweets ) ) {
+				foreach ( $tweets as $tweet ) {
+					if ( 'published' === $tweet['status'] && ! empty( $tweet['twitter_id'] ) ) {
+						$tweet_id = $tweet['twitter_id'];
+						$handle   = $tweet['handle'] ?? 'i/web';
+						$url      = esc_url( 'https://x.com/' . $handle . '/status/' . $tweet_id );
+
+						// Only add valid tweet URLs.
+						if (
+							! empty( $url ) &&
+							false !== strpos( $url, '/status/' ) &&
+							strlen( $url ) > 30 &&
+							wp_http_validate_url( $url )
+						) {
+							$links[] = $url;
+						}
+					}
+				}
+			}
+
+			if ( ! empty( $links ) ) {
+				return array_merge( $urls, $links );
+			}
+		} catch ( Exception $e ) {
+			error_log( 'Error adding autoshare for twitter links to syndication links: ' . $e->getMessage() );
+		}
+
+		return $urls;
 	}
 
 } // End Class
