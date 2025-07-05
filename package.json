@@ -3,7 +3,7 @@
     "node": ">= 0.10.0"
   },
   "devDependencies": {
-    "genericons-neue": "*",
+    "genericons-neue": "*"
   },
   "scripts": {
     "build-icons": "node js/simpleicons.js"

@@ -1,7 +1,7 @@
 == Syndication Links ===
 Contributors: dshanske
 Tags: syndication, indieweb, POSSE, sharing
-Tested up to: 6.7
+Tested up to: 6.8
 Stable tag: 4.5.2
 License: GPLv2 or later
 
@@ -164,6 +164,9 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 4.5.3 ( 2025-07-05 ) =
+* Add support for Autopost for X plugin, props @iamdharmesh and the plugin team there
 
 = Version 4.5.2 ( 2025-02-16 ) =
 * Map Twitter to X icon as Twitter icon removed from set
