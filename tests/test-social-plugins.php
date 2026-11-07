@@ -43,6 +43,18 @@ class Test_Social_Plugins extends WP_UnitTestCase {
 		$this->assertSame( 'website', Social_Plugins::url_to_name_plugins( 'website', 'https://other.example/post' ) );
 	}
 
+	public function test_instance_host_is_compared_case_insensitively() {
+		update_option( 'autopostToMastodon-instance', 'https://Toot.Example.Social/' );
+
+		$this->assertSame( 'mastodon', Social_Plugins::url_to_name_plugins( 'website', 'https://toot.example.social/@someone/123' ) );
+	}
+
+	public function test_an_invalid_instance_is_ignored() {
+		update_option( 'autopostToMastodon-instance', 'not a url' );
+
+		$this->assertSame( 'website', Social_Plugins::url_to_name_plugins( 'website', 'https://toot.example.social/@someone/123' ) );
+	}
+
 	public function test_without_an_instance_names_are_unchanged() {
 		$this->assertSame( 'website', Social_Plugins::url_to_name_plugins( 'website', 'https://toot.example.social/@someone/123' ) );
 	}
