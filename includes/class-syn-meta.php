@@ -261,10 +261,12 @@ class Syn_Meta {
 			esc_html__( 'Add Links to this same content on other sites', 'syndication-links' )
 		);
 		$html .= '<ul>';
-		foreach ( $urls as $url ) {
+		foreach ( array_values( $urls ) as $i => $url ) {
+			// Only the first input has the ID, which the label points at.
 			$html .= sprintf(
-				'<li><input type="text" name="syndication_urls[]" class="widefat" id="syndication_urls" value="%s" /></li>',
-				esc_url_raw( $url )
+				'<li><input type="text" name="syndication_urls[]" class="widefat"%1$s value="%2$s" /></li>',
+				0 === $i ? ' id="syndication_urls"' : '',
+				esc_attr( $url )
 			);
 		}
 		$html .= '</ul>';
