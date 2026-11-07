@@ -5,7 +5,7 @@ add_action( 'init', array( 'Social_Plugins', 'init' ) );
 class Social_Plugins {
 	public static function init() {
 		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_syn_plugins' ) );
-		add_filter( 'syn_links_url_to_name', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
+		add_filter( 'syn_link_mapping', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
 		add_action( 'wpt_tweet_posted', array( 'Social_Plugins', 'wptotwitter_to_syn_links' ), 10, 2 );
 		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_autopost_for_x_links' ) );
 	}
@@ -19,6 +19,7 @@ class Social_Plugins {
 				}
 			}
 		}
+		return $name;
 	}
 
 	public static function array_flatten( $array ) {
