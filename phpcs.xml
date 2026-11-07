@@ -14,9 +14,9 @@
 	<arg name="parallel" value="50"/>
 
         <rule ref="PHPCompatibility"/>
-        <config name="testVersion" value="7.0-"/>
+        <config name="testVersion" value="7.4-"/>
         <rule ref="PHPCompatibilityWP"/>
-        <config name="minimum_supported_wp_version" value="4.9"/>
+        <config name="minimum_supported_wp_version" value="6.2"/>
         <rule ref="WordPress.WP.DeprecatedFunctions" />
 
         <rule ref="WordPress">
