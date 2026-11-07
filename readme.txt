@@ -1,7 +1,9 @@
 == Syndication Links ===
 Contributors: dshanske
 Tags: syndication, indieweb, POSSE, sharing
-Tested up to: 6.8
+Requires at least: 6.2
+Requires PHP: 7.4
+Tested up to: 7.1
 Stable tag: 4.5.3
 License: GPLv2 or later
 
@@ -118,6 +120,10 @@ originalofform.php in your theme folder the function will return it so you can c
 Development and bug reports on this plugin is on Github at https://github.com/dshanske/syndication-links
 
 == Upgrade Notice ==
+
+= Version 5.0.0 =
+
+Syndication Links now requires PHP 7.4 and WordPress 6.2 or later, or ClassicPress. Update those first: on older versions, WordPress won't activate or update the plugin.
 
 = Version 4.4.0 =
 

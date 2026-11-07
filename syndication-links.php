@@ -4,8 +4,8 @@
  * Plugin URI: http://wordpress.org/plugins/syndication-links
  * Description: Add Links to Syndicated Copies of Your Posts
  * Version: 4.5.3
- * Requires at least: 4.9.9
- * Requires PHP: 7.0
+ * Requires at least: 6.2
+ * Requires PHP: 7.4
  * Author: David Shanske
  * Author URI: http://david.shanske.com
  * Text Domain: syndication-links
