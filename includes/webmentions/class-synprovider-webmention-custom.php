@@ -1,5 +1,9 @@
 <?php
 
+// The settings are registered once, whether or not any custom providers exist yet.
+add_action( 'init', array( 'SynProvider_Webmention_Custom', 'register_settings' ) );
+add_action( 'admin_init', array( 'SynProvider_Webmention_Custom', 'admin_init' ), 12 );
+
 class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 	protected $target;
 
@@ -11,8 +15,16 @@ class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 		$this->uid    = sanitize_title( $args['uid'] );
 		$this->target = $args['target'];
 
-		add_action( 'admin_init', array( $this, 'admin_init' ), 12 );
+		// Parent Constructor
+		parent::__construct( $args );
+	}
 
+	/**
+	 * Registers the custom providers option.
+	 *
+	 * @since 5.0.0
+	 */
+	public static function register_settings() {
 		register_setting(
 			'syndication_providers',
 			'syndication_links_custom_posse',
@@ -42,9 +54,6 @@ class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 				'default'      => array(),
 			)
 		);
-
-		// Parent Constructor
-		parent::__construct( $args );
 	}
 
 	public static function admin_init() {
@@ -82,9 +91,9 @@ class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 
 	public static function webmention_callback( $args ) {
 		$name   = 'syndication_links_custom_posse';
-		$custom = get_option( $name );
+		$custom = (array) get_option( $name, array() );
 		foreach ( $custom as $key => $value ) {
-			$custom[ $key ] = array_filter( $value );
+			$custom[ $key ] = array_filter( (array) $value );
 		}
 		$custom = array_filter( $custom );
 		esc_html_e( 'Enter Name, UID, and Target URL for all Custom Webmention POSSE options', 'syndication-links' );

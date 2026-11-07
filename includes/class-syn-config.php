@@ -169,7 +169,8 @@ class Syn_Config {
 
 
 	public static function admin_enqueue( $hook_suffix ) {
-		$hooks = array( 'indieweb_page_syndication_links' );
+		// The settings page is under the IndieWeb menu if that plugin is active, otherwise under Settings.
+		$hooks = array( 'indieweb_page_syndication_links', 'settings_page_syndication_links' );
 		if ( in_array( $hook_suffix, $hooks, true ) ) {
 			wp_enqueue_style(
 				'syn_admin',
@@ -181,6 +182,14 @@ class Syn_Config {
 				'syndication_links_password',
 				plugins_url( 'js/password.js', __DIR__ ),
 				array(),
+				SYNDICATION_LINKS_VERSION,
+				true
+			);
+			// The Add and Remove buttons for custom providers.
+			wp_enqueue_script(
+				'synlinks',
+				plugins_url( 'js/synlinks.js', __DIR__ ),
+				array( 'jquery' ),
 				SYNDICATION_LINKS_VERSION,
 				true
 			);
