@@ -2,3 +2,4 @@ node_modules/*
 sass/.sass-cache/*
 vendor/*
 *.scssc
+composer.lock
