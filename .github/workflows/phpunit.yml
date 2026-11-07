@@ -1,0 +1,49 @@
+name: Unit Testing
+on:
+    push:
+    pull_request:
+jobs:
+  phpunit:
+    name: PHP ${{ matrix.php }} / ${{ startsWith( matrix.wp, 'cp-' ) && 'ClassicPress' || 'WP' }} ${{ startsWith( matrix.wp, 'cp-' ) && 'latest' || matrix.wp }}
+    runs-on: ubuntu-latest
+    services:
+     mysql:
+       image: mariadb:10.11
+       env:
+         MYSQL_ROOT_PASSWORD: root
+       ports:
+         - 3306:3306
+       options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
+    strategy:
+      fail-fast: false
+      matrix:
+        php: [ '7.4', '8.1', '8.3', '8.4' ]
+        wp: [ '6.2', 'latest' ]
+        include:
+          # The latest ClassicPress release, resolved by install-wp-tests.sh.
+          - php: '7.4'
+            wp: 'cp-latest'
+          - php: '8.3'
+            wp: 'cp-latest'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Subversion
+        # install-wp-tests.sh exports the WordPress test library with svn,
+        # which ubuntu-latest no longer ships.
+        run: sudo apt-get update && sudo apt-get install -y subversion
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer
+          extensions: mysqli
+      - name: Install Composer dependencies for PHP
+        uses: ramsey/composer-install@v3
+      - name: Setup Test Environment
+        run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 ${{ matrix.wp }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Unit Testing
+        run: composer phpunit
