@@ -85,6 +85,31 @@ class Test_Link_Saving extends WP_UnitTestCase {
 	}
 
 	/**
+	 * A value that isn't a list leaves the links alone, instead of a fatal error.
+	 */
+	public function test_saving_a_non_array_keeps_the_links() {
+		$post_id = self::factory()->post->create();
+		add_post_syndication_link( $post_id, 'https://old.example/1' );
+		$this->submit( 'https://a.example/1' );
+
+		Syn_Meta::save_post_meta( $post_id );
+
+		$this->assertSame( array( 'https://old.example/1' ), get_post_syndication_links_data( $post_id ) );
+	}
+
+	/**
+	 * Nested arrays in the submitted list are ignored.
+	 */
+	public function test_saving_ignores_nested_values() {
+		$post_id = self::factory()->post->create();
+		$this->submit( array( 'https://a.example/1', array( 'https://b.example/2' ) ) );
+
+		Syn_Meta::save_post_meta( $post_id );
+
+		$this->assertSame( array( 'https://a.example/1' ), array_values( get_post_meta( $post_id, 'mf2_syndication', true ) ) );
+	}
+
+	/**
 	 * A save without the metabox fields (e.g. Quick Edit) leaves the links alone.
 	 */
 	public function test_saving_without_the_field_keeps_the_links() {
