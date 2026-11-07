@@ -192,7 +192,7 @@ class Syn_Link_Domain_Icon_Map {
 			foreach ( $results as $result ) {
 				$url = get_user_meta( $result, 'mastodon', true );
 				if ( ! empty( $url ) && wp_http_validate_url( $url ) ) {
-					$value[] = wp_parse_url( $value, PHP_URL_HOST );
+					$value[] = wp_parse_url( $url, PHP_URL_HOST );
 				}
 			}
 		}
