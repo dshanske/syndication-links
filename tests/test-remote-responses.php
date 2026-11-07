@@ -36,8 +36,10 @@ class Test_Remote_Responses extends WP_UnitTestCase {
 	 * @param array  $headers Headers.
 	 */
 	private function respond( $code, $body, $headers = array( 'content-type' => 'application/json' ) ) {
+		// Real responses use a case-insensitive dictionary; wp_remote_retrieve_header() relies on it.
+		$dictionary     = class_exists( 'WpOrg\\Requests\\Utility\\CaseInsensitiveDictionary' ) ? 'WpOrg\\Requests\\Utility\\CaseInsensitiveDictionary' : 'Requests_Utility_CaseInsensitiveDictionary';
 		$this->response = array(
-			'headers'  => $headers,
+			'headers'  => new $dictionary( $headers ),
 			'body'     => $body,
 			'response' => array(
 				'code'    => $code,
