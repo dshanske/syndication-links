@@ -432,6 +432,10 @@ class Syn_Meta {
 		foreach ( $urls as $url ) {
 			if ( empty( $url ) || ! is_string( $url ) ) {
 				continue; }
+			// Bridgy targets aren't copies of the post; get_syndication_links() adds them as invisible links.
+			if ( self::is_bridgy_target( $url ) ) {
+				continue;
+			}
 			$name = Syn_Link_Domain_Icon_Map::url_to_name( $url );
 			// Only build the icon when it's shown, so text-only and hidden links don't load icon styles.
 			$icon = ( $r['icons'] && 'hidden' !== $display ) ? Syn_Link_Domain_Icon_Map::get_icon( $name ) : '';
@@ -439,10 +443,6 @@ class Syn_Meta {
 				$name = self::extract_domain_name( $url );
 			}
 			$syn = $icon . ( $r['text'] ? Syn_Link_Domain_Icon_Map::get_title( $name ) : '' );
-
-			if ( 'brid.gy' === wp_parse_url( PHP_URL_HOST ) ) {
-				$syn = '';
-			}
 
 			if ( 'hidden' === $display ) {
 				$link    = '<data class="u-syndication" value="%1$s"></data>';
@@ -454,6 +454,44 @@ class Syn_Meta {
 		}
 
 		return $links;
+	}
+
+	/**
+	 * Whether a URL is a Bridgy target, such as https://brid.gy/publish/mastodon or https://fed.brid.gy/.
+	 *
+	 * The Bridgy webmention providers add the target to the post's links while they
+	 * syndicate, because Bridgy checks that the post links to it. It isn't a copy of
+	 * the post, so it's not shown as one.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $url URL.
+	 * @return bool
+	 */
+	public static function is_bridgy_target( $url ) {
+		$host = strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
+		return 'brid.gy' === $host || str_ends_with( $host, '.brid.gy' );
+	}
+
+	/**
+	 * Builds invisible links to the Bridgy targets among a post's links.
+	 *
+	 * Bridgy documents an empty link, e.g. <a href="https://brid.gy/publish/mastodon"></a>,
+	 * as what it looks for, so these are output in every display mode.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string[] $urls Syndication links.
+	 * @return string Markup.
+	 */
+	public static function get_bridgy_target_links( $urls ) {
+		$html = '';
+		foreach ( (array) $urls as $url ) {
+			if ( is_string( $url ) && self::is_bridgy_target( $url ) ) {
+				$html .= sprintf( '<a href="%1$s"></a>', esc_url( $url ) );
+			}
+		}
+		return $html;
 	}
 
 	public static function get_syndication_links_display_option() {
@@ -491,9 +529,10 @@ class Syn_Meta {
 	public static function get_syndication_links( $type, $id = null, $args = array() ) {
 		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
 
-		$links = self::get_syndication_links_elements( $type, $id, $r );
+		$targets = self::get_bridgy_target_links( self::get_syndication_links_data( $type, $id ) );
+		$links   = self::get_syndication_links_elements( $type, $id, $r );
 		if ( empty( $links ) ) {
-			return '';
+			return $targets;
 		}
 
 		if ( $r['show_text_before'] ) {
@@ -524,6 +563,6 @@ class Syn_Meta {
 				$after  = '</li></ul>';
 		}
 
-		return $textbefore . $before . join( $sep, $links ) . $after;
+		return $textbefore . $before . join( $sep, $links ) . $after . $targets;
 	}
 } // End Class
