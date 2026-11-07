@@ -34,6 +34,8 @@ class Syn_Link_Domain_Icon_Map {
 		'bsky.app'            => 'bluesky',
 		'bsky.social'         => 'bluesky',
 		'bookwyrm.social'     => 'bookwyrm',
+		'getrevue.co'         => 'revue',
+		'del.icio.us'         => 'delicious',
 
 	);
 
@@ -56,8 +58,62 @@ class Syn_Link_Domain_Icon_Map {
 			$dir . 'simple-icons',
 			$dir . 'genericons-neue',
 			$dir,
+			self::get_historic_icon_dir(),
 		);
 		return apply_filters( 'syn_icon_file_dirs', $dirs );
+	}
+
+	/**
+	 * Directory of the historic icons: retired services that old posts still link to.
+	 *
+	 * @since 4.6.0
+	 *
+	 * @return string Directory path, without a trailing slash.
+	 */
+	public static function get_historic_icon_dir() {
+		return sprintf( '%1$ssvgs/historic', plugin_dir_path( __DIR__ ) );
+	}
+
+	/**
+	 * Whether an icon is one of the historic icons.
+	 *
+	 * @since 4.6.0
+	 *
+	 * @param string $name The icon name.
+	 * @return bool True if the icon file found for the name is in the historic directory.
+	 */
+	public static function is_historic( $name ) {
+		$file = self::get_icon_filename( $name );
+		return $file && dirname( $file ) === self::get_historic_icon_dir();
+	}
+
+	/**
+	 * Enqueue the stylesheet with the historic icons' colours.
+	 *
+	 * Called when a historic icon is rendered, so the stylesheet only loads on
+	 * pages that show one. Styles enqueued after the head are printed in the
+	 * footer.
+	 *
+	 * @since 4.6.0
+	 */
+	public static function enqueue_historic_style() {
+		// Black-and-white mode doesn't use brand colours.
+		if ( '1' === get_option( 'syndication-links_bw' ) ) {
+			return;
+		}
+
+		/**
+		 * Filters whether to load the historic icons' stylesheet when a historic icon is shown.
+		 *
+		 * @since 4.6.0
+		 *
+		 * @param bool $load Whether to load the stylesheet. Default true.
+		 */
+		if ( ! apply_filters( 'syn_load_historic_icon_style', true ) ) {
+			return;
+		}
+
+		wp_enqueue_style( 'syndication-links-historic', plugin_dir_url( __DIR__ ) . 'css/syn-historic.min.css', array(), SYNDICATION_LINKS_VERSION );
 	}
 
 
@@ -96,6 +152,9 @@ class Syn_Link_Domain_Icon_Map {
 		$icon  = self::get_icon_svg( $name );
 		$title = self::get_title( $name );
 		if ( $icon ) {
+			if ( self::is_historic( $name ) ) {
+				self::enqueue_historic_style();
+			}
 			return sprintf( '<span class="syndication-link-icon svg-%1$s" style="display: inline-block; max-width: 1rem; margin: 2px;" aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $title ), $icon );
 		}
 		return $name;
