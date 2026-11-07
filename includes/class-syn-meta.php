@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) || exit;
+
 // Adds Post Meta Box for Syndication URLs
 add_action( 'init', array( 'Syn_Meta', 'init' ) );
 

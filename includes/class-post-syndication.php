@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) || exit;
+
 // Triggers Syndication using Micropub or a Metabox in the UI
 
 // The Post_Syndication class sets up a post meta box to trigger

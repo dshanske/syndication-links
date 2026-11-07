@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
 /* Requires Post Kinds for Now.
  */
 class Syndication_Provider_Pinboard extends Syndication_Provider {

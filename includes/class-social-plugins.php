@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
 add_action( 'init', array( 'Social_Plugins', 'init' ) );
 
 class Social_Plugins {

@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
 class Widget_Original_Of extends WP_Widget {
 	/**
 	 * Register widget with WordPress.

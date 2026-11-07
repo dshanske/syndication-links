@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
 add_action( 'init', array( 'Syn_Config', 'init' ) );
 add_action( 'admin_init', array( 'Syn_Config', 'admin_init' ) );
 add_action( 'admin_menu', array( 'Syn_Config', 'admin_menu' ), 11 );

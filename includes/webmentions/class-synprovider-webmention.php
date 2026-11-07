@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
 class SynProvider_Webmention extends Syndication_Provider {
 
 	public function send_webmention( $url ) {

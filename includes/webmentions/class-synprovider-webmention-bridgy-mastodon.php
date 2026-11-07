@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
 class SynProvider_Webmention_Bridgy_Mastodon extends SynProvider_Webmention_Bridgy {
 
 	public function __construct( $args = array() ) {

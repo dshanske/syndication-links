@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
 // The settings are registered once, whether or not any custom providers exist yet.
 add_action( 'init', array( 'SynProvider_Webmention_Custom', 'register_settings' ) );
 add_action( 'admin_init', array( 'SynProvider_Webmention_Custom', 'admin_init' ), 12 );
