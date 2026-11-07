@@ -56,6 +56,16 @@ if ( ! class_exists( 'Syn_Test_Provider' ) ) {
 class Test_Post_Syndication extends WP_UnitTestCase {
 
 	/**
+	 * A checked attribute: checked='checked' in WordPress, a bare checked in ClassicPress.
+	 */
+	const CHECKED = '/\\schecked(=|\\s|>|\/)/';
+
+	/**
+	 * A disabled attribute, in either form.
+	 */
+	const DISABLED = '/\\sdisabled(=|\\s|>|\/)/';
+
+	/**
 	 * Registered providers before each test, restored afterwards.
 	 *
 	 * @var array
@@ -350,7 +360,7 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'name="syndicate-to[]" id="two" value="two"', $html );
 		$this->assertStringContainsString( 'Name of two', $html );
 		$this->assertStringNotContainsString( 'value="one"', $html );
-		$this->assertStringNotContainsString( 'checked=', $html );
+		$this->assertDoesNotMatchRegularExpression( self::CHECKED, $html );
 	}
 
 	public function test_checked_state_is_filterable() {
@@ -366,7 +376,7 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 
 		$html = Post_Syndication::checkboxes( $post_id );
 
-		$this->assertStringContainsString( "checked='checked'", $html );
+		$this->assertMatchesRegularExpression( self::CHECKED, $html );
 		$this->assertSame( array( 'one', $post_id ), $seen );
 	}
 
@@ -379,8 +389,8 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 
 		$html = Post_Syndication::checkboxes( $post_id );
 
-		$this->assertStringContainsString( "disabled='disabled'", $html );
-		$this->assertStringNotContainsString( 'checked=', $html );
+		$this->assertMatchesRegularExpression( self::DISABLED, $html );
+		$this->assertDoesNotMatchRegularExpression( self::CHECKED, $html );
 	}
 
 	/**
