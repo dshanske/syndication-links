@@ -88,7 +88,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 			$args['headers'] = array_merge( $args['headers'], $headers );
 		}
 
-		if ( ! array_key_exists( 'Authorization', args['headers'] ) && ! empty( $this->token ) ) {
+		if ( ! array_key_exists( 'Authorization', $args['headers'] ) && ! empty( $this->token ) ) {
 			$args['headers']['Authorization'] = 'Bearer ' . $this->token;
 		}
 
@@ -99,7 +99,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 
 		$code = wp_remote_retrieve_response_code( $response );
 		$body = wp_remote_retrieve_body( $response );
-		if ( ( $code / 100 ) !== 2 ) {
+		if ( 2 !== (int) floor( $code / 100 ) ) {
 			return new WP_Error( 'invalid_response', $body, array( 'status' => $code ) );
 		}
 
