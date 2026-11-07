@@ -66,7 +66,7 @@ class Syn_Link_Domain_Icon_Map {
 	/**
 	 * Directory of the historic icons: retired services that old posts still link to.
 	 *
-	 * @since 4.6.0
+	 * @since 5.0.0
 	 *
 	 * @return string Directory path, without a trailing slash.
 	 */
@@ -77,7 +77,7 @@ class Syn_Link_Domain_Icon_Map {
 	/**
 	 * Whether an icon is one of the historic icons.
 	 *
-	 * @since 4.6.0
+	 * @since 5.0.0
 	 *
 	 * @param string $name The icon name.
 	 * @return bool True if the icon file found for the name is in the historic directory.
@@ -94,7 +94,7 @@ class Syn_Link_Domain_Icon_Map {
 	 * pages that show one. Styles enqueued after the head are printed in the
 	 * footer.
 	 *
-	 * @since 4.6.0
+	 * @since 5.0.0
 	 */
 	public static function enqueue_historic_style() {
 		// Black-and-white mode doesn't use brand colours.
@@ -105,7 +105,7 @@ class Syn_Link_Domain_Icon_Map {
 		/**
 		 * Filters whether to load the historic icons' stylesheet when a historic icon is shown.
 		 *
-		 * @since 4.6.0
+		 * @since 5.0.0
 		 *
 		 * @param bool $load Whether to load the stylesheet. Default true.
 		 */
