@@ -96,7 +96,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 			$response = wp_remote_get( $url, $args );
 			if ( ! is_wp_error( $response ) ) {
 				$code = wp_remote_retrieve_response_code( $response );
-				if ( ( $code / 100 ) === 2 ) {
+				if ( 2 === (int) floor( $code / 100 ) ) {
 					$json = json_decode( $response['body'], true );
 					if ( array_key_exists( 'home_page_url', $json ) ) {
 						add_post_syndication_link( $post_id, esc_url( $json['home_page_url'] ) );
@@ -142,7 +142,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 			return $response;
 		}
 		$code = wp_remote_retrieve_response_code( $response );
-		if ( ( $code / 100 ) !== 2 ) {
+		if ( 2 !== (int) floor( $code / 100 ) ) {
 			return new WP_Error( 'invalid_response', wp_remote_retrieve_body( $response ), array( 'status' => $code ) );
 		}
 		$json = json_decode( $response['body'], true );

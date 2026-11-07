@@ -135,7 +135,7 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 		}
 
 		$code = wp_remote_retrieve_response_code( $response );
-		if ( ( $code / 100 ) !== 2 ) {
+		if ( 2 !== (int) floor( $code / 100 ) ) {
 			return new WP_Error( 'invalid_response', wp_remote_retrieve_body( $response ), array( 'status' => $code ) );
 		}
 
