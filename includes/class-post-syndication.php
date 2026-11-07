@@ -189,7 +189,8 @@ class Post_Syndication {
 		$syndicate_to = (array) $syndicate_to;
 		$status       = get_post_status( $post );
 
-		// Private posts aren't public, so they're never sent anywhere.
+		// Syndication is public: no provider supports private posts yet, so they're never sent.
+		// If one ever does, allow it here.
 		if ( 'private' === $status ) {
 			return false;
 		}
