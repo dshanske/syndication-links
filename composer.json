@@ -49,7 +49,11 @@
     "phpunit": "./vendor/bin/phpunit",
     "setup-wp-tests": "bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest",
     "setup-cp-tests": "bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 cp-latest",
-    "copy-simple-icons": "cp vendor/simple-icons/simple-icons/icons/*.svg svgs/simple-icons",
+    "build-icons": "@php bin/build-icons.php",
+    "build": [
+      "@build-icons",
+      "@build-css"
+    ],
     "wp2md": "vendor/bin/wp2md -i readme.txt -o readme.md",
     "install-codestandards": [
       "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
