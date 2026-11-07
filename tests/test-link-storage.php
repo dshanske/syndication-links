@@ -10,7 +10,13 @@
 
 class Test_Link_Storage extends WP_UnitTestCase {
 
+	/**
+	 * Syn_Meta::init() registers the meta key for posts and comments.
+	 */
 	public function test_meta_is_registered_for_posts_and_comments() {
+		// The test framework unregisters all meta keys after each test, so register them again.
+		Syn_Meta::init();
+
 		$this->assertTrue( registered_meta_key_exists( 'post', 'mf2_syndication' ) );
 		$this->assertTrue( registered_meta_key_exists( 'comment', 'mf2_syndication' ) );
 
