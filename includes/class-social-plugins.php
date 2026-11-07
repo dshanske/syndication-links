@@ -5,20 +5,20 @@ add_action( 'init', array( 'Social_Plugins', 'init' ) );
 class Social_Plugins {
 	public static function init() {
 		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_syn_plugins' ) );
-		add_filter( 'syn_links_url_to_name', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
+		add_filter( 'syn_link_mapping', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
 		add_action( 'wpt_tweet_posted', array( 'Social_Plugins', 'wptotwitter_to_syn_links' ), 10, 2 );
 		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_autopost_for_x_links' ) );
 	}
 
 	public static function url_to_name_plugins( $name, $url ) {
 		if ( class_exists( 'autopostToMastodon' ) ) {
-			$instance = get_option( 'autopostToMastodon-instance', null );
-			if ( wp_http_validate_url( $instance ) ) {
-				if ( wp_parse_url( $instance, PHP_URL_HOST ) === wp_parse_url( $url, PHP_URL_HOST ) ) {
-					return 'mastodon';
-				}
+			// Compare hosts only: wp_http_validate_url() would do a DNS lookup for every link shown.
+			$instance = wp_parse_url( (string) get_option( 'autopostToMastodon-instance', '' ), PHP_URL_HOST );
+			if ( $instance && strtolower( $instance ) === strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) ) ) {
+				return 'mastodon';
 			}
 		}
+		return $name;
 	}
 
 	public static function array_flatten( $array ) {
