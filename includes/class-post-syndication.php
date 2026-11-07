@@ -192,9 +192,10 @@ class Post_Syndication {
 		$current   = time();
 		$diff      = $current - $timestamp;
 
-		// If it is for later then schedule it for later.
+		// If the post is dated in the future, syndicate it when it's published, not now.
 		if ( $diff < 0 ) {
-			wp_schedule_single_event( $timestamp + 5, 'syn_syndication', array( $post_ID, $syndicate_to ) );
+			self::schedule( $post_ID, $syndicate_to, $timestamp + 5 );
+			return true;
 		}
 
 		// Reject this
@@ -226,6 +227,30 @@ class Post_Syndication {
 			return $log;
 		}
 		return true;
+	}
+
+	/**
+	 * Schedules syndication of a post for later.
+	 *
+	 * Keeps one event per post and set of targets: if the post's date has
+	 * changed since it was scheduled, the event moves to the new time.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int      $post_ID      Post ID.
+	 * @param string[] $syndicate_to UIDs of the targets.
+	 * @param int      $time         Unix timestamp to syndicate at.
+	 */
+	public static function schedule( $post_ID, $syndicate_to, $time ) {
+		$args = array( $post_ID, $syndicate_to );
+		$next = wp_next_scheduled( 'syn_syndication', $args );
+		if ( $next === $time ) {
+			return;
+		}
+		if ( $next ) {
+			wp_unschedule_event( $next, 'syn_syndication', $args );
+		}
+		wp_schedule_single_event( $time, 'syn_syndication', $args );
 	}
 
 	public static function syndication_log( $input, $target ) {

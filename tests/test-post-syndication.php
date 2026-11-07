@@ -231,20 +231,99 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Future posts are rescheduled for when they're published.
-	 *
-	 * Whether they're also syndicated straight away is #229 (REVIEW.md B6); its fix adds that test.
+	 * Future posts are scheduled for when they're published, and not sent now (#229).
 	 */
-	public function test_future_posts_are_scheduled() {
+	public function test_future_posts_are_scheduled_not_sent() {
 		$this->register_fakes( 'one' );
 		$post_id = $this->post_aged( -HOUR_IN_SECONDS );
 
-		Post_Syndication::syndication( $post_id, array( 'one' ) );
+		$this->assertTrue( Post_Syndication::syndication( $post_id, array( 'one' ) ) );
 
 		$this->assertSame(
 			get_post_timestamp( $post_id ) + 5,
 			wp_next_scheduled( 'syn_syndication', array( $post_id, array( 'one' ) ) )
 		);
+		$this->assertSame( array(), Syn_Test_Provider::$calls );
+		$this->assertFalse( metadata_exists( 'post', $post_id, 'syndication_log' ) );
+	}
+
+	/**
+	 * Asking again for the same post and targets keeps one event.
+	 */
+	public function test_future_posts_are_scheduled_once() {
+		$this->register_fakes( 'one' );
+		$post_id = $this->post_aged( -HOUR_IN_SECONDS );
+
+		Post_Syndication::syndication( $post_id, array( 'one' ) );
+		Post_Syndication::syndication( $post_id, array( 'one' ) );
+
+		$this->assertSame( 1, $this->count_events( $post_id, array( 'one' ) ) );
+	}
+
+	/**
+	 * If the publish date moves, the event moves with it.
+	 */
+	public function test_rescheduled_posts_move_the_event() {
+		$this->register_fakes( 'one' );
+		$post_id = $this->post_aged( -HOUR_IN_SECONDS );
+		Post_Syndication::syndication( $post_id, array( 'one' ) );
+
+		$later = time() + 2 * HOUR_IN_SECONDS;
+		wp_update_post(
+			array(
+				'ID'            => $post_id,
+				'post_date'     => wp_date( 'Y-m-d H:i:s', $later ),
+				'post_date_gmt' => gmdate( 'Y-m-d H:i:s', $later ),
+			)
+		);
+		Post_Syndication::syndication( $post_id, array( 'one' ) );
+
+		$this->assertSame( 1, $this->count_events( $post_id, array( 'one' ) ) );
+		$this->assertSame( $later + 5, wp_next_scheduled( 'syn_syndication', array( $post_id, array( 'one' ) ) ) );
+	}
+
+	/**
+	 * When the event runs after the post is published, the post is sent once.
+	 */
+	public function test_scheduled_event_sends_the_post() {
+		$this->register_fakes( 'one' );
+		$post_id = $this->post_aged( -HOUR_IN_SECONDS );
+		Post_Syndication::syndication( $post_id, array( 'one' ) );
+
+		// The publish time arrives.
+		$now = time() - MINUTE_IN_SECONDS;
+		wp_update_post(
+			array(
+				'ID'            => $post_id,
+				'post_status'   => 'publish',
+				'post_date'     => wp_date( 'Y-m-d H:i:s', $now ),
+				'post_date_gmt' => gmdate( 'Y-m-d H:i:s', $now ),
+			)
+		);
+		wp_unschedule_event( wp_next_scheduled( 'syn_syndication', array( $post_id, array( 'one' ) ) ), 'syn_syndication', array( $post_id, array( 'one' ) ) );
+		do_action( 'syn_syndication', $post_id, array( 'one' ) );
+
+		$this->assertSame( array( array( 'one', $post_id ) ), Syn_Test_Provider::$calls );
+		$this->assertCount( 1, get_post_meta( $post_id, 'syndication_log', true ) );
+		$this->assertFalse( wp_next_scheduled( 'syn_syndication', array( $post_id, array( 'one' ) ) ) );
+	}
+
+	/**
+	 * Counts the scheduled syn_syndication events for a post and targets.
+	 *
+	 * @param int      $post_id Post ID.
+	 * @param string[] $uids    UIDs.
+	 * @return int
+	 */
+	private function count_events( $post_id, $uids ) {
+		$key   = md5( serialize( array( $post_id, $uids ) ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize -- How WP-Cron keys events.
+		$count = 0;
+		foreach ( (array) _get_cron_array() as $hooks ) {
+			if ( isset( $hooks['syn_syndication'][ $key ] ) ) {
+				++$count;
+			}
+		}
+		return $count;
 	}
 
 	public function test_missing_post_does_nothing() {
