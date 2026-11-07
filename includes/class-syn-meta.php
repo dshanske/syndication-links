@@ -341,6 +341,10 @@ class Syn_Meta {
 		if ( ! wp_verify_nonce( $_POST['syn_metabox_nonce'], 'syn_metabox' ) ) {
 			return;
 		}
+		// Check the user's permissions.
+		if ( ! current_user_can( 'edit_comment', $comment_id ) ) {
+			return;
+		}
 		self::save_meta( 'comment', $comment_id );
 	}
 
