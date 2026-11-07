@@ -186,6 +186,15 @@ class Post_Syndication {
 			return;
 		}
 
+		$syndicate_to = (array) $syndicate_to;
+		$status       = get_post_status( $post );
+
+		// Syndication is public: no provider supports private posts yet, so they're never sent.
+		// If one ever does, allow it here.
+		if ( 'private' === $status ) {
+			return false;
+		}
+
 		$returns = array();
 
 		$timestamp = get_post_timestamp( $post_ID );
@@ -195,6 +204,12 @@ class Post_Syndication {
 		// If the post is dated in the future, syndicate it when it's published, not now.
 		if ( $diff < 0 ) {
 			self::schedule( $post_ID, $syndicate_to, $timestamp + 5 );
+			return true;
+		}
+
+		// Drafts and pending posts wait for publishing: do_pings() sends them then.
+		if ( 'publish' !== $status ) {
+			self::queue( $post_ID, $syndicate_to );
 			return true;
 		}
 
@@ -251,6 +266,22 @@ class Post_Syndication {
 			wp_unschedule_event( $next, 'syn_syndication', $args );
 		}
 		wp_schedule_single_event( $time, 'syn_syndication', $args );
+	}
+
+	/**
+	 * Queues a post to be syndicated by do_pings() once it's published.
+	 *
+	 * Adds the targets to any that are already queued for the post.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int      $post_ID      Post ID.
+	 * @param string[] $syndicate_to UIDs of the targets.
+	 */
+	public static function queue( $post_ID, $syndicate_to ) {
+		$queued = get_post_meta( $post_ID, '_syndicate-to', true );
+		$queued = is_array( $queued ) ? $queued : array();
+		update_post_meta( $post_ID, '_syndicate-to', array_values( array_unique( array_merge( $queued, $syndicate_to ) ) ) );
 	}
 
 	public static function syndication_log( $input, $target ) {

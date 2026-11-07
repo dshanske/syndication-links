@@ -326,6 +326,74 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 		return $count;
 	}
 
+	/**
+	 * Drafts and pending posts aren't sent; they're queued for do_pings() (#228).
+	 *
+	 * @dataProvider data_unpublished_statuses
+	 *
+	 * @param string $status Post status.
+	 */
+	public function test_unpublished_posts_are_queued_not_sent( $status ) {
+		$this->register_fakes( 'one', 'two' );
+		$post_id = $this->post_aged( MINUTE_IN_SECONDS, array( 'post_status' => $status ) );
+
+		$this->assertTrue( Post_Syndication::syndication( $post_id, array( 'one' ) ) );
+		Post_Syndication::syndication( $post_id, array( 'two', 'one' ) );
+
+		$this->assertSame( array(), Syn_Test_Provider::$calls );
+		$this->assertSame( array( 'one', 'two' ), get_post_meta( $post_id, '_syndicate-to', true ) );
+		$this->assertFalse( metadata_exists( 'post', $post_id, 'syndication_log' ) );
+	}
+
+	public function data_unpublished_statuses() {
+		return array(
+			'draft'   => array( 'draft' ),
+			'pending' => array( 'pending' ),
+		);
+	}
+
+	/**
+	 * A queued draft is sent once it's published.
+	 */
+	public function test_queued_draft_is_sent_when_published() {
+		$this->register_fakes( 'one' );
+		$post_id = $this->post_aged( MINUTE_IN_SECONDS, array( 'post_status' => 'draft' ) );
+		Post_Syndication::syndication( $post_id, array( 'one' ) );
+
+		wp_publish_post( $post_id );
+		Post_Syndication::do_pings();
+
+		$this->assertSame( array( array( 'one', $post_id ) ), Syn_Test_Provider::$calls );
+		$this->assertFalse( metadata_exists( 'post', $post_id, '_syndicate-to' ) );
+	}
+
+	/**
+	 * Private posts are never sent or queued.
+	 */
+	public function test_private_posts_are_not_sent() {
+		$this->register_fakes( 'one' );
+		$post_id = $this->post_aged( MINUTE_IN_SECONDS, array( 'post_status' => 'private' ) );
+
+		$this->assertFalse( Post_Syndication::syndication( $post_id, array( 'one' ) ) );
+
+		$this->assertSame( array(), Syn_Test_Provider::$calls );
+		$this->assertFalse( metadata_exists( 'post', $post_id, '_syndicate-to' ) );
+		$this->assertFalse( wp_next_scheduled( 'syn_syndication', array( $post_id, array( 'one' ) ) ) );
+	}
+
+	/**
+	 * Micropub requests go through the same checks.
+	 */
+	public function test_micropub_draft_is_queued() {
+		$this->register_fakes( 'one' );
+		$post_id = $this->post_aged( MINUTE_IN_SECONDS, array( 'post_status' => 'draft' ) );
+
+		do_action( 'micropub_syndication', $post_id, array( 'one' ) );
+
+		$this->assertSame( array(), Syn_Test_Provider::$calls );
+		$this->assertSame( array( 'one' ), get_post_meta( $post_id, '_syndicate-to', true ) );
+	}
+
 	public function test_missing_post_does_nothing() {
 		$this->register_fakes( 'one' );
 
