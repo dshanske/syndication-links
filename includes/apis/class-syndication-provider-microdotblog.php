@@ -140,8 +140,8 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 			if ( ! is_wp_error( $response ) ) {
 				$code = wp_remote_retrieve_response_code( $response );
 				if ( 2 === (int) floor( $code / 100 ) ) {
-					$json = json_decode( $response['body'], true );
-					if ( array_key_exists( 'home_page_url', $json ) ) {
+					$json = json_decode( wp_remote_retrieve_body( $response ), true );
+					if ( is_array( $json ) && ! empty( $json['home_page_url'] ) && is_string( $json['home_page_url'] ) ) {
 						add_post_syndication_link( $post_id, esc_url( $json['home_page_url'] ) );
 						return $json['home_page_url'];
 					}
@@ -163,8 +163,9 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		} else {
 			$permalink = null;
 		}
-		$post    = get_post();
-		$user_id = $post->post_author;
+		// The post's author, or the current post's: on a feed refresh there's no post at all.
+		$post    = get_post( $post_id );
+		$user_id = $post ? (int) $post->post_author : 0;
 
 		if ( ! $user_id ) {
 			$user_id = get_current_user_id();
@@ -174,7 +175,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		if ( ! $username ) {
 			return false;
 		}
-		$url  = sprintf( 'https://micro.blog/posts/%1$s', $username );
+		$url  = sprintf( 'https://micro.blog/posts/%1$s', rawurlencode( $username ) );
 		$args = array(
 			'headers'             => array(
 				'Accept' => 'application/json',
@@ -193,11 +194,17 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		if ( 2 !== (int) floor( $code / 100 ) ) {
 			return new WP_Error( 'invalid_response', wp_remote_retrieve_body( $response ), array( 'status' => $code ) );
 		}
-		$json = json_decode( $response['body'], true );
+		$json = json_decode( wp_remote_retrieve_body( $response ), true );
+		if ( ! is_array( $json ) || ! isset( $json['items'] ) || ! is_array( $json['items'] ) ) {
+			return new WP_Error( 'invalid_response', __( 'Micro.blog returned no posts.', 'syndication-links' ) );
+		}
 		foreach ( $json['items'] as $item ) {
-			$post_id = url_to_postid( $item['url'] );
-			if ( $post_id ) {
-				add_post_syndication_link( $post_id, sprintf( 'https://micro.blog/%1$s/%2$s', $username, $item['id'] ) );
+			if ( ! is_array( $item ) || empty( $item['url'] ) || empty( $item['id'] ) || ! is_string( $item['url'] ) ) {
+				continue;
+			}
+			$item_post_id = url_to_postid( $item['url'] );
+			if ( $item_post_id ) {
+				add_post_syndication_link( $item_post_id, sprintf( 'https://micro.blog/%1$s/%2$s', rawurlencode( $username ), rawurlencode( (string) $item['id'] ) ) );
 			}
 			if ( $item['url'] === $permalink ) {
 				return true;
