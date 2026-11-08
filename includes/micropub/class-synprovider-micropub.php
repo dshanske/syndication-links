@@ -1,41 +1,48 @@
 <?php
+/**
+ * Base class for providers that syndicate by Micropub.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Base Micropub Class
+ * Syndicates a post by creating it at a Micropub endpoint, such as Bridgy Publish's.
+ *
+ * The post is sent as an h-entry in JSON. The copy's URL comes back in the `Location` header.
  */
-
 class SynProvider_Micropub extends Syndication_Provider {
 
 	/**
-	 * Bearer Token for the Micropub transaction
+	 * Bearer token for the Micropub endpoint.
 	 *
 	 * @var string
 	 */
 	protected $token;
 
 	/**
-	 * Micropub Endpoint to Publish To
+	 * Micropub endpoint to publish to.
 	 *
 	 * @var string
 	 */
 	protected $endpoint;
 
 	/**
-	 * Maximum Content Length
+	 * Maximum content length, in characters.
 	 *
 	 * @var int
 	 */
 	protected $content_length = 10000;
 
-
 	/**
-	 * Constructor for the Abstract Class
+	 * Sets the token, if one is given.
 	 *
-	 * The default version of this just sets the parameters
+	 * @param array $args {
+	 *     Optional. Arguments.
 	 *
-	 * @param array $args Array of Arguments
+	 *     @type string $token Bearer token.
+	 * }
 	 */
 	public function __construct( $args = array() ) {
 		if ( array_key_exists( 'token', $args ) ) {
@@ -45,34 +52,40 @@ class SynProvider_Micropub extends Syndication_Provider {
 	}
 
 	/**
-	 * Set Token
+	 * Sets the bearer token.
+	 *
+	 * @param string $token The token.
 	 */
 	public function set_token( $token ) {
 		$this->token = $token;
 	}
 
 	/**
-	 * Check if token is set
+	 * Whether the provider's checkbox is disabled: it is until a token is set.
+	 *
+	 * @return bool
 	 */
 	public function is_disabled() {
 		return empty( $this->token );
 	}
 
 	/**
-	 * Set Endpoint
+	 * Sets the Micropub endpoint.
+	 *
+	 * @param string $endpoint The endpoint URL.
 	 */
 	public function set_endpoint( $endpoint ) {
 		$this->endpoint = $endpoint;
 	}
 
 	/**
-	 * Fetches JSON from a micropub endpoint
+	 * Fetches JSON from a Micropub endpoint, such as a `q=config` query.
 	 *
-	 * @param string $url URL to fetch.
-	 * @param array  $query Query parameters.
-	 * @param array  $headers Headers.
-	 * @return WP_Error|array Either the associated array response or error.
-	*/
+	 * @param string     $url     URL to fetch.
+	 * @param array      $query   Query parameters.
+	 * @param array|null $headers Optional. Extra headers. The token is sent unless they include `Authorization`.
+	 * @return array|WP_Error The decoded response, or an error for a non-2xx or non-JSON response.
+	 */
 	public function fetch_micropub( $url, $query, $headers = null ) {
 		$fetch = add_query_arg( $query, $url );
 		$args  = array(
@@ -113,10 +126,11 @@ class SynProvider_Micropub extends Syndication_Provider {
 	}
 
 	/**
-	 * Generate Content
+	 * Returns the content to send: the post's content, shortened to fit, with a link back
+	 * depending on the backlink setting, or the excerpt if that setting is on.
 	 *
-	 * @param int|WP_Post $post WordPress post
-	 * @return string Content string
+	 * @param WP_Post $post The post.
+	 * @return string The content, as HTML.
 	 */
 	public function get_content( $post ) {
 		$content   = syn_get_post_content( $post );
@@ -130,7 +144,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'syndication_use_excerpt' ) ) {
 			$content = $post->post_excerpt;
 		} elseif ( $this->content_length < $length && 'maybe' === $backlink ) {
-			// If length is over $content_length then replace content with link plus the title
+			// If length is over $content_length then replace content with link plus the title.
 			if ( function_exists( 'kind_get_the_title' ) ) {
 				$content = kind_get_the_title( $post ) . ' - ' . $link;
 			} elseif ( ! empty( get_the_title( $post ) ) ) {
@@ -145,10 +159,12 @@ class SynProvider_Micropub extends Syndication_Provider {
 	}
 
 	/**
-	 * Convert post to Microformats for Micropub
+	 * Converts a post to an h-entry for Micropub.
 	 *
-	 * @param int|WP_Post $post WordPress Post
-	 * @return array|false Microformats
+	 * Includes the post's `mf2_*` meta, its dates, title, excerpt, featured image and content.
+	 *
+	 * @param int|WP_Post $post Post ID or object.
+	 * @return array The h-entry, as Micropub JSON.
 	 */
 	public function post_to_mf2( $post ) {
 		$post = get_post( $post );
@@ -167,7 +183,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 
 		$mf2['properties'] = array_filter( $mf2['properties'] );
 
-		// Time Information
+		// Time Information.
 		$published                      = get_post_datetime( $post );
 		$updated                        = get_post_datetime( $post, 'modified' );
 		$mf2['properties']['published'] = array( $published->format( DATE_W3C ) );
@@ -203,13 +219,13 @@ class SynProvider_Micropub extends Syndication_Provider {
 	}
 
 	/**
-	 * Post JSON from a remote endpoint.
+	 * Creates a post at a Micropub endpoint.
 	 *
-	 * @param int|WP_Post Post to Publish
-	 * @param string $endpoint Micropub Endpoint
-	 * @param array  $headers Headers.
-	 * @return WP_Error|array Either the associated array response or error.
-	*/
+	 * @param int|WP_Post $post     Post ID or object.
+	 * @param string      $endpoint Micropub endpoint.
+	 * @param array|null  $headers  Optional. Extra headers. The token is sent unless they include `Authorization`.
+	 * @return array|WP_Error The response, or an error.
+	 */
 	public function post_micropub( $post, $endpoint, $headers = null ) {
 		$post = get_post( $post );
 		if ( ! $post ) {
@@ -241,13 +257,13 @@ class SynProvider_Micropub extends Syndication_Provider {
 	}
 
 	/**
-	 * Post JSON from a remote endpoint.
+	 * Deletes a post at a Micropub endpoint.
 	 *
-	 * @param string $url URL to Delete.
-	 * @param string $endpoint Micropub Endpoint
-	 * @param array  $headers Headers.
-	 * @return WP_Error|array Either the associated array response or error.
-	*/
+	 * @param string     $url      URL of the post to delete.
+	 * @param string     $endpoint Micropub endpoint.
+	 * @param array|null $headers  Optional. Extra headers. The token is sent unless they include `Authorization`.
+	 * @return array|WP_Error The response, or an error.
+	 */
 	public function delete_micropub( $url, $endpoint, $headers = null ) {
 		$args = array(
 			'headers'             => array(
@@ -279,9 +295,10 @@ class SynProvider_Micropub extends Syndication_Provider {
 	}
 
 	/**
-	 * Given a post try to POSSE it to a given network
+	 * Syndicates a post, and adds the copy's URL from the `Location` header to its links.
 	 *
-	 * @return array of results
+	 * @param int|null $post_id Optional. Post ID. Defaults to the current post.
+	 * @return array|WP_Error The response, or an error.
 	 */
 	public function posse( $post_id = null ) {
 		if ( ! $post_id ) {

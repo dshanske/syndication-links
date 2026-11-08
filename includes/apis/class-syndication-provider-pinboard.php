@@ -1,18 +1,31 @@
 <?php
+/**
+ * Provider: Pinboard.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
-/* Requires Post Kinds for Now.
+/**
+ * Saves the URL a post cites (bookmarks, likes and the like) to Pinboard.
+ *
+ * Requires the Post Kinds plugin, which provides the cited URL.
  */
 class Syndication_Provider_Pinboard extends Syndication_Provider {
 
 	/**
-	 * Bearer Token for the Micropub transaction
+	 * Pinboard API token.
 	 *
 	 * @var string
 	 */
 	protected $token;
 
+	/**
+	 * Sets up the provider, and its token setting.
+	 *
+	 * @param array $args Optional. Arguments.
+	 */
 	public function __construct( $args = array() ) {
 		$this->name = __( 'Pinboard', 'syndication-links' );
 		$this->uid  = 'pinboard';
@@ -26,19 +39,23 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 
 		$this->token = get_option( 'pinboard_token' );
 
-		// Parent Constructor
+		// Parent Constructor.
 		parent::__construct( $args );
 		$this->register_setting();
 	}
 
 	/**
-	 * Check if token is set
+	 * Whether the provider's checkbox is disabled: it is until a token is set.
+	 *
+	 * @return bool
 	 */
 	public function is_disabled() {
 		return empty( $this->token );
 	}
 
-
+	/**
+	 * Registers the token setting.
+	 */
 	public function register_setting() {
 		register_setting(
 			'syndication_apis',
@@ -51,6 +68,9 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 		);
 	}
 
+	/**
+	 * Adds the Pinboard section to the Providers tab, and the token field to the API Keys tab.
+	 */
 	public function admin_init() {
 		add_settings_section(
 			'pinboard_options',
@@ -74,15 +94,18 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 		);
 	}
 
+	/**
+	 * Displays where to find the Pinboard token.
+	 */
 	public static function options_callback() {
 		esc_html_e( 'Your Pinboard token can be found under your account settings, in the password tab.', 'syndication-links' );
 	}
 
-
 	/**
-	 * Given a post try to POSSE it to a given network
+	 * Saves the URL the post cites to Pinboard, and adds the bookmark to the post's links.
 	 *
-	 * @return array of results
+	 * @param int|null $post_id Optional. Post ID. Defaults to the current post.
+	 * @return array|WP_Error|false The response, an error, or false if there's no cited URL or token.
 	 */
 	public function posse( $post_id = null ) {
 		if ( ! $post_id ) {
@@ -107,7 +130,7 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 			'timeout'             => 10,
 			'limit_response_size' => 1048576,
 			'redirection'         => 1,
-			// Use an explicit user-agent
+			// Use an explicit user-agent.
 			'user-agent'          => sprintf( 'Syndication Links for WordPress(%1$s)', home_url() ),
 		);
 
