@@ -314,9 +314,22 @@ class Test_Link_Rendering extends WP_UnitTestCase {
 
 		$this->assertSame(
 			array( 'https://github.com/someone/repo', 'https://www.example.com/post/1' ),
-			array_values( $item['syndication'] )
+			$item['syndication']
 		);
 		$this->assertSame( array( 'id' => 'x' ), Syn_Config::json_feed_item( array( 'id' => 'x' ), self::factory()->post->create_and_get() ) );
+	}
+
+	/**
+	 * A dropped link doesn't leave a gap in the keys, which would make the JSON Feed field an object (B12).
+	 */
+	public function test_json_feed_links_stay_a_list_when_one_is_dropped() {
+		$post_id = self::factory()->post->create();
+		update_post_meta( $post_id, 'mf2_syndication', array( 'https://github.com/someone/repo', 'not a url', 'https://github.com/someone/repo', 'https://www.example.com/post/1' ) );
+
+		$item = Syn_Config::json_feed_item( array(), get_post( $post_id ) );
+
+		$this->assertSame( array( 'https://github.com/someone/repo', 'https://www.example.com/post/1' ), $item['syndication'] );
+		$this->assertStringStartsWith( '[', wp_json_encode( $item['syndication'] ) );
 	}
 
 	public function test_comment_text_appends_the_links() {

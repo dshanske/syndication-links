@@ -214,7 +214,8 @@ class Syn_Meta {
 			},
 			$urls
 		);
-		return array_filter( array_unique( $array ) );
+		// Re-index, so a dropped URL doesn't leave a gap that json_encode() turns into an object.
+		return array_values( array_filter( array_unique( $array ) ) );
 	}
 
 
@@ -426,7 +427,7 @@ class Syn_Meta {
 		}
 
 		$urls = array_unique( self::clean_urls( $urls ) );
-		return array_filter( $urls );
+		return array_values( array_filter( $urls ) );
 	}
 
 	public static function get_syndication_links_elements( $type, $id = null, $args = array() ) {

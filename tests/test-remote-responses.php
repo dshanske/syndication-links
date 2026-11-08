@@ -187,7 +187,7 @@ class Test_Remote_Responses extends WP_UnitTestCase {
 		$result = Syndication_Provider_MicroDotBlog::get_microblog_post( $post_id );
 
 		$this->assertSame( 'https://micro.blog/someone/123', $result );
-		$this->assertSame( array( 'https://micro.blog/someone/123' ), array_values( get_post_syndication_links_data( $post_id ) ) );
+		$this->assertSame( array( 'https://micro.blog/someone/123' ), get_post_syndication_links_data( $post_id ) );
 		$this->assertStringStartsWith( 'https://micro.blog/conversation.js?', $this->requests[0][0] );
 	}
 

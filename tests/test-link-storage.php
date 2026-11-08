@@ -2,9 +2,6 @@
 /**
  * Tests for storing and reading syndication links: Syn_Meta and the template API.
  *
- * Stored arrays can have gaps in their keys (REVIEW.md B12), so these tests
- * compare values with array_values() until that's fixed.
- *
  * @package Syndication_Links
  */
 
@@ -58,7 +55,7 @@ class Test_Link_Storage extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertSame( array( 'https://a.example/1', 'https://b.example/2' ), array_values( $clean ) );
+		$this->assertSame( array( 'https://a.example/1', 'https://b.example/2' ), $clean );
 	}
 
 	public function test_clean_urls_rewrites_known_sites_to_https() {
@@ -76,7 +73,7 @@ class Test_Link_Storage extends WP_UnitTestCase {
 				'https://github.com/someone',
 				'http://example.com/stays-http',
 			),
-			array_values( $clean )
+			$clean
 		);
 	}
 
@@ -89,7 +86,7 @@ class Test_Link_Storage extends WP_UnitTestCase {
 
 		$clean = Syn_Meta::clean_urls( array( 'http://example.com/now-https' ) );
 
-		$this->assertSame( array( 'https://example.com/now-https' ), array_values( $clean ) );
+		$this->assertSame( array( 'https://example.com/now-https' ), $clean );
 	}
 
 	public function test_clean_urls_passes_non_arrays_through() {
@@ -111,7 +108,7 @@ class Test_Link_Storage extends WP_UnitTestCase {
 
 		$this->assertSame(
 			array( 'https://a.example/1', 'https://b.example/2' ),
-			array_values( get_post_syndication_links_data( $post_id ) )
+			get_post_syndication_links_data( $post_id )
 		);
 	}
 
@@ -132,7 +129,7 @@ class Test_Link_Storage extends WP_UnitTestCase {
 
 		add_post_syndication_link( $post_id, 'https://c.example/3', true );
 
-		$this->assertSame( array( 'https://c.example/3' ), array_values( get_post_syndication_links_data( $post_id ) ) );
+		$this->assertSame( array( 'https://c.example/3' ), get_post_syndication_links_data( $post_id ) );
 	}
 
 	public function test_newline_separated_string_meta_is_read_as_a_list() {
@@ -141,7 +138,7 @@ class Test_Link_Storage extends WP_UnitTestCase {
 
 		$this->assertSame(
 			array( 'https://a.example/1', 'https://b.example/2' ),
-			array_values( get_post_syndication_links_data( $post_id ) )
+			get_post_syndication_links_data( $post_id )
 		);
 	}
 
@@ -157,12 +154,12 @@ class Test_Link_Storage extends WP_UnitTestCase {
 
 		$this->assertSame(
 			array( 'https://a.example/1', 'https://old.example/1' ),
-			array_values( get_post_syndication_links_data( $post_id ) )
+			get_post_syndication_links_data( $post_id )
 		);
 		$this->assertFalse( metadata_exists( 'post', $post_id, 'syndication_urls' ) );
 		$this->assertSame(
 			array( 'https://a.example/1', 'https://old.example/1' ),
-			array_values( get_post_meta( $post_id, 'mf2_syndication', true ) )
+			get_post_meta( $post_id, 'mf2_syndication', true )
 		);
 	}
 
@@ -182,7 +179,7 @@ class Test_Link_Storage extends WP_UnitTestCase {
 
 		$this->assertSame(
 			array( 'https://a.example/1', 'https://filtered.example/1' ),
-			array_values( get_post_syndication_links_data( $post_id ) )
+			get_post_syndication_links_data( $post_id )
 		);
 		$this->assertSame( $post_id, $seen );
 	}
@@ -195,7 +192,7 @@ class Test_Link_Storage extends WP_UnitTestCase {
 		};
 		add_filter( 'syn_add_links', $add );
 
-		$this->assertSame( array( 'https://legacy.example/1' ), array_values( get_post_syndication_links_data( $post_id ) ) );
+		$this->assertSame( array( 'https://legacy.example/1' ), get_post_syndication_links_data( $post_id ) );
 	}
 
 	public function test_comment_links() {
@@ -207,7 +204,7 @@ class Test_Link_Storage extends WP_UnitTestCase {
 
 		$this->assertSame(
 			array( 'https://a.example/1', 'https://b.example/2', 'https://c.example/3' ),
-			array_values( get_comment_syndication_links_data( $comment_id ) )
+			get_comment_syndication_links_data( $comment_id )
 		);
 		$this->assertSame( array(), get_post_syndication_links_data( $post_id ) );
 	}
@@ -223,7 +220,7 @@ class Test_Link_Storage extends WP_UnitTestCase {
 		add_filter( 'syn_add_links', '__return_empty_array' );
 
 		// syn_add_links only runs for posts, so it doesn't remove the comment's links.
-		$this->assertSame( array( 'https://filtered.example/1' ), array_values( get_comment_syndication_links_data( $comment_id ) ) );
+		$this->assertSame( array( 'https://filtered.example/1' ), get_comment_syndication_links_data( $comment_id ) );
 	}
 
 	public function test_missing_objects_return_false() {
