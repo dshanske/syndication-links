@@ -1,4 +1,9 @@
 <?php
+/**
+ * Mapping links to icons.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
@@ -8,11 +13,20 @@ add_action( 'updated_user_meta', array( 'Syn_Link_Domain_Icon_Map', 'mastodon_me
 add_action( 'deleted_user_meta', array( 'Syn_Link_Domain_Icon_Map', 'mastodon_meta_changed' ), 10, 3 );
 add_action( 'deleted_user', array( 'Syn_Link_Domain_Icon_Map', 'flush_mastodon_urls' ) );
 
-/* Maps domain names to icons from the provided SVG fontset
+/**
+ * Maps a link's domain to an icon name, and renders the icons.
+ *
+ * Icons are SVG files, looked up by name in the directories from get_icon_file_dirs().
  */
 class Syn_Link_Domain_Icon_Map {
 
-	// Common mappings and custom mappings
+	/**
+	 * Icon names for domains whose name doesn't match their icon.
+	 *
+	 * Also caches, for the request, the names already worked out for other domains.
+	 *
+	 * @var string[]
+	 */
 	private static $map = array(
 		'twitter.com'         => 'x',
 		'facebook.com'        => 'facebook',
@@ -48,7 +62,12 @@ class Syn_Link_Domain_Icon_Map {
 
 	);
 
-	// Try to get the correct icon for the majority of sites
+	/**
+	 * Returns the name part of a domain: `example.com` and `www.example.com` become `example`.
+	 *
+	 * @param string $string The domain.
+	 * @return string The name, or the domain if it has more than three parts.
+	 */
 	public static function split_domain( $string ) {
 		$explode = explode( '.', $string );
 		if ( 2 === count( $explode ) ) {
@@ -60,7 +79,11 @@ class Syn_Link_Domain_Icon_Map {
 		return $string;
 	}
 
-	// Return directories for icon files
+	/**
+	 * Returns the directories searched for icon files, in order.
+	 *
+	 * @return string[] Directory paths.
+	 */
 	public static function get_icon_file_dirs() {
 		$dir  = sprintf( '%1$ssvgs/', plugin_dir_path( __DIR__ ) );
 		$dirs = array(
@@ -69,6 +92,13 @@ class Syn_Link_Domain_Icon_Map {
 			$dir,
 			self::get_historic_icon_dir(),
 		);
+		/**
+		 * Filters the directories searched for icon files, in order.
+		 *
+		 * Add a directory to the start to override the bundled icons, or to the end to add icons.
+		 *
+		 * @param string[] $dirs Directory paths.
+		 */
 		return apply_filters( 'syn_icon_file_dirs', $dirs );
 	}
 
@@ -125,8 +155,12 @@ class Syn_Link_Domain_Icon_Map {
 		wp_enqueue_style( 'syndication-links-historic', plugin_dir_url( __DIR__ ) . 'css/syn-historic.min.css', array(), SYNDICATION_LINKS_VERSION );
 	}
 
-
-	// Return the filename of an icon based on name if the file exists
+	/**
+	 * Returns the path of an icon's SVG file.
+	 *
+	 * @param string $name The icon name. Only letters, numbers, dots, dashes and underscores.
+	 * @return string|null The path, or null if there's no such icon or the name isn't allowed.
+	 */
 	public static function get_icon_filename( $name ) {
 		// The name is used as a filename, so don't allow anything that could leave the directory.
 		if ( ! is_string( $name ) || ! preg_match( '/^[a-z0-9._-]+$/iD', $name ) || false !== strpos( $name, '..' ) ) {
@@ -143,8 +177,21 @@ class Syn_Link_Domain_Icon_Map {
 		return null;
 	}
 
-	// Return the retrieved svg based on name
+	/**
+	 * Returns an icon's SVG markup.
+	 *
+	 * @param string $name The icon name.
+	 * @return string|null The SVG, or null if there's no such icon.
+	 */
 	public static function get_icon_svg( $name ) {
+		/**
+		 * Filters an icon's SVG before the icon files are searched.
+		 *
+		 * Return a string to use it as the icon.
+		 *
+		 * @param string|null $icon The SVG markup. Default null.
+		 * @param string      $name The icon name.
+		 */
 		$icon = apply_filters( 'pre_syn_link_icon', null, $name );
 		if ( is_string( $icon ) ) {
 			return $icon;
@@ -160,6 +207,14 @@ class Syn_Link_Domain_Icon_Map {
 		return null;
 	}
 
+	/**
+	 * Returns an icon's markup.
+	 *
+	 * Loads the historic icons' stylesheet when the icon is one of them.
+	 *
+	 * @param string $name The icon name.
+	 * @return string The icon in a span, or the escaped name if there's no such icon.
+	 */
 	public static function get_icon( $name ) {
 		$icon  = self::get_icon_svg( $name );
 		$title = self::get_title( $name );
@@ -173,6 +228,12 @@ class Syn_Link_Domain_Icon_Map {
 		return esc_html( $name );
 	}
 
+	/**
+	 * Returns an icon's title: the service's name.
+	 *
+	 * @param string $name The icon name.
+	 * @return string The title, or the icon name if it has none.
+	 */
 	public static function get_title( $name ) {
 		$strings = simpleicons_syn_get_names();
 		if ( isset( $strings[ $name ] ) ) {
@@ -180,6 +241,14 @@ class Syn_Link_Domain_Icon_Map {
 		} else {
 			$return = $name;
 		}
+		/**
+		 * Filters an icon's title, used as the link text and the icon's label.
+		 *
+		 * The title is escaped when it's output, so return plain text.
+		 *
+		 * @param string $return The title.
+		 * @param string $name   The icon name.
+		 */
 		return apply_filters( 'syn_link_title', $return, $name );
 	}
 
@@ -207,6 +276,14 @@ class Syn_Link_Domain_Icon_Map {
 		delete_transient( 'syn_mastodon_hosts' );
 	}
 
+	/**
+	 * Returns the hosts of the Mastodon accounts in users' profiles.
+	 *
+	 * Read from each user's `mastodon` meta, such as the IndieWeb plugin's Mastodon field,
+	 * and cached for a day.
+	 *
+	 * @return string[] Hosts.
+	 */
 	public static function mastodon_urls() {
 		$mastodon = get_transient( 'syn_mastodon_hosts' );
 		if ( false !== $mastodon && is_array( $mastodon ) ) {
@@ -239,24 +316,33 @@ class Syn_Link_Domain_Icon_Map {
 		return $value;
 	}
 
+	/**
+	 * Returns the icon name for a link.
+	 *
+	 * Web links are matched by domain, falling back to 'website'. `mailto:` links are
+	 * 'mail', `sms:` and `tel:` links are 'phone', and other links are 'notice'.
+	 *
+	 * @param string $url The link.
+	 * @return string The icon name.
+	 */
 	public static function url_to_name( $url ) {
 		$scheme = strtolower( (string) wp_parse_url( $url, PHP_URL_SCHEME ) );
-		// The default if not an http link is to return notice
+		// The default if not an http link is to return notice.
 		$return = 'notice';
 		if ( ( 'http' === $scheme ) || ( 'https' === $scheme ) ) {
-			$return = 'website'; // default for web links
+			$return = 'website'; // default for web links.
 			$url    = strtolower( $url );
 			$domain = (string) wp_parse_url( $url, PHP_URL_HOST );
 
-			$domain = str_replace( 'www.', '', $domain ); // Always remove www
+			$domain = str_replace( 'www.', '', $domain ); // Always remove www.
 
-			// If the domain is already on the pre-loaded list then use that
+			// If the domain is already on the pre-loaded list then use that.
 			if ( array_key_exists( $domain, self::$map ) ) {
 				$return = self::$map[ $domain ];
 			} elseif ( in_array( $domain, self::mastodon_urls(), true ) ) {
 				$return = 'mastodon';
 			} else {
-				// Remove extra info and try to map it to an icon
+				// Remove extra info and try to map it to an icon.
 				$strip = self::split_domain( $domain );
 				if ( self::get_icon_filename( $strip ) ) {
 					$return = $strip;
@@ -265,16 +351,16 @@ class Syn_Link_Domain_Icon_Map {
 				} elseif ( self::get_icon_filename( str_replace( '.', '', $domain ) ) ) {
 					$return = str_replace( '.', '', $domain );
 				} else if ( false !== stripos( $domain, 'wordpress' ) ) { // phpcs:ignore
-					// Anything with WordPress in the name that is not matched return WordPress
+					// Anything with WordPress in the name that is not matched return WordPress.
 					$return = 'wordpress'; // phpcs:ignore
 				} else if ( false !== stripos( $domain, 'read' ) ) { // phpcs:ignore
-					// Anything with read in the name that is not matched return a book
+					// Anything with read in the name that is not matched return a book.
 					$return = 'book'; // phpcs:ignore
 				} else if ( false !== stripos( $domain, 'news' ) ) { // phpcs:ignore
-					// Anything with news in the name that is not matched return the summary icon
+					// Anything with news in the name that is not matched return the summary icon.
 					$return = 'summary'; // phpcs:ignore
 				} else {
-					// Some domains have the word app in them check for matches with that
+					// Some domains have the word app in them check for matches with that.
 					$strip = str_replace( 'app', '', $strip );
 					if ( self::get_icon_filename( $strip ) ) {
 						$return = $strip;
@@ -296,6 +382,12 @@ class Syn_Link_Domain_Icon_Map {
 		if ( isset( $domain ) ) {
 			self::$map[ $domain ] = $return;
 		}
+		/**
+		 * Filters the icon name for a link.
+		 *
+		 * @param string $return The icon name.
+		 * @param string $url    The link.
+		 */
 		$return = apply_filters( 'syn_link_mapping', $return, $url );
 		return $return;
 	}
