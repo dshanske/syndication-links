@@ -195,9 +195,15 @@ In no particular order...
 * Behaviour change: private posts are never syndicated. Drafts and pending posts are queued and sent when published, and future-dated posts are sent when they're published, not straight away as well.
 * New Import tab and `wp syndication-links import` command: copy the links recorded by other cross-posting plugins (SNAP, Mastodon Autopost, XPoster, Autopost for X, Keyring, Medium) into the post's own syndication links. Once imported, the other plugin can be removed without losing the links. Other plugins can add import sources with `register_syndication_link_source()`.
 * Medium links are no longer shown from the Medium plugin, which is closed. Import them to keep them.
+* Jetpack Social (Publicize): the posts it shared to are shown with the post's links, and can be imported.
 * XPoster: links to its Mastodon and Bluesky posts are added, and its X links are also shown for posts saved before they were recorded.
 * Fixed the Mastodon Autopost and Autopost for X integrations.
 * Bridgy targets are output as empty links, as Bridgy's docs describe, not as syndicated copies.
+* Deleting a link in the Syndication Links box now sticks. Links other plugins add are listed read-only instead of being saved with the post, and adding a link no longer stores them.
+* Saving from the editor applies only the box's own changes, so links added by syndication in the meantime are kept. Before, publishing from the block editor could wipe them.
+* With a webmention provider such as Bridgy Fed enabled, a link to it in the content no longer syndicates a post that wasn't sent to it.
+* Providers without a token aren't offered to Micropub clients, and fail with a clear error. The API Keys tab explains how to get a Bridgy token.
+* The links (`mf2_syndication`) and the syndication log no longer appear in the Custom Fields box. The meta keys are unchanged.
 * `?original-of=` matches the exact link, searches every syndication post type, and returns a 404 when nothing matches. `?syndication=` only filters the main query.
 * `mailto:`, `sms:` and `tel:` links get mail and phone icons.
 * Icons for retired services (Google+, Google Podcasts, Pocket and others) are kept in a separate pack, loaded only when one is shown. The icons are built with PHP; the Node build is gone.
