@@ -36,6 +36,13 @@ class SynProvider_Micropub extends Syndication_Provider {
 	protected $content_length = 10000;
 
 	/**
+	 * Micropub endpoints can delete the posts they created.
+	 *
+	 * @var bool
+	 */
+	protected $supports_delete = true;
+
+	/**
 	 * Sets the token, if one is given.
 	 *
 	 * @param array $args {
@@ -296,6 +303,51 @@ class SynProvider_Micropub extends Syndication_Provider {
 		}
 
 		$response = wp_remote_post( $endpoint, $args );
+		return $response;
+	}
+
+	/**
+	 * Deletes the copies this provider made, with a Micropub delete for each.
+	 *
+	 * The copy's URL is what Micropub deletes: for Bridgy, that's the post on the silo.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int      $post_id Post ID. The post may no longer exist.
+	 * @param string   $source  The post's URL before it was trashed. Not used.
+	 * @param string[] $copies  The copies' URLs.
+	 * @return array|WP_Error|null The last response, the first error, or null if there are no copies.
+	 */
+	public function delete( $post_id, $source, $copies = array() ) {
+		if ( empty( $copies ) ) {
+			return null;
+		}
+		if ( empty( $this->token ) ) {
+			return new WP_Error(
+				'missing_token',
+				/* translators: %s: provider name */
+				sprintf( __( '%s has no token. Add one on the API Keys tab of the Syndication Links settings.', 'syndication-links' ), $this->name )
+			);
+		}
+		$response = null;
+		foreach ( $copies as $copy ) {
+			$response = $this->delete_micropub( $copy, $this->endpoint );
+			if ( is_wp_error( $response ) ) {
+				return $response;
+			}
+			$code = (int) wp_remote_retrieve_response_code( $response );
+			if ( 2 !== (int) floor( $code / 100 ) ) {
+				return new WP_Error(
+					$this->uid . '_delete_error',
+					/* translators: 1: provider name, 2: URL */
+					sprintf( __( '%1$s could not delete %2$s', 'syndication-links' ), $this->name, $copy ),
+					array(
+						'status' => $code,
+						'data'   => wp_remote_retrieve_body( $response ),
+					)
+				);
+			}
+		}
 		return $response;
 	}
 

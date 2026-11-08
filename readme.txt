@@ -147,6 +147,7 @@ You can also use the `syn_link_mapping` filter to return `mastodon` for any URL.
 * `pre_syn_link_icon( $icon, $name )` - Allows you to provide a custom icon. Icons by default are SVG, not URL or filenames.
 * `syndication_links_display( true )` - Adds Syndication Links to content display. Set to false if the theme supports this, or declare `add_theme_support( 'syndication-links' )`.
 * `syndication_links_comment_display( true )` - Adds Syndication Links after each comment. Set to false if the theme places them.
+* `syndication_links_delete_copies( $copies, $post )` - The copies deleted when a post is trashed or deleted: their URLs, keyed by provider UID. Return an empty array to keep them.
 
 = How do I contribute or file bug reports? =
 
@@ -156,7 +157,7 @@ Development and bug reports on this plugin is on Github at https://github.com/ds
 
 = Version 5.0.0 =
 
-Requires PHP 7.4 and WordPress 6.2 or later, or ClassicPress. Private posts are never syndicated, and HTML from the syn_link_title filter is now escaped. Medium links are no longer shown until imported: the new Import tab copies links from other cross-posting plugins into your posts.
+Requires PHP 7.4 and WordPress 6.2 or later, or ClassicPress. Private posts are never syndicated, and trashing a post deletes its Bridgy copies. HTML from the syn_link_title filter is escaped. Medium links are shown only once imported, from the new Import tab.
 
 = Version 4.4.0 =
 
@@ -234,6 +235,7 @@ In no particular order...
 * Behaviour change: for Bridgy's Micropub providers, "Insert link back to original post: If too long" now adds the link only when the post is too long, as Bridgy's own option does. Short posts are sent without it. "Use excerpt" now applies to them, and with the link turned off the content uses the whole length limit.
 * Pinboard: needs Post Kinds 4.0.1 or later, and adds the bookmark to the post's links instead of replacing them.
 * Webmention providers count any 2xx response as a success, as the Webmention spec says.
+* Trashing or deleting a post deletes its copies on Mastodon and Bluesky (through Bridgy) and on Bridgy Fed, and tells custom webmention targets. A trashed post waits five minutes first, so restoring it keeps them. Turn this off on the Providers tab, or filter `syndication_links_delete_copies`.
 * Fixed: the provider settings markup, a fatal error in the Micro.blog lookup when Micro.blog doesn't return JSON, and warnings when refreshing the Micro.blog feed or sending an untagged post to Pinboard.
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
 * Micropub providers (Bridgy) return an error when the endpoint answers with an error status, using its description if it gives one, instead of logging it as a success.

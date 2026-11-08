@@ -16,6 +16,13 @@ defined( 'ABSPATH' ) || exit;
 class SynProvider_Webmention extends Syndication_Provider {
 
 	/**
+	 * The Webmention spec deletes by sending the webmention again, once the post is gone.
+	 *
+	 * @var bool
+	 */
+	protected $supports_delete = true;
+
+	/**
 	 * Sends a webmention from a URL to the provider's target.
 	 *
 	 * @param string $url The source URL.
@@ -27,6 +34,39 @@ class SynProvider_Webmention extends Syndication_Provider {
 			return;
 		}
 		return send_webmention( $url, $target );
+	}
+
+	/**
+	 * Tells the target the post is gone, by sending the webmention again.
+	 *
+	 * The target refetches the post's old URL and finds it gone: the Webmention plugin
+	 * answers 410 for trashed posts. Bridgy and Bridgy Fed then delete their copies.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int      $post_id Post ID. The post may no longer exist.
+	 * @param string   $source  The post's URL before it was trashed.
+	 * @param string[] $copies  The copies' URLs. Not used.
+	 * @return array|WP_Error|null The response, an error, or null if there's no target.
+	 */
+	public function delete( $post_id, $source, $copies = array() ) {
+		$response = $this->send_webmention( $source );
+		if ( null === $response || is_wp_error( $response ) ) {
+			return $response;
+		}
+		$code = (int) wp_remote_retrieve_response_code( $response );
+		if ( 2 !== (int) floor( $code / 100 ) ) {
+			return new WP_Error(
+				$this->uid . '_delete_error',
+				/* translators: %s: provider name */
+				sprintf( __( '%s could not delete the copy', 'syndication-links' ), $this->name ),
+				array(
+					'status' => $code,
+					'data'   => wp_remote_retrieve_body( $response ),
+				)
+			);
+		}
+		return $response;
 	}
 
 	/**

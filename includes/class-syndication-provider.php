@@ -48,6 +48,15 @@ abstract class Syndication_Provider {
 	protected $user;
 
 	/**
+	 * Whether the provider can delete the copies it made.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @var bool
+	 */
+	protected $supports_delete = false;
+
+	/**
 	 * Offers the provider to Micropub clients if it's enabled in the settings.
 	 *
 	 * @param array $args Optional. Arguments, used by subclasses.
@@ -155,6 +164,33 @@ abstract class Syndication_Provider {
 	 */
 	public function is_checked() {
 		return false;
+	}
+
+	/**
+	 * Whether the provider can delete the copies it made, when a post is trashed.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @return bool
+	 */
+	public function supports_delete() {
+		return $this->supports_delete;
+	}
+
+	/**
+	 * Deletes the copies of a post this provider made.
+	 *
+	 * Runs after the post is trashed or deleted, for providers that support it.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int      $post_id Post ID. The post may no longer exist.
+	 * @param string   $source  The post's URL before it was trashed.
+	 * @param string[] $copies  The copies' URLs, from the syndication log.
+	 * @return array|WP_Error|null The response, which is logged, an error, or null if there's nothing to delete.
+	 */
+	public function delete( $post_id, $source, $copies = array() ) {
+		return null;
 	}
 
 	/**
