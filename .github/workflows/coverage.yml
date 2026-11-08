@@ -1,0 +1,46 @@
+name: Coverage
+on:
+    push:
+    pull_request:
+jobs:
+  coverage:
+    name: Coverage (PHP 8.3 / WP latest)
+    runs-on: ubuntu-latest
+    services:
+     mysql:
+       image: mariadb:10.11
+       env:
+         MYSQL_ROOT_PASSWORD: root
+       ports:
+         - 3306:3306
+       options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=10s --health-retries=10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install Subversion
+        run: sudo apt-get update && sudo apt-get install -y subversion
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: pcov
+          tools: composer
+          extensions: mysqli
+      - name: Install Composer dependencies for PHP
+        uses: ramsey/composer-install@v3
+      - name: Setup Test Environment
+        run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Unit Testing with coverage
+        run: ./vendor/bin/phpunit --coverage-text=coverage.txt --colors=never
+      - name: Coverage summary
+        if: always()
+        run: |
+          {
+            echo '## Code coverage'
+            echo '```'
+            cat coverage.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          cat coverage.txt

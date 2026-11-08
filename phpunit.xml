@@ -6,6 +6,16 @@
 	convertNoticesToExceptions="true"
 	convertWarningsToExceptions="true"
 	>
+	<coverage processUncoveredFiles="true">
+		<include>
+			<directory suffix=".php">./includes/</directory>
+			<file>./syndication-links.php</file>
+		</include>
+		<exclude>
+			<!-- Generated: a list of icon titles. -->
+			<file>./includes/simple-icons.php</file>
+		</exclude>
+	</coverage>
 	<testsuites>
 		<testsuite name="Syndication Links Tests">
 			<directory prefix="test-" suffix=".php">./tests/</directory>
