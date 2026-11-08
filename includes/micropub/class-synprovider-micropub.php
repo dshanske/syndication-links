@@ -287,8 +287,6 @@ class SynProvider_Micropub extends Syndication_Provider {
 		if ( ! $post_id ) {
 			$post_id = get_the_ID();
 		}
-		$post = get_post( $post_id );
-
 		$response = self::post_micropub( $post_id, $this->endpoint );
 		if ( is_wp_error( $response ) ) {
 			return $response;

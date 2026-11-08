@@ -97,6 +97,7 @@ class Social_Plugins {
 		return true;
 	}
 
+	// phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- These define each source's import query, which only runs in batches from the importer.
 	/**
 	 * Validates a source and fills in its defaults.
 	 *
@@ -241,6 +242,7 @@ class Social_Plugins {
 
 		return $sources;
 	}
+	// phpcs:enable WordPress.DB.SlowDBQuery.slow_db_query_meta_query
 
 	/**
 	 * The Medium post the official Medium plugin recorded for a post.

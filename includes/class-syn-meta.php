@@ -175,7 +175,7 @@ class Syn_Meta {
 				'posts_per_page' => 10,
 				// The links are stored serialized, so this is an unindexed LIKE on the meta value.
 				// In a serialized array each link is wrapped in quotes, which rules out longer URLs.
-				'meta_query'     => array(
+				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Only on original-of requests; misses are a 404.
 					'relation' => 'OR',
 					array(
 						'key'     => 'mf2_syndication',
@@ -495,17 +495,17 @@ class Syn_Meta {
 		$posts    = get_posts(
 			array(
 				// Every type and status: 'any' leaves out types and statuses excluded from search.
-				'post_type'        => get_post_types(),
-				'post_status'      => array_keys( get_post_stati() ),
-				'meta_key'         => 'syndication_urls',
-				'fields'           => 'ids',
-				'posts_per_page'   => self::LEGACY_BATCH,
-				'no_found_rows'    => true,
+				'post_type'      => get_post_types(),
+				'post_status'    => array_keys( get_post_stati() ),
+				'meta_key'       => 'syndication_urls', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Batched background migration on cron.
+				'fields'         => 'ids',
+				'posts_per_page' => self::LEGACY_BATCH,
+				'no_found_rows'  => true,
 			)
 		);
 		$comments = get_comments(
 			array(
-				'meta_key' => 'syndication_urls',
+				'meta_key' => 'syndication_urls', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Batched background migration on cron.
 				'fields'   => 'ids',
 				'number'   => self::LEGACY_BATCH,
 				'status'   => 'any',

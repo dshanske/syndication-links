@@ -6,7 +6,7 @@ class SynProvider_Webmention_Bridgy extends SynProvider_Webmention {
 	public function __construct( $args = array() ) {
 
 		$option = get_option( 'syndication_provider_enable' );
-		$enable = is_array( $option ) ? in_array( $this->uid, $option ) : false;
+		$enable = is_array( $option ) ? in_array( $this->uid, $option, true ) : false;
 		if ( $enable ) {
 			add_filter( 'webmention_send_vars', array( $this, 'webmention_send_vars' ), 10, 2 );
 		}

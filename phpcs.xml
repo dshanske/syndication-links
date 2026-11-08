@@ -30,7 +30,12 @@
 			<property name="strict_class_file_names" value="false" />
 		</properties>
 	</rule>
-	<rule ref="VariableAnalysis"/>
+	<rule ref="VariableAnalysis">
+		<properties>
+			<!-- Hook and callback signatures fix the parameters, used or not. -->
+			<property name="allowUnusedFunctionParameters" value="true"/>
+		</properties>
+	</rule>
 
         <rule ref="WordPress-Extra" />
         <rule ref="WordPress.WP.I18n"/>

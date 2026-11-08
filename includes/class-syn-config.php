@@ -381,7 +381,7 @@ class Syn_Config {
 				continue;
 			}
 			?>
-			<li><input name='<?php echo esc_attr( $args['label_for'] ); ?>[]' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option ), true ); ?>/> 
+			<li><input name='<?php echo esc_attr( $args['label_for'] ); ?>[]' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option, true ), true ); ?>/> 
 			<label for="<?php echo esc_attr( $post_type->name ); ?>"><?php echo esc_html( $post_type->label ); ?></label>
 			</li> 
 			<?php
