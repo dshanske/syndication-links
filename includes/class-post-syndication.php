@@ -231,7 +231,7 @@ class Post_Syndication {
 				}
 				if ( in_array( $target->get_uid(), $syndicate_to, true ) ) {
 					$return = $target->posse( $post_ID );
-					self::error_log( $return );
+					self::error_log( $return, $target, $post_ID );
 					$returns[] = self::syndication_log( $return, $target );
 				}
 			}
@@ -314,15 +314,42 @@ class Post_Syndication {
 		);
 	}
 
-	public static function error_log( $input ) {
+	/**
+	 * Logs the outcome of a syndication attempt under WP_DEBUG.
+	 *
+	 * Only a summary is logged: the status code, error code and the new URL.
+	 * Response bodies can include account details, and the full response is
+	 * already kept in the post's syndication log.
+	 *
+	 * @since 5.0.0 Logs a summary instead of the whole response, and takes the target and post.
+	 *
+	 * @param mixed                     $input   What the provider's posse() returned.
+	 * @param Syndication_Provider|null $target  The target. Optional.
+	 * @param int                       $post_id Post ID. Optional.
+	 */
+	public static function error_log( $input, $target = null, $post_id = 0 ) {
 		if ( ! WP_DEBUG ) {
 			return;
 		}
-		if ( is_wp_error( $input ) ) {
-			error_log( sprintf( '%1$s: %2$s', $input->get_error_message(), wp_json_encode( $input->error_data ) ) ); // phpcs:ignore
-		} else {
-			error_log( sprintf( 'Success: %1$s', wp_json_encode( $input ) ) ); // phpcs:ignore
+		$where = $target instanceof Syndication_Provider ? $target->get_uid() : 'unknown target';
+		if ( $post_id ) {
+			$where = sprintf( 'post %1$d to %2$s', $post_id, $where );
 		}
+		if ( is_wp_error( $input ) ) {
+			$data   = $input->get_error_data();
+			$status = ( is_array( $data ) && isset( $data['status'] ) ) ? sprintf( ' (HTTP %d)', $data['status'] ) : '';
+			error_log( sprintf( 'Syndication Links: syndicating %1$s failed: %2$s%3$s', $where, $input->get_error_code(), $status ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			return;
+		}
+		$details = '';
+		if ( is_array( $input ) && isset( $input['response']['code'] ) ) {
+			$details = sprintf( ' (HTTP %d)', $input['response']['code'] );
+			$url     = wp_remote_retrieve_header( $input, 'location' );
+			if ( $url ) {
+				$details .= ' ' . $url;
+			}
+		}
+		error_log( sprintf( 'Syndication Links: syndicated %1$s%2$s', $where, $details ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 	}
 
 	public static function syndication_log_output( $post_id ) {
