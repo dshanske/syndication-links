@@ -12,6 +12,8 @@ Link to copies of your [cross-posted](https://indieweb.org/cross-posting) conten
 
 ## Description
 
+Syndication Links is a WordPress (and ClassicPress) plugin, available from the [WordPress.org plugin directory](https://wordpress.org/plugins/syndication-links/).
+
 It supports adding links to your WordPress posts, pages, and comments, indicating where a syndicated copy is, in the form of a text or icon link. You can do this
 manually or with supported plugins. Also contains a generic UI for syndicating to other sites through your site or a Micropub Client.
 
@@ -106,11 +108,26 @@ If you add `?original-of=` and the URL-encoded URL it will return the post that 
 If you want to do this with a form, there is a function you can add to your theme called `get_original_of_form()` and a widget that calls this. Like the search form if you have a
 originalofform.php in your theme folder the function will return it so you can customize the form.
 
+### How do I find the posts I syndicated to a site?
+
+Add `?syndication=` and a domain, such as `?syndication=mastodon.social`, to your site's address. It lists the posts with a syndication link to that domain. A full URL works too: its domain is used.
+
+It combines with WordPress's other query parameters, so `?syndication=mastodon.social&s=widgets` searches those posts for "widgets".
+
+### Why do links to my Mastodon server show a generic icon?
+
+There are too many Mastodon servers to recognize them all, so the plugin uses the Mastodon icon for:
+
+* the servers in your users' profiles: the `mastodon` user field, which the [IndieWeb plugin](https://wordpress.org/plugins/indieweb/) adds as "Mastodon Server (URL)". Enter your profile URL, such as `https://masto.ai/@username`.
+* the server set in XPoster or Mastodon Autopost, if you use them.
+* servers whose name is "mastodon", such as `mastodon.social` or `mastodon.online`, which match the icon by name.
+
+You can also use the `syn_link_mapping` filter to return `mastodon` for any URL.
+
 ### What filters are available to modify output?
 
 * `syn_rewrite_secure( $domains )` - $domains is an array of domain names to rewrite to https if found
 * `syn_metabox_types( $screens )` - $screens would be an array of post types to add the Syndication Link metabox to.
-* `syn_network_strings( $strings )` - $strings is an array of descriptive text strings by domain name
 * `syn_add_links( $urls, $post_ID )` - (Deprecated) $urls is an array of retrieved links from $post_ID
 * `get_post_syndication_links( $urls, $post_ID)` - Replaces syn_add_links.
 * `get_comment_syndication_links( $urls, $comment_ID` - Filters an array of retrieved comment syndication links.
