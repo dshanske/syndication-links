@@ -201,20 +201,32 @@ function syndication_links_init() {
 				);
 		}
 
-		// Providers that have a Post Kinds Dependency.
-		if ( class_exists( 'Post_Kinds_Plugin' ) ) {
-			syndication_links_register_providers(
-				array(
-					'class-syndication-provider-pinboard.php', // Pinboard.
-				),
-				'/includes/apis'
-			);
-		}
+		// Providers that need Post Kinds. Its functions load on plugins_loaded at the same
+		// priority as this, so check once every plugin has loaded.
+		add_action( 'init', 'syndication_links_register_post_kinds_providers', 5 );
 	}
 	load_plugin_textdomain( 'syndication-links', false, basename( __DIR__ ) . '/languages/' );
 }
 
 	add_action( 'plugins_loaded', 'syndication_links_init', 11 );
+
+/**
+ * Registers the providers that need the Post Kinds plugin, if it's active.
+ *
+ * Uses Post Kinds' public get_post_kind_response() (Post Kinds 4.0.1+), not its classes.
+ *
+ * @since 5.0.0
+ */
+function syndication_links_register_post_kinds_providers() {
+	if ( function_exists( 'get_post_kind_response' ) ) {
+		syndication_links_register_providers(
+			array(
+				'class-syndication-provider-pinboard.php', // Pinboard.
+			),
+			'/includes/apis'
+		);
+	}
+}
 
 /**
  * Adds the plugin's suggested text to the privacy policy guide.
