@@ -6,19 +6,18 @@ add_action( 'init', array( 'Social_Plugins', 'init' ) );
 
 class Social_Plugins {
 	public static function init() {
-		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_syn_plugins' ) );
+		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_syn_plugins' ), 10, 2 );
 		add_filter( 'syn_link_mapping', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
-		add_action( 'wpt_tweet_posted', array( 'Social_Plugins', 'wptotwitter_to_syn_links' ), 10, 2 );
-		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_autopost_for_x_links' ) );
+		// XPoster fires wpt_tweet_posted before it saves the status ID, so wait for the ID itself.
+		add_action( 'added_post_meta', array( 'Social_Plugins', 'wptotwitter_tweet_id_added' ), 10, 4 );
+		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_autopost_for_x_links' ), 10, 2 );
 	}
 
 	public static function url_to_name_plugins( $name, $url ) {
-		if ( class_exists( 'autopostToMastodon' ) ) {
-			// Compare hosts only: wp_http_validate_url() would do a DNS lookup for every link shown.
-			$instance = wp_parse_url( (string) get_option( 'autopostToMastodon-instance', '' ), PHP_URL_HOST );
-			if ( $instance && strtolower( $instance ) === strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) ) ) {
-				return 'mastodon';
-			}
+		// Mastodon Autopost's instance. Compare hosts only: wp_http_validate_url() would do a DNS lookup for every link shown.
+		$instance = wp_parse_url( (string) get_option( 'autopostToMastodon-instance', '' ), PHP_URL_HOST );
+		if ( $instance && strtolower( $instance ) === strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) ) ) {
+			return 'mastodon';
 		}
 		return $name;
 	}
@@ -38,12 +37,17 @@ class Social_Plugins {
 		return $result;
 	}
 
-	public static function add_syn_plugins( $urls ) {
+	public static function add_syn_plugins( $urls, $post_id = null ) {
+		// The filter passes the post: get_the_ID() is only right inside the loop.
+		$post_id = $post_id ? $post_id : get_the_ID();
+		if ( ! $post_id ) {
+			return $urls;
+		}
 		$see_on = array();
 //		if ( defined( 'NextScripts_SNAP_Version' ) ) {
 //			$see_on = array_merge( $see_on, self::add_links_from_snap() );
 //		}
-		$keys = get_post_meta( get_the_ID() );
+		$keys = get_post_meta( $post_id );
 		if ( ! $keys ) {
 			return $urls;
 		}
@@ -51,7 +55,7 @@ class Social_Plugins {
 
 		foreach(  $keys as $key ) {
 			if ( 0 === strpos( $key, 'snap' ) && 6 === strlen( $key ) ) {
-				$meta = get_post_meta( get_the_ID(), $key, true );
+				$meta = get_post_meta( $post_id, $key, true );
 				$meta = maybe_unserialize( $meta );
 				$meta = self::array_flatten( $meta );
 				if ( isset( $meta['postURL'] ) ) {
@@ -61,25 +65,25 @@ class Social_Plugins {
 		}
 		// Support for the Official Medium Plugin per request @chrisaldrich
 		if ( class_exists( 'Medium_Post' ) ) {
-			$medium_post = Medium_Post::get_by_wp_id( get_the_ID() );
-			$see_on[]    = $medium_post->url;
+			$medium_post = Medium_Post::get_by_wp_id( $post_id );
+			if ( $medium_post && ! empty( $medium_post->url ) ) {
+				$see_on[] = $medium_post->url;
+			}
 		}
 		// Support for Mastodon Autopost https://github.com/dshanske/syndication-links/issues/75
-		if ( class_exists( 'autopostToMastodon' ) ) {
-			$mastodon = get_post_meta( get_the_ID(), 'mastodonAutopostLastSuccessfullPostURL', true );
-			if ( ! $mastodon ) {
-				$mastodon = get_post_meta( get_the_ID(), 'mastodonAutopostLastSuccessfullTootURL', true );
-			}
-			if ( $mastodon ) {
+		// The meta is read whether or not the plugin is still active: the toots it posted still exist.
+		foreach ( array( 'autopostToMastodonshare-lastSuccessfullTootURL', 'mastodonAutopostLastSuccessfullPostURL', 'mastodonAutopostLastSuccessfullTootURL' ) as $key ) {
+			$mastodon = get_post_meta( $post_id, $key, true );
+			if ( $mastodon && is_string( $mastodon ) ) {
 				$see_on[] = $mastodon;
+				break;
 			}
-
 		}
 		// Support for Keyring Social Importer fields https://github.com/dshanske/syndication-links/issues/73
 		if ( class_exists( 'Keyring_Importer_Base' ) ) {
 			$keyrings = array( 'href', 'flickr_url', 'instagram_url', 'pinterest_url', 'twitter_permalink' );
 			foreach( $keyrings as $keyring ) {
-				$keyr = get_post_meta( get_the_ID(), $keyring, true );
+				$keyr = get_post_meta( $post_id, $keyring, true );
 				if ( $keyr ) {
 					$see_on[] = $keyr;
 				}
@@ -158,6 +162,22 @@ class Social_Plugins {
 		return $broadcasts;
 	}
 
+	/**
+	 * Records the X status XPoster just posted, once XPoster has saved its ID.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int    $meta_id    Meta ID.
+	 * @param int    $post_id    Post ID.
+	 * @param string $meta_key   Meta key.
+	 * @param mixed  $meta_value Meta value.
+	 */
+	public static function wptotwitter_tweet_id_added( $meta_id, $post_id, $meta_key, $meta_value ) {
+		if ( '_wpt_tweet_id' === $meta_key ) {
+			self::wptotwitter_to_syn_links( null, $post_id );
+		}
+	}
+
 	public static function wptotwitter_to_syn_links( $connection, $id ) {
 		// If someone is doing a a credentials check to twitter, we won't have an ID.
 		if ( false === $id ) {
@@ -187,8 +207,8 @@ class Social_Plugins {
 	 * @param array $urls The array of URLs to syndicate to.
 	 * @return array The array of URLs to syndicate to.
 	 */
-	public static function add_autopost_for_x_links( $urls ) {
-		$post_id = get_the_ID();
+	public static function add_autopost_for_x_links( $urls, $post_id = null ) {
+		$post_id = $post_id ? $post_id : get_the_ID();
 		if ( empty( $post_id ) ) {
 			return $urls;
 		}
@@ -203,20 +223,10 @@ class Social_Plugins {
 			$tweets = get_post_meta( $post_id, 'autoshare_status', true );
 			if ( ! empty( $tweets ) && is_array( $tweets ) ) {
 				foreach ( $tweets as $tweet ) {
-					if ( 'published' === $tweet['status'] && ! empty( $tweet['twitter_id'] ) ) {
-						$tweet_id = $tweet['twitter_id'];
-						$handle   = $tweet['handle'] ?? 'i/web';
-						$url      = esc_url( 'https://x.com/' . $handle . '/status/' . $tweet_id );
-
-						// Only add valid tweet URLs.
-						if (
-							! empty( $url ) &&
-							false !== strpos( $url, '/status/' ) &&
-							strlen( $url ) > 30 &&
-							wp_http_validate_url( $url )
-						) {
-							$links[] = $url;
-						}
+					if ( isset( $tweet['status'] ) && 'published' === $tweet['status'] && ! empty( $tweet['twitter_id'] ) ) {
+						// The plugin saves an empty handle when it doesn't know it; x.com/i/web/status/ works without one.
+						$handle  = empty( $tweet['handle'] ) ? 'i/web' : rawurlencode( $tweet['handle'] );
+						$links[] = 'https://x.com/' . $handle . '/status/' . rawurlencode( $tweet['twitter_id'] );
 					}
 				}
 			}
