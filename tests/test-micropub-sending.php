@@ -254,6 +254,36 @@ class Test_Micropub_Sending extends WP_UnitTestCase {
 		$this->assertSame( array(), Syn_Meta::get_stored_links( 'post', $post_id ) );
 	}
 
+	/**
+	 * A Micropub error is returned as one, with its description (#342).
+	 */
+	public function test_posse_returns_an_error_for_an_error_status() {
+		$this->respond(
+			400,
+			'{"error":"invalid_request","error_description":"Bridgy could not publish this."}',
+			array( 'location' => 'https://mastodon.example/@me/1' )
+		);
+		$post_id = $this->post();
+
+		$result = $this->provider()->posse( $post_id );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'Bridgy could not publish this.', $result->get_error_message() );
+		$this->assertSame( 400, $result->get_error_data()['status'] );
+		$this->assertSame( 'invalid_request', $result->get_error_data()['data']['error'] );
+		$this->assertSame( array(), Syn_Meta::get_stored_links( 'post', $post_id ) );
+	}
+
+	public function test_posse_error_without_a_description() {
+		$this->respond( 500, 'Server error' );
+
+		$result = $this->provider()->posse( $this->post() );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 500, $result->get_error_data()['status'] );
+		$this->assertSame( 'Server error', $result->get_error_data()['data'] );
+	}
+
 	public function test_posse_passes_request_errors_through() {
 		$this->response = new WP_Error( 'http_request_failed', 'Timed out' );
 		$post_id        = $this->post();

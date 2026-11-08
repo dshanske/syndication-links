@@ -302,8 +302,10 @@ class SynProvider_Micropub extends Syndication_Provider {
 	/**
 	 * Syndicates a post, and adds the copy's URL from the `Location` header to its links.
 	 *
+	 * @since 5.0.0 Returns an error for a response that isn't a 2xx.
+	 *
 	 * @param int|null $post_id Optional. Post ID. Defaults to the current post.
-	 * @return array|WP_Error The response, or an error.
+	 * @return array|WP_Error The response, or an error for a failed request or a non-2xx response.
 	 */
 	public function posse( $post_id = null ) {
 		if ( ! $post_id ) {
@@ -319,6 +321,28 @@ class SynProvider_Micropub extends Syndication_Provider {
 		$response = self::post_micropub( $post_id, $this->endpoint );
 		if ( is_wp_error( $response ) ) {
 			return $response;
+		}
+
+		// Micropub creates the post with a 201 or 202; anything other than a 2xx is an error.
+		$code = (int) wp_remote_retrieve_response_code( $response );
+		if ( 2 !== (int) floor( $code / 100 ) ) {
+			$body = wp_remote_retrieve_body( $response );
+			$data = json_decode( $body, true );
+			// Micropub errors are JSON with an `error` code and an optional `error_description`.
+			if ( is_array( $data ) && ! empty( $data['error_description'] ) && is_string( $data['error_description'] ) ) {
+				$message = $data['error_description'];
+			} else {
+				/* translators: %s: provider name */
+				$message = sprintf( __( 'Unknown %s Error', 'syndication-links' ), $this->name );
+			}
+			return new WP_Error(
+				$this->uid . '_publish_error',
+				$message,
+				array(
+					'status' => $code,
+					'data'   => is_null( $data ) ? $body : $data,
+				)
+			);
 		}
 
 		$location = wp_remote_retrieve_header( $response, 'location' );
