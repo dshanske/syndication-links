@@ -303,7 +303,9 @@ function register_syndication_link_source( $slug, $args ) {
 /**
  * Returns the post types that have syndication links and can be syndicated.
  *
- * Always includes `post`, plus the types chosen in the settings.
+ * Always includes `post`, plus the types chosen in the settings (pages by default).
+ *
+ * @since 5.0.0 Lists each type once.
  *
  * @return string[] Post type names.
  */
@@ -312,7 +314,7 @@ function syndication_post_types() {
 	if ( ! is_array( $post_types ) ) {
 		$post_types = array();
 	}
-	$post_types = array_merge( array( 'post' ), $post_types );
+	$post_types = array_values( array_unique( array_merge( array( 'post' ), $post_types ) ) );
 	/**
 	 * Filters the post types that have syndication links and can be syndicated.
 	 *

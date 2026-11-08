@@ -114,7 +114,8 @@ class Syn_Config {
 						),
 					),
 				),
-				'default'      => array( 'post', 'page' ),
+				// The other post types: posts always have links (see syndication_post_types()).
+				'default'      => array( 'page' ),
 			)
 		);
 
