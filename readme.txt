@@ -143,6 +143,7 @@ You can also use the `syn_link_mapping` filter to return `mastodon` for any URL.
 * `syndication_link_disabled( $disabled, $uid, $post_ID )` - Will disable the checkbox for a syndication provider($uid) when loaded. The post ID is passed through to allow more specific targeting.
 * `syn_link_title( $title, $name )` - Allows you to set the title string for Links. Example, pinboard => Pinboard.
 * `syn_link_mapping( $icon, $url )` - Allows you to override or set the mapping from URL to icon name.
+* `syn_link_rel( $rels, $url )` - The rel values of a syndication link: `nofollow`, plus `syndication` on a single post's page. Remove `nofollow` to let search engines follow the links.
 * `pre_syn_link_icon( $icon, $name )` - Allows you to provide a custom icon. Icons by default are SVG, not URL or filenames.
 * `syndication_links_display( true )` - Adds Syndication Links to content display. Set to false if the theme supports this, or declare `add_theme_support( 'syndication-links' )`.
 * `syndication_links_comment_display( true )` - Adds Syndication Links after each comment. Set to false if the theme places them.
@@ -224,6 +225,7 @@ In no particular order...
 * The links (`mf2_syndication`) and the syndication log no longer appear in the Custom Fields box. The meta keys are unchanged.
 * `?original-of=` matches the exact link, searches every syndication post type, and returns a 404 when nothing matches. `?syndication=` only filters the main query.
 * `mailto:`, `sms:` and `tel:` links get mail and phone icons.
+* Syndication links are `rel="nofollow"`. The new `syn_link_rel` filter can remove it.
 * New template tags for themes: `the_syndication_links()`, `the_comment_syndication_links()` and `syndication_links_display_mode()`.
 * Icons for retired services (Google+, Google Podcasts, Pocket and others) are kept in a separate pack, loaded only when one is shown. The icons are built with PHP; the Node build is gone.
 * Old `syndication_urls` links are moved to `mf2_syndication` in the background instead of when a post is read.
