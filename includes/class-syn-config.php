@@ -47,17 +47,6 @@ class Syn_Config {
 
 		register_setting(
 			'syndication_display',
-			'syndication-links_the_content',
-			array(
-				'type'         => 'boolean',
-				'description'  => 'Disable Syndication Links in the Content',
-				'show_in_rest' => true,
-				'default'      => false,
-			)
-		);
-
-		register_setting(
-			'syndication_display',
 			'syndication-links_archives',
 			array(
 				'type'         => 'boolean',
