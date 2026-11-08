@@ -143,34 +143,30 @@ class Syn_Config {
 	}
 
 	/**
-	 * Enqueues the front-end stylesheet for the chosen icon size and colours.
+	 * Enqueues the front-end stylesheet, with the chosen icon size and colours.
+	 *
+	 * There's one stylesheet. The icon size and black-and-white mode are added
+	 * to it as an inline style: the size as the `--syn-icon-size` custom
+	 * property, and black-and-white mode by overriding each icon's brand colour.
 	 */
 	public static function enqueue_scripts() {
-		$size = get_option( 'syndication-links_size' );
-		if ( '1' === get_option( 'syndication-links_bw' ) ) {
-			switch ( $size ) {
-				case 'large':
-					$css = 'css/syn-bw-large.min.css';
-					break;
-				case 'medium':
-					$css = 'css/syn-bw-medium.min.css';
-					break;
-				default:
-					$css = 'css/syn-bw.min.css';
-			}
-		} else {
-			switch ( $size ) {
-				case 'large':
-					$css = 'css/syn-large.min.css';
-					break;
-				case 'medium':
-					$css = 'css/syn-medium.min.css';
-					break;
-				default:
-					$css = 'css/syn.min.css';
-			}
+		wp_enqueue_style( 'syndication-style', plugin_dir_url( __DIR__ ) . 'css/syn.min.css', array(), SYNDICATION_LINKS_VERSION );
+
+		$css   = '';
+		$sizes = array(
+			'medium' => '1.5rem',
+			'large'  => '2rem',
+		);
+		$size  = get_option( 'syndication-links_size' );
+		if ( isset( $sizes[ $size ] ) ) {
+			$css .= sprintf( 'ul.relsyn{--syn-icon-size:%s}', $sizes[ $size ] );
 		}
-		wp_enqueue_style( 'syndication-style', plugin_dir_url( __DIR__ ) . $css, array(), SYNDICATION_LINKS_VERSION );
+		if ( '1' === get_option( 'syndication-links_bw' ) ) {
+			$css .= '.relsyn li a{color:white;mix-blend-mode:difference}.relsyn li a .syndication-link-icon{color:inherit}';
+		}
+		if ( $css ) {
+			wp_add_inline_style( 'syndication-style', $css );
+		}
 	}
 
 	/**

@@ -7,23 +7,11 @@
 
 class Test_Historic_Icons extends WP_UnitTestCase {
 
-	const STYLE = 'syndication-links-historic';
-
 	public function set_up() {
 		parent::set_up();
-		wp_dequeue_style( self::STYLE );
-		wp_deregister_style( self::STYLE );
-		delete_option( 'syndication-links_bw' );
 		// Show links (not the hidden <data> markup) on non-singular views, which tests run as.
 		update_option( 'syndication-links_display', 'iconstext' );
 		update_option( 'syndication-links_archives', '1' );
-	}
-
-	public function tear_down() {
-		wp_dequeue_style( self::STYLE );
-		wp_deregister_style( self::STYLE );
-		delete_option( 'syndication-links_bw' );
-		parent::tear_down();
 	}
 
 	/**
@@ -61,18 +49,7 @@ class Test_Historic_Icons extends WP_UnitTestCase {
 		$this->assertTrue( Syn_Link_Domain_Icon_Map::is_historic( $slug ) );
 		$this->assertSame( $title, Syn_Link_Domain_Icon_Map::get_title( $slug ) );
 
-		$css = file_get_contents( dirname( __DIR__ ) . '/css/syn-historic.min.css' );
-		$this->assertStringContainsString( ".svg-$slug{", $css );
-	}
-
-	/**
-	 * Historic icons stay out of the main stylesheet.
-	 */
-	public function test_historic_icons_not_in_main_stylesheet() {
-		$css = file_get_contents( dirname( __DIR__ ) . '/css/syn.min.css' );
-		foreach ( $this->data_historic_icons() as $icon ) {
-			$this->assertStringNotContainsString( '.svg-' . $icon[0] . '{', $css, $icon[0] );
-		}
+		$this->assertMatchesRegularExpression( '/^#[0-9A-F]{6}$/', (string) Syn_Link_Domain_Icon_Map::get_color( $slug ) );
 	}
 
 	/**
@@ -108,79 +85,9 @@ class Test_Historic_Icons extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Rendering a historic icon loads the historic stylesheet; other icons don't.
+	 * A historic icon renders with its colour, like any other icon.
 	 */
-	public function test_historic_icon_enqueues_style() {
-		Syn_Link_Domain_Icon_Map::get_icon( 'facebook' );
-		$this->assertFalse( wp_style_is( self::STYLE, 'enqueued' ) );
-
-		$icon = Syn_Link_Domain_Icon_Map::get_icon( 'googleplus' );
-		$this->assertStringContainsString( '<svg', $icon );
-		$this->assertStringContainsString( 'svg-googleplus', $icon );
-		$this->assertTrue( wp_style_is( self::STYLE, 'enqueued' ) );
-		$this->assertStringEndsWith( '/css/syn-historic.min.css', wp_styles()->registered[ self::STYLE ]->src );
-	}
-
-	/**
-	 * Black-and-white mode uses no brand colours, so it doesn't load them.
-	 */
-	public function test_black_and_white_mode_skips_style() {
-		update_option( 'syndication-links_bw', '1' );
-
-		Syn_Link_Domain_Icon_Map::get_icon( 'googleplus' );
-
-		$this->assertFalse( wp_style_is( self::STYLE, 'enqueued' ) );
-	}
-
-	public function test_filter_can_turn_off_style() {
-		add_filter( 'syn_load_historic_icon_style', '__return_false' );
-
-		Syn_Link_Domain_Icon_Map::get_icon( 'googleplus' );
-
-		$this->assertFalse( wp_style_is( self::STYLE, 'enqueued' ) );
-	}
-
-	/**
-	 * Text-only links don't build the icon, so they don't load icon styles.
-	 */
-	public function test_text_only_links_skip_style() {
-		$post_id = self::factory()->post->create();
-		add_post_syndication_link( $post_id, 'https://plus.google.com/+someone/posts/abc' );
-
-		$links = Syn_Meta::get_syndication_links_elements(
-			'post',
-			$post_id,
-			array(
-				'icons' => false,
-				'text'  => true,
-			)
-		);
-
-		$this->assertCount( 1, $links );
-		$this->assertStringContainsString( 'Google+', $links[0] );
-		$this->assertStringNotContainsString( '<svg', $links[0] );
-		$this->assertFalse( wp_style_is( self::STYLE, 'enqueued' ) );
-	}
-
-	/**
-	 * Hidden links are only microformats markup, so they don't load icon styles.
-	 */
-	public function test_hidden_links_skip_style() {
-		update_option( 'syndication-links_display', 'hidden' );
-		$post_id = self::factory()->post->create();
-		add_post_syndication_link( $post_id, 'https://plus.google.com/+someone/posts/abc' );
-
-		$links = Syn_Meta::get_syndication_links_elements( 'post', $post_id, array( 'icons' => true ) );
-
-		$this->assertCount( 1, $links );
-		$this->assertStringStartsWith( '<data class="u-syndication"', $links[0] );
-		$this->assertFalse( wp_style_is( self::STYLE, 'enqueued' ) );
-	}
-
-	/**
-	 * Links shown with icons load the stylesheet.
-	 */
-	public function test_icon_links_load_style() {
+	public function test_historic_icon_links_carry_their_colour() {
 		$post_id = self::factory()->post->create();
 		add_post_syndication_link( $post_id, 'https://plus.google.com/+someone/posts/abc' );
 
@@ -195,6 +102,6 @@ class Test_Historic_Icons extends WP_UnitTestCase {
 
 		$this->assertCount( 1, $links );
 		$this->assertStringContainsString( 'svg-googleplus', $links[0] );
-		$this->assertTrue( wp_style_is( self::STYLE, 'enqueued' ) );
+		$this->assertStringContainsString( '--syn-icon-color: #DC4E41; ', $links[0] );
 	}
 }

@@ -60,14 +60,7 @@
     ],
     "build-css": [
       "vendor/bin/pscss --style=expanded sass/main.scss css/syn.css",
-      "vendor/bin/pscss --style=compressed sass/main.scss css/syn.min.css",
-      "vendor/bin/pscss --style=compressed sass/min.scss css/syn-minimal.min.css",
-      "vendor/bin/pscss --style=compressed sass/historic.scss css/syn-historic.min.css",
-      "vendor/bin/pscss --style=compressed sass/main-medium.scss css/syn-medium.min.css",
-      "vendor/bin/pscss --style=compressed sass/main-large.scss css/syn-large.min.css",
-      "vendor/bin/pscss --style=compressed sass/main-bw.scss css/syn-bw.min.css",
-      "vendor/bin/pscss --style=compressed sass/main-bw-medium.scss css/syn-bw-medium.min.css",
-      "vendor/bin/pscss --style=compressed sass/main-bw-large.scss css/syn-bw-large.min.css"
+      "vendor/bin/pscss --style=compressed sass/main.scss css/syn.min.css"
     ]
   }
 }

@@ -127,35 +127,6 @@ class Syn_Link_Domain_Icon_Map {
 	}
 
 	/**
-	 * Enqueue the stylesheet with the historic icons' colours.
-	 *
-	 * Called when a historic icon is rendered, so the stylesheet only loads on
-	 * pages that show one. Styles enqueued after the head are printed in the
-	 * footer.
-	 *
-	 * @since 5.0.0
-	 */
-	public static function enqueue_historic_style() {
-		// Black-and-white mode doesn't use brand colours.
-		if ( '1' === get_option( 'syndication-links_bw' ) ) {
-			return;
-		}
-
-		/**
-		 * Filters whether to load the historic icons' stylesheet when a historic icon is shown.
-		 *
-		 * @since 5.0.0
-		 *
-		 * @param bool $load Whether to load the stylesheet. Default true.
-		 */
-		if ( ! apply_filters( 'syn_load_historic_icon_style', true ) ) {
-			return;
-		}
-
-		wp_enqueue_style( 'syndication-links-historic', plugin_dir_url( __DIR__ ) . 'css/syn-historic.min.css', array(), SYNDICATION_LINKS_VERSION );
-	}
-
-	/**
 	 * Returns the path of an icon's SVG file.
 	 *
 	 * @param string $name The icon name. Only letters, numbers, dots, dashes and underscores.
@@ -210,7 +181,8 @@ class Syn_Link_Domain_Icon_Map {
 	/**
 	 * Returns an icon's markup.
 	 *
-	 * Loads the historic icons' stylesheet when the icon is one of them.
+	 * The icon's brand colour, if it has one, is set as the `--syn-icon-color`
+	 * custom property, which the stylesheet uses as the icon's colour.
 	 *
 	 * @param string $name The icon name.
 	 * @return string The icon in a span, or the escaped name if there's no such icon.
@@ -219,13 +191,46 @@ class Syn_Link_Domain_Icon_Map {
 		$icon  = self::get_icon_svg( $name );
 		$title = self::get_title( $name );
 		if ( $icon ) {
-			if ( self::is_historic( $name ) ) {
-				self::enqueue_historic_style();
-			}
-			return sprintf( '<span class="syndication-link-icon svg-%1$s" style="display: inline-block; max-width: 1rem; margin: 2px;" aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $title ), $icon );
+			$color = self::get_color( $name );
+			$style = $color ? sprintf( '--syn-icon-color: %s; ', $color ) : '';
+			return sprintf( '<span class="syndication-link-icon svg-%1$s" style="%4$sdisplay: inline-block; max-width: 1rem; margin: 2px;" aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $title ), $icon, esc_attr( $style ) );
 		}
 		// No icon: fall back to the name as text.
 		return esc_html( $name );
+	}
+
+	/**
+	 * Returns an icon's brand colour.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $name The icon name.
+	 * @return string|null The colour as a hex value such as `#1185FE`, or null if the icon has none.
+	 */
+	public static function get_color( $name ) {
+		$colors = simpleicons_syn_get_colors();
+		$color  = isset( $colors[ $name ] ) ? $colors[ $name ] : null;
+
+		/**
+		 * Filters an icon's brand colour.
+		 *
+		 * Use it to give a colour to an icon added through `syn_icon_file_dirs` or
+		 * `pre_syn_link_icon`, or to change a bundled icon's colour. Return null
+		 * for no colour: the icon then takes the link's colour. Colours that
+		 * aren't a hex value (`#abc` or `#aabbcc`) are ignored.
+		 *
+		 * @since 5.0.0
+		 *
+		 * @param string|null $color The colour, or null if the icon has none.
+		 * @param string      $name  The icon name.
+		 */
+		$color = apply_filters( 'syn_link_icon_color', $color, $name );
+
+		if ( ! is_string( $color ) ) {
+			return null;
+		}
+		$color = sanitize_hex_color( $color );
+		return $color ? $color : null;
 	}
 
 	/**
