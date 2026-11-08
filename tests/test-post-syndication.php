@@ -176,6 +176,30 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 		$this->assertSame( array( 'one' => 'One' ), Post_Syndication::get_providers() );
 	}
 
+	/**
+	 * The provider settings list every provider in one container, with each name escaped once.
+	 */
+	public function test_provider_settings_markup() {
+		$this->register_fakes( 'one' );
+		Post_Syndication::register( new Syn_Test_Provider( 'two', 'A & B' ) );
+
+		ob_start();
+		Post_Syndication::provider_callback( array() );
+		$html = ob_get_clean();
+
+		$this->assertSame( 1, substr_count( $html, '<div>' ) );
+		$this->assertSame( 1, substr_count( $html, '</div>' ) );
+		$this->assertStringEndsWith( '</div>', $html );
+		$this->assertStringContainsString( '>A &amp; B</label>', $html );
+	}
+
+	public function test_checkbox_escapes_the_uid() {
+		$html = Post_Syndication::checkbox( 'a"b', 'Name' );
+
+		$this->assertStringContainsString( 'value="a&quot;b"', $html );
+		$this->assertStringNotContainsString( 'value="a"b"', $html );
+	}
+
 	public function test_get_providers_escapes_names() {
 		Post_Syndication::register( new Syn_Test_Provider( 'one', 'A & <b>B</b>' ) );
 
