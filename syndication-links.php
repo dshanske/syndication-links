@@ -11,6 +11,8 @@
  * Text Domain: syndication-links
  * Domain Path:  /languages
  * License: GPLv2 or later
+ *
+ * @package Syndication_Links
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -21,6 +23,14 @@ define( 'SYNDICATION_LINKS_VERSION', get_file_data( __FILE__, array( 'Version' =
 // If set to 0 disable the webmention version of Bridgy in favor of Micropub.
 defined( 'SYNDICATION_LINKS_BRIDGY_WEBMENTION' ) || define( 'SYNDICATION_LINKS_BRIDGY_WEBMENTION', 0 );
 
+/**
+ * Loads plugin files.
+ *
+ * A missing file is logged rather than fatal.
+ *
+ * @param string[] $files Filenames to load.
+ * @param string   $dir   Directory the files are in, relative to the plugin directory.
+ */
 function syndication_links_load( $files, $dir = 'includes/' ) {
 	$dir = trailingslashit( $dir );
 	if ( empty( $files ) ) {
@@ -37,9 +47,13 @@ function syndication_links_load( $files, $dir = 'includes/' ) {
 }
 
 /**
- * Filename to Classname Function.
+ * Builds a class name from a class filename.
  *
- * @param string $filename.
+ * `class-synprovider-micropub-bridgy-github.php` becomes `Synprovider_Micropub_Bridgy_Github`.
+ * PHP class names are case-insensitive, so this matches `SynProvider_Micropub_Bridgy_Github`.
+ *
+ * @param string $filename The filename, without a path.
+ * @return string|false The class name, or false if no such class is loaded.
  */
 function syndication_links_filename_to_classname( $filename ) {
 	$class = str_replace( 'class-', '', $filename );
@@ -57,8 +71,8 @@ function syndication_links_filename_to_classname( $filename ) {
  *
  * Checks for the existence of and loads files, then registers them as providers.
  *
- * @param array  $files An array of filenames.
- * @param string $dir The directory the files can be found in, relative to the current directory.
+ * @param string[] $files An array of filenames.
+ * @param string   $dir   The directory the files can be found in, relative to the plugin directory.
  */
 function syndication_links_register_providers( $files, $dir = 'includes/' ) {
 	$dir = trailingslashit( $dir );
@@ -83,18 +97,24 @@ function syndication_links_register_providers( $files, $dir = 'includes/' ) {
 	}
 }
 
+/**
+ * Loads the plugin.
+ *
+ * The POSSE code and providers are only loaded when syndication is enabled,
+ * and each provider only when what it depends on is available.
+ */
 function syndication_links_init() {
 	syndication_links_load(
 		array(
-			'simple-icons.php', // Icon Information
-			'class-syn-link-domain-icon-map.php', // Mapping domains to icon names
-			'class-syn-meta.php', // Information on Metadata
-			'class-syn-config.php', // Configuration Options
-			'class-social-plugins.php', // Social Plugin Add-Ons
-			'class-syn-plugin-import.php', // Import links from other plugins
-			'functions.php', // Global Functions
-			'compat-functions.php', // Compat Functions
-			'class-widget-original-of.php', // Original Of Widget
+			'simple-icons.php', // Icon Information.
+			'class-syn-link-domain-icon-map.php', // Mapping domains to icon names.
+			'class-syn-meta.php', // Information on Metadata.
+			'class-syn-config.php', // Configuration Options.
+			'class-social-plugins.php', // Social Plugin Add-Ons.
+			'class-syn-plugin-import.php', // Import links from other plugins.
+			'functions.php', // Global Functions.
+			'compat-functions.php', // Compat Functions.
+			'class-widget-original-of.php', // Original Of Widget.
 		)
 	);
 
@@ -110,40 +130,40 @@ function syndication_links_init() {
 	if ( 1 === intval( get_option( 'syndication_posse_enable', 0 ) ) ) {
 		syndication_links_load(
 			array(
-				'class-syndication-provider.php', // Syndication Provider Base Class
-				'class-post-syndication.php', // Post syndication logic
+				'class-syndication-provider.php', // Syndication Provider Base Class.
+				'class-post-syndication.php', // Post syndication logic.
 			)
 		);
 
-		// Providers that require access to a third-party API or other method
+		// Providers that require access to a third-party API or other method.
 		syndication_links_register_providers(
 			array(
-				'class-syndication-provider-microdotblog.php', // Micro.blog
+				'class-syndication-provider-microdotblog.php', // Micro.blog.
 			),
 			'/includes/apis'
 		);
 
-		// Micropub Base Class
+		// Micropub Base Class.
 			syndication_links_register_providers(
 				array(
-					'class-synprovider-micropub.php', // Class for any Micropub Based Service
+					'class-synprovider-micropub.php', // Class for any Micropub Based Service.
 				),
 				'/includes/micropub'
 			);
 
-		// Webmention Only Providers
+		// Webmention Only Providers.
 		if ( function_exists( 'send_webmention' ) ) {
 
 			syndication_links_load(
 				array(
-					'class-synprovider-webmention.php', // Class for Any Webmention Based Service
-					'class-synprovider-webmention-custom.php', // Class for A Custom Webmention Based Service
+					'class-synprovider-webmention.php', // Class for Any Webmention Based Service.
+					'class-synprovider-webmention-custom.php', // Class for A Custom Webmention Based Service.
 				),
 				'/includes/webmentions'
 			);
 			syndication_links_register_providers(
 				array(
-					'class-synprovider-webmention-bridgy-fed.php', // Bridgy Fed
+					'class-synprovider-webmention-bridgy-fed.php', // Bridgy Fed.
 				),
 				'/includes/webmentions'
 			);
@@ -159,7 +179,7 @@ function syndication_links_init() {
 		}
 
 		if ( 0 === SYNDICATION_LINKS_BRIDGY_WEBMENTION ) {
-			// Providers that require Micropub
+			// Providers that require Micropub.
 			syndication_links_register_providers(
 				array(
 					'class-synprovider-micropub-bridgy-flickr.php',
@@ -172,20 +192,20 @@ function syndication_links_init() {
 		} elseif ( function_exists( 'send_webmention' ) ) {
 				syndication_links_register_providers(
 					array(
-						'class-synprovider-webmention-bridgy.php', // Bridgy Base Class
-						'class-synprovider-webmention-bridgy-github.php', // Github via Bridgy
-						'class-synprovider-webmention-bridgy-flickr.php', // Flickr via Bridgy
-						'class-synprovider-webmention-bridgy-mastodon.php', // Mastodon via Bridgy
+						'class-synprovider-webmention-bridgy.php', // Bridgy Base Class.
+						'class-synprovider-webmention-bridgy-github.php', // Github via Bridgy.
+						'class-synprovider-webmention-bridgy-flickr.php', // Flickr via Bridgy.
+						'class-synprovider-webmention-bridgy-mastodon.php', // Mastodon via Bridgy.
 					),
 					'/includes/webmentions'
 				);
 		}
 
-		// Providers that have a Post Kinds Dependency
+		// Providers that have a Post Kinds Dependency.
 		if ( class_exists( 'Post_Kinds_Plugin' ) ) {
 			syndication_links_register_providers(
 				array(
-					'class-syndication-provider-pinboard.php', // Pinboard
+					'class-syndication-provider-pinboard.php', // Pinboard.
 				),
 				'/includes/apis'
 			);
@@ -196,6 +216,9 @@ function syndication_links_init() {
 
 	add_action( 'plugins_loaded', 'syndication_links_init', 11 );
 
+/**
+ * Adds the plugin's suggested text to the privacy policy guide.
+ */
 function syndication_links_privacy_declaration() {
 	if ( function_exists( 'wp_add_privacy_policy_content' ) ) {
 		$content = __(

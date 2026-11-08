@@ -9,6 +9,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Returns the icon titles.
+ *
+ * @return string[] Titles, keyed by icon slug.
+ */
 function simpleicons_syn_get_names() {
 	return array(
 		'dotenv'                       => '.ENV',
