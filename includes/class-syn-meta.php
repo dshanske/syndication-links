@@ -28,6 +28,20 @@ class Syn_Meta {
 		add_action( 'syn_migrate_legacy_links', array( $cls, 'migrate_legacy_links' ) );
 		add_filter( 'is_protected_meta', array( $cls, 'protect_meta' ), 10, 2 );
 		self::schedule_legacy_migration();
+		self::register_meta();
+		add_filter( 'query_vars', array( $cls, 'query_var' ) );
+		add_action( 'parse_query', array( $cls, 'parse_query' ) );
+		add_action( 'pre_get_posts', array( $cls, 'syndication_filter_query' ) );
+
+		add_filter( 'wp_privacy_personal_data_exporters', array( $cls, 'wp_privacy_personal_data_exporters' ), 10 );
+	}
+
+	/**
+	 * Registers the `mf2_syndication` meta for posts and comments, including for the REST API.
+	 *
+	 * @since 5.0.0
+	 */
+	public static function register_meta() {
 		$args = array(
 			'type'          => 'array',
 			'description'   => 'Syndication URLs',
@@ -54,11 +68,6 @@ class Syn_Meta {
 			'mf2_syndication',
 			$args
 		);
-		add_filter( 'query_vars', array( $cls, 'query_var' ) );
-		add_action( 'parse_query', array( $cls, 'parse_query' ) );
-		add_action( 'pre_get_posts', array( $cls, 'syndication_filter_query' ) );
-
-		add_filter( 'wp_privacy_personal_data_exporters', array( $cls, 'wp_privacy_personal_data_exporters' ), 10 );
 	}
 
 	/**

@@ -8,6 +8,14 @@
 class Test_Protected_Meta extends WP_UnitTestCase {
 
 	/**
+	 * The test case unregisters every meta key after each test, so register it again.
+	 */
+	public function set_up() {
+		parent::set_up();
+		Syn_Meta::register_meta();
+	}
+
+	/**
 	 * @dataProvider data_protected_keys
 	 *
 	 * @param string $key  Meta key.
