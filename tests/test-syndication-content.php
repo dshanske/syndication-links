@@ -147,6 +147,7 @@ class Test_Syndication_Content extends WP_UnitTestCase {
 	}
 
 	public function test_post_types_always_include_posts() {
+		update_option( 'syndication_post_types', array() );
 		$this->assertSame( array( 'post' ), syndication_post_types() );
 
 		update_option( 'syndication_post_types', array( 'page' ) );
@@ -161,6 +162,7 @@ class Test_Syndication_Content extends WP_UnitTestCase {
 			$types[] = 'note';
 			return $types;
 		};
+		update_option( 'syndication_post_types', array() );
 		add_filter( 'syndication_post_types', $filter );
 
 		$this->assertSame( array( 'post', 'note' ), syndication_post_types() );
