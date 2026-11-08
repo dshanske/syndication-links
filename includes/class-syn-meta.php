@@ -517,7 +517,7 @@ class Syn_Meta {
 	/**
 	 * Adds syndication links to an object.
 	 *
-	 * New links go before the existing ones, and duplicates are dropped.
+	 * New links go after the existing ones, and duplicates are dropped.
 	 *
 	 * @param string          $type    Object type, e.g. 'post' or 'comment'.
 	 * @param int             $id      Object ID.
