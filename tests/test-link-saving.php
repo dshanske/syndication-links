@@ -164,6 +164,20 @@ class Test_Link_Saving extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * A user who can't edit the comment can't change its links (#252).
+	 */
+	public function test_saving_comment_links_needs_permission_to_edit_the_comment() {
+		$post_id    = self::factory()->post->create( array( 'post_author' => self::$admin_id ) );
+		$comment_id = self::factory()->comment->create( array( 'comment_post_ID' => $post_id ) );
+		wp_set_current_user( self::$subscriber_id );
+		$this->submit( array( 'https://a.example/1' ) );
+
+		Syn_Meta::save_comment_meta( $comment_id );
+
+		$this->assertFalse( metadata_exists( 'comment', $comment_id, 'mf2_syndication' ) );
+	}
+
 	public function test_saving_comment_links_without_a_nonce_does_nothing() {
 		$comment_id                = self::factory()->comment->create( array( 'comment_post_ID' => self::factory()->post->create() ) );
 		$_POST['syndication_urls'] = array( 'https://a.example/1' );
