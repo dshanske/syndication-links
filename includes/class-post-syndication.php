@@ -40,6 +40,8 @@ class Post_Syndication {
 		add_action( 'micropub_syndication', array( __CLASS__, 'syndication' ), 10, 2 );
 		add_action( 'syn_syndication', array( __CLASS__, 'syndication' ), 10, 2 );
 		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
+		// The Webmention plugin's public filter for the targets it found in a post's content.
+		add_filter( 'webmention_links', array( __CLASS__, 'webmention_links' ), 10, 2 );
 
 		// Syndication Links POSSE/Syndication Options.
 
@@ -657,5 +659,58 @@ class Post_Syndication {
 				self::syndication( $post_id, $syndication );
 			}
 		}
+	}
+
+	/**
+	 * Keeps the Webmention plugin from sending to an enabled provider the post didn't choose.
+	 *
+	 * The Webmention plugin sends a webmention to every link in a post's content. When a
+	 * webmention provider, such as Bridgy Fed, is enabled here, a link to its target in
+	 * the content would syndicate the post even with its box unchecked. So the target is
+	 * dropped unless the post has the provider queued or has been sent to it before
+	 * (so updates still go out). Providers that aren't enabled are left alone, for sites
+	 * that link to the target by hand.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string[] $urls    The targets found in the post's content.
+	 * @param int      $post_id Post ID.
+	 * @return string[] The targets.
+	 */
+	public static function webmention_links( $urls, $post_id ) {
+		$enabled = get_option( 'syndication_provider_enable', array() );
+		if ( ! is_array( $urls ) || ! is_array( $enabled ) || empty( $enabled ) ) {
+			return $urls;
+		}
+
+		$queued = get_post_meta( $post_id, '_syndicate-to', true );
+		$chosen = is_array( $queued ) ? $queued : array();
+		$log    = get_post_meta( $post_id, 'syndication_log', true );
+		if ( is_array( $log ) ) {
+			$chosen = array_merge( $chosen, array_column( array_filter( $log, 'is_array' ), 'uid' ) );
+		}
+
+		$skip = array();
+		foreach ( static::$targets as $uid => $target ) {
+			if ( ! $target instanceof SynProvider_Webmention || ! in_array( $uid, $enabled, true ) || in_array( $uid, $chosen, true ) ) {
+				continue;
+			}
+			$url = $target->get_target();
+			if ( $url ) {
+				$skip[] = strtolower( untrailingslashit( $url ) );
+			}
+		}
+		if ( empty( $skip ) ) {
+			return $urls;
+		}
+
+		return array_values(
+			array_filter(
+				$urls,
+				function ( $url ) use ( $skip ) {
+					return ! is_string( $url ) || ! in_array( strtolower( untrailingslashit( $url ) ), $skip, true );
+				}
+			)
+		);
 	}
 } // End Class
