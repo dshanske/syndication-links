@@ -22,6 +22,7 @@ defined( 'ABSPATH' ) || exit;
  *     @type string $single-css       Class for each link.
  *     @type string $text-css         Class for the text before the links.
  *     @type bool   $show_text_before Whether to show the text before the links.
+ *     @type bool   $targets          Whether to add the Bridgy targets, as empty links. Default true.
  * }
  * @return string|false The markup, or false if there's no such post.
  */

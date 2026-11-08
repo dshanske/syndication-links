@@ -359,6 +359,55 @@ class Test_Link_Rendering extends WP_UnitTestCase {
 		$this->assertStringStartsWith( '[', wp_json_encode( $item['syndication'] ) );
 	}
 
+	/**
+	 * Bridgy finds its targets on the post's page, so feeds leave them out.
+	 */
+	public function test_feeds_leave_out_bridgy_targets() {
+		$post_id = $this->post_with_links( array( 'https://github.com/someone/repo', 'https://brid.gy/publish/mastodon', 'https://fed.brid.gy' ) );
+		$this->go_to( get_permalink( $post_id ) );
+		the_post();
+
+		$content = Syn_Config::the_content_feed( 'Hello', 'rss2' );
+		$item    = Syn_Config::json_feed_item( array(), get_post( $post_id ) );
+
+		$this->assertStringContainsString( 'GitHub</a>', $content );
+		$this->assertStringNotContainsString( 'brid.gy', $content );
+		$this->assertSame( array( 'https://github.com/someone/repo' ), $item['syndication'] );
+	}
+
+	public function test_a_feed_with_only_bridgy_targets_gets_no_links() {
+		$post_id = $this->post_with_links( array( 'https://brid.gy/publish/mastodon' ) );
+		$this->go_to( get_permalink( $post_id ) );
+		the_post();
+
+		$this->assertSame( 'Hello', Syn_Config::the_content_feed( 'Hello', 'rss2' ) );
+		$this->assertArrayNotHasKey( 'syndication', Syn_Config::json_feed_item( array(), get_post( $post_id ) ) );
+	}
+
+	public function test_the_feed_links_can_be_turned_off() {
+		$post_id = $this->post_with_links();
+		$this->go_to( get_permalink( $post_id ) );
+		the_post();
+		add_filter( 'syndication_links_feed_display', '__return_false' );
+
+		$content = Syn_Config::the_content_feed( 'Hello', 'rss2' );
+		$item    = Syn_Config::json_feed_item( array( 'id' => 'x' ), get_post( $post_id ) );
+
+		remove_filter( 'syndication_links_feed_display', '__return_false' );
+		$this->assertSame( 'Hello', $content );
+		$this->assertSame( array( 'id' => 'x' ), $item );
+	}
+
+	/**
+	 * On a page, the targets are still there for Bridgy to find, unless turned off.
+	 */
+	public function test_the_targets_argument() {
+		$post_id = $this->post_with_links( array( 'https://github.com/someone/repo', 'https://brid.gy/publish/mastodon' ) );
+
+		$this->assertStringContainsString( 'https://brid.gy/publish/mastodon', get_post_syndication_links( $post_id ) );
+		$this->assertStringNotContainsString( 'brid.gy', get_post_syndication_links( $post_id, array( 'targets' => false ) ) );
+	}
+
 	public function test_comment_text_appends_the_links() {
 		$comment_id = self::factory()->comment->create( array( 'comment_post_ID' => self::factory()->post->create() ) );
 		add_comment_syndication_link( $comment_id, 'https://github.com/someone/repo' );

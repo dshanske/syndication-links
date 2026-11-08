@@ -863,6 +863,7 @@ class Syn_Meta {
 			'single-css'       => 'syn-link',
 			'text-css'         => 'syn-text',
 			'show_text_before' => true,
+			'targets'          => true,
 		);
 
 		/**
@@ -890,7 +891,10 @@ class Syn_Meta {
 	/**
 	 * Returns the markup for an object's syndication links.
 	 *
-	 * Bridgy targets are added after the list as empty links, in every display mode.
+	 * Bridgy targets are added after the list as empty links, in every display mode,
+	 * unless the `targets` argument is false.
+	 *
+	 * @since 5.0.0 Takes the `targets` argument.
 	 *
 	 * @param string   $type Object type, e.g. 'post' or 'comment'.
 	 * @param int|null $id   Object ID.
@@ -900,7 +904,7 @@ class Syn_Meta {
 	public static function get_syndication_links( $type, $id = null, $args = array() ) {
 		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
 
-		$targets = self::get_bridgy_target_links( self::get_syndication_links_data( $type, $id ) );
+		$targets = $r['targets'] ? self::get_bridgy_target_links( self::get_syndication_links_data( $type, $id ) ) : '';
 		$links   = self::get_syndication_links_elements( $type, $id, $r );
 		if ( empty( $links ) ) {
 			return $targets;
