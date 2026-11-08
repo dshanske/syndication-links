@@ -34,7 +34,7 @@ class Widget_Original_Of extends WP_Widget {
 		// phpcs:ignore
 		echo $args['before_widget'];
 		if ( ! empty( $instance['title'] ) ) {
-			echo $args['before_title'] . $title . $args['after_title']; // phpcs:ignore
+			echo $args['before_title'] . esc_html( $title ) . $args['after_title']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- before/after_title come from the theme's sidebar.
 		}
 		get_original_of_form();
 		// phpcs:ignore
@@ -54,8 +54,9 @@ class Widget_Original_Of extends WP_Widget {
 	 * @return array Updated safe values to be saved.
 	 */
 	public function update( $new_instance, $old_instance ) {
-		array_walk_recursive( $new_instance, 'sanitize_text_field' );
-		return $new_instance;
+		$instance          = array();
+		$instance['title'] = isset( $new_instance['title'] ) ? sanitize_text_field( $new_instance['title'] ) : '';
+		return $instance;
 	}
 
 
@@ -68,10 +69,12 @@ class Widget_Original_Of extends WP_Widget {
 	 */
 	public function form( $instance ) {
 		$title = isset( $instance['title'] ) ? $instance['title'] : '';
-		?>
-				<p><label for="title"><?php esc_html_e( 'Title: ', 'syndication-links' ); ?></label>
-				<input type="text" size="30" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?> id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" value="
-		<?php echo esc_html( $title ); ?>" /></p>
-		<?php
+		printf(
+			'<p><label for="%1$s">%2$s</label> <input type="text" class="widefat" name="%3$s" id="%1$s" value="%4$s" /></p>',
+			esc_attr( $this->get_field_id( 'title' ) ),
+			esc_html__( 'Title:', 'syndication-links' ),
+			esc_attr( $this->get_field_name( 'title' ) ),
+			esc_attr( $title )
+		);
 	}
 }
