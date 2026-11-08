@@ -157,6 +157,17 @@ class Test_Syndication_Content extends WP_UnitTestCase {
 		$this->assertSame( array( 'post' ), syndication_post_types() );
 	}
 
+	/**
+	 * By default, posts and pages, each once (#345).
+	 */
+	public function test_post_types_default_to_posts_and_pages() {
+		delete_option( 'syndication_post_types' );
+		$this->assertSame( array( 'post', 'page' ), syndication_post_types() );
+
+		update_option( 'syndication_post_types', array( 'post', 'page', 'page' ) );
+		$this->assertSame( array( 'post', 'page' ), syndication_post_types() );
+	}
+
 	public function test_post_types_are_filterable() {
 		$filter = function ( $types ) {
 			$types[] = 'note';
