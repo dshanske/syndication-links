@@ -444,8 +444,17 @@ class Syn_Config {
 			<?php self::tab_link( 'general', __( 'General', 'syndication-links' ), $active_tab ); ?>
 			<?php self::tab_link( 'providers', __( 'Providers', 'syndication-links' ), $active_tab ); ?>
 			<?php self::tab_link( 'apis', __( 'API Keys', 'syndication-links' ), $active_tab ); ?>
+			<?php self::tab_link( 'import', __( 'Import', 'syndication-links' ), $active_tab ); ?>
 		</h2>
 		<hr />
+		<?php
+		// The import tab has its own forms, which post to admin-post.php.
+		if ( 'import' === $active_tab ) {
+			Syn_Plugin_Import::render();
+			echo '</div>';
+			return;
+		}
+		?>
 		<form method="post" action="options.php">
 			<?php
 			switch ( $active_tab ) {

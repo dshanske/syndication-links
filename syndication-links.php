@@ -91,6 +91,7 @@ function syndication_links_init() {
 			'class-syn-meta.php', // Information on Metadata
 			'class-syn-config.php', // Configuration Options
 			'class-social-plugins.php', // Social Plugin Add-Ons
+			'class-syn-plugin-import.php', // Import links from other plugins
 			'functions.php', // Global Functions
 			'compat-functions.php', // Compat Functions
 			'class-widget-original-of.php', // Original Of Widget
