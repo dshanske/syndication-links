@@ -6,7 +6,6 @@
 
 	<file>./includes/</file>
 	<file>./syndication-links.php</file>
-	<exclude-pattern>*/includes/class-social-plugins.php</exclude-pattern>
 	<!-- Only check the PHP, CSS and SCSS files. -->
 	<arg name="extensions" value="php,css,scss/css"/>
 	<arg name="colors"/>
