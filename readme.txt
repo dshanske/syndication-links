@@ -79,10 +79,17 @@ The goal of the interface is not only can you syndicate via Micropub, but in the
 
 == Frequently Asked Questions ==
 
-= How do I prevent the links from being automatically added to the content? =
+= How does a theme place the links itself? =
 
-You will have to add the following code to your theme `add_filter( 'syndication_links_display', '__return_false' );` and then you can call get_syndication_links() directly in your theme. You should add
-this to the init hook.
+Declare support in the theme's `functions.php`, on `after_setup_theme` like other theme features:
+
+`add_theme_support( 'syndication-links' );`
+
+The plugin then stops adding the links after the post content and after each comment, and the settings page says the theme places them. To take over only one of them, list it: `add_theme_support( 'syndication-links', array( 'content' ) )` or `array( 'comments' )`.
+
+Then output the links where the theme wants them with `get_post_syndication_links()` and `get_comment_syndication_links()`. The display settings (icons or text, size, text before the links) still apply.
+
+The older filters still work, and are now checked when the links would be added, so it doesn't matter when they're added: `add_filter( 'syndication_links_display', '__return_false' );` for the post content, and `syndication_links_comment_display` for comments.
 
 * `get_post_syndication_links( $post, $args ) - Returns the HTML for a post.
 * `get_comment_syndication_links( $comment, $args ) - Returns the HTML for a comment.
@@ -130,7 +137,8 @@ You can also use the `syn_link_mapping` filter to return `mastodon` for any URL.
 * `syn_link_title( $title, $name )` - Allows you to set the title string for Links. Example, pinboard => Pinboard.
 * `syn_link_mapping( $icon, $url )` - Allows you to override or set the mapping from URL to icon name.
 * `pre_syn_link_icon( $icon, $name )` - Allows you to provide a custom icon. Icons by default are SVG, not URL or filenames.
-* `syndication_links_display( true )` - Adds Syndication Links to content display. Set to false if the theme supports this.
+* `syndication_links_display( true )` - Adds Syndication Links to content display. Set to false if the theme supports this, or declare `add_theme_support( 'syndication-links' )`.
+* `syndication_links_comment_display( true )` - Adds Syndication Links after each comment. Set to false if the theme places them.
 
 = How do I contribute or file bug reports? =
 
@@ -197,6 +205,7 @@ In no particular order...
 * New Import tab and `wp syndication-links import` command: copy the links recorded by other cross-posting plugins (SNAP, Mastodon Autopost, XPoster, Autopost for X, Keyring, Medium) into the post's own syndication links. Once imported, the other plugin can be removed without losing the links. Other plugins can add import sources with `register_syndication_link_source()`.
 * Medium links are no longer shown from the Medium plugin, which is closed. Import them to keep them.
 * Jetpack Social (Publicize): the posts it shared to are shown with the post's links, and can be imported.
+* Themes can place the links themselves by declaring `add_theme_support( 'syndication-links' )`, for the post content, comments or both. The `syndication_links_display` filter now works whenever it's added, and the new `syndication_links_comment_display` filter does the same for comments.
 * New setting, off by default: store the syndication links of comments received by webmention, from the reply's microformats, and show them with the comment. Needs the Webmention plugin.
 * XPoster: links to its Mastodon and Bluesky posts are added, and its X links are also shown for posts saved before they were recorded.
 * Fixed the Mastodon Autopost and Autopost for X integrations.
