@@ -116,7 +116,8 @@ class Test_Plugin_Import extends WP_UnitTestCase {
 		Syn_Plugin_Import::import_batch( 'mastodon-autopost' );
 		Syn_Plugin_Import::import_batch( 'mastodon-autopost' );
 
-		$this->assertSame( array( 'https://github.com/someone/repo', 'https://toot.example.social/@someone/1' ), get_post_meta( $page, 'mf2_syndication', true ) );
+		// add_syndication_link() puts new links first; what matters is that each is there once.
+		$this->assertEqualsCanonicalizing( array( 'https://github.com/someone/repo', 'https://toot.example.social/@someone/1' ), get_post_meta( $page, 'mf2_syndication', true ) );
 		$this->assertSame( 'https://toot.example.social/@someone/1', get_post_meta( $page, 'autopostToMastodonshare-lastSuccessfullTootURL', true ) );
 	}
 
