@@ -45,7 +45,7 @@ class Syn_Meta {
 	public static function wp_privacy_personal_data_exporters( $exporters ) {
 		$exporters['syndication-links'] = array(
 			'exporter_friendly_name' => __( 'Syndication Links Plugin', 'syndication-links' ),
-			'callback'               => array( $cls, 'data_exporter' ),
+			'callback'               => array( __CLASS__, 'data_exporter' ),
 		);
 		return $exporters;
 	}
@@ -60,7 +60,7 @@ class Syn_Meta {
 				'author_email' => $email_address,
 				'number'       => $number,
 				'paged'        => $page,
-				'order_by'     => 'comment_ID',
+				'orderby'      => 'comment_ID',
 				'order'        => 'ASC',
 			)
 		);
@@ -72,12 +72,14 @@ class Syn_Meta {
 				$group_id    = 'comments';
 				$group_label = __( 'Comments', 'syndication-links' );
 
-				$data           = array(
-					array(
-						'name'  => __( 'Syndication Links', 'syndication-links' ),
-						'value' => $syndication,
-					),
-				);
+				// One row per link: core expects a string value, and turns a URL into a link.
+				$data = array();
+				foreach ( $syndication as $url ) {
+					$data[] = array(
+						'name'  => __( 'Syndication Link', 'syndication-links' ),
+						'value' => $url,
+					);
+				}
 				$export_items[] = array(
 					'group_id'    => $group_id,
 					'group_label' => $group_label,
