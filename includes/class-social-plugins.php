@@ -10,14 +10,20 @@ class Social_Plugins {
 		add_filter( 'syn_link_mapping', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
 		// XPoster fires wpt_tweet_posted before it saves the status ID, so wait for the ID itself.
 		add_action( 'added_post_meta', array( 'Social_Plugins', 'wptotwitter_tweet_id_added' ), 10, 4 );
+		// XPoster saves only the Bluesky post's CID, so its URL is looked up in the background.
+		add_action( 'added_post_meta', array( 'Social_Plugins', 'xposter_bluesky_id_added' ), 10, 3 );
+		add_action( 'syn_xposter_bluesky', array( 'Social_Plugins', 'record_xposter_bluesky' ), 10, 2 );
 		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_autopost_for_x_links' ), 10, 2 );
 	}
 
 	public static function url_to_name_plugins( $name, $url ) {
-		// Mastodon Autopost's instance. Compare hosts only: wp_http_validate_url() would do a DNS lookup for every link shown.
-		$instance = wp_parse_url( (string) get_option( 'autopostToMastodon-instance', '' ), PHP_URL_HOST );
-		if ( $instance && strtolower( $instance ) === strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) ) ) {
-			return 'mastodon';
+		// Mastodon Autopost's and XPoster's instances. Compare hosts only: wp_http_validate_url() would do a DNS lookup for every link shown.
+		$host = strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
+		foreach ( array( 'autopostToMastodon-instance', 'wpt_mastodon_instance' ) as $option ) {
+			$instance = wp_parse_url( (string) get_option( $option, '' ), PHP_URL_HOST );
+			if ( $instance && strtolower( $instance ) === $host ) {
+				return 'mastodon';
+			}
 		}
 		return $name;
 	}
@@ -72,6 +78,9 @@ class Social_Plugins {
 	 *     @type callable $callback   Given a post ID, returns an array of link URLs. Required.
 	 *                                It should read only stored data (post meta, options), so it
 	 *                                keeps working when the other plugin is inactive.
+	 *     @type callable $import     Given a post ID, returns the links to import, when that needs more
+	 *                                than $callback, such as a remote lookup. Optional; defaults to $callback.
+	 *                                It runs only in the background (WP-Cron) or from WP-CLI.
 	 *     @type array    $meta_query A WP_Query meta_query finding the posts that may have links.
 	 *                                Without one, the source is shown but can't be imported.
 	 *     @type bool     $show       Whether the links are added to the links shown for the post,
@@ -102,6 +111,7 @@ class Social_Plugins {
 		$args = wp_parse_args(
 			$args,
 			array(
+				'import'     => null,
 				'meta_query' => array(),
 				'show'       => true,
 			)
@@ -109,6 +119,7 @@ class Social_Plugins {
 		return array(
 			'name'       => (string) $args['name'],
 			'callback'   => $args['callback'],
+			'import'     => is_callable( $args['import'] ) ? $args['import'] : $args['callback'],
 			'meta_query' => is_array( $args['meta_query'] ) ? $args['meta_query'] : array(),
 			'show'       => (bool) $args['show'],
 		);
@@ -201,7 +212,9 @@ class Social_Plugins {
 			'xposter'           => array(
 				'name'       => 'XPoster (WP to Twitter)',
 				'callback'   => array( __CLASS__, 'xposter_links' ),
-				'meta_query' => self::any_meta( array( '_wpt_tweet_id' ) ),
+				// Importing also looks up Bluesky posts, which needs a request to Bluesky.
+				'import'     => array( __CLASS__, 'xposter_import_links' ),
+				'meta_query' => self::any_meta( array( '_wpt_tweet_id', '_wpt_status_id', '_wpt_bluesky_id' ) ),
 			),
 			'autopost-for-x'    => array(
 				'name'       => 'Autopost for X',
@@ -216,12 +229,13 @@ class Social_Plugins {
 				'meta_query' => self::any_meta( array_merge( self::$keyring_keys, array( 'href' ) ) ),
 				'show'       => class_exists( 'Keyring_Importer_Base' ),
 			),
-			// Support for the Official Medium Plugin per request @chrisaldrich. Its links are in
-			// the Medium plugin's own data, so they can't be imported once it's gone.
+			// The official Medium plugin was closed on WordPress.org in 2019. Its links are no longer
+			// shown, but can still be imported from the medium_post meta it left.
 			'medium'            => array(
-				'name'     => 'Medium',
-				'callback' => array( __CLASS__, 'medium_links' ),
-				'show'     => class_exists( 'Medium_Post' ),
+				'name'       => 'Medium',
+				'callback'   => array( __CLASS__, 'medium_links' ),
+				'meta_query' => self::any_meta( array( 'medium_post' ) ),
+				'show'       => false,
 			),
 		);
 
@@ -229,7 +243,10 @@ class Social_Plugins {
 	}
 
 	/**
-	 * The post's link from the official Medium plugin, while it's active.
+	 * The Medium post the official Medium plugin recorded for a post.
+	 *
+	 * The plugin saved a Medium_Post object in the medium_post meta. Without the plugin
+	 * that's an incomplete object, whose public properties can still be read as an array.
 	 *
 	 * @since 5.0.0
 	 *
@@ -237,11 +254,15 @@ class Social_Plugins {
 	 * @return string[]
 	 */
 	public static function medium_links( $post_id ) {
-		if ( ! class_exists( 'Medium_Post' ) ) {
+		$medium = get_post_meta( $post_id, 'medium_post', true );
+		if ( ! is_object( $medium ) && ! is_array( $medium ) ) {
 			return array();
 		}
-		$medium_post = Medium_Post::get_by_wp_id( $post_id );
-		return ( $medium_post && ! empty( $medium_post->url ) ) ? array( $medium_post->url ) : array();
+		$medium = (array) $medium;
+		if ( empty( $medium['url'] ) || ! is_string( $medium['url'] ) || ( isset( $medium['status'] ) && 'draft' === $medium['status'] ) ) {
+			return array();
+		}
+		return array( $medium['url'] );
 	}
 
 	/**
@@ -315,15 +336,175 @@ class Social_Plugins {
 	 * @return string[]
 	 */
 	public static function xposter_links( $post_id ) {
-		$uid = get_post_meta( $post_id, '_wpt_tweet_id', true );
-		if ( ! $uid || ! is_scalar( $uid ) ) {
-			return array();
+		$links = array();
+		$uid   = get_post_meta( $post_id, '_wpt_tweet_id', true );
+		if ( $uid && is_scalar( $uid ) ) {
+			$account = get_option( 'wtt_twitter_username' );
+			$links[] = $account ? sprintf( 'https://twitter.com/%s/status/%s', $account, $uid ) : 'https://x.com/i/web/status/' . rawurlencode( $uid );
 		}
-		$account = get_option( 'wtt_twitter_username' );
-		if ( $account ) {
-			return array( sprintf( 'https://twitter.com/%s/status/%s', $account, $uid ) );
+		$mastodon = self::xposter_mastodon_link( $post_id );
+		if ( $mastodon ) {
+			$links[] = $mastodon;
 		}
-		return array( 'https://x.com/i/web/status/' . rawurlencode( $uid ) );
+		return $links;
+	}
+
+	/**
+	 * Reads an XPoster setting for the post: the author's own, when XPoster is set up per author, or the site's.
+	 *
+	 * @param int    $post_id Post ID.
+	 * @param string $key     Setting.
+	 * @return string
+	 */
+	private static function xposter_setting( $post_id, $key ) {
+		$author = (int) get_post_field( 'post_author', $post_id );
+		$value  = $author ? get_user_meta( $author, $key, true ) : '';
+		if ( ! $value ) {
+			$value = get_option( $key, '' );
+		}
+		return is_string( $value ) ? trim( $value ) : '';
+	}
+
+	/**
+	 * The Mastodon status XPoster posted for a post: {instance}/@{username}/{id}.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string|false
+	 */
+	public static function xposter_mastodon_link( $post_id ) {
+		$id       = get_post_meta( $post_id, '_wpt_status_id', true );
+		$instance = self::xposter_setting( $post_id, 'wpt_mastodon_instance' );
+		$username = ltrim( self::xposter_setting( $post_id, 'wpt_mastodon_username' ), '@' );
+		if ( ! $id || ! is_scalar( $id ) || ! $instance || ! $username ) {
+			return false;
+		}
+		// The username may be stored as user@instance; the profile path wants the local part.
+		$username = strtok( $username, '@' );
+		return sprintf( '%1$s/@%2$s/%3$s', untrailingslashit( $instance ), rawurlencode( $username ), rawurlencode( $id ) );
+	}
+
+	/**
+	 * XPoster's links for importing: the stored ones, plus the Bluesky post looked up by its CID.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string[]
+	 */
+	public static function xposter_import_links( $post_id ) {
+		$links   = self::xposter_links( $post_id );
+		$bluesky = self::xposter_bluesky_link( $post_id );
+		if ( $bluesky ) {
+			$links[] = $bluesky;
+		}
+		return $links;
+	}
+
+	/**
+	 * Schedules the lookup of a Bluesky post when XPoster saves its CID.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int    $meta_id  Meta ID.
+	 * @param int    $post_id  Post ID.
+	 * @param string $meta_key Meta key.
+	 */
+	public static function xposter_bluesky_id_added( $meta_id, $post_id, $meta_key ) {
+		if ( '_wpt_bluesky_id' === $meta_key ) {
+			wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'syn_xposter_bluesky', array( (int) $post_id, 1 ) );
+		}
+	}
+
+	/**
+	 * Records the Bluesky post XPoster posted, retrying a few times while Bluesky's feed catches up.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @param int $attempt Attempt number, from 1.
+	 */
+	public static function record_xposter_bluesky( $post_id, $attempt = 1 ) {
+		$link = self::xposter_bluesky_link( $post_id );
+		if ( $link ) {
+			add_post_syndication_link( $post_id, $link );
+			return;
+		}
+		if ( $attempt < 3 ) {
+			wp_schedule_single_event( time() + 5 * MINUTE_IN_SECONDS, 'syn_xposter_bluesky', array( (int) $post_id, $attempt + 1 ) );
+		}
+	}
+
+	/**
+	 * The Bluesky post XPoster posted for a post, found by its CID in the account's public feed.
+	 *
+	 * XPoster saves only the post's CID, but a link needs the record key, so this looks
+	 * through the account's recent posts (up to 1,000, cached for an hour). It makes
+	 * requests to Bluesky, so it's only used in the background and when importing.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string|false
+	 */
+	public static function xposter_bluesky_link( $post_id ) {
+		$cid    = get_post_meta( $post_id, '_wpt_bluesky_id', true );
+		$handle = ltrim( self::xposter_setting( $post_id, 'wpt_bluesky_username' ), '@' );
+		if ( ! $cid || ! is_string( $cid ) || ! $handle ) {
+			return false;
+		}
+		$posts = self::bluesky_posts( $handle, $cid );
+		if ( ! isset( $posts[ $cid ] ) ) {
+			return false;
+		}
+		return sprintf( 'https://bsky.app/profile/%1$s/post/%2$s', rawurlencode( $handle ), rawurlencode( $posts[ $cid ] ) );
+	}
+
+	/**
+	 * An account's recent posts, as CID => record key.
+	 *
+	 * @param string $handle Bluesky handle.
+	 * @param string $cid    The CID being looked for; the walk stops once it's found.
+	 * @return string[]
+	 */
+	private static function bluesky_posts( $handle, $cid ) {
+		$key   = 'syn_bsky_' . md5( strtolower( $handle ) );
+		$posts = get_transient( $key );
+		if ( is_array( $posts ) && isset( $posts[ $cid ] ) ) {
+			return $posts;
+		}
+		$posts  = array();
+		$cursor = '';
+		for ( $page = 0; $page < 10; $page++ ) {
+			$args = array(
+				'actor'  => $handle,
+				'limit'  => 100,
+				'filter' => 'posts_no_replies',
+			);
+			if ( $cursor ) {
+				$args['cursor'] = $cursor;
+			}
+			$response = wp_safe_remote_get( add_query_arg( array_map( 'rawurlencode', $args ), 'https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed' ), array( 'timeout' => 10 ) );
+			if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
+				break;
+			}
+			$body = json_decode( wp_remote_retrieve_body( $response ), true );
+			if ( ! is_array( $body ) || empty( $body['feed'] ) ) {
+				break;
+			}
+			foreach ( $body['feed'] as $item ) {
+				if ( isset( $item['post']['cid'], $item['post']['uri'] ) && preg_match( '#/app\.bsky\.feed\.post/([^/]+)$#', $item['post']['uri'], $match ) ) {
+					$posts[ $item['post']['cid'] ] = $match[1];
+				}
+			}
+			if ( isset( $posts[ $cid ] ) || empty( $body['cursor'] ) ) {
+				break;
+			}
+			$cursor = $body['cursor'];
+		}
+		set_transient( $key, $posts, HOUR_IN_SECONDS );
+		return $posts;
 	}
 
 	/**
@@ -374,76 +555,6 @@ class Social_Plugins {
 			}
 		}
 		return $links;
-	}
-
-	public static function add_links_from_snap() {
-		global $nxs_snapAvNts;
-		global $post;
-		$broadcasts   = array();
-		$snap_options = get_option( 'NS_SNAutoPoster' );
-		$urlmap       = array(
-			'AP' => array(),
-			'BG' => array(),
-			'DA' => array(),
-			'DI' => array(),
-			'DL' => array(),
-			'FB' => array( 'url' => '%BASE%/posts/%pgID%' ),
-			'FF' => array(),
-			'FL' => array(),
-			'FP' => array(),
-			'GP' => array(),
-			'IP' => array(),
-			'LI' => array(),
-			'LJ' => array(),
-			'PK' => array(),
-			'PN' => array(),
-			'SC' => array(),
-			'ST' => array(),
-			'SU' => array(),
-			'TR' => array( 'url' => '%BASE%/post/%pgID%' ),
-			'TW' => array( 'url' => '%BASE%/status/%pgID%' ),
-			'VB' => array(),
-			'VK' => array(),
-			'WP' => array(),
-			'YT' => array(),
-		);
-		foreach ( $nxs_snapAvNts as $key => $serv ) {
-			/* all SNAP entries are in separate meta entries for the post based on the service name's "code" */
-			$mkey   = 'snap' . $serv['code'];
-			$urlkey = $serv['lcode'] . 'URL';
-			$okey   = $serv['lcode'];
-			$metas  = maybe_unserialize( get_post_meta( get_the_ID(), $mkey, true ) );
-			if ( ! empty( $metas ) && is_array( $metas ) ) {
-				foreach ( $metas as $cntr => $m ) {
-					$url = false;
-					if ( isset( $m['isPosted'] ) && 1 === (int) $m['isPosted'] ) {
-						if ( isset( $m['postURL'] ) && ! filter_var( $m['postURL'], FILTER_VALIDATE_URL ) ) {
-							$url = $m['postURL'];
-						} else {
-							$base = ( isset( $urlmap[ $serv['code'] ]['url'] ) ) ? $urlmap[ $serv['code'] ]['url'] : false;
-							if ( false !== $base ) {
-								/* Facebook exception, why not */
-								if ( 'FB' === $serv['code'] ) {
-									$pos  = strpos( $m['pgID'], '_' );
-									$pgID = ( false === $pos ) ? $m['pgID'] : substr( $m['pgID'], $pos + 1 );
-								} else {
-									$pgID = $m['pgID'];
-								}
-								$o       = $snap_options[ $okey ][ $cntr ];
-								$search  = array( '%BASE%', '%pgID%' );
-								$replace = array( $o[ $urlkey ], $pgID );
-								$url     = str_replace( $search, $replace, $base );
-							}
-						}
-						if ( false !== $url ) {
-							$url          = preg_replace( '~(^|[^:])//+~', '\\1/', $url );
-							$broadcasts[] = $url;
-						}
-					}
-				}
-			}
-		}
-		return $broadcasts;
 	}
 
 	/**
