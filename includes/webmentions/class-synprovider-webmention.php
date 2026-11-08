@@ -82,6 +82,10 @@ class SynProvider_Webmention extends Syndication_Provider {
 	 * Syndicates a post: adds the target to its links, sends the webmention, and
 	 * swaps the target for the copy's URL from the `Location` header.
 	 *
+	 * If sending fails, the target is removed again, unless it was already there.
+	 *
+	 * @since 5.0.0 Removes the target when sending fails, and returns an error when there's no endpoint.
+	 *
 	 * @param int|null $post_id Optional. Post ID. Defaults to the current post.
 	 * @return array|WP_Error The response, or an error.
 	 */
@@ -90,6 +94,8 @@ class SynProvider_Webmention extends Syndication_Provider {
 			$post_id = get_the_ID();
 		}
 		$post = get_post( $post_id );
+		// A target that was already in the links, e.g. added by hand, is left there if this fails.
+		$had_target = in_array( $this->get_target(), Syn_Meta::get_stored_links( 'post', $post_id ), true );
 		add_post_syndication_link( $post_id, $this->get_target() );
 
 		// Attempt at cache busting by running anything attached to 'edit_post'.
@@ -107,7 +113,19 @@ class SynProvider_Webmention extends Syndication_Provider {
 
 		$response = self::send_webmention( get_permalink( $post_id ) );
 
+		// The Webmention plugin returns false when the target has no endpoint.
+		if ( ! is_wp_error( $response ) && ! is_array( $response ) ) {
+			$response = new WP_Error(
+				$this->uid . '_publish_error',
+				/* translators: Syndication Target */
+				sprintf( __( 'No webmention endpoint found for %1$s', 'syndication-links' ), $this->name )
+			);
+		}
+
 		if ( is_wp_error( $response ) ) {
+			if ( ! $had_target ) {
+				$this->remove_target( $post_id );
+			}
 			return $response;
 		}
 
@@ -119,6 +137,9 @@ class SynProvider_Webmention extends Syndication_Provider {
 
 		// The Webmention spec counts any 2xx response as a success.
 		if ( 2 !== (int) floor( (int) $response_code / 100 ) ) {
+			if ( ! $had_target ) {
+				$this->remove_target( $post_id );
+			}
 			return new WP_Error(
 				$this->uid . '_publish_error',
 				/* translators: Syndication Target */
@@ -130,13 +151,7 @@ class SynProvider_Webmention extends Syndication_Provider {
 			);
 		}
 
-		// The stored links only: this replaces them, and the ones other plugins add aren't stored.
-		$links  = Syn_Meta::get_stored_links( 'post', $post_id );
-		$search = array_search( $this->get_target(), $links, true );
-		if ( false !== $search ) {
-			unset( $links[ $search ] );
-		}
-
+		$links    = $this->links_without_target( $post_id );
 		$location = wp_remote_retrieve_header( $response, 'location' );
 		if ( ! empty( $location ) ) {
 			$links[] = $location;
@@ -144,5 +159,38 @@ class SynProvider_Webmention extends Syndication_Provider {
 
 		add_post_syndication_link( $post_id, $links, true );
 		return $response;
+	}
+
+	/**
+	 * Returns the post's stored links, without the target.
+	 *
+	 * Only the stored links: they replace the post's links, and the ones other plugins
+	 * add aren't stored.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string[] The links.
+	 */
+	protected function links_without_target( $post_id ) {
+		$links  = Syn_Meta::get_stored_links( 'post', $post_id );
+		$search = array_search( $this->get_target(), $links, true );
+		if ( false !== $search ) {
+			unset( $links[ $search ] );
+		}
+		return array_values( $links );
+	}
+
+	/**
+	 * Removes the target from the post's links, after sending to it failed (#146).
+	 *
+	 * The target is only there for the service to find while it fetches the post.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	protected function remove_target( $post_id ) {
+		add_post_syndication_link( $post_id, $this->links_without_target( $post_id ), true );
 	}
 }
