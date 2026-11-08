@@ -54,7 +54,7 @@
       "@build-icons",
       "@build-css"
     ],
-    "wp2md": "vendor/bin/wp2md -i readme.txt -o readme.md",
+    "wp2md": "vendor/bin/wp2md -i readme.txt -o readme.md -s syndication-links -f png",
     "install-codestandards": [
       "Dealerdirect\\Composer\\Plugin\\Installers\\PHPCodeSniffer\\Plugin::run"
     ],
