@@ -101,6 +101,13 @@ this to the init hook.
 *** `single-css` - Class to wrap a single link in
 *** `text-css` - Class to wrap the text before the links in
 
+### Which template tags can a theme use?
+
+* `the_syndication_links( $post, $args )` and `the_comment_syndication_links( $comment, $args )` display the links. `get_post_syndication_links()` and `get_comment_syndication_links()` return them instead.
+* `syndication_links_display_mode()` returns how links are shown on the current page: `icons`, `text`, `iconstext` or `hidden`.
+
+The display settings apply to all of them. A theme's arguments change how visible links look, but when the site hides the links, they stay hidden (as invisible microformats markup).
+
 ### How can I look up the original if I have a syndication link?
 
 If you add `?original-of=` and the URL-encoded URL it will return the post that has that URL stored. As no two posts should have the same two syndication links it will by default only return the first.
@@ -216,6 +223,7 @@ In no particular order...
 * The links (`mf2_syndication`) and the syndication log no longer appear in the Custom Fields box. The meta keys are unchanged.
 * `?original-of=` matches the exact link, searches every syndication post type, and returns a 404 when nothing matches. `?syndication=` only filters the main query.
 * `mailto:`, `sms:` and `tel:` links get mail and phone icons.
+* New template tags for themes: `the_syndication_links()`, `the_comment_syndication_links()` and `syndication_links_display_mode()`.
 * Icons for retired services (Google+, Google Podcasts, Pocket and others) are kept in a separate pack, loaded only when one is shown. The icons are built with PHP; the Node build is gone.
 * Old `syndication_urls` links are moved to `mf2_syndication` in the background instead of when a post is read.
 * Links are always returned as a list, so the JSON Feed `syndication` field is never an object.

@@ -62,6 +62,55 @@ function get_comment_syndication_links( $comment_id = null, $args = array() ) {
 }
 
 /**
+ * Displays a post's syndication links.
+ *
+ * For themes that place the links themselves (see add_theme_support( 'syndication-links' )).
+ * The display settings apply: the theme's arguments change how visible links look, but
+ * links the site hides stay hidden.
+ *
+ * @since 5.0.0
+ *
+ * @param int|WP_Post|null $post Optional. Post ID or object. Defaults to the current post.
+ * @param array            $args Optional. Display arguments; see get_post_syndication_links().
+ */
+function the_syndication_links( $post = null, $args = array() ) {
+	$html = get_post_syndication_links( $post, $args );
+	if ( $html ) {
+		echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from escaped parts by Syn_Meta::get_syndication_links().
+	}
+}
+
+/**
+ * Displays a comment's syndication links.
+ *
+ * For themes that place the links themselves (see add_theme_support( 'syndication-links' )).
+ *
+ * @since 5.0.0
+ *
+ * @param int|WP_Comment|null $comment Optional. Comment ID or object. Defaults to the current comment.
+ * @param array               $args    Optional. Display arguments; see get_post_syndication_links().
+ */
+function the_comment_syndication_links( $comment = null, $args = array() ) {
+	$html = get_comment_syndication_links( $comment, $args );
+	if ( $html ) {
+		echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from escaped parts by Syn_Meta::get_syndication_links().
+	}
+}
+
+/**
+ * Returns how syndication links are displayed on the current page.
+ *
+ * On archive pages, links are hidden unless the setting to show them there is on.
+ *
+ * @since 5.0.0
+ *
+ * @return string 'icons', 'text', 'iconstext' or 'hidden'.
+ */
+function syndication_links_display_mode() {
+	return (string) Syn_Meta::get_syndication_links_display_option();
+}
+
+/**
  * Returns a post's syndication links as URLs.
  *
  * Includes links that other plugins add through the `get_post_syndication_links` filter.
