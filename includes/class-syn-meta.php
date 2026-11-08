@@ -383,19 +383,19 @@ class Syn_Meta {
 	public static function metabox( $object, $args ) {
 		$screen = get_current_screen();
 		if ( 'comment' === $screen->id ) {
-			$urls = get_comment_syndication_links_data( $object );
+			$type = 'comment';
+			$id   = (int) $object->comment_ID;
 		} else {
-			$urls = get_post_syndication_links_data( $object );
+			$type = 'post';
+			$id   = (int) $object->ID;
 		}
 
 		wp_nonce_field( 'syn_metabox', 'syn_metabox_nonce' );
 
-		if ( is_string( $urls ) ) {
-			$urls = explode( PHP_EOL, $urls );
-		}
-		if ( ! $urls ) {
-			$urls = array( '' );
-		}
+		// Only the links stored here are editable. Links other plugins add are listed below.
+		$stored = self::get_stored_links( $type, $id );
+		$others = array_diff( self::get_syndication_links_data( $type, $id ), $stored );
+		$urls   = $stored ? $stored : array( '' );
 
 		$html  = '<div class="syndication_url_list">';
 		$html .= sprintf(
@@ -416,6 +416,21 @@ class Syn_Meta {
 			'<button class="button-primary" id="add-syn-link-button">%s</button>',
 			esc_html__( 'Add', 'syndication-links' )
 		);
+		// The links as loaded, so saving applies only this form's changes (see save_meta()).
+		$html .= sprintf(
+			'<input type="hidden" name="syndication_urls_loaded" value="%s" />',
+			esc_attr( wp_json_encode( $stored ) )
+		);
+		if ( $others ) {
+			$html .= sprintf(
+				'<p>%s</p><ul>',
+				esc_html__( 'Also shown, from other plugins. To remove one, remove it in the plugin that added it.', 'syndication-links' )
+			);
+			foreach ( $others as $url ) {
+				$html .= sprintf( '<li><a href="%1$s">%2$s</a></li>', esc_url( $url ), esc_html( $url ) );
+			}
+			$html .= '</ul>';
+		}
 		$html .= '</div>';
 
 		echo $html; // phpcs:ignore
@@ -436,12 +451,22 @@ class Syn_Meta {
 		}
 
 		// clean_urls() validates each URL, so only the shape is checked here.
-		$syn = array_filter( array_filter( wp_unslash( $_POST['syndication_urls'] ), 'is_string' ) );
+		$syn = self::clean_urls( array_filter( array_filter( wp_unslash( $_POST['syndication_urls'] ), 'is_string' ) ) );
+
+		// Apply only what this form changed, against the links as they're stored now. Links
+		// added since the form was loaded, such as by syndication or because the block editor
+		// doesn't reload the box after saving, are kept.
+		if ( isset( $_POST['syndication_urls_loaded'] ) && is_string( $_POST['syndication_urls_loaded'] ) ) {
+			$loaded = json_decode( wp_unslash( $_POST['syndication_urls_loaded'] ), true );
+			$loaded = is_array( $loaded ) ? self::clean_urls( array_filter( $loaded, 'is_string' ) ) : array();
+			$syn    = self::clean_urls( array_merge( $syn, array_diff( self::get_stored_links( $type, $id ), $loaded ) ) );
+			// The box showed the legacy links too, so they're now saved in mf2_syndication or removed.
+			delete_metadata( $type, $id, 'syndication_urls' );
+		}
 
 		if ( empty( $syn ) ) {
 			delete_metadata( $type, $id, 'mf2_syndication' );
 		} else {
-			$syn = self::clean_urls( $syn );
 			self::add_syndication_link( $type, $id, $syn, true );
 		}
 	}
@@ -533,10 +558,8 @@ class Syn_Meta {
 		if ( $replace ) {
 			return update_metadata( $type, $id, 'mf2_syndication', $uri );
 		}
-		$links = self::get_syndication_links_data( $type, $id );
-		if ( ! is_array( $links ) ) {
-			$links = array();
-		}
+		// Only the stored links: the ones other plugins add at read time aren't saved with them.
+		$links = self::get_stored_links( $type, $id );
 		if ( is_string( $uri ) ) {
 			$links[] = $uri;
 		}
@@ -638,9 +661,34 @@ class Syn_Meta {
 	}
 
 	/**
+	 * Returns the links stored for an object, without the ones other plugins add.
+	 *
+	 * Includes links still in the legacy meta that the background migration hasn't moved
+	 * yet. Reading never writes.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $type Object type, e.g. 'post' or 'comment'.
+	 * @param int    $id   Object ID.
+	 * @return string[] The URLs, cleaned.
+	 */
+	public static function get_stored_links( $type, $id ) {
+		$urls = get_metadata( $type, $id, 'mf2_syndication', true );
+		if ( is_string( $urls ) ) {
+			$urls = explode( "\n", $urls );
+		}
+		$urls = is_array( $urls ) ? $urls : array();
+		$old  = get_metadata( $type, $id, 'syndication_urls', true );
+		if ( $old && is_string( $old ) ) {
+			$urls = array_merge( $urls, explode( "\n", $old ) );
+		}
+		return self::clean_urls( array_filter( $urls, 'is_string' ) );
+	}
+
+	/**
 	 * Returns an object's syndication links.
 	 *
-	 * Includes links still in the legacy meta, and links other plugins add through
+	 * The stored links (see get_stored_links()), plus links other plugins add through
 	 * the `get_{$type}_syndication_links` filter.
 	 *
 	 * @param string $type Object type, e.g. 'post' or 'comment'.
@@ -648,20 +696,7 @@ class Syn_Meta {
 	 * @return string[] The URLs, or an empty array if there are none.
 	 */
 	public static function get_syndication_links_data( $type, $id ) {
-		$urls = array();
-		$urls = get_metadata( $type, $id, 'mf2_syndication', true );
-		if ( $urls ) {
-			if ( is_string( $urls ) ) {
-				$urls = explode( "\n", $urls );
-			}
-		} else {
-			$urls = array();
-		}
-		// Links in the legacy meta that the background migration hasn't moved yet. Reading never writes.
-		$old = get_metadata( $type, $id, 'syndication_urls', true );
-		if ( $old && is_string( $old ) ) {
-			$urls = array_merge( $urls, explode( "\n", $old ) );
-		}
+		$urls = self::get_stored_links( $type, $id );
 
 		/**
 		 * Filters an object's syndication links before they're cleaned and returned.

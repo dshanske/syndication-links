@@ -89,7 +89,8 @@ class SynProvider_Webmention extends Syndication_Provider {
 			);
 		}
 
-		$links  = get_post_syndication_links_data( $post_id );
+		// The stored links only: this replaces them, and the ones other plugins add aren't stored.
+		$links  = Syn_Meta::get_stored_links( 'post', $post_id );
 		$search = array_search( $this->get_target(), $links, true );
 		if ( false !== $search ) {
 			unset( $links[ $search ] );

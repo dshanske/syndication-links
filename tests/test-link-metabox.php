@@ -83,4 +83,34 @@ class Test_Link_Metabox extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'value="https://a.example/?a=1&amp;b=2"', $html );
 		$this->assertStringNotContainsString( '<script>', $html );
 	}
+	/**
+	 * Links other plugins add are listed, but not as fields, so saving doesn't store them (#212).
+	 */
+	public function test_other_plugins_links_are_listed_read_only() {
+		$post_id = self::factory()->post->create();
+		add_post_syndication_link( $post_id, 'https://a.example/1' );
+		$filter = function ( $urls ) {
+			$urls[] = 'https://other.example/1';
+			return $urls;
+		};
+		add_filter( 'get_post_syndication_links', $filter );
+
+		$html = $this->render( $post_id );
+		remove_filter( 'get_post_syndication_links', $filter );
+
+		$this->assertSame( 1, substr_count( $html, 'name="syndication_urls[]"' ) );
+		$this->assertStringNotContainsString( 'value="https://other.example/1"', $html );
+		$this->assertStringContainsString( '<a href="https://other.example/1">', $html );
+	}
+
+	public function test_the_loaded_links_are_sent_with_the_form() {
+		$post_id = self::factory()->post->create();
+		add_post_syndication_link( $post_id, array( 'https://a.example/1', 'https://b.example/2' ) );
+
+		$html = $this->render( $post_id );
+
+		$this->assertMatchesRegularExpression( '/name="syndication_urls_loaded" value="([^"]*)"/', $html );
+		preg_match( '/name="syndication_urls_loaded" value="([^"]*)"/', $html, $match );
+		$this->assertSame( array( 'https://a.example/1', 'https://b.example/2' ), json_decode( html_entity_decode( $match[1] ), true ) );
+	}
 }

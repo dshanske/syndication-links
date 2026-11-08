@@ -211,4 +211,86 @@ class Test_Link_Saving extends WP_UnitTestCase {
 
 		$this->assertFalse( metadata_exists( 'comment', $comment_id, 'mf2_syndication' ) );
 	}
+	/**
+	 * Fills $_POST as the metabox form would, including the links it loaded.
+	 *
+	 * @param array $urls   The submitted syndication_urls[] values.
+	 * @param array $loaded The links the form was loaded with.
+	 */
+	protected function submit_from( $urls, $loaded ) {
+		$this->submit( $urls );
+		$_POST['syndication_urls_loaded'] = wp_slash( wp_json_encode( $loaded ) );
+	}
+
+	/**
+	 * A link added after the form was loaded survives a save from that form (#216).
+	 */
+	public function test_saving_a_stale_form_keeps_links_added_since() {
+		$post_id = self::factory()->post->create();
+		add_post_syndication_link( $post_id, 'https://a.example/1' );
+		// Syndication adds a link after the editor loaded the box.
+		add_post_syndication_link( $post_id, 'https://copy.example/1' );
+		$this->submit_from( array( 'https://a.example/1' ), array( 'https://a.example/1' ) );
+
+		Syn_Meta::save_post_meta( $post_id );
+
+		$this->assertEqualsCanonicalizing( array( 'https://a.example/1', 'https://copy.example/1' ), get_post_syndication_links_data( $post_id ) );
+	}
+
+	public function test_saving_applies_the_forms_removals_and_additions() {
+		$post_id = self::factory()->post->create();
+		add_post_syndication_link( $post_id, array( 'https://a.example/1', 'https://b.example/2' ) );
+		add_post_syndication_link( $post_id, 'https://copy.example/1' );
+		$this->submit_from( array( 'https://a.example/1', 'https://new.example/1' ), array( 'https://a.example/1', 'https://b.example/2' ) );
+
+		Syn_Meta::save_post_meta( $post_id );
+
+		$this->assertEqualsCanonicalizing(
+			array( 'https://a.example/1', 'https://new.example/1', 'https://copy.example/1' ),
+			get_post_syndication_links_data( $post_id )
+		);
+	}
+
+	public function test_removing_every_link_deletes_them() {
+		$post_id = self::factory()->post->create();
+		add_post_syndication_link( $post_id, 'https://a.example/1' );
+		$this->submit_from( array( '' ), array( 'https://a.example/1' ) );
+
+		Syn_Meta::save_post_meta( $post_id );
+
+		$this->assertFalse( metadata_exists( 'post', $post_id, 'mf2_syndication' ) );
+	}
+
+	/**
+	 * Links another plugin adds aren't saved, so removing them there removes them (#212).
+	 */
+	public function test_other_plugins_links_are_not_saved() {
+		$post_id = self::factory()->post->create();
+		add_post_syndication_link( $post_id, 'https://a.example/1' );
+		$filter = function ( $urls ) {
+			$urls[] = 'https://other.example/1';
+			return $urls;
+		};
+		add_filter( 'get_post_syndication_links', $filter );
+		$this->submit_from( array( 'https://a.example/1' ), array( 'https://a.example/1' ) );
+
+		Syn_Meta::save_post_meta( $post_id );
+		remove_filter( 'get_post_syndication_links', $filter );
+
+		$this->assertSame( array( 'https://a.example/1' ), get_post_meta( $post_id, 'mf2_syndication', true ) );
+	}
+
+	/**
+	 * The box shows legacy links as its own, so saving moves them into mf2_syndication, and removing one sticks.
+	 */
+	public function test_saving_moves_the_legacy_links() {
+		$post_id = self::factory()->post->create();
+		update_post_meta( $post_id, 'syndication_urls', "https://old.example/1\nhttps://old.example/2" );
+		$this->submit_from( array( 'https://old.example/1' ), array( 'https://old.example/1', 'https://old.example/2' ) );
+
+		Syn_Meta::save_post_meta( $post_id );
+
+		$this->assertFalse( metadata_exists( 'post', $post_id, 'syndication_urls' ) );
+		$this->assertSame( array( 'https://old.example/1' ), get_post_syndication_links_data( $post_id ) );
+	}
 }
