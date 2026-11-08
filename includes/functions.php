@@ -1,7 +1,30 @@
 <?php
+/**
+ * Template functions: the public API that themes and other plugins call.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Returns the markup for a post's syndication links.
+ *
+ * @param int|WP_Post|null $post_id Post ID or object. Defaults to the current post.
+ * @param array            $args {
+ *     Optional. Display arguments. Defaults come from the display settings, via the
+ *     `syn_links_display_defaults` filter.
+ *
+ *     @type string $style            Markup: 'ul' (the default), 'ol', 'p' or 'span'.
+ *     @type bool   $text             Whether to show each link's name.
+ *     @type bool   $icons            Whether to show each link's icon.
+ *     @type string $container-css    Class for the list.
+ *     @type string $single-css       Class for each link.
+ *     @type string $text-css         Class for the text before the links.
+ *     @type bool   $show_text_before Whether to show the text before the links.
+ * }
+ * @return string|false The markup, or false if there's no such post.
+ */
 function get_post_syndication_links( $post_id = null, $args = array() ) {
 	$post = get_post( $post_id );
 	if ( $post ) {
@@ -10,10 +33,26 @@ function get_post_syndication_links( $post_id = null, $args = array() ) {
 	return false;
 }
 
+/**
+ * Returns the markup for a post's syndication links.
+ *
+ * An alias of get_post_syndication_links().
+ *
+ * @param int|WP_Post|null $post_id Post ID or object. Defaults to the current post.
+ * @param array            $args    Optional. Display arguments; see get_post_syndication_links().
+ * @return string|false The markup, or false if there's no such post.
+ */
 function get_syndication_links( $post_id = null, $args = array() ) {
 	return get_post_syndication_links( $post_id, $args );
 }
 
+/**
+ * Returns the markup for a comment's syndication links.
+ *
+ * @param int|WP_Comment|null $comment_id Comment ID or object. Defaults to the current comment.
+ * @param array               $args       Optional. Display arguments; see get_post_syndication_links().
+ * @return string|false The markup, or false if there's no such comment.
+ */
 function get_comment_syndication_links( $comment_id = null, $args = array() ) {
 	$comment = get_comment( $comment_id );
 	if ( $comment ) {
@@ -22,6 +61,14 @@ function get_comment_syndication_links( $comment_id = null, $args = array() ) {
 	return false;
 }
 
+/**
+ * Returns a post's syndication links as URLs.
+ *
+ * Includes links that other plugins add through the `get_post_syndication_links` filter.
+ *
+ * @param int|WP_Post $post_id Post ID or object.
+ * @return string[]|false The URLs, or false if there's no such post.
+ */
 function get_post_syndication_links_data( $post_id ) {
 	$post = get_post( $post_id );
 	if ( $post ) {
@@ -30,6 +77,14 @@ function get_post_syndication_links_data( $post_id ) {
 	return false;
 }
 
+/**
+ * Returns a comment's syndication links as URLs.
+ *
+ * Includes links that other plugins add through the `get_comment_syndication_links` filter.
+ *
+ * @param int|WP_Comment $comment_id Comment ID or object.
+ * @return string[]|false The URLs, or false if there's no such comment.
+ */
 function get_comment_syndication_links_data( $comment_id ) {
 	$comment = get_comment( $comment_id );
 	if ( $comment ) {
@@ -38,6 +93,16 @@ function get_comment_syndication_links_data( $comment_id ) {
 	return false;
 }
 
+/**
+ * Adds syndication links to a post.
+ *
+ * New links go after the existing ones. Invalid and duplicate URLs are dropped.
+ *
+ * @param int|WP_Post     $post_id Post ID or object.
+ * @param string|string[] $uri     A URL, or an array of URLs.
+ * @param bool            $replace Optional. Whether to replace the existing links. Default false.
+ * @return int|bool The result of update_metadata(), or false if there's no such post or nothing to add.
+ */
 function add_post_syndication_link( $post_id, $uri, $replace = false ) {
 	$post = get_post( $post_id );
 	if ( $post ) {
@@ -46,6 +111,16 @@ function add_post_syndication_link( $post_id, $uri, $replace = false ) {
 	return false;
 }
 
+/**
+ * Adds syndication links to a comment.
+ *
+ * New links go after the existing ones. Invalid and duplicate URLs are dropped.
+ *
+ * @param int|WP_Comment  $comment_id Comment ID or object.
+ * @param string|string[] $uri        A URL, or an array of URLs.
+ * @param bool            $replace    Optional. Whether to replace the existing links. Default false.
+ * @return int|bool The result of update_metadata(), or false if there's no such comment or nothing to add.
+ */
 function add_comment_syndication_link( $comment_id, $uri, $replace = false ) {
 	$comment = get_comment( $comment_id );
 	if ( $comment ) {
@@ -54,6 +129,12 @@ function add_comment_syndication_link( $comment_id, $uri, $replace = false ) {
 	return false;
 }
 
+/**
+ * Returns the current post's content, filtered for sending to another site.
+ *
+ * @param string|null $syndication_uid Optional. UID of the provider the content is for.
+ * @return string The content.
+ */
 function get_the_content_syndication( $syndication_uid = null ) {
 
 	/** This filter is documented in wp-includes/post-template.php */
@@ -67,11 +148,27 @@ function get_the_content_syndication( $syndication_uid = null ) {
 	return apply_filters( 'the_content_syndication', $content, $syndication_uid );
 }
 
+/**
+ * Whether the content is being prepared for syndication.
+ *
+ * True while the `the_content_syndication` filter runs, so `the_content` callbacks
+ * can tell when the content is being sent elsewhere.
+ *
+ * @return bool
+ */
 function is_syndication() {
 	return doing_filter( 'the_content_syndication' );
 }
 
-// Modeled after get_search_form
+/**
+ * Displays or returns a form that looks up the original of a syndicated copy.
+ *
+ * Modeled after get_search_form(). A theme can supply its own `originalofform.php`.
+ * The form submits to `?original-of=`, which redirects to the post.
+ *
+ * @param bool $echo Optional. Whether to echo the form. Default true.
+ * @return string|void The form markup, if `$echo` is false.
+ */
 function get_original_of_form( $echo = true ) {
 	$of_form_template = locate_template( 'originalofform.php' );
 	if ( '' !== $of_form_template ) {
@@ -95,6 +192,15 @@ function get_original_of_form( $echo = true ) {
 	}
 }
 
+/**
+ * Registers a syndication provider.
+ *
+ * Does nothing unless syndication (POSSE) is enabled, since the provider classes
+ * are only loaded then.
+ *
+ * @param Syndication_Provider $object The provider.
+ * @return bool|null Whether it was registered, or null if syndication is off.
+ */
 function register_syndication_provider( $object ) {
 	if ( class_exists( 'Post_Syndication' ) ) {
 		return Post_Syndication::register( $object );
@@ -137,20 +243,34 @@ function register_syndication_link_source( $slug, $args ) {
 	return Social_Plugins::register_source( $slug, $args );
 }
 
+/**
+ * Returns the post types that have syndication links and can be syndicated.
+ *
+ * Always includes `post`, plus the types chosen in the settings.
+ *
+ * @return string[] Post type names.
+ */
 function syndication_post_types() {
 	$post_types = get_option( 'syndication_post_types' );
 	if ( ! is_array( $post_types ) ) {
 		$post_types = array();
 	}
 	$post_types = array_merge( array( 'post' ), $post_types );
+	/**
+	 * Filters the post types that have syndication links and can be syndicated.
+	 *
+	 * @param string[] $post_types Post type names.
+	 */
 	return apply_filters( 'syndication_post_types', $post_types );
 }
 
-/* Return post content ready for excerpting
+/**
+ * Returns a post's content, ready for excerpting.
  *
- * @param int|WP_Post $post Post Object or ID.
- * @return string String ready for excerpting.
+ * Shortcodes and blocks are rendered or removed, and only basic formatting is kept.
  *
+ * @param int|WP_Post $post Post ID or object.
+ * @return string The content, or '' if there's no such post.
  */
 function syn_get_post_content( $post ) {
 	$allowed = array(
@@ -270,12 +390,12 @@ function syn_get_post_content( $post ) {
 	return wp_kses( $text, $allowed );
 }
 
-/* Customized Excerpt Function for Syndication
+/**
+ * Shortens text for syndication, at a word boundary.
  *
- * @param text Text to excerpt.
- * @param int Character Count. Optional.
- * @return string Excerpted String.
- *
+ * @param string $text  Text to excerpt. HTML is stripped.
+ * @param int    $count Optional. Maximum length in characters. Default 200.
+ * @return string The excerpt.
  */
 function syn_excerpt( $text, $count = 200 ) {
 	$text = wp_strip_all_tags( $text );
