@@ -60,7 +60,7 @@ class Test_Link_Saving extends WP_UnitTestCase {
 
 		$this->assertSame(
 			array( 'https://a.example/1', 'https://www.facebook.com/someone/posts/1' ),
-			array_values( get_post_meta( $post_id, 'mf2_syndication', true ) )
+			get_post_meta( $post_id, 'mf2_syndication', true )
 		);
 	}
 
@@ -71,7 +71,7 @@ class Test_Link_Saving extends WP_UnitTestCase {
 
 		Syn_Meta::save_post_meta( $post_id );
 
-		$this->assertSame( array( 'https://new.example/1' ), array_values( get_post_syndication_links_data( $post_id ) ) );
+		$this->assertSame( array( 'https://new.example/1' ), get_post_syndication_links_data( $post_id ) );
 	}
 
 	public function test_saving_an_empty_list_deletes_the_links() {
@@ -106,7 +106,7 @@ class Test_Link_Saving extends WP_UnitTestCase {
 
 		Syn_Meta::save_post_meta( $post_id );
 
-		$this->assertSame( array( 'https://a.example/1' ), array_values( get_post_meta( $post_id, 'mf2_syndication', true ) ) );
+		$this->assertSame( array( 'https://a.example/1' ), get_post_meta( $post_id, 'mf2_syndication', true ) );
 	}
 
 	/**
