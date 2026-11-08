@@ -1,9 +1,26 @@
 <?php
+/**
+ * Base class for providers that syndicate by sending a webmention.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Syndicates a post by sending a webmention from it to a target, such as Bridgy.
+ *
+ * The target is added to the post's links first, since services like Bridgy look for
+ * it on the page. Requires the Webmention plugin's send_webmention().
+ */
 class SynProvider_Webmention extends Syndication_Provider {
 
+	/**
+	 * Sends a webmention from a URL to the provider's target.
+	 *
+	 * @param string $url The source URL.
+	 * @return array|WP_Error|null The response, or null if there's no target.
+	 */
 	public function send_webmention( $url ) {
 		$target = $this->get_target();
 		if ( ! $target ) {
@@ -12,14 +29,21 @@ class SynProvider_Webmention extends Syndication_Provider {
 		return send_webmention( $url, $target );
 	}
 
+	/**
+	 * Returns the webmention target.
+	 *
+	 * @return string|null The target URL, or null if there's none.
+	 */
 	public function get_target() {
 		return null;
 	}
 
 	/**
-	 * Given a post try to POSSE it to a given network
+	 * Syndicates a post: adds the target to its links, sends the webmention, and
+	 * swaps the target for the copy's URL from the `Location` header.
 	 *
-	 * @return array of results
+	 * @param int|null $post_id Optional. Post ID. Defaults to the current post.
+	 * @return array|WP_Error The response, or an error.
 	 */
 	public function posse( $post_id = null ) {
 		if ( ! $post_id ) {
@@ -29,9 +53,16 @@ class SynProvider_Webmention extends Syndication_Provider {
 		add_post_syndication_link( $post_id, $this->get_target() );
 
 		// Attempt at cache busting by running anything attached to 'edit_post'.
+		/** This action is documented in wp-includes/post.php */
 		do_action( 'edit_post', $post_id, $post );
 
-		// Add a custom action to attach a manual clear cache to.
+		/**
+		 * Fires before the webmention is sent, after the target is added to the post's links.
+		 *
+		 * Use it to clear the post from a page cache, so the target sees the link.
+		 *
+		 * @param int $post_id Post ID.
+		 */
 		do_action( 'pre_syndication_links_webmention', $post_id );
 
 		$response = self::send_webmention( get_permalink( $post_id ) );

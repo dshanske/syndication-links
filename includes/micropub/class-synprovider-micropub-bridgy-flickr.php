@@ -1,18 +1,24 @@
 <?php
+/**
+ * Provider: Flickr via Bridgy Publish, by Micropub.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Flickr Micropub Class
+ * Syndicates to Flickr through Bridgy Publish's Micropub endpoint, with the token from the settings.
  */
-
 class SynProvider_Micropub_Bridgy_Flickr extends SynProvider_Micropub {
 	/**
-	 * Constructor
+	 * Sets up the provider, and its token setting.
 	 *
-	 * The default version of this just sets the parameters
+	 * @param array $args {
+	 *     Optional. Arguments.
 	 *
-	 * @param array $args Array of Arguments
+	 *     @type string $token Bearer token. Defaults to the one in the settings.
+	 * }
 	 */
 	public function __construct( $args = array() ) {
 		$this->name     = __( 'Flickr via Bridgy', 'syndication-links' );
@@ -34,6 +40,9 @@ class SynProvider_Micropub_Bridgy_Flickr extends SynProvider_Micropub {
 		$this->register_setting();
 	}
 
+	/**
+	 * Registers the token setting.
+	 */
 	public function register_setting() {
 		register_setting(
 			'syndication_apis',
@@ -47,6 +56,9 @@ class SynProvider_Micropub_Bridgy_Flickr extends SynProvider_Micropub {
 		);
 	}
 
+	/**
+	 * Adds the token field to the API Keys tab.
+	 */
 	public function admin_init() {
 		add_settings_field(
 			'bridgy_flickr_token',
@@ -65,10 +77,10 @@ class SynProvider_Micropub_Bridgy_Flickr extends SynProvider_Micropub {
 	}
 
 	/**
-	 * Convert post to Microformats for Micropub
+	 * Converts a post to an h-entry for Micropub.
 	 *
-	 * @param int|WP_Post $post WordPress Post
-	 * @return array|false Microformats
+	 * @param int|WP_Post $post Post ID or object.
+	 * @return array The h-entry, as Micropub JSON.
 	 */
 	public function post_to_mf2( $post ) {
 		$mf2 = parent::post_to_mf2( $post );

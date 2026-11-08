@@ -1,14 +1,26 @@
 <?php
+/**
+ * Provider: Micro.blog.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
-/*
- * Micro.Blog Provider enables a hidden feed that items can be added to in order to get published to micro.blog, then advises micro.blog to poll that feed.
+/**
+ * Syndicates to Micro.blog through a feed.
+ *
+ * Syndicated posts are added to a dedicated feed, which the account's Micro.blog
+ * settings must point to. Micro.blog is then pinged to fetch it, and the copy's URL
+ * is looked up shortly after.
  */
-
 class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 
-
+	/**
+	 * Sets the provider's name and UID, and hooks the feed if the provider is enabled.
+	 *
+	 * @param array $args Optional. Arguments.
+	 */
 	public function __construct( $args = array() ) {
 		$this->name = __( 'Micro.blog', 'syndication-links' );
 		$this->uid  = 'microdotblog';
@@ -23,11 +35,13 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 			add_filter( 'user_contactmethods', array( $this, 'user_contactmethods' ) );
 			add_action( 'microdotblog_get_ids', array( $this, 'get_microblog_post' ), 10 );
 		}
-		// Parent Constructor
+		// Parent Constructor.
 		parent::__construct( $args );
 	}
 
-
+	/**
+	 * Adds the Micro.blog section to the Providers tab.
+	 */
 	public static function admin_init() {
 		add_settings_section(
 			'microdotblog_options',
@@ -37,6 +51,12 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		);
 	}
 
+	/**
+	 * Adds a Micro.blog username field to user profiles.
+	 *
+	 * @param string[] $profile_fields Contact methods, keyed by meta key.
+	 * @return string[] The contact methods.
+	 */
 	public static function user_contactmethods( $profile_fields ) {
 		if ( ! array_key_exists( 'microblog', $profile_fields ) ) {
 			$profile_fields['microblog'] = __( 'Micro.blog username', 'syndication-links' );
@@ -44,11 +64,24 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		return $profile_fields;
 	}
 
+	/**
+	 * Registers the `microdotblog` query var.
+	 *
+	 * @param string[] $vars Public query vars.
+	 * @return string[] The query vars.
+	 */
 	public static function query_var( $vars ) {
 		$vars[] = 'microdotblog';
 		return $vars;
 	}
 
+	/**
+	 * Limits a feed request with `microdotblog` to the posts syndicated to Micro.blog.
+	 *
+	 * With `microdotblog=refresh`, the account's Micro.blog posts are fetched first.
+	 *
+	 * @param WP_Query $query The query.
+	 */
 	public static function create_feed( $query ) {
 		if ( ! array_key_exists( 'microdotblog', $query->query_vars ) ) {
 			return;
@@ -69,6 +102,14 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		}
 	}
 
+	/**
+	 * Looks up a post's copy on Micro.blog, and adds it to the post's links.
+	 *
+	 * Runs on `microdotblog_get_ids`, scheduled shortly after the post is syndicated.
+	 *
+	 * @param int|null $post_id Optional. Post ID.
+	 * @return string|false The copy's URL, or false if it wasn't found.
+	 */
 	public static function get_microblog_post( $post_id = null ) {
 		$urls = array_filter( array( get_the_guid( $post_id ), get_permalink( $post_id ) ) );
 
@@ -92,7 +133,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 				'timeout'             => 10,
 				'limit_response_size' => 1048576,
 				'redirection'         => 1,
-				// Use an explicit user-agent
+				// Use an explicit user-agent.
 				'user-agent'          => sprintf( 'Syndication Links for WordPress(%1$s)', home_url() ),
 			);
 			$response = wp_remote_get( $url, $args );
@@ -110,7 +151,12 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		return false;
 	}
 
-
+	/**
+	 * Fetches the account's Micro.blog posts, and adds each copy to its post's links.
+	 *
+	 * @param int|null $post_id Optional. Post ID: stop once its copy is found.
+	 * @return bool|WP_Error True when done, false if the author has no Micro.blog username, or an error.
+	 */
 	public static function retrieve_json_feed( $post_id = null ) {
 		if ( $post_id ) {
 			$permalink = get_permalink( $post_id );
@@ -136,7 +182,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 			'timeout'             => 10,
 			'limit_response_size' => 1048576,
 			'redirection'         => 1,
-			// Use an explicit user-agent
+			// Use an explicit user-agent.
 			'user-agent'          => sprintf( 'Syndication Links for WordPress(%1$s)', home_url() ),
 		);
 		$response = wp_remote_get( $url, $args );
@@ -160,12 +206,17 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		return true;
 	}
 
+	/**
+	 * Adds the `/microdotblog/feed/` rewrite rule.
+	 */
 	public static function rewrite() {
 		add_rewrite_rule( '^microdotblog/feed/(.*)/?', 'index.php?microdotblog=1&withcomments=0&feed=$matches[1]', 'top' );
 	}
 
 	/**
-	 * Return micro.blog feed link
+	 * Returns the URL of the Micro.blog feed: JSON Feed if available, otherwise the default feed.
+	 *
+	 * @return string The URL.
 	 */
 	public static function get_feed() {
 		if ( function_exists( 'json_feed_content_type' ) ) {
@@ -182,9 +233,10 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 	}
 
 	/**
-	 * Given a post try to POSSE it to a given network
+	 * Syndicates a post: adds it to the feed, pings Micro.blog, and schedules the lookup of the copy.
 	 *
-	 * @return array of results
+	 * @param int|null $post_id Optional. Post ID. Defaults to the current post.
+	 * @return array A message for the log.
 	 */
 	public function posse( $post_id = null ) {
 		if ( ! $post_id ) {
@@ -204,6 +256,9 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		return array( 'message' => __( 'Posted to Micro.blog', 'syndication-links' ) );
 	}
 
+	/**
+	 * Displays how to set up the feed on Micro.blog, and its URL.
+	 */
 	public static function options_callback() {
 		esc_html_e( 'Micro.blog requires you to add a feed under your account settings. Micro.blog polls that feed and uses it to create posts on the service. In order for you to use the syndication feature in this plugin, you need to remove all feeds and replace them with the one below and set your micro.blog username in your WordPress user profile. By default this using the JSONfeed if installed, otherwise RSS. This feed is generated by the same triggers used by the other providers. Please check to make sure the feed is working properly. A few seconds after publishing the plugin will poll micro.blog to get the link.', 'syndication-links' );
 		printf( '<p><a href="%1$s">%1$s</a></p>', esc_url( self::get_feed() ) );

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Provider: custom webmention targets set in the settings.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
@@ -6,9 +11,30 @@ defined( 'ABSPATH' ) || exit;
 add_action( 'init', array( 'SynProvider_Webmention_Custom', 'register_settings' ) );
 add_action( 'admin_init', array( 'SynProvider_Webmention_Custom', 'admin_init' ), 12 );
 
+/**
+ * Syndicates by sending a webmention to a target the site owner sets up.
+ *
+ * One instance is registered for each entry in the `syndication_links_custom_posse` option.
+ */
 class SynProvider_Webmention_Custom extends SynProvider_Webmention {
+	/**
+	 * The webmention target URL.
+	 *
+	 * @var string
+	 */
 	protected $target;
 
+	/**
+	 * Sets up the provider from its settings entry.
+	 *
+	 * @param array $args {
+	 *     The settings entry. Without a name and UID, nothing is set up.
+	 *
+	 *     @type string $name   Display name.
+	 *     @type string $uid    Unique ID.
+	 *     @type string $target Webmention target URL.
+	 * }
+	 */
 	public function __construct( $args = array() ) {
 		if ( ! array_key_exists( 'name', $args ) || ! array_key_exists( 'uid', $args ) ) {
 			return;
@@ -17,7 +43,7 @@ class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 		$this->uid    = sanitize_title( $args['uid'] );
 		$this->target = $args['target'];
 
-		// Parent Constructor
+		// Parent Constructor.
 		parent::__construct( $args );
 	}
 
@@ -58,6 +84,9 @@ class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 		);
 	}
 
+	/**
+	 * Adds the custom providers section and field to the settings page.
+	 */
 	public static function admin_init() {
 		add_settings_section(
 			'webmention_provider_options',
@@ -79,6 +108,13 @@ class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 		);
 	}
 
+	/**
+	 * Returns an array value, or '' if the key isn't set.
+	 *
+	 * @param array  $array The array.
+	 * @param string $key   The key.
+	 * @return mixed The value, or ''.
+	 */
 	public static function ifset( $array, $key ) {
 		if ( array_key_exists( $key, $array ) ) {
 			return $array[ $key ];
@@ -86,11 +122,18 @@ class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 		return '';
 	}
 
-
+	/**
+	 * Displays the description of the custom providers section.
+	 */
 	public static function webmention_heading() {
 		esc_html_e( 'Set up Custom Webmention POSSE handling', 'syndication-links' );
 	}
 
+	/**
+	 * Displays the custom providers: a row of fields for each, with Add and Remove buttons.
+	 *
+	 * @param array $args The field's arguments.
+	 */
 	public static function webmention_callback( $args ) {
 		$name   = 'syndication_links_custom_posse';
 		$custom = (array) get_option( $name, array() );
@@ -113,6 +156,12 @@ class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 		printf( '<span class="button button-secondary" id="delete-custom-webmention-button">%s</span>', esc_html__( 'Remove', 'syndication-links' ) );
 	}
 
+	/**
+	 * Displays the name, UID and target fields for one custom provider.
+	 *
+	 * @param int|string $int   The provider's index in the option.
+	 * @param array      $value Optional. The provider's settings.
+	 */
 	private static function webmention_inputs( $int, $value = array() ) {
 		$output = '<input type="%1$s" name="%2$s[%3$s][%4$s]" id="%5$s" value="%6$s" placeholder="%7$s" />';
 		$name   = 'syndication_links_custom_posse';
@@ -123,6 +172,11 @@ class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 		echo '</li>';
 	}
 
+	/**
+	 * Returns the webmention target.
+	 *
+	 * @return string The target URL.
+	 */
 	public function get_target() {
 		return esc_url_raw( $this->target );
 	}
