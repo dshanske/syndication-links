@@ -77,7 +77,8 @@ class SynProvider_Webmention extends Syndication_Provider {
 			$data = $response['body'];
 		}
 
-		if ( ! in_array( (int) $response_code, array( 201, 202 ), true ) ) {
+		// The Webmention spec counts any 2xx response as a success.
+		if ( 2 !== (int) floor( (int) $response_code / 100 ) ) {
 			return new WP_Error(
 				$this->uid . '_publish_error',
 				/* translators: Syndication Target */

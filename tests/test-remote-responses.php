@@ -198,4 +198,41 @@ class Test_Remote_Responses extends WP_UnitTestCase {
 		$this->assertFalse( Syndication_Provider_MicroDotBlog::get_microblog_post( $post_id ) );
 		$this->assertSame( array(), get_post_syndication_links_data( $post_id ) );
 	}
+	/**
+	 * Sends a webmention through Bridgy Fed, answered with the mocked response.
+	 *
+	 * @return array|WP_Error What posse() returned.
+	 */
+	private function send_bridgy_fed() {
+		$response = $this->response;
+		$filter   = function () use ( $response ) {
+			return $response;
+		};
+		add_filter( 'syn_test_send_webmention', $filter );
+		$result = ( new SynProvider_Webmention_Bridgy_Fed() )->posse( self::factory()->post->create() );
+		remove_filter( 'syn_test_send_webmention', $filter );
+		return $result;
+	}
+
+	/**
+	 * The Webmention spec counts any 2xx response as a success.
+	 *
+	 * @dataProvider data_success_codes
+	 *
+	 * @param int $code Status code.
+	 */
+	public function test_webmention_accepts_any_2xx( $code ) {
+		$this->respond( $code, '' );
+
+		$this->assertNotWPError( $this->send_bridgy_fed() );
+	}
+
+	public function test_webmention_rejects_other_statuses() {
+		$this->respond( 400, 'Bad request' );
+
+		$result = $this->send_bridgy_fed();
+
+		$this->assertWPError( $result );
+		$this->assertSame( 400, $result->get_error_data()['status'] );
+	}
 }
