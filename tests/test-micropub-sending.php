@@ -96,6 +96,8 @@ class Test_Micropub_Sending extends WP_UnitTestCase {
 				array(
 					'post_title'    => 'The title',
 					'post_content'  => 'The content.',
+					// The factory makes up an excerpt unless one is given.
+					'post_excerpt'  => '',
 					'post_date'     => '2026-11-01 10:00:00',
 					'post_date_gmt' => '2026-11-01 10:00:00',
 				),
@@ -117,7 +119,14 @@ class Test_Micropub_Sending extends WP_UnitTestCase {
 	}
 
 	public function test_post_to_mf2_leaves_out_an_empty_title_and_excerpt() {
-		$mf2 = $this->provider()->post_to_mf2( $this->post( array( 'post_title' => '' ) ) );
+		$mf2 = $this->provider()->post_to_mf2(
+			$this->post(
+				array(
+					'post_title'   => '',
+					'post_excerpt' => '',
+				)
+			)
+		);
 
 		$this->assertArrayNotHasKey( 'name', $mf2['properties'] );
 		$this->assertArrayNotHasKey( 'summary', $mf2['properties'] );
