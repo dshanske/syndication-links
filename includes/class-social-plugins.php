@@ -33,11 +33,11 @@ class Social_Plugins {
 			return false;
 		}
 		$result = array();
-		foreach ($array as $key => $value) {
-			if (is_array($value)) {
-			$result = array_merge($result, self::array_flatten($value));
+		foreach ( $array as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$result = array_merge( $result, self::array_flatten( $value ) );
 			} else {
-			$result[$key] = $value;
+				$result[ $key ] = $value;
 			}
 		}
 		return $result;
@@ -580,7 +580,7 @@ class Social_Plugins {
 		}
 
 		$account = get_option( 'wtt_twitter_username' );
-		$uid = get_post_meta( $id, '_wpt_tweet_id', true );
+		$uid     = get_post_meta( $id, '_wpt_tweet_id', true );
 		if ( ! $account || ! $uid ) {
 			return;
 		}
@@ -615,5 +615,4 @@ class Social_Plugins {
 
 		return array_merge( $urls, self::autopost_for_x_links( $post_id ) );
 	}
-
 } // End Class
