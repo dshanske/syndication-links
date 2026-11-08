@@ -557,6 +557,44 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 	}
 
 	/**
+	 * A provider that can't be chosen in the editor isn't offered to Micropub clients either (#166).
+	 */
+	public function test_disabled_providers_are_not_micropub_targets() {
+		update_option( 'syndication_provider_enable', array( 'one', 'two' ) );
+		$this->register_fakes( 'one', 'two' );
+		$filter = function ( $disabled, $uid ) {
+			return 'two' === $uid;
+		};
+		add_filter( 'syndication_link_disabled', $filter, 10, 2 );
+
+		$targets = apply_filters( 'micropub_syndicate-to', array(), self::$admin_id ); // phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores -- Micropub's hook.
+		remove_filter( 'syndication_link_disabled', $filter, 10 );
+
+		$this->assertSame( array( 'one' ), wp_list_pluck( $targets, 'uid' ) );
+	}
+
+	/**
+	 * A Micropub provider without a token says so, without sending anything (#166).
+	 */
+	public function test_micropub_provider_without_a_token_returns_an_error() {
+		$post_id  = self::factory()->post->create();
+		$provider = new SynProvider_Micropub_Bridgy_Github( array( 'token' => '' ) );
+		$requests = 0;
+		$count    = function ( $pre ) use ( &$requests ) {
+			++$requests;
+			return $pre;
+		};
+		add_filter( 'pre_http_request', $count );
+
+		$result = $provider->posse( $post_id );
+		remove_filter( 'pre_http_request', $count );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'missing_token', $result->get_error_code() );
+		$this->assertSame( 0, $requests );
+	}
+
+	/**
 	 * A provider that was created but never registered doesn't fatal (B10).
 	 */
 	public function test_get_works_for_an_unregistered_provider() {

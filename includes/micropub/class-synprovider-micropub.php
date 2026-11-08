@@ -287,6 +287,13 @@ class SynProvider_Micropub extends Syndication_Provider {
 		if ( ! $post_id ) {
 			$post_id = get_the_ID();
 		}
+		if ( empty( $this->token ) ) {
+			return new WP_Error(
+				'missing_token',
+				/* translators: %s: provider name */
+				sprintf( __( '%s has no token. Add one on the API Keys tab of the Syndication Links settings.', 'syndication-links' ), $this->name )
+			);
+		}
 		$response = self::post_micropub( $post_id, $this->endpoint );
 		if ( is_wp_error( $response ) ) {
 			return $response;
