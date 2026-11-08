@@ -96,7 +96,7 @@ function get_comment_syndication_links_data( $comment_id ) {
 /**
  * Adds syndication links to a post.
  *
- * New links go before the existing ones. Invalid and duplicate URLs are dropped.
+ * New links go after the existing ones. Invalid and duplicate URLs are dropped.
  *
  * @param int|WP_Post     $post_id Post ID or object.
  * @param string|string[] $uri     A URL, or an array of URLs.
@@ -114,7 +114,7 @@ function add_post_syndication_link( $post_id, $uri, $replace = false ) {
 /**
  * Adds syndication links to a comment.
  *
- * New links go before the existing ones. Invalid and duplicate URLs are dropped.
+ * New links go after the existing ones. Invalid and duplicate URLs are dropped.
  *
  * @param int|WP_Comment  $comment_id Comment ID or object.
  * @param string|string[] $uri        A URL, or an array of URLs.
