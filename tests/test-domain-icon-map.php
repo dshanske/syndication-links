@@ -130,6 +130,49 @@ class Test_Domain_Icon_Map extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Non-web links get an icon for their scheme (REVIEW.md B4).
+	 *
+	 * @dataProvider data_non_web_links
+	 *
+	 * @param string $url  The link.
+	 * @param string $name The expected icon name.
+	 */
+	public function test_url_to_name_non_web_link( $url, $name ) {
+		$this->assertSame( $name, Syn_Link_Domain_Icon_Map::url_to_name( $url ) );
+	}
+
+	public function data_non_web_links() {
+		return array(
+			'mailto'       => array( 'mailto:someone@example.com', 'mail' ),
+			'mailto, caps' => array( 'MAILTO:someone@example.com', 'mail' ),
+			'sms'          => array( 'sms:+15555550100', 'phone' ),
+			'tel'          => array( 'tel:+15555550100', 'phone' ),
+			'other scheme' => array( 'gemini://example.com/post', 'notice' ),
+			'no scheme'    => array( 'example.com/post', 'notice' ),
+		);
+	}
+
+	public function test_non_web_links_are_not_cached_under_a_domain() {
+		$map = new ReflectionProperty( 'Syn_Link_Domain_Icon_Map', 'map' );
+		$map->setAccessible( true );
+		$before = $map->getValue();
+
+		Syn_Link_Domain_Icon_Map::url_to_name( 'mailto:someone@example.com' );
+
+		$this->assertSame( $before, $map->getValue() );
+	}
+
+	public function test_non_web_links_go_through_the_filter() {
+		$filter = function ( $name, $url ) {
+			return 0 === strpos( $url, 'mailto:' ) ? 'custom-mail' : $name;
+		};
+		add_filter( 'syn_link_mapping', $filter, 10, 2 );
+
+		$this->assertSame( 'custom-mail', Syn_Link_Domain_Icon_Map::url_to_name( 'mailto:someone@example.com' ) );
+		remove_filter( 'syn_link_mapping', $filter, 10 );
+	}
+
+	/**
 	 * Unknown domains with WordPress, read or news in them get a generic icon.
 	 */
 	public function test_url_to_name_keyword_fallbacks() {
