@@ -123,7 +123,7 @@ Development and bug reports on this plugin is on Github at https://github.com/ds
 
 = Version 5.0.0 =
 
-Syndication Links now requires PHP 7.4 and WordPress 6.2 or later, or ClassicPress. Update those first: on older versions, WordPress won't activate or update the plugin.
+Requires PHP 7.4 and WordPress 6.2 or later, or ClassicPress. Private posts are never syndicated, and HTML from the syn_link_title filter is now escaped. Medium links are no longer shown until imported: the new Import tab copies links from other cross-posting plugins into your posts.
 
 = Version 4.4.0 =
 
@@ -170,6 +170,24 @@ In no particular order...
 9. GitHub Actions is used to actively test against various PHP versions
 
 == Changelog ==
+
+= Version 5.0.0 ( unreleased ) =
+* Requires PHP 7.4 and WordPress 6.2 or later, or the latest ClassicPress. On older versions, WordPress won't activate or update the plugin.
+* Security: output in the link markup, the metabox and the Original Of widget is escaped, submitted links are sanitized, and saving a comment's links checks the user can edit it.
+* Behaviour change: a `syn_link_title` filter that returns HTML now has it escaped. Text before the links still allows formatting such as `<em>`.
+* Behaviour change: private posts are never syndicated. Drafts and pending posts are queued and sent when published, and future-dated posts are sent when they're published, not straight away as well.
+* New Import tab and `wp syndication-links import` command: copy the links recorded by other cross-posting plugins (SNAP, Mastodon Autopost, XPoster, Autopost for X, Keyring, Medium) into the post's own syndication links. Once imported, the other plugin can be removed without losing the links. Other plugins can add import sources with `register_syndication_link_source()`.
+* Medium links are no longer shown from the Medium plugin, which is closed. Import them to keep them.
+* XPoster: links to its Mastodon and Bluesky posts are added, and its X links are also shown for posts saved before they were recorded.
+* Fixed the Mastodon Autopost and Autopost for X integrations.
+* Bridgy targets are output as empty links, as Bridgy's docs describe, not as syndicated copies.
+* `?original-of=` matches the exact link, searches every syndication post type, and returns a 404 when nothing matches. `?syndication=` only filters the main query.
+* `mailto:`, `sms:` and `tel:` links get mail and phone icons.
+* Icons for retired services (Google+, Google Podcasts, Pocket and others) are kept in a separate pack, loaded only when one is shown. The icons are built with PHP; the Node build is gone.
+* Old `syndication_urls` links are moved to `mf2_syndication` in the background instead of when a post is read.
+* Links are always returned as a list, so the JSON Feed `syndication` field is never an object.
+* Fixed: the privacy exporter, a fatal error in Micropub syndication, the settings page's Add and Remove buttons outside the IndieWeb menu, and adding the first custom webmention provider.
+* With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
 
 = Version 4.5.3 ( 2025-07-05 ) =
 * Add support for Autopost for X plugin, props @iamdharmesh and the plugin team there
