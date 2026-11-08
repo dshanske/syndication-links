@@ -13,6 +13,13 @@ defined( 'ABSPATH' ) || exit;
 class SynProvider_Webmention_Bridgy_Flickr extends SynProvider_Webmention_Bridgy {
 
 	/**
+	 * Bridgy can't delete posts on this service.
+	 *
+	 * @var bool
+	 */
+	protected $supports_delete = false;
+
+	/**
 	 * Sets the provider's name and UID.
 	 *
 	 * @param array $args Optional. Arguments.

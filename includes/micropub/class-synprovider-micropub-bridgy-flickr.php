@@ -11,6 +11,13 @@ defined( 'ABSPATH' ) || exit;
  * Syndicates to Flickr through Bridgy Publish's Micropub endpoint, with the token from the settings.
  */
 class SynProvider_Micropub_Bridgy_Flickr extends SynProvider_Micropub {
+
+	/**
+	 * Bridgy can't delete posts on this service.
+	 *
+	 * @var bool
+	 */
+	protected $supports_delete = false;
 	/**
 	 * Sets up the provider, and its token setting.
 	 *

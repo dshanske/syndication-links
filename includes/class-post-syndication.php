@@ -39,6 +39,10 @@ class Post_Syndication {
 		}
 		add_action( 'micropub_syndication', array( __CLASS__, 'syndication' ), 10, 2 );
 		add_action( 'syn_syndication', array( __CLASS__, 'syndication' ), 10, 2 );
+		// Delete the copies of a trashed or deleted post (#184).
+		add_action( 'wp_trash_post', array( __CLASS__, 'schedule_delete' ) );
+		add_action( 'before_delete_post', array( __CLASS__, 'schedule_delete' ) );
+		add_action( 'syn_delete_copies', array( __CLASS__, 'delete_copies' ), 10, 3 );
 		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
 		// The Webmention plugin's public filter for the targets it found in a post's content.
 		add_filter( 'webmention_links', array( __CLASS__, 'webmention_links' ), 10, 2 );
@@ -71,6 +75,16 @@ class Post_Syndication {
 				'description'  => 'Use Post Excerpt for Content',
 				'show_in_rest' => true,
 				'default'      => '0',
+			)
+		);
+		register_setting(
+			'syndication_providers',
+			'syndication_delete_on_trash',
+			array(
+				'type'         => 'boolean',
+				'description'  => 'Delete the syndicated copies of a post when it is trashed',
+				'show_in_rest' => true,
+				'default'      => '1',
 			)
 		);
 		register_setting(
@@ -131,6 +145,20 @@ class Post_Syndication {
 					'true'  => __( 'Disable', 'syndication-links' ),
 					'maybe' => __( 'If too long', 'syndication-links' ),
 				),
+			)
+		);
+
+		add_settings_field(
+			'syndication_delete_on_trash',
+			__( 'Delete the Syndicated Copies of Trashed Posts', 'syndication-links' ),
+			array(
+				'Syn_Config',
+				'checkbox_callback',
+			),
+			'syndication_provider_options',
+			'syndication_providers',
+			array(
+				'label_for' => 'syndication_delete_on_trash',
 			)
 		);
 
@@ -345,6 +373,138 @@ class Post_Syndication {
 	}
 
 	/**
+	 * How long a trashed post waits before its copies are deleted, in seconds.
+	 *
+	 * Restoring the post in that time keeps them.
+	 *
+	 * @since 5.0.0
+	 */
+	const DELETE_DELAY = 5 * MINUTE_IN_SECONDS;
+
+	/**
+	 * Returns the copies of a post each provider made, from its syndication log.
+	 *
+	 * Only providers that support deleting are listed, with the URLs of the copies they
+	 * reported, and not ones whose copies were already deleted. A webmention provider is
+	 * listed even when it reported no URL: it deletes by sending the webmention again.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @return array[] Copies' URLs, keyed by provider UID.
+	 */
+	public static function sent_copies( $post_id ) {
+		$log = get_post_meta( $post_id, 'syndication_log', true );
+		if ( ! is_array( $log ) ) {
+			return array();
+		}
+		$copies = array();
+		foreach ( $log as $entry ) {
+			if ( ! is_array( $entry ) || empty( $entry['uid'] ) || ! isset( static::$targets[ $entry['uid'] ] ) ) {
+				continue;
+			}
+			// Failed attempts made no copy.
+			if ( ! isset( $entry['data']['code'] ) || 2 !== (int) floor( (int) $entry['data']['code'] / 100 ) ) {
+				continue;
+			}
+			$uid = $entry['uid'];
+			// A copy that was deleted, e.g. before the post was restored, is gone.
+			if ( ! empty( $entry['action'] ) && 'delete' === $entry['action'] ) {
+				unset( $copies[ $uid ] );
+				continue;
+			}
+			if ( ! static::$targets[ $uid ]->supports_delete() ) {
+				continue;
+			}
+			if ( ! isset( $copies[ $uid ] ) ) {
+				$copies[ $uid ] = array();
+			}
+			if ( ! empty( $entry['data']['url'] ) && is_string( $entry['data']['url'] ) ) {
+				$copies[ $uid ][] = $entry['data']['url'];
+			}
+		}
+		foreach ( $copies as $uid => $urls ) {
+			$copies[ $uid ] = array_values( array_unique( $urls ) );
+		}
+		return $copies;
+	}
+
+	/**
+	 * Schedules the deletion of a post's copies, when it's trashed or deleted.
+	 *
+	 * What to delete is worked out now, while the post and its log still exist, and passed
+	 * to the event. A trashed post waits DELETE_DELAY first, so restoring it keeps them.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	public static function schedule_delete( $post_id ) {
+		$post = get_post( $post_id );
+		if ( ! $post || ! in_array( $post->post_type, syndication_post_types(), true ) ) {
+			return;
+		}
+		// A post deleted from the trash had its copies deleted when it was trashed.
+		if ( 'trash' === $post->post_status || '1' !== (string) get_option( 'syndication_delete_on_trash', '1' ) ) {
+			return;
+		}
+		$copies = self::sent_copies( $post->ID );
+		/**
+		 * Filters the copies deleted when a post is trashed or deleted.
+		 *
+		 * @since 5.0.0
+		 *
+		 * @param array[] $copies  Copies' URLs, keyed by provider UID. Return an empty array to keep them.
+		 * @param WP_Post $post    The post.
+		 */
+		$copies = apply_filters( 'syndication_links_delete_copies', $copies, $post );
+		if ( empty( $copies ) || ! is_array( $copies ) ) {
+			return;
+		}
+		$delay = doing_action( 'before_delete_post' ) ? 0 : self::DELETE_DELAY;
+		wp_schedule_single_event( time() + $delay, 'syn_delete_copies', array( $post->ID, get_permalink( $post ), $copies ) );
+	}
+
+	/**
+	 * Deletes a post's copies, unless the post was restored.
+	 *
+	 * Runs on the `syn_delete_copies` event. The results are added to the post's log, if
+	 * it still exists.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int     $post_id Post ID.
+	 * @param string  $source  The post's URL before it was trashed.
+	 * @param array[] $copies  Copies' URLs, keyed by provider UID.
+	 */
+	public static function delete_copies( $post_id, $source, $copies ) {
+		$post = get_post( $post_id );
+		// Restored from the trash: keep the copies.
+		if ( $post && 'trash' !== $post->post_status ) {
+			return;
+		}
+		$returns = array();
+		foreach ( (array) $copies as $uid => $urls ) {
+			if ( ! isset( static::$targets[ $uid ] ) || ! static::$targets[ $uid ]->supports_delete() ) {
+				continue;
+			}
+			$target = static::$targets[ $uid ];
+			$return = $target->delete( $post_id, $source, (array) $urls );
+			if ( null === $return ) {
+				continue;
+			}
+			self::error_log( $return, $target, $post_id );
+			$entry           = self::syndication_log( $return, $target );
+			$entry['action'] = 'delete';
+			$returns[]       = $entry;
+		}
+		if ( $post && $returns ) {
+			$log = get_post_meta( $post_id, 'syndication_log', true );
+			update_post_meta( $post_id, 'syndication_log', array_merge( is_array( $log ) ? $log : array(), $returns ) );
+		}
+	}
+
+	/**
 	 * Builds a log entry from a provider's result.
 	 *
 	 * @param array|WP_Error       $input  What the provider's posse() returned.
@@ -433,6 +593,10 @@ class Post_Syndication {
 				$date->setTimestamp( $log['date'] );
 				$date->setTimezone( wp_timezone() );
 				$name = array_key_exists( 'name', $log ) ? $log['name'] : $log['uid'];
+				if ( ! empty( $log['action'] ) && 'delete' === $log['action'] ) {
+					/* translators: %s: provider name */
+					$name = sprintf( __( '%s (delete)', 'syndication-links' ), $name );
+				}
 				printf( '<p><details><summary>%1$s: %2$s</summary><pre>%3$s</pre></details></p>', esc_html( $date->format( DATE_W3C ) ), esc_html( $name ), esc_html( wp_json_encode( $log['data'], JSON_PRETTY_PRINT ) ) );
 			}
 		}
