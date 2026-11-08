@@ -143,25 +143,66 @@ class Syn_Meta {
 			self::not_found( $wp );
 			return;
 		}
-		$url   = esc_url_raw( $url );
-		$args  = array(
-			'fields'     => 'ids',
-			// The links are a serialized array, so this is an unindexed LIKE on the meta value.
-			'meta_query' => array(
-				array(
-					'key'     => 'mf2_syndication',
-					'value'   => $url,
-					'compare' => 'LIKE',
-				),
-			),
-		);
-		$posts = get_posts( $args );
-		if ( empty( $posts ) ) {
+		$post_id = self::find_original( esc_url_raw( $url ) );
+		if ( ! $post_id ) {
 			self::not_found( $wp );
 			return;
 		}
-		wp_safe_redirect( get_permalink( $posts[0] ) );
+		wp_safe_redirect( get_permalink( $post_id ) );
 		exit;
+	}
+
+	/**
+	 * Finds the published post that has a syndication link.
+	 *
+	 * Searches every syndication post type, and the legacy syndication_urls meta the
+	 * background migration hasn't moved yet. Only an exact match counts: a link that
+	 * merely starts with the URL doesn't.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $url The syndicated URL, as cleaned on save.
+	 * @return int The post ID, or 0 if no post has the link.
+	 */
+	public static function find_original( $url ) {
+		if ( empty( $url ) ) {
+			return 0;
+		}
+		$posts = get_posts(
+			array(
+				'fields'         => 'ids',
+				'post_type'      => syndication_post_types(),
+				'posts_per_page' => 10,
+				// The links are stored serialized, so this is an unindexed LIKE on the meta value.
+				// In a serialized array each link is wrapped in quotes, which rules out longer URLs.
+				'meta_query'     => array(
+					'relation' => 'OR',
+					array(
+						'key'     => 'mf2_syndication',
+						'value'   => '"' . $url . '"',
+						'compare' => 'LIKE',
+					),
+					array(
+						'key'     => 'syndication_urls',
+						'value'   => $url,
+						'compare' => 'LIKE',
+					),
+				),
+			)
+		);
+		if ( empty( $posts ) ) {
+			return 0;
+		}
+		update_meta_cache( 'post', $posts );
+		foreach ( $posts as $post_id ) {
+			$links = get_post_meta( $post_id, 'mf2_syndication', true );
+			$links = is_array( $links ) ? $links : explode( "\n", (string) $links );
+			$links = array_merge( $links, explode( "\n", (string) get_post_meta( $post_id, 'syndication_urls', true ) ) );
+			if ( in_array( $url, array_map( 'trim', array_filter( $links, 'is_string' ) ), true ) ) {
+				return (int) $post_id;
+			}
+		}
+		return 0;
 	}
 
 	/**
