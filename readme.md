@@ -218,6 +218,10 @@ In no particular order...
 * Old `syndication_urls` links are moved to `mf2_syndication` in the background instead of when a post is read.
 * Links are always returned as a list, so the JSON Feed `syndication` field is never an object.
 * Fixed: the privacy exporter, a fatal error in Micropub syndication, the settings page's Add and Remove buttons outside the IndieWeb menu, and adding the first custom webmention provider.
+* Behaviour change: for Bridgy's Micropub providers, "Insert link back to original post: If too long" now adds the link only when the post is too long, as Bridgy's own option does. Short posts are sent without it. "Use excerpt" now applies to them, and with the link turned off the content uses the whole length limit.
+* Pinboard: needs Post Kinds 4.0.1 or later, and adds the bookmark to the post's links instead of replacing them.
+* Webmention providers count any 2xx response as a success, as the Webmention spec says.
+* Fixed: the provider settings markup, a fatal error in the Micro.blog lookup when Micro.blog doesn't return JSON, and warnings when refreshing the Micro.blog feed or sending an untagged post to Pinboard.
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
 
 ### Version 4.5.3 ( 2025-07-05 )
