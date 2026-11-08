@@ -1,15 +1,25 @@
 <?php
+/**
+ * Original Of widget.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * A widget with a form that looks up the original of a syndicated copy.
+ *
+ * @see get_original_of_form()
+ */
 class Widget_Original_Of extends WP_Widget {
 	/**
 	 * Register widget with WordPress.
 	 */
 	public function __construct() {
 		parent::__construct(
-			'Widget_Original_Of',                // Base ID
-			__( 'Original Of', 'syndication-links' ),        // Name
+			'Widget_Original_Of',                // Base ID.
+			__( 'Original Of', 'syndication-links' ),        // Name.
 			array(
 				'classname'   => 'original_of_widget',
 				'description' => __( 'Displays a search box to search for posts by their syndicated URLs', 'syndication-links' ),

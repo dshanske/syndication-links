@@ -1,4 +1,9 @@
 <?php
+/**
+ * Settings page and front-end output.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
@@ -6,11 +11,24 @@ add_action( 'init', array( 'Syn_Config', 'init' ) );
 add_action( 'admin_init', array( 'Syn_Config', 'admin_init' ) );
 add_action( 'admin_menu', array( 'Syn_Config', 'admin_menu' ), 11 );
 
+/**
+ * Registers the settings and their page, and adds the links to content, comments and feeds.
+ */
 class Syn_Config {
+	/**
+	 * Registers the settings, and hooks the front-end output.
+	 */
 	public static function init() {
 		$cls = get_called_class();
 		add_action( 'wp_enqueue_scripts', array( $cls, 'enqueue_scripts' ) );
 
+		/**
+		 * Filters whether the links are added to the content automatically.
+		 *
+		 * Return false when the theme displays them itself.
+		 *
+		 * @param bool $display Whether to add the links to the content. Default true.
+		 */
 		if ( apply_filters( 'syndication_links_display', true ) ) {
 			add_filter( 'the_content', array( $cls, 'the_content' ), 30 );
 		}
@@ -22,7 +40,7 @@ class Syn_Config {
 		add_filter( 'json_feed_item', array( $cls, 'json_feed_item' ), 10, 2 );
 		add_action( 'admin_enqueue_scripts', array( $cls, 'admin_enqueue' ) );
 
-		// Syndication Content Options
+		// Syndication Content Options.
 		register_setting(
 			'syndication_display',
 			'syndication-links_bw',
@@ -118,7 +136,7 @@ class Syn_Config {
 			)
 		);
 
-		// Syndication Links POSSE/Syndication Options
+		// Syndication Links POSSE/Syndication Options.
 		register_setting(
 			'syndication_providers',
 			'syndication_posse_enable',
@@ -141,6 +159,9 @@ class Syn_Config {
 		);
 	}
 
+	/**
+	 * Enqueues the front-end stylesheet for the chosen icon size and colours.
+	 */
 	public static function enqueue_scripts() {
 		$size = get_option( 'syndication-links_size' );
 		if ( '1' === get_option( 'syndication-links_bw' ) ) {
@@ -169,7 +190,11 @@ class Syn_Config {
 		wp_enqueue_style( 'syndication-style', plugin_dir_url( __DIR__ ) . $css, array(), SYNDICATION_LINKS_VERSION );
 	}
 
-
+	/**
+	 * Enqueues the settings page's styles and scripts.
+	 *
+	 * @param string $hook_suffix The current admin page.
+	 */
 	public static function admin_enqueue( $hook_suffix ) {
 		// The settings page is under the IndieWeb menu if that plugin is active, otherwise under Settings.
 		$hooks = array( 'indieweb_page_syndication_links', 'settings_page_syndication_links' );
@@ -198,6 +223,9 @@ class Syn_Config {
 		}
 	}
 
+	/**
+	 * Adds the settings sections and fields.
+	 */
 	public static function admin_init() {
 		add_settings_section(
 			'syndication_display',
@@ -307,15 +335,18 @@ class Syn_Config {
 		);
 	}
 
+	/**
+	 * Adds the settings page: under the IndieWeb menu if that plugin is active, otherwise under Settings.
+	 */
 	public static function admin_menu() {
 		$cls = get_called_class();
 		// If the IndieWeb Plugin is installed use its menu.
 		if ( class_exists( 'IndieWeb_Plugin' ) ) {
 			add_submenu_page(
 				'indieweb',
-				__( 'Syndication Links', 'syndication-links' ), // page title
-				__( 'Syndication Links', 'syndication-links' ), // menu title
-				'manage_options', // access capability
+				__( 'Syndication Links', 'syndication-links' ), // page title.
+				__( 'Syndication Links', 'syndication-links' ), // menu title.
+				'manage_options', // access capability.
 				'syndication_links',
 				array( $cls, 'links_options' )
 			);
@@ -324,6 +355,9 @@ class Syn_Config {
 		}
 	}
 
+	/**
+	 * Displays the description of the content options section.
+	 */
 	public static function options_callback() {
 		esc_html_e( 'Options for Presenting Syndication Links in Posts.', 'syndication-links' );
 		echo '<p>';
@@ -331,6 +365,9 @@ class Syn_Config {
 		echo '</p>';
 	}
 
+	/**
+	 * Displays the description of the syndication options section.
+	 */
 	public static function posse_options_callback() {
 		esc_html_e( 'Options for Syndicating to Other Sites', 'syndication-links' );
 		echo '<p>';
@@ -338,7 +375,17 @@ class Syn_Config {
 		echo '</p>';
 	}
 
-
+	/**
+	 * Displays a checkbox setting.
+	 *
+	 * A hidden field submits 0 when the box is unchecked.
+	 *
+	 * @param array $args {
+	 *     The field's arguments.
+	 *
+	 *     @type string $label_for The option name.
+	 * }
+	 */
 	public static function checkbox_callback( array $args ) {
 		$name    = $args['label_for'];
 		$checked = get_option( $args['label_for'] );
@@ -346,6 +393,16 @@ class Syn_Config {
 		echo "<input name='" . esc_attr( $name ) . "' type='checkbox' value='1' " . checked( 1, $checked, false ) . ' /> ';
 	}
 
+	/**
+	 * Displays a dropdown setting.
+	 *
+	 * @param array $args {
+	 *     The field's arguments.
+	 *
+	 *     @type string $label_for The option name.
+	 *     @type array  $list      Labels, keyed by value.
+	 * }
+	 */
 	public static function select_callback( array $args ) {
 		$name    = $args['label_for'];
 		$select  = get_option( $name );
@@ -357,6 +414,16 @@ class Syn_Config {
 		echo '</select>';
 	}
 
+	/**
+	 * Displays a setting as radio buttons.
+	 *
+	 * @param array $args {
+	 *     The field's arguments.
+	 *
+	 *     @type string $label_for The option name.
+	 *     @type array  $list      Labels, keyed by value.
+	 * }
+	 */
 	public static function radio_callback( array $args ) {
 		$name    = $args['label_for'];
 		$select  = get_option( $name );
@@ -370,6 +437,15 @@ class Syn_Config {
 		echo '</fieldset>';
 	}
 
+	/**
+	 * Displays a checkbox for each public post type other than `post`, which always has links.
+	 *
+	 * @param array $args {
+	 *     The field's arguments.
+	 *
+	 *     @type string $label_for The option name.
+	 * }
+	 */
 	public static function post_type_callback( array $args ) {
 		echo '<ul>';
 		$option = get_option( $args['label_for'] );
@@ -389,6 +465,16 @@ class Syn_Config {
 		echo '</ul>';
 	}
 
+	/**
+	 * Displays a text setting.
+	 *
+	 * @param array $args {
+	 *     The field's arguments.
+	 *
+	 *     @type string $label_for The option name.
+	 *     @type string $type      Optional. Input type, such as 'text', 'url' or 'password'. Default 'text'.
+	 * }
+	 */
 	public static function text_callback( $args ) {
 		$name = $args['label_for'];
 		if ( ! isset( $args['type'] ) ) {
@@ -402,6 +488,11 @@ class Syn_Config {
 		}
 	}
 
+	/**
+	 * Returns the display modes.
+	 *
+	 * @return string[] Labels, keyed by mode.
+	 */
 	public static function display_options() {
 		return array(
 			'icons'     => __( 'Icons Only', 'syndication-links' ),
@@ -411,6 +502,11 @@ class Syn_Config {
 		);
 	}
 
+	/**
+	 * Returns the icon sizes.
+	 *
+	 * @return string[] Labels, keyed by size.
+	 */
 	public static function size_options() {
 		return array(
 			'small'  => __( 'Small', 'syndication-links' ),
@@ -419,20 +515,22 @@ class Syn_Config {
 		);
 	}
 
-
 	/**
-	 * Echoes link for tab on page
+	 * Displays a tab of the settings page.
 	 *
-	 * @param string $tab The id of the tab.
-	 * @param string $name The label of the tab.
-	 * @param string $active Which tab is active.
-	*/
+	 * @param string $tab    The tab's ID.
+	 * @param string $name   The tab's label.
+	 * @param string $active Optional. The active tab's ID. Default 'display'.
+	 */
 	public static function tab_link( $tab, $name, $active = 'display' ) {
 		$url    = add_query_arg( 'tab', $tab, menu_page_url( 'syndication_links', false ) );
 		$active = ( $active === $tab ) ? ' nav-tab-active' : '';
 		printf( '<a href="%1$s" class="nav-tab%2$s">%3$s</a>', esc_url( $url ), esc_attr( $active ), esc_html( $name ) );
 	}
 
+	/**
+	 * Displays the settings page.
+	 */
 	public static function links_options() {
 		$active_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : 'general';
 		?>
@@ -479,6 +577,14 @@ class Syn_Config {
 		<?php
 	}
 
+	/**
+	 * Adds the post's links after its content.
+	 *
+	 * Not in the admin, in feeds (see the_content_feed()) or in nested `the_content` calls.
+	 *
+	 * @param string $content The content.
+	 * @return string The content.
+	 */
 	public static function the_content( $content ) {
 		global $wp_current_filter;
 		$post = get_post();
@@ -493,7 +599,7 @@ class Syn_Config {
 			return $content;
 		}
 
-		// Don't allow to be added to the_content more than once (prevent infinite loops)
+		// Don't allow to be added to the_content more than once (prevent infinite loops).
 		$done = false;
 		foreach ( $wp_current_filter as $filter ) {
 			if ( 'the_content' === $filter ) {
@@ -507,6 +613,13 @@ class Syn_Config {
 		return $content . '<div class="syndication-links">' . get_post_syndication_links() . '</div>';
 	}
 
+	/**
+	 * Adds the comment's links after its text, outside the admin.
+	 *
+	 * @param string     $comment_text The comment text.
+	 * @param WP_Comment $comment      The comment.
+	 * @return string The comment text.
+	 */
 	public static function comment_text( $comment_text, $comment ) {
 		if ( ! is_admin() ) {
 			return $comment_text . '<p>' . get_comment_syndication_links( $comment ) . '</p>';
@@ -514,6 +627,15 @@ class Syn_Config {
 		return $comment_text;
 	}
 
+	/**
+	 * Adds the post's links, as text, after its content in feeds.
+	 *
+	 * Only hooked when the feed setting is on. JSON Feed gets them as a field instead.
+	 *
+	 * @param string $content   The content.
+	 * @param string $feed_type The feed type.
+	 * @return string The content.
+	 */
 	public static function the_content_feed( $content, $feed_type ) {
 		$post_ID = get_the_ID();
 		if ( ! $post_ID ) {
@@ -534,6 +656,13 @@ class Syn_Config {
 		return $content . get_post_syndication_links( $post_ID, $args );
 	}
 
+	/**
+	 * Adds the post's links to its JSON Feed item, as `syndication`.
+	 *
+	 * @param array   $feed_item The feed item.
+	 * @param WP_Post $post      The post.
+	 * @return array The feed item.
+	 */
 	public static function json_feed_item( $feed_item, $post ) {
 		$syn = get_post_syndication_links_data( $post );
 		if ( $syn ) {
