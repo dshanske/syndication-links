@@ -460,7 +460,6 @@ class Syn_Meta {
 				'fields'           => 'ids',
 				'posts_per_page'   => self::LEGACY_BATCH,
 				'no_found_rows'    => true,
-				'suppress_filters' => true,
 			)
 		);
 		$comments = get_comments(
