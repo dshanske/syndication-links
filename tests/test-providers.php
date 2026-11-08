@@ -83,7 +83,7 @@ class Test_Providers extends WP_UnitTestCase {
 		$this->assertArrayNotHasKey( 'webmention-mastodon-bridgy', $providers );
 
 		// Pinboard needs Post Kinds.
-		if ( ! class_exists( 'Post_Kinds_Plugin' ) ) {
+		if ( ! function_exists( 'get_post_kind_response' ) ) {
 			$this->assertArrayNotHasKey( 'pinboard', $providers );
 		}
 	}

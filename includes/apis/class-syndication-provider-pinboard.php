@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Saves the URL a post cites (bookmarks, likes and the like) to Pinboard.
  *
- * Requires the Post Kinds plugin, which provides the cited URL.
+ * Requires the Post Kinds plugin (4.0.1 or later), which provides the cited URL.
  */
 class Syndication_Provider_Pinboard extends Syndication_Provider {
 
@@ -112,10 +112,10 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 			$post_id = get_the_ID();
 		}
 
-		$kind_post = new Kind_Post( $post_id );
-		$cite      = $kind_post->get_cite();
-		$cite      = $kind_post->normalize_cite( $cite );
-		if ( empty( $cite['url'] ) ) {
+		// Post Kinds' public function: the citation, normalized, or null if the post has none.
+		$response = function_exists( 'get_post_kind_response' ) ? get_post_kind_response( $post_id ) : null;
+		$cite     = ( is_array( $response ) && isset( $response['cite'] ) && is_array( $response['cite'] ) ) ? $response['cite'] : array();
+		if ( empty( $cite['url'] ) || ! is_string( $cite['url'] ) ) {
 			return false;
 		}
 
@@ -136,19 +136,17 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 
 		$url = 'https://api.pinboard.in/v1/posts/add';
 
+		// get_the_tags() returns false when the post has no tags.
 		$terms = get_the_tags( $post_id );
-		$tags  = array();
-		foreach ( $terms as $term ) {
-			$tags[] = $term->name;
-		}
+		$tags  = is_array( $terms ) ? wp_list_pluck( $terms, 'name' ) : array();
 
 		$bookmark = array(
 			'auth_token'  => $this->token,
 			'format'      => 'json',
 			'url'         => $cite['url'],
-			'description' => $cite['name'],
+			'description' => isset( $cite['name'] ) && is_string( $cite['name'] ) ? $cite['name'] : '',
 			'tags'        => implode( ' ', $tags ),
-			'extended'    => $cite['extended'],
+			'extended'    => isset( $cite['summary'] ) && is_string( $cite['summary'] ) ? wp_strip_all_tags( $cite['summary'] ) : '',
 		);
 		$bookmark = array_filter( $bookmark );
 
@@ -176,9 +174,10 @@ class Syndication_Provider_Pinboard extends Syndication_Provider {
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
-		$link = wp_remote_retrieve_header( $response, 'Location' );
+		$link = wp_remote_retrieve_header( $response, 'location' );
 		if ( ! empty( $link ) ) {
-			add_post_syndication_link( $post_id, 'https://pinboard.in' . $link, true );
+			// Add the bookmark to the post's links, keeping the others.
+			add_post_syndication_link( $post_id, 'https://pinboard.in' . $link );
 		}
 
 		return $response;
