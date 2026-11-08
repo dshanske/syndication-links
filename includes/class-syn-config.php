@@ -22,16 +22,9 @@ class Syn_Config {
 		$cls = get_called_class();
 		add_action( 'wp_enqueue_scripts', array( $cls, 'enqueue_scripts' ) );
 
-		/**
-		 * Filters whether the links are added to the content automatically.
-		 *
-		 * Return false when the theme displays them itself.
-		 *
-		 * @param bool $display Whether to add the links to the content. Default true.
-		 */
-		if ( apply_filters( 'syndication_links_display', true ) ) {
-			add_filter( 'the_content', array( $cls, 'the_content' ), 30 );
-		}
+		// Always hooked: whether to add the links is decided when they'd be added (see auto_display()),
+		// so a theme's add_theme_support() or filter works whenever it's added.
+		add_filter( 'the_content', array( $cls, 'the_content' ), 30 );
 
 		if ( get_option( 'syndication-links_feed' ) ) {
 			add_filter( 'the_content_feed', array( $cls, 'the_content_feed' ), 20, 2 );
@@ -361,8 +354,76 @@ class Syn_Config {
 	public static function options_callback() {
 		esc_html_e( 'Options for Presenting Syndication Links in Posts.', 'syndication-links' );
 		echo '<p>';
-		esc_html_e( 'Syndication Links by default will add links to the content. You can disable this for theme support.', 'syndication-links' );
+		if ( self::theme_handles( 'content' ) || self::theme_handles( 'comments' ) ) {
+			esc_html_e( 'Your theme places the syndication links itself. The options below still set how they look.', 'syndication-links' );
+		} else {
+			esc_html_e( 'Syndication Links adds the links after the content and after each comment. A theme can place them itself instead; see the FAQ.', 'syndication-links' );
+		}
 		echo '</p>';
+	}
+
+	/**
+	 * Whether the theme places the links itself, with add_theme_support( 'syndication-links' ).
+	 *
+	 * A theme can list what it places: add_theme_support( 'syndication-links', array( 'content' ) ).
+	 * Without a list, it places both the post's and the comments' links.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $placement 'content' or 'comments'.
+	 * @return bool
+	 */
+	public static function theme_handles( $placement ) {
+		$support = get_theme_support( 'syndication-links' );
+		if ( ! $support ) {
+			return false;
+		}
+		// Declared with a list: get_theme_support() returns the arguments, wrapped in an array.
+		if ( is_array( $support ) && isset( $support[0] ) && is_array( $support[0] ) ) {
+			return in_array( $placement, $support[0], true );
+		}
+		return true;
+	}
+
+	/**
+	 * Whether the plugin adds the links to a placement itself.
+	 *
+	 * Not when the theme declares it places them, or a filter turns it off. Checked when
+	 * the links would be added, so it doesn't matter when the theme does either.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $placement 'content' or 'comments'.
+	 * @return bool
+	 */
+	public static function auto_display( $placement ) {
+		if ( self::theme_handles( $placement ) ) {
+			return false;
+		}
+		if ( 'comments' === $placement ) {
+			/**
+			 * Filters whether the links are added after each comment's text automatically.
+			 *
+			 * Return false when the theme displays them itself. A theme can also declare
+			 * add_theme_support( 'syndication-links' ).
+			 *
+			 * @since 5.0.0
+			 *
+			 * @param bool $display Whether to add the links to comments. Default true.
+			 */
+			return (bool) apply_filters( 'syndication_links_comment_display', true );
+		}
+		/**
+		 * Filters whether the links are added to the post content automatically.
+		 *
+		 * Return false when the theme displays them itself. A theme can also declare
+		 * add_theme_support( 'syndication-links' ).
+		 *
+		 * @since 5.0.0 Checked when the content is displayed, rather than once on `init`.
+		 *
+		 * @param bool $display Whether to add the links to the content. Default true.
+		 */
+		return (bool) apply_filters( 'syndication_links_display', true );
 	}
 
 	/**
@@ -580,7 +641,8 @@ class Syn_Config {
 	/**
 	 * Adds the post's links after its content.
 	 *
-	 * Not in the admin, in feeds (see the_content_feed()) or in nested `the_content` calls.
+	 * Not when the theme places them (see auto_display()), in the admin, in feeds (see
+	 * the_content_feed()) or in nested `the_content` calls.
 	 *
 	 * @param string $content The content.
 	 * @return string The content.
@@ -588,7 +650,7 @@ class Syn_Config {
 	public static function the_content( $content ) {
 		global $wp_current_filter;
 		$post = get_post();
-		if ( empty( $post ) ) {
+		if ( empty( $post ) || ! self::auto_display( 'content' ) ) {
 			return $content;
 		}
 		if ( ( is_admin() ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
@@ -614,14 +676,14 @@ class Syn_Config {
 	}
 
 	/**
-	 * Adds the comment's links after its text, outside the admin.
+	 * Adds the comment's links after its text, outside the admin, unless the theme places them.
 	 *
 	 * @param string     $comment_text The comment text.
 	 * @param WP_Comment $comment      The comment.
 	 * @return string The comment text.
 	 */
 	public static function comment_text( $comment_text, $comment ) {
-		if ( ! is_admin() ) {
+		if ( ! is_admin() && self::auto_display( 'comments' ) ) {
 			return $comment_text . '<p>' . get_comment_syndication_links( $comment ) . '</p>';
 		}
 		return $comment_text;
