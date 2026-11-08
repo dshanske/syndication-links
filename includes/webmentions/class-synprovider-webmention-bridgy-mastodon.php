@@ -37,7 +37,7 @@ class SynProvider_Webmention_Bridgy_Mastodon extends SynProvider_Webmention_Brid
 	 */
 	public function wp_footer() {
 		if ( ( 1 === (int) get_option( 'syndication_use_excerpt' ) ) && has_excerpt() ) {
-			printf( '<p class="p-bridgy-mastodon-content" style="display:none">%1$s</p>', get_the_excerpt() ); // phpcs:ignore
+			printf( '<p class="p-bridgy-mastodon-content" style="display:none">%1$s</p>', esc_html( get_the_excerpt() ) );
 		}
 	}
 
