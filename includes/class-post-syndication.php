@@ -490,16 +490,17 @@ class Post_Syndication {
 	 * @param array $args The field's arguments.
 	 */
 	public static function provider_callback( $args ) {
-		$targets   = self::get_providers();
 		$allowlist = (array) get_option( 'syndication_provider_enable', array() );
 		echo '<div>';
-		foreach ( $targets as $uid => $name ) {
+		// The raw names, escaped once here: get_providers() returns them already escaped.
+		foreach ( static::$targets as $uid => $target ) {
+			$name = $target->get_name();
 			if ( empty( $uid ) || empty( $name ) ) {
 				continue;
 			}
 			printf( '<p><input type="checkbox" name="syndication_provider_enable[]" id="%1$s" value="%1$s" %3$s /><label for="%1$s">%2$s</label></p>', esc_attr( $uid ), esc_html( $name ), checked( true, in_array( $uid, $allowlist, true ), false ) );
-			echo '</div>';
 		}
+		echo '</div>';
 	}
 
 	/**
@@ -594,7 +595,7 @@ class Post_Syndication {
 		return sprintf(
 			'<li><input type="checkbox" name="syndicate-to[]" id="%1$s" value="%1$s" %3$s />
 			<label for="%1$s">%2$s</label></li>',
-			$uid,
+			esc_attr( $uid ),
 			$name,
 			implode( ' ', $properties )
 		);
