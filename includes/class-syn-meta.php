@@ -448,14 +448,14 @@ class Syn_Meta {
 			if ( 'website' === $name ) {
 				$name = self::extract_domain_name( $url );
 			}
-			$syn = $icon . ( $r['text'] ? Syn_Link_Domain_Icon_Map::get_title( $name ) : '' );
+			$syn = $icon . ( $r['text'] ? esc_html( Syn_Link_Domain_Icon_Map::get_title( $name ) ) : '' );
 
 			if ( 'hidden' === $display ) {
 				$link    = '<data class="u-syndication" value="%1$s"></data>';
 				$links[] = sprintf( $link, esc_url( $url ) );
 			} else {
 				$link    = '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>';
-				$links[] = sprintf( $link, $name, $r['single-css'], esc_url( $url ), $rel, $syn );
+				$links[] = sprintf( $link, esc_attr( $name ), esc_attr( $r['single-css'] ), esc_url( $url ), $rel, $syn );
 			}
 		}
 
@@ -527,7 +527,7 @@ class Syn_Meta {
 	public static function get_syndication_links_text_before( $css = 'syn-text' ) {
 		$display = self::get_syndication_links_display_option();
 
-		return ( 'hidden' !== $display ) ? '<span class="' . $css . '">' . get_option( 'syndication-links_text_before' ) . '</span>' : '';
+		return ( 'hidden' !== $display ) ? '<span class="' . esc_attr( $css ) . '">' . wp_kses_post( (string) get_option( 'syndication-links_text_before' ) ) . '</span>' : '';
 	}
 
 
@@ -549,22 +549,22 @@ class Syn_Meta {
 
 		switch ( $r['style'] ) {
 			case 'p':
-				$before = '<p class="' . $r['container-css'] . '"><span>';
+				$before = '<p class="' . esc_attr( $r['container-css'] ) . '"><span>';
 				$sep    = '</span><span>';
 				$after  = '</span></p>';
 				break;
 			case 'ol':
-				$before = '<ol class="' . $r['container-css'] . '"><li>';
+				$before = '<ol class="' . esc_attr( $r['container-css'] ) . '"><li>';
 				$sep    = '</li><li>';
 				$after  = '</li></ol>';
 				break;
 			case 'span':
-				$before = '<span class="' . $r['container-css'] . '">';
+				$before = '<span class="' . esc_attr( $r['container-css'] ) . '">';
 				$sep    = ' ';
 				$after  = '</span>';
 				break;
 			default:
-				$before = '<ul class="' . $r['container-css'] . '"><li>';
+				$before = '<ul class="' . esc_attr( $r['container-css'] ) . '"><li>';
 				$sep    = '</li><li>';
 				$after  = '</li></ul>';
 		}
