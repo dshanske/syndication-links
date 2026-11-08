@@ -263,6 +263,11 @@ class Social_Plugins {
 				'meta_query' => self::any_meta( array_merge( self::$keyring_keys, array( 'href' ) ) ),
 				'show'       => class_exists( 'Keyring_Importer_Base' ),
 			),
+			'jetpack'           => array(
+				'name'       => 'Jetpack Social (Publicize)',
+				'callback'   => array( __CLASS__, 'jetpack_links' ),
+				'meta_query' => self::any_meta( array( '_publicize_shares' ) ),
+			),
 			// The official Medium plugin was closed on WordPress.org in 2019. Its links are no longer
 			// shown, but can still be imported from the medium_post meta it left.
 			'medium'            => array(
@@ -360,6 +365,45 @@ class Social_Plugins {
 			}
 		}
 		return array();
+	}
+
+	/**
+	 * The posts Jetpack Social (Publicize) shared a post to.
+	 *
+	 * Jetpack saves each share in `_publicize_shares`, with the copy's URL as the `message` of a
+	 * successful share. Its `jetpack_publicize_share_urls_saved` action doesn't pass the post, so
+	 * the meta is read instead. Older data from WordPress.com saves one share per meta row.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string[]
+	 */
+	public static function jetpack_links( $post_id ) {
+		$shares = get_post_meta( $post_id, '_publicize_shares', true );
+		if ( is_array( $shares ) && $shares && array_keys( $shares ) !== range( 0, count( $shares ) - 1 ) ) {
+			$shares = get_post_meta( $post_id, '_publicize_shares', false );
+		}
+		$links = array();
+		foreach ( (array) $shares as $share ) {
+			if ( is_array( $share ) && isset( $share['status'], $share['message'] ) && 'success' === $share['status'] && is_string( $share['message'] ) && self::is_web_url( $share['message'] ) ) {
+				$links[] = $share['message'];
+			}
+		}
+		return $links;
+	}
+
+	/**
+	 * Whether a string is an http(s) URL. Unlike wp_http_validate_url(), no DNS lookup:
+	 * this runs for every post shown.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $url The string.
+	 * @return bool
+	 */
+	private static function is_web_url( $url ) {
+		return false !== filter_var( $url, FILTER_VALIDATE_URL ) && in_array( strtolower( (string) wp_parse_url( $url, PHP_URL_SCHEME ) ), array( 'http', 'https' ), true );
 	}
 
 	/**
