@@ -181,13 +181,21 @@ function add_comment_syndication_link( $comment_id, $uri, $replace = false ) {
 /**
  * Returns the current post's content, filtered for sending to another site.
  *
+ * @since 5.0.0 Leaves out the syndication links box.
+ *
  * @param string|null $syndication_uid Optional. UID of the provider the content is for.
  * @return string The content.
  */
 function get_the_content_syndication( $syndication_uid = null ) {
+	// The links box isn't part of the post, so it isn't sent.
+	$links_removed = remove_filter( 'the_content', array( 'Syn_Config', 'the_content' ), 30 );
 
 	/** This filter is documented in wp-includes/post-template.php */
 	$content = apply_filters( 'the_content', get_the_content() );
+
+	if ( $links_removed ) {
+		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ), 30 );
+	}
 	/**
 	 * Filters the post content for use in syndication.
 	 *
@@ -317,6 +325,7 @@ function syndication_post_types() {
  * Returns a post's content, ready for excerpting.
  *
  * Shortcodes and blocks are rendered or removed, and only basic formatting is kept.
+ * The syndication links box isn't added.
  *
  * @param int|WP_Post $post Post ID or object.
  * @return string The content, or '' if there's no such post.
@@ -419,12 +428,18 @@ function syn_get_post_content( $post ) {
 	*/
 	$filter_block_removed = remove_filter( 'the_content', 'do_blocks', 9 );
 
+	// The links box isn't part of the post, so it isn't sent.
+	$filter_links_removed = remove_filter( 'the_content', array( 'Syn_Config', 'the_content' ), 30 );
+
 	/** This filter is documented in wp-includes/post-template.php */
 	$text = apply_filters( 'the_content', $text );
 
 	// Restore the original filter if removed.
 	if ( $filter_block_removed ) {
 		add_filter( 'the_content', 'do_blocks', 9 );
+	}
+	if ( $filter_links_removed ) {
+		add_filter( 'the_content', array( 'Syn_Config', 'the_content' ), 30 );
 	}
 
 		/*

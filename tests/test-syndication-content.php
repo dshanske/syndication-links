@@ -95,6 +95,21 @@ class Test_Syndication_Content extends WP_UnitTestCase {
 		$this->assertSame( $blocks, has_filter( 'the_content', 'do_blocks' ) );
 	}
 
+	/**
+	 * In the loop, the current post's links box isn't added to the content sent (#343).
+	 */
+	public function test_post_content_leaves_out_the_links_box() {
+		$current = $this->post( 'The current post.' );
+		add_post_syndication_link( $current, 'https://mastodon.example/@me/1' );
+		$this->go_to( get_permalink( $current ) );
+		the_post();
+
+		$content = syn_get_post_content( $this->post( 'The post being sent.' ) );
+
+		$this->assertStringNotContainsString( 'mastodon.example', $content );
+		$this->assertSame( 30, has_filter( 'the_content', array( 'Syn_Config', 'the_content' ) ) );
+	}
+
 	public function test_post_content_of_a_missing_post_is_empty() {
 		$this->assertSame( '', syn_get_post_content( PHP_INT_MAX ) );
 	}
@@ -116,8 +131,13 @@ class Test_Syndication_Content extends WP_UnitTestCase {
 		$this->assertGreaterThan( 190, strlen( $excerpt ) );
 	}
 
+	/**
+	 * The content is filtered for the provider, without the links box (#343).
+	 */
 	public function test_content_for_syndication_is_filtered_for_the_provider() {
-		$this->go_to( get_permalink( $this->post( 'The content.' ) ) );
+		$post_id = $this->post( 'The content.' );
+		add_post_syndication_link( $post_id, 'https://mastodon.example/@me/1' );
+		$this->go_to( get_permalink( $post_id ) );
 		the_post();
 		$seen   = array();
 		$filter = function ( $content, $uid ) use ( &$seen ) {
@@ -130,7 +150,8 @@ class Test_Syndication_Content extends WP_UnitTestCase {
 
 		remove_filter( 'the_content_syndication', $filter, 10 );
 		$this->assertSame( 'Changed', $content );
-		$this->assertStringStartsWith( "<p>The content.</p>\n", $seen[0] );
+		$this->assertSame( 30, has_filter( 'the_content', array( 'Syn_Config', 'the_content' ) ) );
+		$this->assertSame( "<p>The content.</p>\n", $seen[0] );
 		$this->assertSame( array( 'one', true ), array_slice( $seen, 1 ) );
 		$this->assertFalse( is_syndication() );
 	}
