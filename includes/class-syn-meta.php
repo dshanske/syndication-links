@@ -12,6 +12,8 @@ class Syn_Meta {
 		add_action( 'admin_init', array( $cls, 'setup' ) );
 		add_action( 'save_post', array( $cls, 'save_post_meta' ), 11 );
 		add_action( 'edit_comment', array( $cls, 'save_comment_meta' ) );
+		add_action( 'syn_migrate_legacy_links', array( $cls, 'migrate_legacy_links' ) );
+		self::schedule_legacy_migration();
 		$args = array(
 			'type'         => 'array',
 			'description'  => 'Syndication URLs',
@@ -396,6 +398,93 @@ class Syn_Meta {
 	 * @return array List of syndication link URLs or empty array if none.
 	 */
 
+	/**
+	 * Number of posts, and of comments, migrated per run.
+	 *
+	 * @since 5.0.0
+	 */
+	const LEGACY_BATCH = 100;
+
+	/**
+	 * Schedules the migration of the legacy syndication_urls meta, until it's done.
+	 *
+	 * @since 5.0.0
+	 */
+	public static function schedule_legacy_migration() {
+		if ( get_option( 'syndication_links_legacy_migrated' ) || wp_next_scheduled( 'syn_migrate_legacy_links' ) ) {
+			return;
+		}
+		wp_schedule_single_event( time(), 'syn_migrate_legacy_links' );
+	}
+
+	/**
+	 * Moves a batch of posts and comments from the legacy syndication_urls meta into mf2_syndication.
+	 *
+	 * Runs on WP-Cron. It schedules itself again until no legacy meta is left,
+	 * then records that in the syndication_links_legacy_migrated option.
+	 *
+	 * @since 5.0.0
+	 */
+	public static function migrate_legacy_links() {
+		$posts    = get_posts(
+			array(
+				// Every type and status: 'any' leaves out types and statuses excluded from search.
+				'post_type'        => get_post_types(),
+				'post_status'      => array_keys( get_post_stati() ),
+				'meta_key'         => 'syndication_urls',
+				'fields'           => 'ids',
+				'posts_per_page'   => self::LEGACY_BATCH,
+				'no_found_rows'    => true,
+				'suppress_filters' => true,
+			)
+		);
+		$comments = get_comments(
+			array(
+				'meta_key' => 'syndication_urls',
+				'fields'   => 'ids',
+				'number'   => self::LEGACY_BATCH,
+				'status'   => 'any',
+			)
+		);
+		update_meta_cache( 'post', $posts );
+		update_meta_cache( 'comment', $comments );
+		foreach ( $posts as $id ) {
+			self::migrate_legacy_meta( 'post', $id );
+		}
+		foreach ( $comments as $id ) {
+			self::migrate_legacy_meta( 'comment', $id );
+		}
+
+		if ( count( $posts ) < self::LEGACY_BATCH && count( $comments ) < self::LEGACY_BATCH ) {
+			update_option( 'syndication_links_legacy_migrated', 1 );
+			return;
+		}
+		wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'syn_migrate_legacy_links' );
+	}
+
+	/**
+	 * Merges one object's legacy syndication_urls meta into mf2_syndication, then deletes it.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $type 'post' or 'comment'.
+	 * @param int    $id   Object ID.
+	 */
+	private static function migrate_legacy_meta( $type, $id ) {
+		$old = get_metadata( $type, $id, 'syndication_urls', true );
+		if ( $old && is_string( $old ) ) {
+			$urls = get_metadata( $type, $id, 'mf2_syndication', true );
+			if ( is_string( $urls ) ) {
+				$urls = explode( "\n", $urls );
+			}
+			$urls = self::clean_urls( array_merge( (array) $urls, explode( "\n", $old ) ) );
+			if ( $urls ) {
+				update_metadata( $type, $id, 'mf2_syndication', $urls );
+			}
+		}
+		delete_metadata( $type, $id, 'syndication_urls' );
+	}
+
 	public static function get_syndication_links_data( $type, $id ) {
 		$urls = array();
 		$urls = get_metadata( $type, $id, 'mf2_syndication', true );
@@ -406,14 +495,10 @@ class Syn_Meta {
 		} else {
 			$urls = array();
 		}
+		// Links in the legacy meta that the background migration hasn't moved yet. Reading never writes.
 		$old = get_metadata( $type, $id, 'syndication_urls', true );
-		if ( $old ) {
-			$old = explode( "\n", $old );
-			if ( is_array( $old ) ) {
-				$urls = array_filter( array_unique( array_merge( $urls, $old ) ) );
-				update_metadata( $type, $id, 'mf2_syndication', $urls );
-				delete_metadata( $type, $id, 'syndication_urls' );
-			}
+		if ( $old && is_string( $old ) ) {
+			$urls = array_merge( $urls, explode( "\n", $old ) );
 		}
 
 		/* Allow adding of additional links before display but ensuring they are unique

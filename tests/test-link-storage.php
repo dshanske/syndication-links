@@ -143,11 +143,9 @@ class Test_Link_Storage extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Links in the legacy syndication_urls meta are merged into mf2_syndication when read.
-	 *
-	 * This documents the current behaviour. REVIEW.md P5 moves the migration out of the getter.
+	 * Links in the legacy syndication_urls meta are included when read, without writing (P5).
 	 */
-	public function test_legacy_syndication_urls_are_migrated() {
+	public function test_legacy_syndication_urls_are_read_without_writing() {
 		$post_id = self::factory()->post->create();
 		update_post_meta( $post_id, 'mf2_syndication', array( 'https://a.example/1' ) );
 		update_post_meta( $post_id, 'syndication_urls', "https://old.example/1\nhttps://a.example/1" );
@@ -156,11 +154,45 @@ class Test_Link_Storage extends WP_UnitTestCase {
 			array( 'https://a.example/1', 'https://old.example/1' ),
 			get_post_syndication_links_data( $post_id )
 		);
-		$this->assertFalse( metadata_exists( 'post', $post_id, 'syndication_urls' ) );
-		$this->assertSame(
-			array( 'https://a.example/1', 'https://old.example/1' ),
-			get_post_meta( $post_id, 'mf2_syndication', true )
-		);
+		$this->assertTrue( metadata_exists( 'post', $post_id, 'syndication_urls' ) );
+		$this->assertSame( array( 'https://a.example/1' ), get_post_meta( $post_id, 'mf2_syndication', true ) );
+	}
+
+	public function test_legacy_migration_moves_post_and_comment_links() {
+		$post_id = self::factory()->post->create( array( 'post_status' => 'draft' ) );
+		update_post_meta( $post_id, 'mf2_syndication', array( 'https://a.example/1' ) );
+		update_post_meta( $post_id, 'syndication_urls', "https://old.example/1\nhttps://a.example/1" );
+		$only_old   = self::factory()->post->create();
+		$comment_id = self::factory()->comment->create( array( 'comment_post_ID' => $only_old ) );
+		update_post_meta( $only_old, 'syndication_urls', 'https://old.example/2' );
+		update_comment_meta( $comment_id, 'syndication_urls', 'https://old.example/3' );
+		delete_option( 'syndication_links_legacy_migrated' );
+
+		Syn_Meta::migrate_legacy_links();
+
+		$this->assertSame( array( 'https://a.example/1', 'https://old.example/1' ), get_post_meta( $post_id, 'mf2_syndication', true ) );
+		$this->assertSame( array( 'https://old.example/2' ), get_post_meta( $only_old, 'mf2_syndication', true ) );
+		$this->assertSame( array( 'https://old.example/3' ), get_comment_meta( $comment_id, 'mf2_syndication', true ) );
+		foreach ( array( $post_id, $only_old ) as $id ) {
+			$this->assertFalse( metadata_exists( 'post', $id, 'syndication_urls' ) );
+		}
+		$this->assertFalse( metadata_exists( 'comment', $comment_id, 'syndication_urls' ) );
+		$this->assertSame( '1', (string) get_option( 'syndication_links_legacy_migrated' ) );
+		$this->assertFalse( wp_next_scheduled( 'syn_migrate_legacy_links' ) );
+	}
+
+	public function test_legacy_migration_is_scheduled_until_done() {
+		delete_option( 'syndication_links_legacy_migrated' );
+		wp_clear_scheduled_hook( 'syn_migrate_legacy_links' );
+
+		Syn_Meta::schedule_legacy_migration();
+		$this->assertNotFalse( wp_next_scheduled( 'syn_migrate_legacy_links' ) );
+
+		wp_clear_scheduled_hook( 'syn_migrate_legacy_links' );
+		update_option( 'syndication_links_legacy_migrated', 1 );
+
+		Syn_Meta::schedule_legacy_migration();
+		$this->assertFalse( wp_next_scheduled( 'syn_migrate_legacy_links' ) );
 	}
 
 	public function test_post_links_filter_adds_links() {
