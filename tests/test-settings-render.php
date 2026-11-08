@@ -102,7 +102,10 @@ class Test_Settings_Render extends WP_UnitTestCase {
 
 		Syn_Config::admin_menu();
 
-		$this->assertContains( 'syndication_links', wp_list_pluck( $submenu['options-general.php'], 2 ) );
+		$pages = array_column( $submenu['options-general.php'], 3, 2 );
+		$this->assertArrayHasKey( 'syndication_links', $pages );
+		// The page has a title (#346).
+		$this->assertSame( 'Syndication Links', $pages['syndication_links'] );
 	}
 
 	public function test_the_section_descriptions() {
@@ -111,12 +114,13 @@ class Test_Settings_Render extends WP_UnitTestCase {
 	}
 
 	/**
-	 * A checkbox submits 0 when unchecked, through a hidden field before it.
+	 * A checkbox submits 0 when unchecked, through a hidden field before it. Its ID
+	 * matches the field's label (#346).
 	 */
 	public function test_checkbox_field() {
 		$args = array( 'label_for' => 'syn_test_option' );
 		$this->assertSame(
-			"<input name='syn_test_option' type='hidden' value='0' /><input name='syn_test_option' type='checkbox' value='1'  /> ",
+			"<input name='syn_test_option' type='hidden' value='0' /><input name='syn_test_option' id='syn_test_option' type='checkbox' value='1'  /> ",
 			$this->output( array( 'Syn_Config', 'checkbox_callback' ), $args )
 		);
 
@@ -171,6 +175,9 @@ class Test_Settings_Render extends WP_UnitTestCase {
 		$this->assertStringNotContainsString( "value='post'", $html );
 		$this->assertMatchesRegularExpression( "/value='page'\\s+checked/", $html );
 		$this->assertMatchesRegularExpression( "/value='attachment'\\s*\\/>/", $html );
+		// Each label is tied to its checkbox (#346).
+		$this->assertStringContainsString( "id='syndication_post_types-page' type='checkbox'", $html );
+		$this->assertStringContainsString( '<label for="syndication_post_types-page">', $html );
 	}
 
 	/**

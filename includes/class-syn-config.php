@@ -334,7 +334,13 @@ class Syn_Config {
 				array( $cls, 'links_options' )
 			);
 		} else {
-			add_options_page( '', 'Syndication Links', 'manage_options', 'syndication_links', array( $cls, 'links_options' ) );
+			add_options_page(
+				__( 'Syndication Links', 'syndication-links' ), // page title.
+				__( 'Syndication Links', 'syndication-links' ), // menu title.
+				'manage_options',
+				'syndication_links',
+				array( $cls, 'links_options' )
+			);
 		}
 	}
 
@@ -441,7 +447,7 @@ class Syn_Config {
 		$name    = $args['label_for'];
 		$checked = get_option( $args['label_for'] );
 		echo "<input name='" . esc_attr( $name ) . "' type='hidden' value='0' />";
-		echo "<input name='" . esc_attr( $name ) . "' type='checkbox' value='1' " . checked( 1, $checked, false ) . ' /> ';
+		echo "<input name='" . esc_attr( $name ) . "' id='" . esc_attr( $name ) . "' type='checkbox' value='1' " . checked( 1, $checked, false ) . ' /> ';
 	}
 
 	/**
@@ -460,7 +466,7 @@ class Syn_Config {
 		$options = $args['list'];
 		echo "<select name='" . esc_attr( $name ) . "' id='" . esc_attr( $name ) . "'>";
 		foreach ( $options as $key => $value ) {
-			echo '<option value="' . esc_attr( $key ) . '"' . ( $select === $key ? ' selected>' : '>' ) . esc_attr( $value ) . '</option>';
+			echo '<option value="' . esc_attr( $key ) . '"' . ( $select === $key ? ' selected>' : '>' ) . esc_html( $value ) . '</option>';
 		}
 		echo '</select>';
 	}
@@ -482,7 +488,7 @@ class Syn_Config {
 		echo '<fieldset>';
 		foreach ( $options as $key => $value ) {
 			echo '<input type="radio" name="' . esc_attr( $name ) . '" id="' . esc_attr( $name ) . '-' . esc_attr( $key ) . '" value="' . esc_attr( $key ) . '" ' . checked( $key, $select, false ) . ' />';
-			echo '<label for="' . esc_attr( $name ) . '-' . esc_attr( $key ) . '">' . esc_attr( $value ) . '</label>';
+			echo '<label for="' . esc_attr( $name ) . '-' . esc_attr( $key ) . '">' . esc_html( $value ) . '</label>';
 			echo '<br />';
 		}
 		echo '</fieldset>';
@@ -508,8 +514,8 @@ class Syn_Config {
 				continue;
 			}
 			?>
-			<li><input name='<?php echo esc_attr( $args['label_for'] ); ?>[]' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option, true ), true ); ?>/> 
-			<label for="<?php echo esc_attr( $post_type->name ); ?>"><?php echo esc_html( $post_type->label ); ?></label>
+			<li><input name='<?php echo esc_attr( $args['label_for'] ); ?>[]' id='<?php echo esc_attr( $args['label_for'] . '-' . $post_type->name ); ?>' type='checkbox' value='<?php echo esc_attr( $post_type->name ); ?>' <?php checked( in_array( $post_type->name, $option, true ), true ); ?>/> 
+			<label for="<?php echo esc_attr( $args['label_for'] . '-' . $post_type->name ); ?>"><?php echo esc_html( $post_type->label ); ?></label>
 			</li> 
 			<?php
 		}
