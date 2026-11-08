@@ -16,6 +16,7 @@ class Post_Syndication {
 		add_action( 'load-post.php', array( __CLASS__, 'metabox_setup' ) );
 		add_action( 'load-post-new.php', array( __CLASS__, 'metabox_setup' ) );
 		add_action( 'do_pings', array( __CLASS__, 'do_pings' ), 9, 2 );
+		add_action( 'wp_after_insert_post', array( __CLASS__, 'schedule_pings' ), 10, 2 );
 		$priority = get_option( 'syndication_wp_cron', 1 ) ? 4 : 99;
 		foreach ( syndication_post_types() as $type ) {
 			add_action( 'save_post_' . $type, array( __CLASS__, 'save_post' ), $priority, 2 );
@@ -178,6 +179,26 @@ class Post_Syndication {
 			// Send Syndications
 			delete_post_meta( $target, '_syndicate-to' );
 			self::syndication( $target, $meta );
+		}
+	}
+
+	/**
+	 * Makes sure do_pings runs for a published post that's queued for syndication.
+	 *
+	 * Core schedules do_pings only when a `post` is published (_publish_post_hook()),
+	 * so a queued post of any other type would wait for the next `post`.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int     $post_id Post ID.
+	 * @param WP_Post $post    Post object.
+	 */
+	public static function schedule_pings( $post_id, $post ) {
+		if ( 'publish' !== get_post_status( $post ) || ! metadata_exists( 'post', $post_id, '_syndicate-to' ) ) {
+			return;
+		}
+		if ( ! wp_next_scheduled( 'do_pings' ) ) {
+			wp_schedule_single_event( time(), 'do_pings' );
 		}
 	}
 
