@@ -119,7 +119,10 @@ class Syn_Link_Domain_Icon_Map {
 
 	// Return the filename of an icon based on name if the file exists
 	public static function get_icon_filename( $name ) {
-		$dir  = sprintf( '%1$ssvgs/', plugin_dir_path( __DIR__ ) );
+		// The name is used as a filename, so don't allow anything that could leave the directory.
+		if ( ! is_string( $name ) || ! preg_match( '/^[a-z0-9._-]+$/iD', $name ) || false !== strpos( $name, '..' ) ) {
+			return null;
+		}
 		$dirs = self::get_icon_file_dirs();
 		$svg  = $name . '.svg';
 		foreach ( $dirs as $dir ) {
@@ -157,7 +160,8 @@ class Syn_Link_Domain_Icon_Map {
 			}
 			return sprintf( '<span class="syndication-link-icon svg-%1$s" style="display: inline-block; max-width: 1rem; margin: 2px;" aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $title ), $icon );
 		}
-		return $name;
+		// No icon: fall back to the name as text.
+		return esc_html( $name );
 	}
 
 	public static function get_title( $name ) {

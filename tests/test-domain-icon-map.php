@@ -177,6 +177,44 @@ class Test_Domain_Icon_Map extends WP_UnitTestCase {
 	 * The generic icons used as fallbacks are present. They come from
 	 * Genericons and the plugin's own svgs/ directory (see REVIEW.md B9).
 	 */
+	/**
+	 * Names that could leave the icon directories aren't looked up (#258).
+	 *
+	 * @dataProvider data_unsafe_icon_names
+	 *
+	 * @param mixed $name Icon name.
+	 */
+	public function test_unsafe_icon_names_are_refused( $name ) {
+		$this->assertNull( Syn_Link_Domain_Icon_Map::get_icon_filename( $name ) );
+	}
+
+	public function data_unsafe_icon_names() {
+		return array(
+			'parent directory' => array( '../svgs/website' ),
+			'two dots'         => array( 'web..site' ),
+			'absolute path'    => array( '/etc/passwd' ),
+			'backslash'        => array( '..\\website' ),
+			'null byte'        => array( "website\0" ),
+			'trailing newline' => array( "website\n" ),
+			'space'            => array( 'web site' ),
+			'empty'            => array( '' ),
+			'not a string'     => array( array( 'website' ) ),
+		);
+	}
+
+	public function test_safe_icon_names_are_found() {
+		$this->assertNotNull( Syn_Link_Domain_Icon_Map::get_icon_filename( 'website' ) );
+		$this->assertStringEndsWith( '/github.svg', Syn_Link_Domain_Icon_Map::get_icon_filename( 'github' ) );
+	}
+
+	/**
+	 * Without an icon, the name is returned as escaped text.
+	 */
+	public function test_missing_icon_falls_back_to_escaped_text() {
+		$this->assertSame( 'no-such-icon', Syn_Link_Domain_Icon_Map::get_icon( 'no-such-icon' ) );
+		$this->assertSame( '&lt;b&gt;x&lt;/b&gt;', Syn_Link_Domain_Icon_Map::get_icon( '<b>x</b>' ) );
+	}
+
 	public function test_fallback_icons_exist() {
 		foreach ( array( 'website', 'notice', 'book', 'summary', 'wordpress', 'indieweb', 'nostr', 'bookwyrm' ) as $name ) { // phpcs:ignore WordPress.WP.CapitalPDangit
 			$this->assertNotNull( Syn_Link_Domain_Icon_Map::get_icon_filename( $name ), "Icon {$name} is missing." );
