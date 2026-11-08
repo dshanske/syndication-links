@@ -153,10 +153,11 @@ class Test_Bridgy_Webmention_Options extends WP_UnitTestCase {
 	public function test_the_footer_escapes_the_excerpt() {
 		update_option( 'syndication_use_excerpt', '1' );
 
-		$html = $this->footer( 'Tom & Jerry <script>alert(1)</script>' );
+		// Saving runs the excerpt through kses, which keeps <b>.
+		$html = $this->footer( 'Tom & Jerry <b>bold</b>' );
 
-		$this->assertStringNotContainsString( '<script>', $html );
-		$this->assertStringContainsString( 'Tom &amp; Jerry &lt;script&gt;', $html );
+		$this->assertStringNotContainsString( '<b>', $html );
+		$this->assertStringContainsString( 'Tom &amp; Jerry &lt;b&gt;bold&lt;/b&gt;', $html );
 	}
 
 	public function test_the_footer_is_empty_when_the_excerpt_setting_is_off() {
