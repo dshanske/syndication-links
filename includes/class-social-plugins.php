@@ -1,10 +1,23 @@
 <?php
+/**
+ * Integrations with other cross-posting plugins.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'init', array( 'Social_Plugins', 'init' ) );
 
+/**
+ * Shows, records and imports the links that other cross-posting plugins store.
+ *
+ * Each integration is a source in a registry; see register_source().
+ */
 class Social_Plugins {
+	/**
+	 * Hooks the integrations.
+	 */
 	public static function init() {
 		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_syn_plugins' ), 10, 2 );
 		add_filter( 'syn_link_mapping', array( 'Social_Plugins', 'url_to_name_plugins' ), 10, 2 );
@@ -16,6 +29,13 @@ class Social_Plugins {
 		add_filter( 'get_post_syndication_links', array( 'Social_Plugins', 'add_autopost_for_x_links' ), 10, 2 );
 	}
 
+	/**
+	 * Gives links to the Mastodon instance set in Mastodon Autopost or XPoster the Mastodon icon.
+	 *
+	 * @param string $name The icon name.
+	 * @param string $url  The link.
+	 * @return string The icon name.
+	 */
 	public static function url_to_name_plugins( $name, $url ) {
 		// Mastodon Autopost's and XPoster's instances. Compare hosts only: wp_http_validate_url() would do a DNS lookup for every link shown.
 		$host = strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
@@ -28,6 +48,12 @@ class Social_Plugins {
 		return $name;
 	}
 
+	/**
+	 * Flattens a nested array, keeping the innermost keys.
+	 *
+	 * @param array $array The array.
+	 * @return array|false The flattened array, or false if it isn't an array.
+	 */
 	public static function array_flatten( $array ) {
 		if ( ! is_array( $array ) ) {
 			return false;
@@ -43,6 +69,13 @@ class Social_Plugins {
 		return $result;
 	}
 
+	/**
+	 * Adds the links that sources shown at read time recorded for a post.
+	 *
+	 * @param string[] $urls    The post's links.
+	 * @param int|null $post_id Optional. Post ID. Defaults to the current post.
+	 * @return string[] The links, with the sources' links first.
+	 */
 	public static function add_syn_plugins( $urls, $post_id = null ) {
 		// The filter passes the post: get_the_ID() is only right inside the loop.
 		$post_id = $post_id ? $post_id : get_the_ID();
@@ -575,6 +608,13 @@ class Social_Plugins {
 		}
 	}
 
+	/**
+	 * Records the X status XPoster posted for a post.
+	 *
+	 * @param mixed    $connection Unused; kept from XPoster's old `wpt_tweet_posted` hook.
+	 * @param int|bool $id         Post ID, or false during a credentials check.
+	 * @return int|bool|null The result of add_post_syndication_link(), or null if there's nothing to add.
+	 */
 	public static function wptotwitter_to_syn_links( $connection, $id ) {
 		// If someone is doing a a credentials check to twitter, we won't have an ID.
 		if ( false === $id ) {
@@ -601,8 +641,9 @@ class Social_Plugins {
 	 *
 	 * @see https://wordpress.org/plugins/autoshare-for-twitter/ for more information on plugin.
 	 *
-	 * @param array $urls The array of URLs to syndicate to.
-	 * @return array The array of URLs to syndicate to.
+	 * @param string[] $urls    The post's links.
+	 * @param int|null $post_id Optional. Post ID. Defaults to the current post.
+	 * @return string[] The links.
 	 */
 	public static function add_autopost_for_x_links( $urls, $post_id = null ) {
 		$post_id = $post_id ? $post_id : get_the_ID();
