@@ -146,7 +146,19 @@ class Post_Syndication {
 	 * Displays the description of the API keys section.
 	 */
 	public static function syndication_apis_callback() {
-		esc_html_e( 'For Bridgy, once you have enabled publish on your Bridgy user page, there will be a Get token button, put that into the field for the token for the service', 'syndication-links' );
+		echo '<p>';
+		esc_html_e( 'Providers that post through another service need a token from it. A provider can\'t be chosen, in the editor or by a Micropub client, until its token is set.', 'syndication-links' );
+		echo '</p><p>';
+		$allowed = array(
+			'a'      => array( 'href' => array() ),
+			'strong' => array(),
+		);
+		printf(
+			/* translators: %s: URL of Bridgy's Micropub documentation */
+			wp_kses( __( 'To get a Bridgy token: sign in at <a href="%s">Bridgy</a> with the account you want to post to, enable Publish on your Bridgy user page, then click <strong>Get token</strong> and paste the token into that service\'s field below.', 'syndication-links' ), $allowed ),
+			esc_url( 'https://brid.gy/about#micropub' )
+		);
+		echo '</p>';
 	}
 
 	/**

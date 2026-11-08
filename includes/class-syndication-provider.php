@@ -70,7 +70,10 @@ abstract class Syndication_Provider {
 	 * @return array The targets.
 	 */
 	public function syndicate_to( $targets, $user_id ) {
-		$targets[] = $this->get();
+		// A provider that can't be chosen in the editor, such as one without a token, isn't offered either.
+		if ( ! Post_Syndication::disabled( $this->uid ) ) {
+			$targets[] = $this->get();
+		}
 		return array_filter( $targets );
 	}
 
