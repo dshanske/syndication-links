@@ -133,15 +133,20 @@ class SynProvider_Micropub extends Syndication_Provider {
 	 * @return string The content, as HTML.
 	 */
 	public function get_content( $post ) {
-		$content   = syn_get_post_content( $post );
-		$length    = strlen( $content );
-		$backlink  = get_option( 'syndication_backlink' );
+		$content = syn_get_post_content( $post );
+		$length  = strlen( $content );
+		// '' adds a link back, 'true' doesn't, and 'maybe' adds one only when the content is too long.
+		$backlink  = (string) get_option( 'syndication_backlink', 'maybe' );
 		$shortlink = wp_get_shortlink( $post );
-		$link      = '<a href="' . $shortlink . '">' . $shortlink . '</a>';
-		if ( true !== $backlink ) {
+		$link      = '<a href="' . esc_url( $shortlink ) . '">' . esc_html( $shortlink ) . '</a>';
+		if ( 'true' === $backlink ) {
+			$content = syn_excerpt( $content, $this->content_length );
+		} else {
+			// Leave room for the link and its separator.
 			$content = syn_excerpt( $content, ( $this->content_length - 3 ) - strlen( $shortlink ) );
 		}
-		if ( ! empty( $post->post_excerpt ) && 1 === get_option( 'syndication_use_excerpt' ) ) {
+		// Options are stored as strings, so compare the checkbox's value as a number.
+		if ( ! empty( $post->post_excerpt ) && 1 === (int) get_option( 'syndication_use_excerpt' ) ) {
 			$content = $post->post_excerpt;
 		} elseif ( $this->content_length < $length && 'maybe' === $backlink ) {
 			// If length is over $content_length then replace content with link plus the title.
@@ -152,7 +157,7 @@ class SynProvider_Micropub extends Syndication_Provider {
 			} else {
 				$content = $content . ' - ' . $link;
 			}
-		} elseif ( 'true' !== $backlink ) {
+		} elseif ( '' === $backlink ) {
 			$content = $content . ' (' . $link . ')';
 		}
 		return $content;
