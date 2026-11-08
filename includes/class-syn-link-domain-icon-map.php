@@ -1,4 +1,7 @@
 <?php
+
+defined( 'ABSPATH' ) || exit;
+
 /* Maps domain names to icons from the provided SVG fontset
  */
 class Syn_Link_Domain_Icon_Map {

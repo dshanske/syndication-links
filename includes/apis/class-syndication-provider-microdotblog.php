@@ -1,5 +1,7 @@
 <?php
 
+defined( 'ABSPATH' ) || exit;
+
 /*
  * Micro.Blog Provider enables a hidden feed that items can be added to in order to get published to micro.blog, then advises micro.blog to poll that feed.
  */

@@ -13,6 +13,8 @@
  * License: GPLv2 or later
  */
 
+defined( 'ABSPATH' ) || exit;
+
 // Version Number Constant.
 define( 'SYNDICATION_LINKS_VERSION', get_file_data( __FILE__, array( 'Version' => 'Version' ) )['Version'] );
 
