@@ -668,7 +668,8 @@ class Post_Syndication {
 		if ( isset( $_POST['syndicate-to'] ) ) {
 			$syndication = array_map( 'sanitize_key', $_POST['syndicate-to'] );
 			if ( get_option( 'syndication_wp_cron', 1 ) ) {
-				add_post_meta( $post_id, '_syndicate-to', $syndication, true );
+				// Adds to the targets already queued, e.g. when a draft is saved again.
+				self::queue( $post_id, $syndication );
 			} elseif ( 'publish' === get_post_status( $post_id ) ) {
 				self::syndication( $post_id, $syndication );
 			}

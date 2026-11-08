@@ -484,6 +484,20 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 		$this->assertSame( array(), Syn_Test_Provider::$calls );
 	}
 
+	/**
+	 * Saving again adds the newly checked targets to the ones already queued (#341).
+	 */
+	public function test_saving_again_adds_to_the_queue() {
+		$post_id = self::factory()->post->create( array( 'post_status' => 'draft' ) );
+		$this->submit( array( 'one' ) );
+		Post_Syndication::save_post( $post_id );
+
+		$this->submit( array( 'one', 'two' ) );
+		Post_Syndication::save_post( $post_id );
+
+		$this->assertSame( array( 'one', 'two' ), get_post_meta( $post_id, '_syndicate-to', true ) );
+	}
+
 	public function test_saving_without_cron_syndicates_published_posts() {
 		update_option( 'syndication_wp_cron', 0 );
 		$this->register_fakes( 'one' );
