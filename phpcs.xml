@@ -22,7 +22,6 @@
                 <exclude name="WordPress.Security.ValidatedSanitizedInput" />
 		<exclude name="WordPress.Security.NonceVerification" />
 		<exclude name="Generic.CodeAnalysis.UnusedFunctionParameter"/>
-		<exclude name="Squiz.Commenting"/>
 		<exclude name="Universal.NamingConventions.NoReservedKeywordParameterNames"/>
         </rule>
         <rule ref="WordPress.Files.FileName">
