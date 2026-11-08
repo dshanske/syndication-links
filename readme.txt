@@ -236,6 +236,12 @@ In no particular order...
 * Webmention providers count any 2xx response as a success, as the Webmention spec says.
 * Fixed: the provider settings markup, a fatal error in the Micro.blog lookup when Micro.blog doesn't return JSON, and warnings when refreshing the Micro.blog feed or sending an untagged post to Pinboard.
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
+* Micropub providers (Bridgy) return an error when the endpoint answers with an error status, using its description if it gives one, instead of logging it as a success.
+* Saving a queued post again adds the newly checked providers to the queue.
+* The syndication links box is no longer added to the content sent to other sites.
+* The excerpt in the Bridgy Mastodon footer is escaped.
+* Pages still get syndication links by default, and each post type is listed once.
+* The settings page has a title outside the IndieWeb menu, and its checkbox labels can be clicked.
 
 = Version 4.5.3 ( 2025-07-05 ) =
 * Add support for Autopost for X plugin, props @iamdharmesh and the plugin team there
