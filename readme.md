@@ -201,6 +201,7 @@ In no particular order...
 * Security: output in the link markup, the metabox and the Original Of widget is escaped, submitted links are sanitized, and saving a comment's links checks the user can edit it.
 * Behaviour change: a `syn_link_title` filter that returns HTML now has it escaped. Text before the links still allows formatting such as `<em>`.
 * Behaviour change: private posts are never syndicated. Drafts and pending posts are queued and sent when published, and future-dated posts are sent when they're published, not straight away as well.
+* Posts of every syndication post type, not only `post`, are sent when they're queued and published (props @kupietools).
 * New Import tab and `wp syndication-links import` command: copy the links recorded by other cross-posting plugins (SNAP, Mastodon Autopost, XPoster, Autopost for X, Keyring, Medium) into the post's own syndication links. Once imported, the other plugin can be removed without losing the links. Other plugins can add import sources with `register_syndication_link_source()`.
 * Medium links are no longer shown from the Medium plugin, which is closed. Import them to keep them.
 * Jetpack Social (Publicize): the posts it shared to are shown with the post's links, and can be imported.

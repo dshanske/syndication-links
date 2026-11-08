@@ -450,6 +450,20 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Queued posts of other types are sent too, not only `post` (#225).
+	 */
+	public function test_do_pings_syndicates_queued_posts_of_any_type() {
+		$this->register_fakes( 'one' );
+		$page = $this->post_aged( MINUTE_IN_SECONDS, array( 'post_type' => 'page' ) );
+		add_post_meta( $page, '_syndicate-to', array( 'one' ) );
+
+		Post_Syndication::do_pings();
+
+		$this->assertSame( array( array( 'one', $page ) ), Syn_Test_Provider::$calls );
+		$this->assertFalse( metadata_exists( 'post', $page, '_syndicate-to' ) );
+	}
+
+	/**
 	 * Fills $_POST as the "Syndicate To" metabox would.
 	 *
 	 * @param string[] $uids Checked UIDs.
