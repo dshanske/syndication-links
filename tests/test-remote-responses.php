@@ -201,15 +201,16 @@ class Test_Remote_Responses extends WP_UnitTestCase {
 	/**
 	 * Sends a webmention through Bridgy Fed, answered with the mocked response.
 	 *
+	 * @param int $post_id Optional. Post ID. Defaults to a new post.
 	 * @return array|WP_Error What posse() returned.
 	 */
-	private function send_bridgy_fed() {
+	private function send_bridgy_fed( $post_id = 0 ) {
 		$response = $this->response;
 		$filter   = function () use ( $response ) {
 			return $response;
 		};
 		add_filter( 'syn_test_send_webmention', $filter );
-		$result = ( new SynProvider_Webmention_Bridgy_Fed() )->posse( self::factory()->post->create() );
+		$result = ( new SynProvider_Webmention_Bridgy_Fed() )->posse( $post_id ? $post_id : self::factory()->post->create() );
 		remove_filter( 'syn_test_send_webmention', $filter );
 		return $result;
 	}
@@ -234,5 +235,53 @@ class Test_Remote_Responses extends WP_UnitTestCase {
 
 		$this->assertWPError( $result );
 		$this->assertSame( 400, $result->get_error_data()['status'] );
+	}
+
+	/**
+	 * The target is only in the links while it's sent: a failed send removes it (#146).
+	 *
+	 * @dataProvider data_failures
+	 *
+	 * @param int|WP_Error|false $failure Status code, request error, or false for no endpoint.
+	 */
+	public function test_a_failed_webmention_removes_the_target( $failure ) {
+		$post_id = self::factory()->post->create();
+		add_post_syndication_link( $post_id, 'https://mastodon.example/@me/1' );
+		if ( is_int( $failure ) ) {
+			$this->respond( $failure, 'Failed' );
+		} else {
+			$this->response = $failure;
+		}
+
+		$this->assertWPError( $this->send_bridgy_fed( $post_id ) );
+		$this->assertSame( array( 'https://mastodon.example/@me/1' ), Syn_Meta::get_stored_links( 'post', $post_id ) );
+	}
+
+	public function data_failures() {
+		return array(
+			'error status'  => array( 400 ),
+			'request error' => array( new WP_Error( 'http_request_failed', 'Timed out' ) ),
+			'no endpoint'   => array( false ),
+		);
+	}
+
+	/**
+	 * A target that was already in the links, e.g. added by hand, stays.
+	 */
+	public function test_a_failed_webmention_keeps_a_target_that_was_there() {
+		$post_id = self::factory()->post->create();
+		add_post_syndication_link( $post_id, 'https://fed.brid.gy' );
+		$this->respond( 500, 'Failed' );
+
+		$this->assertWPError( $this->send_bridgy_fed( $post_id ) );
+		$this->assertSame( array( 'https://fed.brid.gy' ), Syn_Meta::get_stored_links( 'post', $post_id ) );
+	}
+
+	public function test_a_successful_webmention_swaps_the_target_for_the_copy() {
+		$post_id = self::factory()->post->create();
+		$this->respond( 201, '', array( 'location' => 'https://bsky.app/profile/me/post/1' ) );
+
+		$this->assertNotWPError( $this->send_bridgy_fed( $post_id ) );
+		$this->assertSame( array( 'https://bsky.app/profile/me/post/1' ), Syn_Meta::get_stored_links( 'post', $post_id ) );
 	}
 }
