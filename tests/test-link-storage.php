@@ -167,6 +167,8 @@ class Test_Link_Storage extends WP_UnitTestCase {
 		update_post_meta( $only_old, 'syndication_urls', 'https://old.example/2' );
 		update_comment_meta( $comment_id, 'syndication_urls', 'https://old.example/3' );
 		delete_option( 'syndication_links_legacy_migrated' );
+		// Syn_Meta::init() scheduled the event at bootstrap; WP-Cron removes a single event before running it.
+		wp_clear_scheduled_hook( 'syn_migrate_legacy_links' );
 
 		Syn_Meta::migrate_legacy_links();
 
