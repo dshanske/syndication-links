@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -13,7 +13,9 @@ jobs:
           coverage: none
           tools: composer, cs2pr
       - name: Install Composer dependencies for PHP
-        uses: "ramsey/composer-install@v2"
+        uses: ramsey/composer-install@v3
       - name: Detect coding standard violations
         run: composer lint
-
+      # Parse every PHP file on the minimum PHP version, so PHP 8-only syntax fails here.
+      - name: Check PHP syntax
+        run: composer lint:php
