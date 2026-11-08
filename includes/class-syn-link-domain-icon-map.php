@@ -240,13 +240,13 @@ class Syn_Link_Domain_Icon_Map {
 	}
 
 	public static function url_to_name( $url ) {
-		$scheme = wp_parse_url( $url, PHP_URL_SCHEME );
+		$scheme = strtolower( (string) wp_parse_url( $url, PHP_URL_SCHEME ) );
 		// The default if not an http link is to return notice
 		$return = 'notice';
 		if ( ( 'http' === $scheme ) || ( 'https' === $scheme ) ) {
 			$return = 'website'; // default for web links
 			$url    = strtolower( $url );
-			$domain = wp_parse_url( $url, PHP_URL_HOST );
+			$domain = (string) wp_parse_url( $url, PHP_URL_HOST );
 
 			$domain = str_replace( 'www.', '', $domain ); // Always remove www
 
@@ -282,9 +282,21 @@ class Syn_Link_Domain_Icon_Map {
 				}
 			}
 		}
-		// Save the determined mapping into the map so that it will not have to look again on the same page load
-		self::$map[ $domain ] = $return;
-		$return               = apply_filters( 'syn_link_mapping', $return, $url );
+		// Non-web links: mail and phone have their own icons, anything else is a notice.
+		$schemes = array(
+			'mailto' => 'mail',
+			'sms'    => 'phone',
+			'tel'    => 'phone',
+		);
+		if ( isset( $schemes[ $scheme ] ) ) {
+			$return = $schemes[ $scheme ];
+		}
+		// Save the determined mapping into the map so that it will not have to look again on the same page load.
+		// Only web links have a domain to cache.
+		if ( isset( $domain ) ) {
+			self::$map[ $domain ] = $return;
+		}
+		$return = apply_filters( 'syn_link_mapping', $return, $url );
 		return $return;
 	}
 }
