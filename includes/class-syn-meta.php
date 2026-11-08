@@ -1,12 +1,25 @@
 <?php
+/**
+ * Storing, editing and displaying syndication links.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
-// Adds Post Meta Box for Syndication URLs
 add_action( 'init', array( 'Syn_Meta', 'init' ) );
 
-// The Syn_Meta class sets up post meta boxes for data associated with Syndication
+/**
+ * Stores syndication links in the `mf2_syndication` meta of posts and comments.
+ *
+ * Also provides the links box in the editor, the `original-of` and `syndication` query
+ * vars, the privacy exporter, the migration of the legacy `syndication_urls` meta, and
+ * the front-end markup.
+ */
 class Syn_Meta {
+	/**
+	 * Registers the meta and hooks.
+	 */
 	public static function init() {
 		$cls = get_called_class();
 		add_action( 'admin_init', array( $cls, 'setup' ) );
@@ -44,6 +57,12 @@ class Syn_Meta {
 		add_filter( 'wp_privacy_personal_data_exporters', array( $cls, 'wp_privacy_personal_data_exporters' ), 10 );
 	}
 
+	/**
+	 * Registers the privacy exporter.
+	 *
+	 * @param array $exporters Registered exporters.
+	 * @return array The exporters, with this plugin's added.
+	 */
 	public static function wp_privacy_personal_data_exporters( $exporters ) {
 		$exporters['syndication-links'] = array(
 			'exporter_friendly_name' => __( 'Syndication Links Plugin', 'syndication-links' ),
@@ -52,8 +71,20 @@ class Syn_Meta {
 		return $exporters;
 	}
 
+	/**
+	 * Exports the syndication links of the comments made with an email address.
+	 *
+	 * One row per link, 500 comments per page.
+	 *
+	 * @param string $email_address The email address.
+	 * @param int    $page          Optional. Page number, from 1. Default 1.
+	 * @return array {
+	 *     @type array $data The rows.
+	 *     @type bool  $done Whether this was the last page.
+	 * }
+	 */
 	public static function data_exporter( $email_address, $page = 1 ) {
-		$number = 500; // Limit us to avoid timing out
+		$number = 500; // Limit us to avoid timing out.
 		$page   = (int) $page;
 
 		$export_items = array();
@@ -99,12 +130,27 @@ class Syn_Meta {
 		);
 	}
 
+	/**
+	 * Returns the admin screens that have the links box or its script.
+	 *
+	 * @return string[] Screen IDs: comments, the settings page and the syndication post types.
+	 */
 	public static function screens() {
 		$screens = array( 'comment', 'indieweb_page_syndication_links' );
 		$screens = array_merge( $screens, syndication_post_types() );
+		/**
+		 * Filters the admin screens that have the syndication links box.
+		 *
+		 * @param string[] $screens Screen IDs.
+		 */
 		return apply_filters( 'syn_metabox_types', $screens );
 	}
 
+	/**
+	 * Enqueues the links box's script on the screens that have it.
+	 *
+	 * @param string $hook_suffix The current admin page.
+	 */
 	public static function enqueue( $hook_suffix ) {
 		$screens = self::screens();
 		if ( in_array( get_current_screen()->id, $screens, true ) ) {
@@ -118,9 +164,12 @@ class Syn_Meta {
 		}
 	}
 
-
-
-
+	/**
+	 * Registers the `original-of` and `syndication` query vars.
+	 *
+	 * @param string[] $vars Public query vars.
+	 * @return string[] The query vars.
+	 */
 	public static function query_var( $vars ) {
 		$vars[] = 'original-of';
 		$vars[] = 'syndication';
@@ -220,11 +269,12 @@ class Syn_Meta {
 
 
 	/**
-	 * Filter the query for syndications.
+	 * Limits the main query to posts with a syndication link to a domain.
 	 *
-	 * @access public
+	 * `?syndication=example.com` (or a URL, whose domain is used) combines with the
+	 * other query vars, such as a search.
 	 *
-	 * @param $query
+	 * @param WP_Query $query The query.
 	 */
 	public static function syndication_filter_query( $query ) {
 		// Only the front-end main query: secondary queries (widgets, menus, related posts) are left alone.
@@ -233,7 +283,7 @@ class Syn_Meta {
 		}
 		$search = $query->get( 'syndication' );
 
-		// If a URL, match the domain
+		// If a URL, match the domain.
 		if ( wp_http_validate_url( $search ) ) {
 			$search = wp_parse_url( $search, PHP_URL_HOST );
 		}
@@ -252,12 +302,14 @@ class Syn_Meta {
 	}
 
 
-	/*
-	Filters incoming URLs.
+	/**
+	 * Cleans a list of URLs.
 	 *
-	 * @param array $urls An array of URLs to filter.
-	 * @return array A filtered array of unique URLs.
-	 * @uses clean_url
+	 * Drops invalid URLs and duplicates, upgrades some services to https, and
+	 * re-indexes the list.
+	 *
+	 * @param string[] $urls The URLs.
+	 * @return string[] The cleaned URLs. Anything that isn't an array is returned as is.
 	 */
 	public static function clean_urls( $urls ) {
 		if ( ! is_array( $urls ) ) {
@@ -272,7 +324,12 @@ class Syn_Meta {
 				if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
 					return false;
 				}
-				// Rewrite these to https as needed
+				// Rewrite these to https as needed.
+				/**
+				 * Filters the domains whose links are rewritten from http to https.
+				 *
+				 * @param string[] $domains Domains, without subdomains.
+				 */
 				$secure = apply_filters( 'syn_rewrite_secure', array( 'facebook.com', 'twitter.com', 'huffduffer.com', 'foursquare.com', 'blogger.com', 'dailymotion.com', 'github.com', 'gitlab.com', 'google.com', 'tumblr.com', 'vimeo.com', 'wikipedia.org', 'wordpress.com', 'youtube.com' ) );
 				if ( in_array( self::extract_domain_name( $url ), $secure, true ) ) {
 					$url = preg_replace( '/^http:/i', 'https:', $url );
@@ -287,22 +344,25 @@ class Syn_Meta {
 	}
 
 
-	/* Meta box setup function. */
+	/**
+	 * Hooks the links box and its script.
+	 */
 	public static function setup() {
 		add_action( 'admin_enqueue_scripts', array( 'Syn_Meta', 'enqueue' ) );
-		/* Add meta boxes on the 'add_meta_boxes' hook. */
 		add_action( 'add_meta_boxes', array( 'Syn_Meta', 'add_meta_boxes' ) );
 	}
 
-	/* Create one or more meta boxes to be displayed on the post editor screen. */
+	/**
+	 * Adds the links box to the post and comment editors.
+	 */
 	public static function add_meta_boxes() {
 		add_meta_box(
-			'synbox-meta',      // Unique ID
-			esc_html__( 'Syndication Links', 'syndication-links' ),    // Title
-			array( 'Syn_Meta', 'metabox' ),   // Callback function
-			self::screens(),         // Admin page (or post type)
-			'normal',         // Context
-			'default',        // Priority
+			'synbox-meta',      // Unique ID.
+			esc_html__( 'Syndication Links', 'syndication-links' ),    // Title.
+			array( 'Syn_Meta', 'metabox' ),   // Callback function.
+			self::screens(),         // Admin page (or post type).
+			'normal',         // Context.
+			'default',        // Priority.
 			array(
 				'__block_editor_compatible_meta_box' => true,
 				'__back_compat_meta_box'             => false,
@@ -310,6 +370,12 @@ class Syn_Meta {
 		);
 	}
 
+	/**
+	 * Displays the links box: one field per link, and an Add button.
+	 *
+	 * @param WP_Post|WP_Comment $object The post or comment being edited.
+	 * @param array              $args   The box's arguments.
+	 */
 	public static function metabox( $object, $args ) {
 		$screen = get_current_screen();
 		if ( 'comment' === $screen->id ) {
@@ -351,7 +417,14 @@ class Syn_Meta {
 		echo $html; // phpcs:ignore
 	}
 
-	/* Save the meta box's metadata. */
+	/**
+	 * Saves the links submitted from the links box.
+	 *
+	 * The caller checks the nonce and capability. Submitting no links deletes them.
+	 *
+	 * @param string $type Object type: 'post' or 'comment'.
+	 * @param int    $id   Object ID.
+	 */
 	public static function save_meta( $type, $id ) {
 		// The field is a list; anything else isn't from the metabox, so leave the links alone.
 		if ( ! isset( $_POST['syndication_urls'] ) || ! is_array( $_POST['syndication_urls'] ) ) {
@@ -370,7 +443,11 @@ class Syn_Meta {
 	}
 
 
-	/* Save the meta box's post metadata. */
+	/**
+	 * Saves a post's links from the links box, after checking the nonce and capability.
+	 *
+	 * @param int $post_id Post ID.
+	 */
 	public static function save_post_meta( $post_id ) {
 		/*
 		 * We need to verify this came from our screen and with proper authorization,
@@ -401,7 +478,11 @@ class Syn_Meta {
 
 
 
-	/* Save the meta box's comment metadata. */
+	/**
+	 * Saves a comment's links from the links box, after checking the nonce and capability.
+	 *
+	 * @param int $comment_id Comment ID.
+	 */
 	public static function save_comment_meta( $comment_id ) {
 		/*
 		 * We need to verify this came from our screen and with proper authorization,
@@ -422,18 +503,27 @@ class Syn_Meta {
 		self::save_meta( 'comment', $comment_id );
 	}
 
+	/**
+	 * Returns a URL's registrable domain: `www.example.com` becomes `example.com`.
+	 *
+	 * @param string $url The URL.
+	 * @return string|null The domain, or null if the URL has no host.
+	 */
 	public static function extract_domain_name( $url ) {
 		$parse = wp_parse_url( $url, PHP_URL_HOST );
 		return preg_replace( '/^([a-zA-Z0-9].*\.)?([a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z.]{2,})$/', '$2', $parse );
 	}
 
-	/* Add Syndication Links to a Metadata Object
+	/**
+	 * Adds syndication links to an object.
 	 *
-	 * @param string $type Metadata Type, e.g. post, comment, term.
-	 * @param int $id  Object ID.
-	 * @param string|array $uri Syndication URL or array of Syndication URLs.
-	 * @param boolean $replace Whether or not to replace the current data or not.a
-	 * @return boolean True if successful.
+	 * New links go before the existing ones, and duplicates are dropped.
+	 *
+	 * @param string          $type    Object type, e.g. 'post' or 'comment'.
+	 * @param int             $id      Object ID.
+	 * @param string|string[] $uri     A URL, or an array of URLs.
+	 * @param bool            $replace Optional. Whether to replace the existing links. Default false.
+	 * @return int|bool The result of update_metadata(), or false if there was nothing to add.
 	 */
 	public static function add_syndication_link( $type, $id, $uri, $replace = false ) {
 		if ( $replace ) {
@@ -456,13 +546,6 @@ class Syn_Meta {
 
 		return update_metadata( $type, $id, 'mf2_syndication', $links );
 	}
-
-	/* Retrieve Syndication Link URLs from an Object
-	 *
-	 * @param string $type Metadata Type, e.g. post, comment, term.
-	 * @param int $id  Object ID.
-	 * @return array List of syndication link URLs or empty array if none.
-	 */
 
 	/**
 	 * Number of posts, and of comments, migrated per run.
@@ -550,6 +633,16 @@ class Syn_Meta {
 		delete_metadata( $type, $id, 'syndication_urls' );
 	}
 
+	/**
+	 * Returns an object's syndication links.
+	 *
+	 * Includes links still in the legacy meta, and links other plugins add through
+	 * the `get_{$type}_syndication_links` filter.
+	 *
+	 * @param string $type Object type, e.g. 'post' or 'comment'.
+	 * @param int    $id   Object ID.
+	 * @return string[] The URLs, or an empty array if there are none.
+	 */
 	public static function get_syndication_links_data( $type, $id ) {
 		$urls = array();
 		$urls = get_metadata( $type, $id, 'mf2_syndication', true );
@@ -566,13 +659,27 @@ class Syn_Meta {
 			$urls = array_merge( $urls, explode( "\n", $old ) );
 		}
 
-		/* Allow adding of additional links before display but ensuring they are unique
-
+		/**
+		 * Filters an object's syndication links before they're cleaned and returned.
+		 *
+		 * The dynamic part of the hook is the object type: `get_post_syndication_links`
+		 * or `get_comment_syndication_links`. Other plugins use it to add the links they
+		 * recorded. Duplicates and invalid URLs are dropped afterwards.
+		 *
+		 * @param string[] $urls The URLs.
+		 * @param int      $id   Object ID.
 		 */
 		$urls = apply_filters( "get_{$type}_syndication_links", $urls, $id );
 
-		/* Legacy filter kept for backcompat for now only works on posts */
 		if ( 'post' === $type ) {
+			/**
+			 * Filters a post's syndication links.
+			 *
+			 * Kept for backward compatibility; use `get_post_syndication_links` instead.
+			 *
+			 * @param string[] $urls    The URLs.
+			 * @param int      $post_id Post ID.
+			 */
 			$urls = apply_filters( 'syn_add_links', $urls, $id );
 		}
 
@@ -580,6 +687,16 @@ class Syn_Meta {
 		return array_values( array_filter( $urls ) );
 	}
 
+	/**
+	 * Returns the markup for each of an object's syndication links.
+	 *
+	 * Bridgy targets are left out; get_syndication_links() adds them separately.
+	 *
+	 * @param string   $type Object type, e.g. 'post' or 'comment'.
+	 * @param int|null $id   Object ID.
+	 * @param array    $args Optional. Display arguments; see get_post_syndication_links().
+	 * @return string[] One `<a>` element per link.
+	 */
 	public static function get_syndication_links_elements( $type, $id = null, $args = array() ) {
 		$urls = self::get_syndication_links_data( $type, $id );
 		if ( empty( $urls ) ) {
@@ -654,6 +771,13 @@ class Syn_Meta {
 		return $html;
 	}
 
+	/**
+	 * Returns the display setting for the current request.
+	 *
+	 * Archives use 'hidden' unless the setting to show links on archives is on.
+	 *
+	 * @return string 'text', 'icons', 'iconstext' or 'hidden'.
+	 */
 	public static function get_syndication_links_display_option() {
 		$display = get_option( 'syndication-links_display' );
 		if ( ! is_singular() ) {
@@ -663,6 +787,11 @@ class Syn_Meta {
 		return $display;
 	}
 
+	/**
+	 * Returns the default display arguments, from the display settings.
+	 *
+	 * @return array Display arguments; see get_post_syndication_links().
+	 */
 	public static function get_syndication_links_display_defaults() {
 		$display  = self::get_syndication_links_display_option();
 		$defaults = array(
@@ -675,9 +804,20 @@ class Syn_Meta {
 			'show_text_before' => true,
 		);
 
+		/**
+		 * Filters the default display arguments for syndication links.
+		 *
+		 * @param array $defaults Display arguments; see get_post_syndication_links().
+		 */
 		return apply_filters( 'syn_links_display_defaults', $defaults );
 	}
 
+	/**
+	 * Returns the text shown before the links, from the settings.
+	 *
+	 * @param string $css Optional. Class for the wrapping span. Default 'syn-text'.
+	 * @return string The markup, or '' when the links are hidden.
+	 */
 	public static function get_syndication_links_text_before( $css = 'syn-text' ) {
 		$display = self::get_syndication_links_display_option();
 
@@ -686,6 +826,16 @@ class Syn_Meta {
 
 
 
+	/**
+	 * Returns the markup for an object's syndication links.
+	 *
+	 * Bridgy targets are added after the list as empty links, in every display mode.
+	 *
+	 * @param string   $type Object type, e.g. 'post' or 'comment'.
+	 * @param int|null $id   Object ID.
+	 * @param array    $args Optional. Display arguments; see get_post_syndication_links().
+	 * @return string The markup, or '' if there are no links.
+	 */
 	public static function get_syndication_links( $type, $id = null, $args = array() ) {
 		$r = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
 
