@@ -21,8 +21,10 @@ class Test_Plugin_Import extends WP_UnitTestCase {
 			array( 'snap', 'mastodon-autopost', 'xposter', 'autopost-for-x', 'keyring', 'medium' ),
 			array_keys( Social_Plugins::sources() )
 		);
-		// Medium's links live in the Medium plugin, so there's nothing to query.
-		$this->assertArrayNotHasKey( 'medium', Social_Plugins::import_sources() );
+		// Medium's links are no longer shown, but can be imported.
+		$sources = Social_Plugins::sources();
+		$this->assertFalse( $sources['medium']['show'] );
+		$this->assertArrayHasKey( 'medium', Social_Plugins::import_sources() );
 	}
 
 	private function register_custom() {
@@ -203,7 +205,7 @@ class Test_Plugin_Import extends WP_UnitTestCase {
 
 		$this->assertStringContainsString( 'Mastodon Autopost', $html );
 		$this->assertStringContainsString( 'NextScripts: Social Networks Auto-Poster', $html );
-		$this->assertStringNotContainsString( '>Medium<', $html );
+		$this->assertStringContainsString( '>Medium<', $html );
 		$this->assertSame( 1, substr_count( $html, 'name="source"' ) );
 		$this->assertStringContainsString( 'value="mastodon-autopost"', $html );
 	}

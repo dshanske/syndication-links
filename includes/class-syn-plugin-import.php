@@ -104,7 +104,7 @@ class Syn_Plugin_Import {
 	 */
 	public static function import_batch( $slug, $page = 1 ) {
 		$sources = self::sources();
-		if ( ! isset( $sources[ $slug ] ) || ! is_callable( $sources[ $slug ]['callback'] ) ) {
+		if ( ! isset( $sources[ $slug ] ) || ! is_callable( $sources[ $slug ]['import'] ) ) {
 			return false;
 		}
 		$args                   = self::query_args( $sources[ $slug ] );
@@ -116,7 +116,7 @@ class Syn_Plugin_Import {
 
 		$posts = 0;
 		foreach ( $ids as $id ) {
-			$links = (array) call_user_func( $sources[ $slug ]['callback'], $id );
+			$links = (array) call_user_func( $sources[ $slug ]['import'], $id );
 			$links = array_filter( $links, 'is_string' );
 			if ( $links ) {
 				// Merges with the post's links; clean_urls() drops invalid URLs and duplicates.
