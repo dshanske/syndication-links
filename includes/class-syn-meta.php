@@ -279,13 +279,13 @@ class Syn_Meta {
 
 	/* Save the meta box's metadata. */
 	public static function save_meta( $type, $id ) {
-		if ( ! array_key_exists( 'syndication_urls', $_POST ) ) {
+		// The field is a list; anything else isn't from the metabox, so leave the links alone.
+		if ( ! isset( $_POST['syndication_urls'] ) || ! is_array( $_POST['syndication_urls'] ) ) {
 			return;
 		}
 
-		$syn = array_filter( $_POST['syndication_urls'] );
-
-		error_log( wp_json_encode( $syn ) );
+		// clean_urls() validates each URL, so only the shape is checked here.
+		$syn = array_filter( array_filter( wp_unslash( $_POST['syndication_urls'] ), 'is_string' ) );
 
 		if ( empty( $syn ) ) {
 			delete_metadata( $type, $id, 'mf2_syndication' );
