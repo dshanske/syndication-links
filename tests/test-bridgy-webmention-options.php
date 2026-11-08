@@ -7,6 +7,23 @@
 
 class Test_Bridgy_Webmention_Options extends WP_UnitTestCase {
 
+	/**
+	 * Loads the webmention versions of Bridgy. The plugin loads the Micropub versions
+	 * unless SYNDICATION_LINKS_BRIDGY_WEBMENTION is set, so they aren't loaded by default.
+	 */
+	public static function set_up_before_class() {
+		parent::set_up_before_class();
+		syndication_links_load(
+			array(
+				'class-synprovider-webmention-bridgy.php',
+				'class-synprovider-webmention-bridgy-github.php',
+				'class-synprovider-webmention-bridgy-flickr.php',
+				'class-synprovider-webmention-bridgy-mastodon.php',
+			),
+			'includes/webmentions/'
+		);
+	}
+
 	public function tear_down() {
 		delete_option( 'syndication_backlink' );
 		delete_option( 'bridgy_ignoreformatting' );
