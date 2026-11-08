@@ -2,6 +2,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// Rebuild the cached Mastodon hosts when a user's Mastodon URL changes, or a user is deleted.
+add_action( 'added_user_meta', array( 'Syn_Link_Domain_Icon_Map', 'mastodon_meta_changed' ), 10, 3 );
+add_action( 'updated_user_meta', array( 'Syn_Link_Domain_Icon_Map', 'mastodon_meta_changed' ), 10, 3 );
+add_action( 'deleted_user_meta', array( 'Syn_Link_Domain_Icon_Map', 'mastodon_meta_changed' ), 10, 3 );
+add_action( 'deleted_user', array( 'Syn_Link_Domain_Icon_Map', 'flush_mastodon_urls' ) );
+
 /* Maps domain names to icons from the provided SVG fontset
  */
 class Syn_Link_Domain_Icon_Map {
@@ -177,8 +183,32 @@ class Syn_Link_Domain_Icon_Map {
 		return apply_filters( 'syn_link_title', $return, $name );
 	}
 
+	/**
+	 * Clears the cached Mastodon hosts when a user's `mastodon` meta changes.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int|int[] $meta_id   Meta ID(s).
+	 * @param int       $object_id User ID.
+	 * @param string    $meta_key  Meta key.
+	 */
+	public static function mastodon_meta_changed( $meta_id, $object_id, $meta_key ) {
+		if ( 'mastodon' === $meta_key ) {
+			self::flush_mastodon_urls();
+		}
+	}
+
+	/**
+	 * Clears the cached Mastodon hosts.
+	 *
+	 * @since 5.0.0
+	 */
+	public static function flush_mastodon_urls() {
+		delete_transient( 'syn_mastodon_hosts' );
+	}
+
 	public static function mastodon_urls() {
-		$mastodon = get_transient( 'syn_mastodon' );
+		$mastodon = get_transient( 'syn_mastodon_hosts' );
 		if ( false !== $mastodon && is_array( $mastodon ) ) {
 			return $mastodon;
 		}
@@ -203,7 +233,9 @@ class Syn_Link_Domain_Icon_Map {
 				}
 			}
 		}
-		set_transient( 'syn_mastodon', $value );
+		// Expire it, so it isn't autoloaded and does get refreshed. The old name had no expiration.
+		set_transient( 'syn_mastodon_hosts', $value, DAY_IN_SECONDS );
+		delete_transient( 'syn_mastodon' );
 		return $value;
 	}
 
