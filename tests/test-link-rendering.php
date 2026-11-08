@@ -109,7 +109,7 @@ class Test_Link_Rendering extends WP_UnitTestCase {
 		$links = Syn_Meta::get_syndication_links_elements( 'post', $post_id );
 
 		$this->assertCount( 1, $links );
-		$this->assertStringStartsWith( '<a aria-label="github" class="u-syndication syn-link" href="https://github.com/someone/repo">', $links[0] );
+		$this->assertStringStartsWith( '<a aria-label="github" class="u-syndication syn-link" href="https://github.com/someone/repo" rel="nofollow">', $links[0] );
 		$this->assertStringContainsString( 'svg-github', $links[0] );
 		$this->assertStringContainsString( '<svg', $links[0] );
 		$this->assertStringEndsWith( 'GitHub</a>', $links[0] );
@@ -122,7 +122,34 @@ class Test_Link_Rendering extends WP_UnitTestCase {
 
 		$links = Syn_Meta::get_syndication_links_elements( 'post', $post_id );
 
+		$this->assertStringContainsString( 'href="https://github.com/someone/repo" rel="syndication nofollow">', $links[0] );
+	}
+
+	/**
+	 * The syn_link_rel filter can drop nofollow (#55).
+	 */
+	public function test_nofollow_can_be_removed() {
+		$post_id = $this->post_with_links();
+		$this->go_to( get_permalink( $post_id ) );
+		$filter = function ( $rels ) {
+			return array_diff( $rels, array( 'nofollow' ) );
+		};
+		add_filter( 'syn_link_rel', $filter );
+
+		$links = Syn_Meta::get_syndication_links_elements( 'post', $post_id );
+		remove_filter( 'syn_link_rel', $filter );
+
 		$this->assertStringContainsString( 'href="https://github.com/someone/repo" rel="syndication">', $links[0] );
+	}
+
+	public function test_no_rel_values_means_no_rel_attribute() {
+		$post_id = $this->post_with_links();
+		add_filter( 'syn_link_rel', '__return_empty_array' );
+
+		$links = Syn_Meta::get_syndication_links_elements( 'post', $post_id );
+		remove_filter( 'syn_link_rel', '__return_empty_array' );
+
+		$this->assertStringStartsWith( '<a aria-label="github" class="u-syndication syn-link" href="https://github.com/someone/repo">', $links[0] );
 	}
 
 	public function test_icons_only() {
@@ -281,7 +308,7 @@ class Test_Link_Rendering extends WP_UnitTestCase {
 		$content = apply_filters( 'the_content', 'Hello' );
 
 		$this->assertStringContainsString( '<div class="syndication-links">' . get_post_syndication_links( $post_id ) . '</div>', $content );
-		$this->assertStringContainsString( 'rel="syndication"', $content );
+		$this->assertStringContainsString( 'rel="syndication nofollow"', $content );
 	}
 
 	public function test_the_content_skips_feeds() {

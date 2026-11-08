@@ -752,7 +752,8 @@ class Syn_Meta {
 		}
 		$display = self::get_syndication_links_display_option();
 		$r       = wp_parse_args( $args, self::get_syndication_links_display_defaults() );
-		$rel     = is_single() ? ' rel="syndication">' : '>';
+		// On a post's own page the links are its syndicated copies; nofollow everywhere (#55).
+		$default = is_single() ? array( 'syndication', 'nofollow' ) : array( 'nofollow' );
 		$links   = array();
 		foreach ( $urls as $url ) {
 			if ( empty( $url ) || ! is_string( $url ) ) {
@@ -773,7 +774,19 @@ class Syn_Meta {
 				$link    = '<data class="u-syndication" value="%1$s"></data>';
 				$links[] = sprintf( $link, esc_url( $url ) );
 			} else {
-				$link    = '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s %5$s</a>';
+				/**
+				 * Filters the rel values of a syndication link.
+				 *
+				 * Return them without 'nofollow' to let search engines follow the links.
+				 *
+				 * @since 5.0.0
+				 *
+				 * @param string[] $rels The rel values: 'nofollow', plus 'syndication' on a single post's page.
+				 * @param string   $url  The link.
+				 */
+				$rels    = array_unique( array_filter( (array) apply_filters( 'syn_link_rel', $default, $url ), 'is_string' ) );
+				$rel     = $rels ? ' rel="' . esc_attr( implode( ' ', $rels ) ) . '"' : '';
+				$link    = '<a aria-label="%1$s" class="u-syndication %2$s" href="%3$s"%4$s> %5$s</a>';
 				$links[] = sprintf( $link, esc_attr( $name ), esc_attr( $r['single-css'] ), esc_url( $url ), $rel, $syn );
 			}
 		}
