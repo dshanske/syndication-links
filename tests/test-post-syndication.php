@@ -552,4 +552,29 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 		$this->assertSame( array( 'one' ), wp_list_pluck( $targets, 'uid' ) );
 		$this->assertSame( 'Name of one', $targets[0]['name'] );
 	}
+
+	/**
+	 * A provider that was created but never registered doesn't fatal (B10).
+	 */
+	public function test_get_works_for_an_unregistered_provider() {
+		$provider = new Syn_Test_Provider( 'unregistered', 'Unregistered' );
+
+		$target = $provider->get();
+
+		$this->assertSame( 'unregistered', $target['uid'] );
+		$this->assertArrayNotHasKey( 'checked', $target );
+		$this->assertFalse( Post_Syndication::checked( 'unregistered' ) );
+		$this->assertFalse( Post_Syndication::disabled( 'unregistered' ) );
+	}
+
+	public function test_checked_filter_still_applies_to_an_unregistered_provider() {
+		$filter = function ( $checked, $uid ) {
+			return 'unregistered' === $uid;
+		};
+		add_filter( 'syndication_link_checked', $filter, 10, 2 );
+
+		$this->assertTrue( Post_Syndication::checked( 'unregistered' ) );
+
+		remove_filter( 'syndication_link_checked', $filter, 10 );
+	}
 }

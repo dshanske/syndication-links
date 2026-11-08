@@ -395,12 +395,13 @@ class Post_Syndication {
 	}
 
 	public static function checked( $uid, $post_ID = 0 ) {
-		$checked = static::$targets[ $uid ]->is_checked();
+		// A provider that isn't registered (e.g. enabled but never registered) isn't checked.
+		$checked = isset( static::$targets[ $uid ] ) ? static::$targets[ $uid ]->is_checked() : false;
 		return apply_filters( 'syndication_link_checked', $checked, $uid, $post_ID );
 	}
 
 	public static function disabled( $uid, $post_ID = 0 ) {
-		$disabled = static::$targets[ $uid ]->is_disabled();
+		$disabled = isset( static::$targets[ $uid ] ) ? static::$targets[ $uid ]->is_disabled() : false;
 		return apply_filters( 'syndication_link_disabled', $disabled, $uid, $post_ID );
 	}
 
