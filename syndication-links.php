@@ -112,6 +112,7 @@ function syndication_links_init() {
 			'class-syn-config.php', // Configuration Options.
 			'class-social-plugins.php', // Social Plugin Add-Ons.
 			'class-syn-plugin-import.php', // Import links from other plugins.
+			'class-syn-webmention-comments.php', // Syndication links of webmention comments.
 			'functions.php', // Global Functions.
 			'compat-functions.php', // Compat Functions.
 			'class-widget-original-of.php', // Original Of Widget.

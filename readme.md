@@ -204,6 +204,7 @@ In no particular order...
 * New Import tab and `wp syndication-links import` command: copy the links recorded by other cross-posting plugins (SNAP, Mastodon Autopost, XPoster, Autopost for X, Keyring, Medium) into the post's own syndication links. Once imported, the other plugin can be removed without losing the links. Other plugins can add import sources with `register_syndication_link_source()`.
 * Medium links are no longer shown from the Medium plugin, which is closed. Import them to keep them.
 * Jetpack Social (Publicize): the posts it shared to are shown with the post's links, and can be imported.
+* New setting, off by default: store the syndication links of comments received by webmention, from the reply's microformats, and show them with the comment. Needs the Webmention plugin.
 * XPoster: links to its Mastodon and Bluesky posts are added, and its X links are also shown for posts saved before they were recorded.
 * Fixed the Mastodon Autopost and Autopost for X integrations.
 * Bridgy targets are output as empty links, as Bridgy's docs describe, not as syndicated copies.
