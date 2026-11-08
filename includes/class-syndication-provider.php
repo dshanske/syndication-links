@@ -1,9 +1,19 @@
 <?php
+/**
+ * Base class for syndication providers.
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * A place posts can be syndicated to.
+ *
+ * Subclasses set `$uid` and `$name`, and implement posse(). Providers enabled in the
+ * settings are offered to Micropub clients through `micropub_syndicate-to`.
+ */
 abstract class Syndication_Provider {
-
 
 	/**
 	 * Unique Identifier for the Provider.
@@ -12,7 +22,6 @@ abstract class Syndication_Provider {
 	 */
 	protected $uid;
 
-
 	/**
 	 * Display Name.
 	 *
@@ -20,35 +29,28 @@ abstract class Syndication_Provider {
 	 */
 	protected $name;
 
-
 	/**
-	 * Service.
+	 * The service, as Micropub's `syndicate-to` describes it.
 	 *
-	 * @param array {
-	 *  @type string $name Name of Provider.
-	 *  @type string $url URL of Provider.
-	 *  @type string $photo Icon/Photo of Service
-	 * }
+	 * Optional keys: `name`, `url` and `photo` (the service's icon).
+	 *
+	 * @var array
 	 */
 	protected $service;
 
 	/**
-	 * User Information.
+	 * The account on the service, as Micropub's `syndicate-to` describes it.
 	 *
-	 * @param array {
-	 *  @type string $name Username.
-	 *  @type string $url User URL.
-	 *  @type string $photo User Photo.
-	 * }
+	 * Optional keys: `name`, `url` and `photo`.
+	 *
+	 * @var array
 	 */
 	protected $user;
 
 	/**
-	 * Constructor for the Abstract Class
+	 * Offers the provider to Micropub clients if it's enabled in the settings.
 	 *
-	 * The default version of this just sets the parameters
-	 *
-	 * @param array $args Array of Arguments
+	 * @param array $args Optional. Arguments, used by subclasses.
 	 */
 	public function __construct( $args = array() ) {
 		$allowlist = get_option( 'syndication_provider_enable', array() );
@@ -60,29 +62,31 @@ abstract class Syndication_Provider {
 		}
 	}
 
+	/**
+	 * Adds the provider to Micropub's syndication targets.
+	 *
+	 * @param array $targets Syndication targets.
+	 * @param int   $user_id ID of the user making the request.
+	 * @return array The targets.
+	 */
 	public function syndicate_to( $targets, $user_id ) {
 		$targets[] = $this->get();
 		return array_filter( $targets );
 	}
 
 	/**
-	 * Returns information about a syndication target
+	 * Returns the provider as a Micropub syndication target.
 	 *
-	 * @return array $target {
-	 *  @string $uid  UID
-	 *  @string $name Name
-	 *  @array $service {
-	 *   Optional. An array of service details.
-	 *  @string $name Name of Service.
-	 *  @string $url URL of Service.
-	 *  @string $photo URL of Photo/Service Logo
-	 *  }
-	 *  @array $user {
-	 *  Optional. Details of the User.
-	 *  @string $name Name of User.
-	 *  @string $url URL of User on Service.
-	 *  @string $photo URL of User Photo
-	 *  }
+	 * Empty values are left out.
+	 *
+	 * @return array {
+	 *     The target.
+	 *
+	 *     @type string $uid     The provider's UID.
+	 *     @type string $name    Its display name.
+	 *     @type array  $service Optional. The service: `name`, `url` and `photo`.
+	 *     @type array  $user    Optional. The account: `name`, `url` and `photo`.
+	 *     @type bool   $checked Whether it's selected by default.
 	 * }
 	 */
 	public function get() {
@@ -96,40 +100,67 @@ abstract class Syndication_Provider {
 		return array_filter( $return );
 	}
 
+	/**
+	 * Returns the provider's unique ID.
+	 *
+	 * @return string
+	 */
 	public function get_uid() {
 		return $this->uid;
 	}
 
+	/**
+	 * Returns the provider's display name.
+	 *
+	 * @return string
+	 */
 	public function get_name() {
 		return $this->name;
 	}
 
+	/**
+	 * Returns the account on the service.
+	 *
+	 * @return array|null
+	 */
 	public function get_user() {
 		return $this->user;
 	}
 
+	/**
+	 * Returns the service.
+	 *
+	 * @return array|null
+	 */
 	public function get_service() {
 		return $this->service;
 	}
 
 	/**
-	 * Should checkbox be disabled
+	 * Whether the provider's checkbox is disabled.
+	 *
+	 * @return bool
 	 */
 	public function is_disabled() {
 		return false;
 	}
 
 	/**
-	 * Should checkbox be checked
+	 * Whether the provider's checkbox is checked by default.
+	 *
+	 * @return bool
 	 */
 	public function is_checked() {
 		return false;
 	}
 
 	/**
-	 * Given a post try to POSSE it to a given network
+	 * Syndicates a post.
 	 *
-	 * @return array to extract log data from.
+	 * Implementations add the URL of the copy to the post's syndication links.
+	 *
+	 * @param int|null $post_id Optional. Post ID. Defaults to the current post.
+	 * @return array|WP_Error The response, which is logged, or an error.
 	 */
 	abstract public function posse( $post_id = null );
 }

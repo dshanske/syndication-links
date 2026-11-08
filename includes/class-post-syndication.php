@@ -1,18 +1,34 @@
 <?php
+/**
+ * Syndicating posts (POSSE).
+ *
+ * @package Syndication_Links
+ */
 
 defined( 'ABSPATH' ) || exit;
 
-// Triggers Syndication using Micropub or a Metabox in the UI
-
-// The Post_Syndication class sets up a post meta box to trigger
-
 add_action( 'init', array( 'Post_Syndication', 'init' ) );
 
+/**
+ * Sends posts to the registered providers.
+ *
+ * Targets are chosen in the Syndicate To box or by Micropub's `mp-syndicate-to`.
+ * Published posts are sent on `do_pings`; drafts are queued until they're published,
+ * future posts are scheduled, and private posts are never sent.
+ */
 class Post_Syndication {
+	/**
+	 * Registered providers, keyed by UID.
+	 *
+	 * @var Syndication_Provider[]
+	 */
 	protected static $targets = array();
 
+	/**
+	 * Hooks the boxes, saving and syndication.
+	 */
 	public static function init() {
-		// Add meta box to new post/post pages only
+		// Add meta box to new post/post pages only.
 		add_action( 'load-post.php', array( __CLASS__, 'metabox_setup' ) );
 		add_action( 'load-post-new.php', array( __CLASS__, 'metabox_setup' ) );
 		add_action( 'do_pings', array( __CLASS__, 'do_pings' ), 9, 2 );
@@ -25,7 +41,7 @@ class Post_Syndication {
 		add_action( 'syn_syndication', array( __CLASS__, 'syndication' ), 10, 2 );
 		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
 
-		// Syndication Links POSSE/Syndication Options
+		// Syndication Links POSSE/Syndication Options.
 
 		register_setting(
 			'syndication_providers',
@@ -67,6 +83,9 @@ class Post_Syndication {
 		);
 	}
 
+	/**
+	 * Registers the provider settings and the API keys section.
+	 */
 	public static function admin_init() {
 		add_settings_field(
 			'syndication_provider_enable',
@@ -121,10 +140,19 @@ class Post_Syndication {
 		);
 	}
 
+	/**
+	 * Displays the description of the API keys section.
+	 */
 	public static function syndication_apis_callback() {
 		esc_html_e( 'For Bridgy, once you have enabled publish on your Bridgy user page, there will be a Get token button, put that into the field for the token for the service', 'syndication-links' );
 	}
 
+	/**
+	 * Registers a provider.
+	 *
+	 * @param Syndication_Provider $object The provider.
+	 * @return bool Whether it was registered: it must be a provider with a UID.
+	 */
 	public static function register( $object ) {
 		if ( $object instanceof Syndication_Provider ) {
 			$uid = $object->get_uid();
@@ -136,6 +164,11 @@ class Post_Syndication {
 		return false;
 	}
 
+	/**
+	 * Sends the posts queued in `_syndicate-to`.
+	 *
+	 * Runs early on core's `do_pings`, and only for published posts.
+	 */
 	public static function do_pings() {
 		$syndicate = get_posts(
 			array(
@@ -152,7 +185,7 @@ class Post_Syndication {
 
 		foreach ( $syndicate as $target ) {
 			$meta = get_post_meta( $target, '_syndicate-to', true );
-			// Send Syndications
+			// Send Syndications.
 			delete_post_meta( $target, '_syndicate-to' );
 			self::syndication( $target, $meta );
 		}
@@ -178,10 +211,22 @@ class Post_Syndication {
 		}
 	}
 
-	/* Syndicate To is an Array of UIDS */
+	/**
+	 * Syndicates a post to some targets.
+	 *
+	 * Private posts are never sent. Future-dated posts are scheduled, other unpublished
+	 * posts are queued, and published posts more than a day old are refused. The
+	 * results are added to the post's `syndication_log`.
+	 *
+	 * @param int      $post_ID      Post ID.
+	 * @param string[] $syndicate_to UIDs of the targets.
+	 * @return array|bool|null The log before this run's entries, true if the post was queued,
+	 *                         scheduled or had nothing to send, false if it can't be sent,
+	 *                         or null if there's no such post.
+	 */
 	public static function syndication( $post_ID, $syndicate_to ) {
 		$post = get_post( $post_ID );
-		// If this is an invalid post return
+		// If this is an invalid post return.
 		if ( ! $post ) {
 			return;
 		}
@@ -213,7 +258,7 @@ class Post_Syndication {
 			return true;
 		}
 
-		// Reject this
+		// Reject this.
 		if ( $diff > DAY_IN_SECONDS ) {
 			$returns[] = new WP_Error( 'too_old', sprintf( 'Post is %1$s days old - no syndication', $diff / DAY_IN_SECONDS ) );
 		} else {
@@ -284,6 +329,13 @@ class Post_Syndication {
 		update_post_meta( $post_ID, '_syndicate-to', array_values( array_unique( array_merge( $queued, $syndicate_to ) ) ) );
 	}
 
+	/**
+	 * Builds a log entry from a provider's result.
+	 *
+	 * @param array|WP_Error       $input  What the provider's posse() returned.
+	 * @param Syndication_Provider $target The provider.
+	 * @return array The log entry: the provider's UID and name, the date, and the response or error.
+	 */
 	public static function syndication_log( $input, $target ) {
 		if ( is_wp_error( $input ) ) {
 			$data            = $input->error_data;
@@ -349,6 +401,11 @@ class Post_Syndication {
 		error_log( sprintf( 'Syndication Links: syndicated %1$s%2$s', $where, $details ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 	}
 
+	/**
+	 * Displays a post's syndication log.
+	 *
+	 * @param int $post_id Post ID.
+	 */
 	public static function syndication_log_output( $post_id ) {
 		$logs = get_post_meta( $post_id, 'syndication_log', true );
 		if ( empty( $logs ) ) {
@@ -366,33 +423,36 @@ class Post_Syndication {
 		}
 	}
 
-	/* Meta box setup function. */
+	/**
+	 * Hooks the boxes on the post editor screens.
+	 */
 	public static function metabox_setup() {
-		/* Add meta boxes on the 'add_meta_boxes' hook. */
 		add_action( 'add_meta_boxes', array( get_called_class(), 'add_postmeta_boxes' ) );
 	}
 
-	/* Create one or more meta boxes to be displayed on the post editor screen. */
+	/**
+	 * Adds the Syndicate To and Syndicate Logs boxes.
+	 */
 	public static function add_postmeta_boxes() {
 		add_meta_box(
-			'syndicationbox-meta',      // Unique ID
-			esc_html__( 'Syndicate To', 'syndication-links' ),    // Title
-			array( get_called_class(), 'metabox' ),   // Callback function
-			syndication_post_types(),         // Admin page (or post type)
-			'side',         // Context
-			'default',      // Priority
+			'syndicationbox-meta',      // Unique ID.
+			esc_html__( 'Syndicate To', 'syndication-links' ),    // Title.
+			array( get_called_class(), 'metabox' ),   // Callback function.
+			syndication_post_types(),         // Admin page (or post type).
+			'side',         // Context.
+			'default',      // Priority.
 			array(
 				'__block_editor_compatible_meta_box' => true,
 				'__back_compat_meta_box'             => false,
 			)
 		);
 		add_meta_box(
-			'syndicationlog-meta',      // Unique ID
-			esc_html__( 'Syndicate Logs', 'syndication-links' ),    // Title
-			array( get_called_class(), 'syndication_log_metabox' ),   // Callback function
-			syndication_post_types(),         // Admin page (or post type)
-			'advanced',         // Context
-			'default',      // Priority
+			'syndicationlog-meta',      // Unique ID.
+			esc_html__( 'Syndicate Logs', 'syndication-links' ),    // Title.
+			array( get_called_class(), 'syndication_log_metabox' ),   // Callback function.
+			syndication_post_types(),         // Admin page (or post type).
+			'advanced',         // Context.
+			'default',      // Priority.
 			array(
 				'__block_editor_compatible_meta_box' => true,
 				'__back_compat_meta_box'             => false,
@@ -400,11 +460,21 @@ class Post_Syndication {
 		);
 	}
 
-
+	/**
+	 * Displays the Syndicate Logs box.
+	 *
+	 * @param WP_Post $object The post.
+	 * @param array   $box    The box's arguments.
+	 */
 	public static function syndication_log_metabox( $object, $box ) {
 		self::syndication_log_output( $object->ID ); // phpcs:ignore
 	}
 
+	/**
+	 * Displays the setting that enables providers: a checkbox for each registered one.
+	 *
+	 * @param array $args The field's arguments.
+	 */
 	public static function provider_callback( $args ) {
 		$targets   = self::get_providers();
 		$allowlist = (array) get_option( 'syndication_provider_enable', array() );
@@ -418,17 +488,54 @@ class Post_Syndication {
 		}
 	}
 
+	/**
+	 * Whether a provider is checked by default.
+	 *
+	 * @param string $uid     The provider's UID.
+	 * @param int    $post_ID Optional. Post ID. Default 0.
+	 * @return bool
+	 */
 	public static function checked( $uid, $post_ID = 0 ) {
 		// A provider that isn't registered (e.g. enabled but never registered) isn't checked.
 		$checked = isset( static::$targets[ $uid ] ) ? static::$targets[ $uid ]->is_checked() : false;
+		/**
+		 * Filters whether a provider is checked by default.
+		 *
+		 * This sets the Syndicate To box and the `checked` flag Micropub clients see. It
+		 * doesn't send posts that were created without choosing targets.
+		 *
+		 * @param bool   $checked Whether it's checked.
+		 * @param string $uid     The provider's UID.
+		 * @param int    $post_ID Post ID, or 0.
+		 */
 		return apply_filters( 'syndication_link_checked', $checked, $uid, $post_ID );
 	}
 
+	/**
+	 * Whether a provider's checkbox is disabled.
+	 *
+	 * @param string $uid     The provider's UID.
+	 * @param int    $post_ID Optional. Post ID. Default 0.
+	 * @return bool
+	 */
 	public static function disabled( $uid, $post_ID = 0 ) {
 		$disabled = isset( static::$targets[ $uid ] ) ? static::$targets[ $uid ]->is_disabled() : false;
+		/**
+		 * Filters whether a provider's checkbox is disabled.
+		 *
+		 * @param bool   $disabled Whether it's disabled.
+		 * @param string $uid      The provider's UID.
+		 * @param int    $post_ID  Post ID, or 0.
+		 */
 		return apply_filters( 'syndication_link_disabled', $disabled, $uid, $post_ID );
 	}
 
+	/**
+	 * Returns the Syndicate To checkboxes for the enabled providers.
+	 *
+	 * @param int $post_ID Post ID.
+	 * @return string The markup, or a message if no provider is enabled.
+	 */
 	public static function checkboxes( $post_ID ) {
 		$targets   = self::get_providers();
 		$allowlist = get_option( 'syndication_provider_enable', array() );
@@ -457,6 +564,15 @@ class Post_Syndication {
 		return $string;
 	}
 
+	/**
+	 * Returns one Syndicate To checkbox.
+	 *
+	 * @param string $uid      The provider's UID.
+	 * @param string $name     The provider's name, already escaped.
+	 * @param bool   $checked  Optional. Whether it's checked. Default false.
+	 * @param bool   $disabled Optional. Whether it's disabled. Default false.
+	 * @return string The markup.
+	 */
 	public static function checkbox( $uid, $name, $checked = false, $disabled = false ) {
 		$properties   = array();
 		$properties[] = checked( $checked, true, false );
@@ -470,6 +586,11 @@ class Post_Syndication {
 		);
 	}
 
+	/**
+	 * Returns the registered providers' names.
+	 *
+	 * @return string[] Escaped names, keyed by UID.
+	 */
 	public static function get_providers() {
 		$return = array();
 		foreach ( static::$targets as $target ) {
@@ -478,15 +599,26 @@ class Post_Syndication {
 		return $return;
 	}
 
+	/**
+	 * Displays the Syndicate To box.
+	 *
+	 * @param WP_Post $object The post.
+	 * @param array   $box    The box's arguments.
+	 */
 	public static function metabox( $object, $box ) {
 		wp_nonce_field( 'synto_metabox', 'synto_metabox_nonce' );
 
 		echo self::checkboxes( $object->ID ); // phpcs:ignore
 	}
 
-
-
-	/* Save the meta box's post metadata. */
+	/**
+	 * Saves the targets chosen in the Syndicate To box.
+	 *
+	 * With WP-Cron on (the default), they're queued in `_syndicate-to` for `do_pings`;
+	 * otherwise a published post is sent straight away.
+	 *
+	 * @param int $post_id Post ID.
+	 */
 	public static function save_post( $post_id ) {
 		/*
 		 * We need to verify this came from our screen and with proper authorization,
@@ -516,7 +648,7 @@ class Post_Syndication {
 				return;
 		}
 
-		// If this property is set then set to
+		// If this property is set then set to.
 		if ( isset( $_POST['syndicate-to'] ) ) {
 			$syndication = array_map( 'sanitize_key', $_POST['syndicate-to'] );
 			if ( get_option( 'syndication_wp_cron', 1 ) ) {
