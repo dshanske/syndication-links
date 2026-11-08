@@ -100,6 +100,7 @@ The older filters still work, and are now checked when the links would be added,
 *** `container-css` - Class to wrap entire syndication links in
 *** `single-css` - Class to wrap a single link in
 *** `text-css` - Class to wrap the text before the links in
+*** `targets` - Whether to add Bridgy targets as empty links, which Bridgy looks for on the post's page. Defaults to true
 
 = Which template tags can a theme use? =
 
@@ -107,6 +108,15 @@ The older filters still work, and are now checked when the links would be added,
 * `syndication_links_display_mode()` returns how links are shown on the current page: `icons`, `text`, `iconstext` or `hidden`.
 
 The display settings apply to all of them. A theme's arguments change how visible links look, but when the site hides the links, they stay hidden (as invisible microformats markup).
+
+= How do I show the links somewhere else, such as a theme's entry footer? =
+
+Many themes have their own hooks, such as Genesis's `genesis_entry_footer`. To show the links there instead of after the content, add this to a child theme's `functions.php`, or to a small plugin:
+
+`add_action( 'after_setup_theme', function () { add_theme_support( 'syndication-links', array( 'content' ) ); } );`
+`add_action( 'genesis_entry_footer', function () { the_syndication_links(); } );`
+
+The first line stops the plugin adding the links after the content. The second shows them on the theme's hook; use whichever hook your theme offers. `the_syndication_links()` is new in 5.0.0. Keep the links inside the post's `h-entry` markup, so they're still read as its syndication links.
 
 = How can I look up the original if I have a syndication link? =
 
@@ -147,6 +157,7 @@ You can also use the `syn_link_mapping` filter to return `mastodon` for any URL.
 * `pre_syn_link_icon( $icon, $name )` - Allows you to provide a custom icon. Icons by default are SVG, not URL or filenames.
 * `syndication_links_display( true )` - Adds Syndication Links to content display. Set to false if the theme supports this, or declare `add_theme_support( 'syndication-links' )`.
 * `syndication_links_comment_display( true )` - Adds Syndication Links after each comment. Set to false if the theme places them.
+* `syndication_links_feed_display( true, $feed_type, $post_id )` - Whether a feed shows the post's links: after the content in RSS and Atom, and as `syndication` in JSON Feed. The Micro.blog provider turns them off in its own feed.
 * `syndication_links_delete_copies( $copies, $post )` - The copies deleted when a post is trashed or deleted: their URLs, keyed by provider UID. Return an empty array to keep them.
 
 = How do I contribute or file bug reports? =
@@ -238,6 +249,7 @@ In no particular order...
 * Trashing or deleting a post deletes its copies on Mastodon and Bluesky (through Bridgy) and on Bridgy Fed, and tells custom webmention targets. A trashed post waits five minutes first, so restoring it keeps them. Turn this off on the Providers tab, or filter `syndication_links_delete_copies`.
 * Fixed: the provider settings markup, a fatal error in the Micro.blog lookup when Micro.blog doesn't return JSON, and warnings when refreshing the Micro.blog feed or sending an untagged post to Pinboard.
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
+* Feeds leave out Bridgy targets, which aren't copies, and the Micro.blog feed leaves out the links, so Micro.blog doesn't post them. The new `syndication_links_feed_display` filter can turn them off in any feed.
 * Micropub providers (Bridgy) return an error when the endpoint answers with an error status, using its description if it gives one, instead of logging it as a success.
 * Saving a queued post again adds the newly checked providers to the queue.
 * The syndication links box is no longer added to the content sent to other sites.
