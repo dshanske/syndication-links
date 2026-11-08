@@ -26,12 +26,16 @@ class Syn_Meta {
 		add_action( 'save_post', array( $cls, 'save_post_meta' ), 11 );
 		add_action( 'edit_comment', array( $cls, 'save_comment_meta' ) );
 		add_action( 'syn_migrate_legacy_links', array( $cls, 'migrate_legacy_links' ) );
+		add_filter( 'is_protected_meta', array( $cls, 'protect_meta' ), 10, 2 );
 		self::schedule_legacy_migration();
 		$args = array(
-			'type'         => 'array',
-			'description'  => 'Syndication URLs',
-			'single'       => true,
-			'show_in_rest' => array(
+			'type'          => 'array',
+			'description'   => 'Syndication URLs',
+			'single'        => true,
+			// The key is protected (see protect_meta()), which would otherwise make it read-only
+			// in the REST API. Whoever can edit the post or comment can edit its links.
+			'auth_callback' => '__return_true',
+			'show_in_rest'  => array(
 				'schema' => array(
 					'type'  => 'array',
 					'items' => array(
@@ -874,5 +878,24 @@ class Syn_Meta {
 		}
 
 		return $textbefore . $before . join( $sep, $links ) . $after . $targets;
+	}
+
+	/**
+	 * Hides the plugin's meta from the Custom Fields box.
+	 *
+	 * The links and the log have their own boxes. The keys keep their names, since
+	 * other plugins and themes read `mf2_syndication`.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param bool   $protected Whether the key is protected.
+	 * @param string $meta_key  Meta key.
+	 * @return bool Whether the key is protected.
+	 */
+	public static function protect_meta( $protected, $meta_key ) {
+		if ( in_array( $meta_key, array( 'mf2_syndication', 'syndication_urls', 'syndication_log' ), true ) ) {
+			return true;
+		}
+		return $protected;
 	}
 } // End Class
