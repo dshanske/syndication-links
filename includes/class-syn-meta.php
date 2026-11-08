@@ -123,31 +123,54 @@ class Syn_Meta {
 		return $vars;
 	}
 
+	/**
+	 * Redirects `?original-of=<syndicated URL>` to the post it's a copy of.
+	 *
+	 * Only the main query is handled. When there's no such post, the request is a 404.
+	 *
+	 * @param WP_Query $wp The query being parsed.
+	 */
 	public static function parse_query( $wp ) {
-		if ( array_key_exists( 'original-of', $wp->query_vars ) ) {
-			$url = $wp->get( 'original-of' );
-			if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
-				include get_404_template();
-				exit;
-			}
-			$url   = esc_url_raw( $url );
-			$args  = array(
-				'fields'     => 'ids',
-				'meta_key'   => 'mf2_syndication',
-				'meta_query' => array(
+		if ( ! $wp->is_main_query() || ! array_key_exists( 'original-of', $wp->query_vars ) ) {
+			return;
+		}
+		$url = $wp->get( 'original-of' );
+		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
+			self::not_found( $wp );
+			return;
+		}
+		$url   = esc_url_raw( $url );
+		$args  = array(
+			'fields'     => 'ids',
+			// The links are a serialized array, so this is an unindexed LIKE on the meta value.
+			'meta_query' => array(
+				array(
 					'key'     => 'mf2_syndication',
 					'value'   => $url,
 					'compare' => 'LIKE',
 				),
-			);
-			$posts = get_posts( $args );
-			if ( empty( $posts ) ) {
-				include get_404_template();
-				exit;
-			}
-			wp_safe_redirect( get_permalink( $posts[0] ) );
-			exit;
+			),
+		);
+		$posts = get_posts( $args );
+		if ( empty( $posts ) ) {
+			self::not_found( $wp );
+			return;
 		}
+		wp_safe_redirect( get_permalink( $posts[0] ) );
+		exit;
+	}
+
+	/**
+	 * Makes the request a 404, which the template loader then shows.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param WP_Query $wp The main query.
+	 */
+	private static function not_found( $wp ) {
+		$wp->set_404();
+		status_header( 404 );
+		nocache_headers();
 	}
 
 
@@ -159,11 +182,11 @@ class Syn_Meta {
 	 * @param $query
 	 */
 	public static function syndication_filter_query( $query ) {
-		// check if the user is requesting an admin page
-		if ( is_admin() ) {
+		// Only the front-end main query: secondary queries (widgets, menus, related posts) are left alone.
+		if ( is_admin() || ! $query->is_main_query() ) {
 			return;
 		}
-		$search = get_query_var( 'syndication' );
+		$search = $query->get( 'syndication' );
 
 		// If a URL, match the domain
 		if ( wp_http_validate_url( $search ) ) {
