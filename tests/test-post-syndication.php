@@ -108,6 +108,8 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 		delete_option( 'syndication_provider_enable' );
 		delete_option( 'syndication_wp_cron' );
 		wp_clear_scheduled_hook( 'syn_syndication' );
+		wp_clear_scheduled_hook( 'do_pings' );
+		unregister_post_type( 'syn_note' );
 		parent::tear_down();
 	}
 
@@ -160,6 +162,7 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 
 	public function test_hooks() {
 		$this->assertSame( 9, has_action( 'do_pings', array( 'Post_Syndication', 'do_pings' ) ) );
+		$this->assertSame( 10, has_action( 'wp_after_insert_post', array( 'Post_Syndication', 'schedule_pings' ) ) );
 		$this->assertSame( 10, has_action( 'micropub_syndication', array( 'Post_Syndication', 'syndication' ) ) );
 		$this->assertSame( 10, has_action( 'syn_syndication', array( 'Post_Syndication', 'syndication' ) ) );
 		$this->assertNotFalse( has_action( 'save_post_post', array( 'Post_Syndication', 'save_post' ) ) );
@@ -576,5 +579,42 @@ class Test_Post_Syndication extends WP_UnitTestCase {
 		$this->assertTrue( Post_Syndication::checked( 'unregistered' ) );
 
 		remove_filter( 'syndication_link_checked', $filter, 10 );
+	}
+
+	/**
+	 * Core only schedules do_pings for `post`, so other types queued for syndication schedule it (B7).
+	 */
+	public function test_publishing_a_queued_custom_post_type_schedules_do_pings() {
+		register_post_type( 'syn_note', array( 'public' => true ) );
+		$post_id = self::factory()->post->create(
+			array(
+				'post_type'   => 'syn_note',
+				'post_status' => 'draft',
+			)
+		);
+		add_post_meta( $post_id, '_syndicate-to', array( 'one' ) );
+		wp_clear_scheduled_hook( 'do_pings' );
+
+		wp_publish_post( $post_id );
+
+		$this->assertNotFalse( wp_next_scheduled( 'do_pings' ) );
+	}
+
+	public function test_do_pings_isnt_scheduled_without_a_queue_or_before_publishing() {
+		register_post_type( 'syn_note', array( 'public' => true ) );
+		$draft = self::factory()->post->create(
+			array(
+				'post_type'   => 'syn_note',
+				'post_status' => 'draft',
+			)
+		);
+		add_post_meta( $draft, '_syndicate-to', array( 'one' ) );
+		$published = self::factory()->post->create( array( 'post_type' => 'syn_note' ) );
+		wp_clear_scheduled_hook( 'do_pings' );
+
+		Post_Syndication::schedule_pings( $draft, get_post( $draft ) );
+		Post_Syndication::schedule_pings( $published, get_post( $published ) );
+
+		$this->assertFalse( wp_next_scheduled( 'do_pings' ) );
 	}
 }
