@@ -18,7 +18,7 @@ class Test_Plugin_Import extends WP_UnitTestCase {
 
 	public function test_builtin_sources() {
 		$this->assertSame(
-			array( 'snap', 'mastodon-autopost', 'xposter', 'autopost-for-x', 'keyring', 'medium' ),
+			array( 'snap', 'mastodon-autopost', 'xposter', 'autopost-for-x', 'keyring', 'jetpack', 'medium' ),
 			array_keys( Social_Plugins::sources() )
 		);
 		// Medium's links are no longer shown, but can be imported.
@@ -118,9 +118,66 @@ class Test_Plugin_Import extends WP_UnitTestCase {
 		Syn_Plugin_Import::import_batch( 'mastodon-autopost' );
 		Syn_Plugin_Import::import_batch( 'mastodon-autopost' );
 
-		// add_syndication_link() puts new links first; what matters is that each is there once.
+		// What matters is that each link is there once.
 		$this->assertEqualsCanonicalizing( array( 'https://github.com/someone/repo', 'https://toot.example.social/@someone/1' ), get_post_meta( $page, 'mf2_syndication', true ) );
 		$this->assertSame( 'https://toot.example.social/@someone/1', get_post_meta( $page, 'autopostToMastodonshare-lastSuccessfullTootURL', true ) );
+	}
+
+	/**
+	 * Jetpack Social's successful shares are shown and imported (#46).
+	 */
+	public function test_jetpack_shares() {
+		$post_id = self::factory()->post->create();
+		update_post_meta(
+			$post_id,
+			'_publicize_shares',
+			array(
+				array(
+					'status'        => 'success',
+					'message'       => 'https://mastodon.example/@someone/1',
+					'service'       => 'mastodon',
+					'connection_id' => '1',
+					'timestamp'     => 1234567890,
+				),
+				array(
+					'status'        => 'failure',
+					'message'       => 'Could not share',
+					'service'       => 'tumblr',
+					'connection_id' => '2',
+					'timestamp'     => 1234567890,
+				),
+			)
+		);
+
+		$this->assertSame( array( 'https://mastodon.example/@someone/1' ), Social_Plugins::jetpack_links( $post_id ) );
+		$this->assertContains( 'https://mastodon.example/@someone/1', get_post_syndication_links_data( $post_id ) );
+
+		Syn_Plugin_Import::import_batch( 'jetpack' );
+
+		$this->assertSame( array( 'https://mastodon.example/@someone/1' ), get_post_meta( $post_id, 'mf2_syndication', true ) );
+	}
+
+	/**
+	 * Older WordPress.com data saves one share per meta row.
+	 */
+	public function test_jetpack_shares_one_per_row() {
+		$post_id = self::factory()->post->create();
+		foreach ( array( 1, 2 ) as $n ) {
+			add_post_meta(
+				$post_id,
+				'_publicize_shares',
+				array(
+					'status'  => 'success',
+					'message' => 'https://bsky.app/profile/someone/post/' . $n,
+					'service' => 'bluesky',
+				)
+			);
+		}
+
+		$this->assertSame(
+			array( 'https://bsky.app/profile/someone/post/1', 'https://bsky.app/profile/someone/post/2' ),
+			Social_Plugins::jetpack_links( $post_id )
+		);
 	}
 
 	public function test_xposter_and_autopost_for_x_import() {
