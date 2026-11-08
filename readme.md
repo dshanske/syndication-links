@@ -1,4 +1,4 @@
-## Syndication Links
+# Syndication Links
 
 **Contributors:** dshanske \
 **Tags:** syndication, indieweb, POSSE, sharing \
@@ -17,13 +17,13 @@ manually or with supported plugins. Also contains a generic UI for syndicating t
 
 ## Screenshots
 
-### 1. Example of Syndication Links metabox with links filled in
+### 1. The Syndication Links box in the post editor, with links filled in
 
-![Example of Syndication Links metabox with links filled in](https://ps.w.org/#-syndication-links/assets/screenshot-1.png)
+![The Syndication Links box in the post editor, with links filled in](https://ps.w.org/syndication-links/assets/screenshot-1.png)
 
 ### 2. Example of output display on website
 
-![Example of output display on website](https://ps.w.org/#-syndication-links/assets/screenshot-2.png)
+![Example of output display on website](https://ps.w.org/syndication-links/assets/screenshot-2.png)
 
 
 ## Installation

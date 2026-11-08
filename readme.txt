@@ -1,4 +1,4 @@
-== Syndication Links ===
+=== Syndication Links ===
 Contributors: dshanske
 Tags: syndication, indieweb, POSSE, sharing
 Requires at least: 6.2
@@ -16,7 +16,7 @@ manually or with supported plugins. Also contains a generic UI for syndicating t
 
 == Screenshots ==
 
-1. Example of Syndication Links metabox with links filled in
+1. The Syndication Links box in the post editor, with links filled in
 2. Example of output display on website
 
 == Installation ==
