@@ -186,6 +186,7 @@ class Post_Syndication {
 	public static function do_pings() {
 		$syndicate = get_posts(
 			array(
+				'post_type'   => 'any',
 				'meta_key'    => '_syndicate-to', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Runs on do_pings (cron), for the few posts with queued targets.
 				'fields'      => 'ids',
 				'nopaging'    => true,
