@@ -1,74 +1,98 @@
 <?php
 /**
- * Tests the `wp syndication-links import` command, with WP-CLI stood in for.
+ * Tests the `wp syndication-links import` command.
+ *
+ * Uses WP-CLI from the dev dependencies, with a logger that records what it prints.
  *
  * @package Syndication_Links
  */
 
-if ( ! class_exists( 'WP_CLI' ) ) {
-	/**
-	 * Records what the command prints. error() stops the command, as WP-CLI's does.
-	 */
-	class WP_CLI {
-		/**
-		 * Messages, as array( type, message ).
-		 *
-		 * @var array[]
-		 */
-		public static $messages = array();
-
-		/**
-		 * Records a command.
-		 *
-		 * @param string   $name     Command name.
-		 * @param callable $callback Callback.
-		 */
-		public static function add_command( $name, $callback ) {
-			self::$messages[] = array( 'command', $name );
-		}
-
-		/**
-		 * Records an error and stops.
-		 *
-		 * @param string $message Message.
-		 * @throws RuntimeException Always.
-		 */
-		public static function error( $message ) {
-			self::$messages[] = array( 'error', $message );
-			throw new RuntimeException( $message );
-		}
-
-		/**
-		 * Records a warning.
-		 *
-		 * @param string $message Message.
-		 */
-		public static function warning( $message ) {
-			self::$messages[] = array( 'warning', $message );
-		}
-
-		/**
-		 * Records a success.
-		 *
-		 * @param string $message Message.
-		 */
-		public static function success( $message ) {
-			self::$messages[] = array( 'success', $message );
-		}
-	}
-}
-
-// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound -- The WP-CLI stand-in above is only for these tests.
 class Test_Plugin_Import_Cli extends WP_UnitTestCase {
+
+	/**
+	 * Messages printed, as array( type, message ).
+	 *
+	 * @var array[]
+	 */
+	public $messages = array();
+
+	/**
+	 * WP-CLI's logger and capture_exit before the test.
+	 *
+	 * @var array
+	 */
+	private $saved = array();
 
 	public function set_up() {
 		parent::set_up();
-		WP_CLI::$messages = array();
+		if ( ! class_exists( 'WP_CLI' ) ) {
+			$this->markTestSkipped( 'WP-CLI is not installed.' );
+		}
+		$this->messages = array();
+		$this->saved    = array(
+			'logger'       => $this->property( 'logger' )->getValue(),
+			'capture_exit' => $this->property( 'capture_exit' )->getValue(),
+		);
+		WP_CLI::set_logger( $this->logger() );
+		// WP_CLI::error() throws instead of exiting.
+		$this->property( 'capture_exit' )->setValue( null, true );
 	}
 
 	public function tear_down() {
+		if ( $this->saved ) {
+			WP_CLI::set_logger( $this->saved['logger'] );
+			$this->property( 'capture_exit' )->setValue( null, $this->saved['capture_exit'] );
+		}
 		delete_option( Syn_Plugin_Import::OPTION );
 		parent::tear_down();
+	}
+
+	/**
+	 * Accessor for one of WP_CLI's private static properties.
+	 *
+	 * @param string $name Property name.
+	 * @return ReflectionProperty
+	 */
+	private function property( $name ) {
+		$property = new ReflectionProperty( 'WP_CLI', $name );
+		$property->setAccessible( true );
+		return $property;
+	}
+
+	/**
+	 * A logger that records the messages in $this->messages.
+	 *
+	 * @return object
+	 */
+	private function logger() {
+		$test = $this;
+		return new class( $test ) {
+			/**
+			 * The test.
+			 *
+			 * @var Test_Plugin_Import_Cli
+			 */
+			private $test;
+
+			/**
+			 * Stores the test.
+			 *
+			 * @param Test_Plugin_Import_Cli $test The test.
+			 */
+			public function __construct( $test ) {
+				$this->test = $test;
+			}
+
+			/**
+			 * Records a message.
+			 *
+			 * @param string $type Message type.
+			 * @param array  $args Arguments: the message first.
+			 */
+			public function __call( $type, $args ) {
+				$this->test->messages[] = array( $type, (string) $args[0] );
+			}
+		};
 	}
 
 	/**
@@ -95,7 +119,7 @@ class Test_Plugin_Import_Cli extends WP_UnitTestCase {
 					return $message[1];
 				},
 				array_filter(
-					WP_CLI::$messages,
+					$this->messages,
 					function ( $message ) use ( $type ) {
 						return $type === $message[0];
 					}
@@ -139,9 +163,11 @@ class Test_Plugin_Import_Cli extends WP_UnitTestCase {
 		try {
 			Syn_Plugin_Import::cli( array(), array() );
 			$this->fail( 'Expected an error.' );
-		} catch ( RuntimeException $e ) {
-			$this->assertStringContainsString( 'mastodon-autopost', $e->getMessage() );
+		} catch ( Exception $e ) {
+			$this->assertInstanceOf( 'WP_CLI\\ExitException', $e );
 		}
+		$this->assertCount( 1, $this->messages( 'error' ) );
+		$this->assertStringContainsString( 'mastodon-autopost', $this->messages( 'error' )[0] );
 		$this->assertSame( array(), $this->messages( 'success' ) );
 	}
 
