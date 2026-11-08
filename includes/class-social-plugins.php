@@ -44,52 +44,336 @@ class Social_Plugins {
 			return $urls;
 		}
 		$see_on = array();
-//		if ( defined( 'NextScripts_SNAP_Version' ) ) {
-//			$see_on = array_merge( $see_on, self::add_links_from_snap() );
-//		}
-		$keys = get_post_meta( $post_id );
-		if ( ! $keys ) {
-			return $urls;
-		}
-		$keys = array_keys( $keys );
-
-		foreach(  $keys as $key ) {
-			if ( 0 === strpos( $key, 'snap' ) && 6 === strlen( $key ) ) {
-				$meta = get_post_meta( $post_id, $key, true );
-				$meta = maybe_unserialize( $meta );
-				$meta = self::array_flatten( $meta );
-				if ( isset( $meta['postURL'] ) ) {
-					$see_on[] = $meta['postURL'];
-				}
-			}
-		}
-		// Support for the Official Medium Plugin per request @chrisaldrich
-		if ( class_exists( 'Medium_Post' ) ) {
-			$medium_post = Medium_Post::get_by_wp_id( $post_id );
-			if ( $medium_post && ! empty( $medium_post->url ) ) {
-				$see_on[] = $medium_post->url;
-			}
-		}
-		// Support for Mastodon Autopost https://github.com/dshanske/syndication-links/issues/75
-		// The meta is read whether or not the plugin is still active: the toots it posted still exist.
-		foreach ( array( 'autopostToMastodonshare-lastSuccessfullTootURL', 'mastodonAutopostLastSuccessfullPostURL', 'mastodonAutopostLastSuccessfullTootURL' ) as $key ) {
-			$mastodon = get_post_meta( $post_id, $key, true );
-			if ( $mastodon && is_string( $mastodon ) ) {
-				$see_on[] = $mastodon;
-				break;
-			}
-		}
-		// Support for Keyring Social Importer fields https://github.com/dshanske/syndication-links/issues/73
-		if ( class_exists( 'Keyring_Importer_Base' ) ) {
-			$keyrings = array( 'href', 'flickr_url', 'instagram_url', 'pinterest_url', 'twitter_permalink' );
-			foreach( $keyrings as $keyring ) {
-				$keyr = get_post_meta( $post_id, $keyring, true );
-				if ( $keyr ) {
-					$see_on[] = $keyr;
-				}
+		foreach ( self::sources() as $source ) {
+			if ( $source['show'] ) {
+				$see_on = array_merge( $see_on, array_filter( (array) call_user_func( $source['callback'], $post_id ), 'is_string' ) );
 			}
 		}
 		return array_merge( $see_on, $urls );
+	}
+
+	/**
+	 * Sources registered with register_source().
+	 *
+	 * @var array[]
+	 */
+	private static $registered = array();
+
+	/**
+	 * Registers a plugin whose recorded links are shown with a post's links, and can be imported.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $slug Unique slug (lowercase letters, numbers, dashes and underscores).
+	 * @param array  $args {
+	 *     The source.
+	 *
+	 *     @type string   $name       Plugin name, shown on the Import tab. Required.
+	 *     @type callable $callback   Given a post ID, returns an array of link URLs. Required.
+	 *                                It should read only stored data (post meta, options), so it
+	 *                                keeps working when the other plugin is inactive.
+	 *     @type array    $meta_query A WP_Query meta_query finding the posts that may have links.
+	 *                                Without one, the source is shown but can't be imported.
+	 *     @type bool     $show       Whether the links are added to the links shown for the post,
+	 *                                before they're imported. Default true.
+	 * }
+	 * @return bool Whether the source was registered.
+	 */
+	public static function register_source( $slug, $args ) {
+		$source = self::normalize_source( $slug, $args );
+		if ( ! $source ) {
+			return false;
+		}
+		self::$registered[ $slug ] = $source;
+		return true;
+	}
+
+	/**
+	 * Validates a source and fills in its defaults.
+	 *
+	 * @param string $slug Slug.
+	 * @param array  $args Source.
+	 * @return array|false
+	 */
+	private static function normalize_source( $slug, $args ) {
+		if ( ! is_string( $slug ) || sanitize_key( $slug ) !== $slug || ! is_array( $args ) || empty( $args['name'] ) || empty( $args['callback'] ) || ! is_callable( $args['callback'] ) ) {
+			return false;
+		}
+		$args = wp_parse_args(
+			$args,
+			array(
+				'meta_query' => array(),
+				'show'       => true,
+			)
+		);
+		return array(
+			'name'       => (string) $args['name'],
+			'callback'   => $args['callback'],
+			'meta_query' => is_array( $args['meta_query'] ) ? $args['meta_query'] : array(),
+			'show'       => (bool) $args['show'],
+		);
+	}
+
+	/**
+	 * Every source: the built-in integrations, registered ones, and filtered ones.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @return array[] Sources keyed by slug. See register_source() for the keys.
+	 */
+	public static function sources() {
+		$sources = array_merge( self::builtin_sources(), self::$registered );
+
+		/**
+		 * Filters the plugins whose recorded links are shown and can be imported.
+		 *
+		 * @since 5.0.0
+		 *
+		 * @param array[] $sources Sources keyed by slug. See Social_Plugins::register_source() for the keys.
+		 */
+		$sources = apply_filters( 'syn_link_sources', $sources );
+
+		$valid = array();
+		foreach ( (array) $sources as $slug => $source ) {
+			$source = self::normalize_source( $slug, $source );
+			if ( $source ) {
+				$valid[ $slug ] = $source;
+			}
+		}
+		return $valid;
+	}
+
+	/**
+	 * The sources that can be imported: those with a meta query.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @return array[]
+	 */
+	public static function import_sources() {
+		return array_filter(
+			self::sources(),
+			function ( $source ) {
+				return ! empty( $source['meta_query'] );
+			}
+		);
+	}
+
+	/**
+	 * Mastodon Autopost's toot URL meta keys, newest first.
+	 *
+	 * @var string[]
+	 */
+	private static $mastodon_autopost_keys = array( 'autopostToMastodonshare-lastSuccessfullTootURL', 'mastodonAutopostLastSuccessfullPostURL', 'mastodonAutopostLastSuccessfullTootURL' );
+
+	/**
+	 * Keyring Social Importers' permalink meta keys that only it uses.
+	 *
+	 * @var string[]
+	 */
+	private static $keyring_keys = array( 'flickr_url', 'instagram_url', 'pinterest_url', 'twitter_permalink' );
+
+	/**
+	 * The integrations built into Syndication Links.
+	 *
+	 * Each reads only the other plugin's stored data, so its links can be shown and
+	 * imported after that plugin is deactivated. The other plugin's data is never changed.
+	 *
+	 * @return array[]
+	 */
+	private static function builtin_sources() {
+		$sources = array(
+			'snap'              => array(
+				'name'       => 'NextScripts: Social Networks Auto-Poster',
+				'callback'   => array( __CLASS__, 'snap_links' ),
+				'meta_query' => array(
+					array(
+						'key'         => 'snap',
+						'compare_key' => 'LIKE',
+					),
+				),
+			),
+			'mastodon-autopost' => array(
+				'name'       => 'Mastodon Autopost',
+				'callback'   => array( __CLASS__, 'mastodon_autopost_links' ),
+				'meta_query' => self::any_meta( self::$mastodon_autopost_keys ),
+			),
+			'xposter'           => array(
+				'name'       => 'XPoster (WP to Twitter)',
+				'callback'   => array( __CLASS__, 'xposter_links' ),
+				'meta_query' => self::any_meta( array( '_wpt_tweet_id' ) ),
+			),
+			'autopost-for-x'    => array(
+				'name'       => 'Autopost for X',
+				'callback'   => array( __CLASS__, 'autopost_for_x_links' ),
+				'meta_query' => self::any_meta( array( 'autoshare_status' ) ),
+				// Shown by add_autopost_for_x_links(), which leaves them out on admin screens.
+				'show'       => false,
+			),
+			'keyring'           => array(
+				'name'       => 'Keyring Social Importers',
+				'callback'   => array( __CLASS__, 'keyring_links' ),
+				'meta_query' => self::any_meta( array_merge( self::$keyring_keys, array( 'href' ) ) ),
+				'show'       => class_exists( 'Keyring_Importer_Base' ),
+			),
+			// Support for the Official Medium Plugin per request @chrisaldrich. Its links are in
+			// the Medium plugin's own data, so they can't be imported once it's gone.
+			'medium'            => array(
+				'name'     => 'Medium',
+				'callback' => array( __CLASS__, 'medium_links' ),
+				'show'     => class_exists( 'Medium_Post' ),
+			),
+		);
+
+		return $sources;
+	}
+
+	/**
+	 * The post's link from the official Medium plugin, while it's active.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string[]
+	 */
+	public static function medium_links( $post_id ) {
+		if ( ! class_exists( 'Medium_Post' ) ) {
+			return array();
+		}
+		$medium_post = Medium_Post::get_by_wp_id( $post_id );
+		return ( $medium_post && ! empty( $medium_post->url ) ) ? array( $medium_post->url ) : array();
+	}
+
+	/**
+	 * A meta query matching posts that have any of the keys.
+	 *
+	 * @param string[] $keys Meta keys.
+	 * @return array
+	 */
+	private static function any_meta( $keys ) {
+		$query = array( 'relation' => 'OR' );
+		foreach ( $keys as $key ) {
+			$query[] = array(
+				'key'     => $key,
+				'compare' => 'EXISTS',
+			);
+		}
+		return $query;
+	}
+
+	/**
+	 * Links SNAP recorded for a post, from its snapXX meta.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string[]
+	 */
+	public static function snap_links( $post_id ) {
+		$links = array();
+		$keys  = get_post_meta( $post_id );
+		if ( ! $keys ) {
+			return $links;
+		}
+		foreach ( array_keys( $keys ) as $key ) {
+			if ( 0 === strpos( $key, 'snap' ) && 6 === strlen( $key ) ) {
+				$meta = self::array_flatten( maybe_unserialize( get_post_meta( $post_id, $key, true ) ) );
+				if ( isset( $meta['postURL'] ) ) {
+					$links[] = $meta['postURL'];
+				}
+			}
+		}
+		return $links;
+	}
+
+	/**
+	 * The toot Mastodon Autopost recorded for a post.
+	 *
+	 * The meta is read whether or not the plugin is still active: the toots it posted still exist.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string[]
+	 */
+	public static function mastodon_autopost_links( $post_id ) {
+		foreach ( self::$mastodon_autopost_keys as $key ) {
+			$mastodon = get_post_meta( $post_id, $key, true );
+			if ( $mastodon && is_string( $mastodon ) ) {
+				return array( $mastodon );
+			}
+		}
+		return array();
+	}
+
+	/**
+	 * The X status XPoster recorded for a post, in the form wptotwitter_to_syn_links() records it.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string[]
+	 */
+	public static function xposter_links( $post_id ) {
+		$uid = get_post_meta( $post_id, '_wpt_tweet_id', true );
+		if ( ! $uid || ! is_scalar( $uid ) ) {
+			return array();
+		}
+		$account = get_option( 'wtt_twitter_username' );
+		if ( $account ) {
+			return array( sprintf( 'https://twitter.com/%s/status/%s', $account, $uid ) );
+		}
+		return array( 'https://x.com/i/web/status/' . rawurlencode( $uid ) );
+	}
+
+	/**
+	 * The X statuses Autopost for X recorded for a post.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string[]
+	 */
+	public static function autopost_for_x_links( $post_id ) {
+		$links  = array();
+		$tweets = get_post_meta( $post_id, 'autoshare_status', true );
+		if ( empty( $tweets ) || ! is_array( $tweets ) ) {
+			return $links;
+		}
+		foreach ( $tweets as $tweet ) {
+			if ( is_array( $tweet ) && isset( $tweet['status'] ) && 'published' === $tweet['status'] && ! empty( $tweet['twitter_id'] ) ) {
+				// The plugin saves an empty handle when it doesn't know it; x.com/i/web/status/ works without one.
+				$handle  = empty( $tweet['handle'] ) ? 'i/web' : rawurlencode( $tweet['handle'] );
+				$links[] = 'https://x.com/' . $handle . '/status/' . rawurlencode( $tweet['twitter_id'] );
+			}
+		}
+		return $links;
+	}
+
+	/**
+	 * The permalinks Keyring Social Importers saved on the posts it created.
+	 *
+	 * The generic `href` key is used only while Keyring's keyring_services taxonomy
+	 * exists and the post has a term in it, so other plugins' `href` meta isn't imported.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param int $post_id Post ID.
+	 * @return string[]
+	 */
+	public static function keyring_links( $post_id ) {
+		$keys = self::$keyring_keys;
+		if ( taxonomy_exists( 'keyring_services' ) && has_term( '', 'keyring_services', $post_id ) ) {
+			$keys[] = 'href';
+		}
+		$links = array();
+		foreach ( $keys as $key ) {
+			$link = get_post_meta( $post_id, $key, true );
+			if ( $link && is_string( $link ) ) {
+				$links[] = $link;
+			}
+		}
+		return $links;
 	}
 
 	public static function add_links_from_snap() {
@@ -218,27 +502,7 @@ class Social_Plugins {
 			return $urls;
 		}
 
-		try {
-			$links  = array();
-			$tweets = get_post_meta( $post_id, 'autoshare_status', true );
-			if ( ! empty( $tweets ) && is_array( $tweets ) ) {
-				foreach ( $tweets as $tweet ) {
-					if ( isset( $tweet['status'] ) && 'published' === $tweet['status'] && ! empty( $tweet['twitter_id'] ) ) {
-						// The plugin saves an empty handle when it doesn't know it; x.com/i/web/status/ works without one.
-						$handle  = empty( $tweet['handle'] ) ? 'i/web' : rawurlencode( $tweet['handle'] );
-						$links[] = 'https://x.com/' . $handle . '/status/' . rawurlencode( $tweet['twitter_id'] );
-					}
-				}
-			}
-
-			if ( ! empty( $links ) ) {
-				return array_merge( $urls, $links );
-			}
-		} catch ( Exception $e ) {
-			error_log( 'Error adding autoshare for twitter links to syndication links: ' . $e->getMessage() );
-		}
-
-		return $urls;
+		return array_merge( $urls, self::autopost_for_x_links( $post_id ) );
 	}
 
 } // End Class

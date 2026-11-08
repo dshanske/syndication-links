@@ -101,6 +101,42 @@ function register_syndication_provider( $object ) {
 	}
 }
 
+/**
+ * Registers a plugin whose recorded links are shown with a post's links, and can be imported.
+ *
+ * Use this to integrate a cross-posting plugin that stores the URLs of the copies it
+ * posted. Its links are added to the links shown for each post, and when the source
+ * has a meta query, Settings > Syndication Links > Import can copy them into the
+ * posts' own links, so they stay after that plugin is deactivated.
+ *
+ * Example:
+ *
+ *     register_syndication_link_source(
+ *         'my-crossposter',
+ *         array(
+ *             'name'       => 'My Crossposter',
+ *             'callback'   => function ( $post_id ) {
+ *                 return (array) get_post_meta( $post_id, '_my_crossposter_url', false );
+ *             },
+ *             'meta_query' => array(
+ *                 array(
+ *                     'key'     => '_my_crossposter_url',
+ *                     'compare' => 'EXISTS',
+ *                 ),
+ *             ),
+ *         )
+ *     );
+ *
+ * @since 5.0.0
+ *
+ * @param string $slug Unique slug (lowercase letters, numbers, dashes and underscores).
+ * @param array  $args See Social_Plugins::register_source() for the keys.
+ * @return bool Whether the source was registered.
+ */
+function register_syndication_link_source( $slug, $args ) {
+	return Social_Plugins::register_source( $slug, $args );
+}
+
 function syndication_post_types() {
 	$post_types = get_option( 'syndication_post_types' );
 	if ( ! is_array( $post_types ) ) {
