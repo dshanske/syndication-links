@@ -147,6 +147,18 @@ class Test_Bridgy_Webmention_Options extends WP_UnitTestCase {
 		$this->assertSame( '<p class="p-bridgy-mastodon-content" style="display:none">The excerpt.</p>', $this->footer( 'The excerpt.' ) );
 	}
 
+	/**
+	 * The excerpt is text for Bridgy to post, so it's escaped (#344).
+	 */
+	public function test_the_footer_escapes_the_excerpt() {
+		update_option( 'syndication_use_excerpt', '1' );
+
+		$html = $this->footer( 'Tom & Jerry <script>alert(1)</script>' );
+
+		$this->assertStringNotContainsString( '<script>', $html );
+		$this->assertStringContainsString( 'Tom &amp; Jerry &lt;script&gt;', $html );
+	}
+
 	public function test_the_footer_is_empty_when_the_excerpt_setting_is_off() {
 		update_option( 'syndication_use_excerpt', '0' );
 
