@@ -61,12 +61,12 @@ class Syn_Plugin_Import {
 	private static function query_args( $source ) {
 		return array(
 			// Every type and status: 'any' leaves out types and statuses excluded from search.
-			'post_type'      => get_post_types(),
-			'post_status'    => array_keys( get_post_stati() ),
-			'meta_query'     => $source['meta_query'],
-			'fields'         => 'ids',
-			'orderby'        => 'ID',
-			'order'          => 'ASC',
+			'post_type'   => get_post_types(),
+			'post_status' => array_keys( get_post_stati() ),
+			'meta_query'  => $source['meta_query'], // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Batched import, run from the admin, cron or WP-CLI.
+			'fields'      => 'ids',
+			'orderby'     => 'ID',
+			'order'       => 'ASC',
 		);
 	}
 

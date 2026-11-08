@@ -214,7 +214,7 @@ class Syn_Link_Domain_Icon_Map {
 		}
 		$args    = array(
 			'count_total' => false,
-			'meta_query'  => array(
+			'meta_query'  => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Cached in a transient for a day.
 				array(
 					'key'     => 'mastodon',
 					'compare' => 'EXISTS',

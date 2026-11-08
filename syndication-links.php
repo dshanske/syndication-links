@@ -31,7 +31,7 @@ function syndication_links_load( $files, $dir = 'includes/' ) {
 		if ( file_exists( $path . $file ) ) {
 			require_once $path . $file;
 		} else {
-			error_log( $path . $file );
+			error_log( 'Syndication Links: missing file ' . $path . $file ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- A missing bundled file is a packaging error worth logging.
 		}
 	}
 }
@@ -74,11 +74,11 @@ function syndication_links_register_providers( $files, $dir = 'includes/' ) {
 				if ( $class ) {
 					register_syndication_provider( new $class() );
 				} else {
-					error_log( 'Cannot register ' . $class );
+					error_log( 'Syndication Links: cannot register the provider in ' . $file ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- A missing bundled file is a packaging error worth logging.
 				}
 			}
 		} else {
-			error_log( $path . $file );
+			error_log( 'Syndication Links: missing file ' . $path . $file ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- A missing bundled file is a packaging error worth logging.
 		}
 	}
 }

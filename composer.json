@@ -45,7 +45,7 @@
     "make-pot": "./vendor/bin/wp i18n make-pot . languages/syndication-links.pot",
     "plugin-check": "./vendor/bin/wp plugin check syndication-links --exclude-checks=file_type --exclude-directories=bin,.github,tests",
     "lint:php": "@php ./vendor/bin/parallel-lint --exclude .git --exclude vendor --exclude node_modules .",
-    "lint": "./vendor/bin/phpcs -q -n",
+    "lint": "./vendor/bin/phpcs -q",
     "phpunit": "./vendor/bin/phpunit",
     "setup-wp-tests": "bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 latest",
     "setup-cp-tests": "bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 cp-latest",

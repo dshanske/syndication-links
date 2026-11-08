@@ -65,17 +65,6 @@ class Post_Syndication {
 				'default'      => 'maybe',
 			)
 		);
-
-		/* register_setting(
-			'syndication_providers',
-			'bridgy_ignoreformatting',
-			array(
-				'type'         => 'boolean',
-				'description'  => 'Tell Bridgy to Ignore Formatting when Publishing',
-				'show_in_rest' => true,
-				'default'      => false,
-			)
-		); */
 	}
 
 	public static function admin_init() {
@@ -124,19 +113,6 @@ class Post_Syndication {
 			)
 		);
 
-		/* add_settings_field(
-			'bridgy_ignoreformatting',
-			__( 'Tell Bridgy to Ignore Formatting', 'syndication-links' ),
-			array(
-				'Syn_Config',
-				'checkbox_callback',
-			),
-			'syndication_provider_options',
-			'bridgy_options',
-			array(
-				'name' => 'bridgy_ignoreformatting',
-			)
-		); */
 		add_settings_section(
 			'syndication_apis',
 			__( 'Syndication API Keys', 'syndication-links' ),
@@ -163,7 +139,7 @@ class Post_Syndication {
 	public static function do_pings() {
 		$syndicate = get_posts(
 			array(
-				'meta_key'    => '_syndicate-to',
+				'meta_key'    => '_syndicate-to', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Runs on do_pings (cron), for the few posts with queued targets.
 				'fields'      => 'ids',
 				'nopaging'    => true,
 				'post_status' => 'publish',
@@ -464,7 +440,6 @@ class Post_Syndication {
 		}
 
 		$string = '<ul>';
-		$meta   = get_post_meta( $post_ID, 'syndicate-to', true );
 
 		foreach ( $targets as $uid => $name ) {
 			if ( ! empty( $allowlist ) && ! in_array( $uid, $allowlist, true ) ) {

@@ -25,7 +25,7 @@ class SynProvider_Micropub_Bridgy_Mastodon extends SynProvider_Micropub {
 		}
 
 		$option = get_option( 'syndication_provider_enable' );
-		$enable = is_array( $option ) ? in_array( $this->uid, $option ) : false;
+		$enable = is_array( $option ) ? in_array( $this->uid, $option, true ) : false;
 
 		if ( $enable ) {
 			add_action( 'admin_init', array( $this, 'admin_init' ), 11 );

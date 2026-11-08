@@ -46,7 +46,7 @@ class SynProvider_Webmention extends Syndication_Provider {
 			$data = $response['body'];
 		}
 
-		if ( ! in_array( $response_code, array( 201, 202 ) ) ) {
+		if ( ! in_array( (int) $response_code, array( 201, 202 ), true ) ) {
 			return new WP_Error(
 				$this->uid . '_publish_error',
 				/* translators: Syndication Target */

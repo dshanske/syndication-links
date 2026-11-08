@@ -11,7 +11,7 @@ class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 
 	public function __construct( $args = array() ) {
 		if ( ! array_key_exists( 'name', $args ) || ! array_key_exists( 'uid', $args ) ) {
-			return null;
+			return;
 		}
 		$this->name   = $args['name'];
 		$this->uid    = sanitize_title( $args['uid'] );
@@ -121,17 +121,6 @@ class SynProvider_Webmention_Custom extends SynProvider_Webmention {
 		printf( $output, 'text', $name, $int, 'uid', esc_attr( $name ), esc_attr( self::ifset( $value, 'uid' ) ), esc_html__( 'UID', 'syndication-links' ) ); // phpcs:ignore
 		printf( $output, 'url', $name, $int, 'target', esc_attr( $name ), esc_attr( self::ifset( $value, 'target' ) ), esc_html__( 'Target URL', 'syndication-links' ) ); // phpcs:ignore
 		echo '</li>';
-	}
-
-	public static function option_callback( $args ) {
-		$custom = get_option( 'syndication_links_custom_posse' );
-		if ( ! empty( $custom ) || ! is_array( $custom ) ) {
-			printf( '<input type="checkbox" name="f" id="f" value="" />' );
-		} else {
-			foreach ( $custom as $key => $value ) {
-				printf( '<input type="checkbox" name="f" id="f" value="" />' );
-			}
-		}
 	}
 
 	public function get_target() {

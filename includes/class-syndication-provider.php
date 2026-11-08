@@ -51,9 +51,6 @@ abstract class Syndication_Provider {
 	 * @param array $args Array of Arguments
 	 */
 	public function __construct( $args = array() ) {
-		$defaults  = array();
-		$defaults  = apply_filters( 'syn_provider_defaults', $defaults );
-		$r         = wp_parse_args( $args, $defaults );
 		$allowlist = get_option( 'syndication_provider_enable', array() );
 		if ( is_string( $allowlist ) && empty( $allowlist ) ) {
 			$allowlist = array();

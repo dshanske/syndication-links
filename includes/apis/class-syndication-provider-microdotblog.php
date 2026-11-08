@@ -190,10 +190,9 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		if ( ! $post_id ) {
 			$post_id = get_the_ID();
 		}
-		$post = get_post( $post_id );
 		add_post_meta( $post_id, '_syndication_links_microdotblog', 1 );
-		$url      = self::get_feed();
-		$response = wp_remote_post(
+		$url = self::get_feed();
+		wp_remote_post(
 			add_query_arg(
 				'url',
 				rawurlencode( $url ),
