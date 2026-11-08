@@ -263,4 +263,21 @@ class Test_Link_Storage extends WP_UnitTestCase {
 		$this->assertFalse( add_comment_syndication_link( PHP_INT_MAX, 'https://a.example/1' ) );
 		$this->assertFalse( get_comment_syndication_links_data( PHP_INT_MAX ) );
 	}
+	/**
+	 * Adding a link doesn't save the links other plugins add at read time (#212).
+	 */
+	public function test_adding_a_link_does_not_store_filtered_links() {
+		$post_id = self::factory()->post->create();
+		add_post_syndication_link( $post_id, 'https://a.example/1' );
+		$filter = function ( $urls ) {
+			$urls[] = 'https://other.example/1';
+			return $urls;
+		};
+		add_filter( 'get_post_syndication_links', $filter );
+
+		add_post_syndication_link( $post_id, 'https://b.example/2' );
+		remove_filter( 'get_post_syndication_links', $filter );
+
+		$this->assertSame( array( 'https://a.example/1', 'https://b.example/2' ), get_post_meta( $post_id, 'mf2_syndication', true ) );
+	}
 }
