@@ -419,15 +419,15 @@ class Test_Link_Rendering extends WP_UnitTestCase {
 	}
 
 	/**
-	 * The stylesheet matches the black-and-white and size options.
+	 * There's one stylesheet; the size and black-and-white options are inline styles on it.
 	 *
 	 * @dataProvider data_stylesheets
 	 *
-	 * @param string $bw   Black-and-white option.
-	 * @param string $size Size option.
-	 * @param string $file Expected stylesheet.
+	 * @param string $bw     Black-and-white option.
+	 * @param string $size   Size option.
+	 * @param string $inline Expected inline style.
 	 */
-	public function test_stylesheet_follows_the_options( $bw, $size, $file ) {
+	public function test_stylesheet_follows_the_options( $bw, $size, $inline ) {
 		update_option( 'syndication-links_bw', $bw );
 		update_option( 'syndication-links_size', $size );
 		wp_dequeue_style( 'syndication-style' );
@@ -436,18 +436,96 @@ class Test_Link_Rendering extends WP_UnitTestCase {
 		Syn_Config::enqueue_scripts();
 
 		$this->assertTrue( wp_style_is( 'syndication-style', 'enqueued' ) );
-		$this->assertStringEndsWith( '/' . $file, wp_styles()->registered['syndication-style']->src );
-		$this->assertFileExists( dirname( __DIR__ ) . '/' . $file );
+		$this->assertStringEndsWith( '/css/syn.min.css', wp_styles()->registered['syndication-style']->src );
+		$this->assertFileExists( dirname( __DIR__ ) . '/css/syn.min.css' );
+		$after = wp_styles()->get_data( 'syndication-style', 'after' );
+		$this->assertSame( $inline, $after ? implode( '', $after ) : '' );
 	}
 
 	public function data_stylesheets() {
+		$bw = '.relsyn li a{color:white;mix-blend-mode:difference}.relsyn li a .syndication-link-icon{color:inherit}';
 		return array(
-			'colour, small'  => array( '0', 'small', 'css/syn.min.css' ),
-			'colour, medium' => array( '0', 'medium', 'css/syn-medium.min.css' ),
-			'colour, large'  => array( '0', 'large', 'css/syn-large.min.css' ),
-			'bw, small'      => array( '1', 'small', 'css/syn-bw.min.css' ),
-			'bw, medium'     => array( '1', 'medium', 'css/syn-bw-medium.min.css' ),
-			'bw, large'      => array( '1', 'large', 'css/syn-bw-large.min.css' ),
+			'colour, small'  => array( '0', 'small', '' ),
+			'colour, medium' => array( '0', 'medium', 'ul.relsyn{--syn-icon-size:1.5rem}' ),
+			'colour, large'  => array( '0', 'large', 'ul.relsyn{--syn-icon-size:2rem}' ),
+			'bw, small'      => array( '1', 'small', $bw ),
+			'bw, medium'     => array( '1', 'medium', 'ul.relsyn{--syn-icon-size:1.5rem}' . $bw ),
+			'bw, large'      => array( '1', 'large', 'ul.relsyn{--syn-icon-size:2rem}' . $bw ),
+		);
+	}
+
+	/**
+	 * The stylesheet holds no brand colours: they come with each icon.
+	 */
+	public function test_stylesheet_has_no_brand_colours() {
+		$css = file_get_contents( dirname( __DIR__ ) . '/css/syn.min.css' );
+
+		$this->assertStringNotContainsString( '.svg-', $css );
+		$this->assertLessThan( 4096, strlen( $css ) );
+	}
+
+	public function test_icon_carries_its_brand_colour() {
+		$icon = Syn_Link_Domain_Icon_Map::get_icon( 'bluesky' );
+
+		$this->assertStringContainsString( 'style="--syn-icon-color: #1185FE; ', $icon );
+		$this->assertSame( '#1185FE', Syn_Link_Domain_Icon_Map::get_color( 'bluesky' ) );
+	}
+
+	public function test_icon_without_a_colour_has_no_colour_property() {
+		add_filter(
+			'pre_syn_link_icon',
+			function ( $icon, $name ) {
+				return 'custom-thing' === $name ? '<svg></svg>' : $icon;
+			},
+			10,
+			2
+		);
+
+		$icon = Syn_Link_Domain_Icon_Map::get_icon( 'custom-thing' );
+
+		$this->assertNull( Syn_Link_Domain_Icon_Map::get_color( 'custom-thing' ) );
+		$this->assertStringContainsString( '<svg></svg>', $icon );
+		$this->assertStringNotContainsString( '--syn-icon-color', $icon );
+	}
+
+	public function test_colour_filter_sets_a_colour() {
+		$filter = function ( $color, $name ) {
+			return 'bluesky' === $name ? '#abc' : $color;
+		};
+		add_filter( 'syn_link_icon_color', $filter, 10, 2 );
+
+		$this->assertSame( '#abc', Syn_Link_Domain_Icon_Map::get_color( 'bluesky' ) );
+		$this->assertStringContainsString( '--syn-icon-color: #abc; ', Syn_Link_Domain_Icon_Map::get_icon( 'bluesky' ) );
+
+		remove_filter( 'syn_link_icon_color', $filter, 10 );
+	}
+
+	/**
+	 * Only hex colours are output, so the filter can't add other CSS to the style attribute.
+	 *
+	 * @dataProvider data_invalid_colours
+	 *
+	 * @param mixed $color Filtered colour.
+	 */
+	public function test_colour_filter_ignores_invalid_colours( $color ) {
+		$filter = function () use ( $color ) {
+			return $color;
+		};
+		add_filter( 'syn_link_icon_color', $filter );
+
+		$this->assertNull( Syn_Link_Domain_Icon_Map::get_color( 'bluesky' ) );
+		$this->assertStringNotContainsString( '--syn-icon-color', Syn_Link_Domain_Icon_Map::get_icon( 'bluesky' ) );
+
+		remove_filter( 'syn_link_icon_color', $filter );
+	}
+
+	public function data_invalid_colours() {
+		return array(
+			'null'      => array( null ),
+			'name'      => array( 'red' ),
+			'injection' => array( '#fff; background: url(x)' ),
+			'quote'     => array( '#fff" onmouseover="x' ),
+			'array'     => array( array( '#fff' ) ),
 		);
 	}
 }

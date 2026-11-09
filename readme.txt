@@ -155,6 +155,7 @@ You can also use the `syn_link_mapping` filter to return `mastodon` for any URL.
 * `syn_link_mapping( $icon, $url )` - Allows you to override or set the mapping from URL to icon name.
 * `syn_link_rel( $rels, $url )` - The rel values of a syndication link: `nofollow`, plus `syndication` on a single post's page. Remove `nofollow` to let search engines follow the links.
 * `pre_syn_link_icon( $icon, $name )` - Allows you to provide a custom icon. Icons by default are SVG, not URL or filenames.
+* `syn_link_icon_color( $color, $name )` - An icon's brand colour as a hex value such as `#1185FE`, or null for none (the icon then takes the link's colour). Use it to colour an icon you've added. Output as the `--syn-icon-color` CSS custom property.
 * `syndication_links_display( true )` - Adds Syndication Links to content display. Set to false if the theme supports this, or declare `add_theme_support( 'syndication-links' )`.
 * `syndication_links_comment_display( true )` - Adds Syndication Links after each comment. Set to false if the theme places them.
 * `syndication_links_feed_display( true, $feed_type, $post_id )` - Whether a feed shows the post's links: after the content in RSS and Atom, and as `syndication` in JSON Feed. The Micro.blog provider turns them off in its own feed.
@@ -251,6 +252,7 @@ In no particular order...
 * Fixed: the provider settings markup, a fatal error in the Micro.blog lookup when Micro.blog doesn't return JSON, and warnings when refreshing the Micro.blog feed or sending an untagged post to Pinboard.
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
 * Feeds leave out Bridgy targets, which aren't copies, and the Micro.blog feed leaves out the links, so Micro.blog doesn't post them. The new `syndication_links_feed_display` filter can turn them off in any feed.
+* One small front-end stylesheet (under 1 KB) instead of a 143 KB one: each icon's brand colour is now set on the icon, and the icon size and black-and-white options are added as inline styles. Historic icons no longer need a stylesheet of their own. The `syn-medium`, `syn-large`, `syn-bw*` and `syn-minimal` stylesheets are removed. New `syn_link_icon_color` filter.
 * Micropub providers (Bridgy) return an error when the endpoint answers with an error status, using its description if it gives one, instead of logging it as a success.
 * Saving a queued post again adds the newly checked providers to the queue.
 * The syndication links box is no longer added to the content sent to other sites.
