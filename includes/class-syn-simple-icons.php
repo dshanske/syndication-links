@@ -8,6 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 add_action( 'init', array( 'Syn_Simple_Icons', 'init' ) );
+add_action( 'admin_init', array( 'Syn_Simple_Icons', 'admin_init' ), 12 );
 
 /**
  * Adds icons from Simple Icons that the plugin doesn't bundle.
@@ -22,7 +23,9 @@ add_action( 'init', array( 'Syn_Simple_Icons', 'init' ) );
  * rebuilt from its viewBox and path data only, and stored in
  * `uploads/syndication-links/icons/`, which is added to the icon directories.
  *
- * Nothing is downloaded without an admin asking for it.
+ * Nothing is downloaded without an admin asking for it, unless the "Add Icons
+ * Automatically" setting is on: then, when a link to a site with a generic icon
+ * is saved and Simple Icons has a match, it's added in the background.
  *
  * @since 5.0.0
  */
@@ -43,6 +46,27 @@ class Syn_Simple_Icons {
 	const SOURCE = 'https://api.github.com/repos/simple-icons/simple-icons/contents/icons/%1$s.svg?ref=%2$s';
 
 	/**
+	 * The option that turns on adding matching icons automatically. Off by default.
+	 *
+	 * @var string
+	 */
+	const AUTO = 'syndication-links_simple_icons_auto';
+
+	/**
+	 * The cron hook that adds an icon in the background, with the slug and host.
+	 *
+	 * @var string
+	 */
+	const HOOK = 'syn_add_simple_icon';
+
+	/**
+	 * How long after a link is saved its icon is added, so the Fediverse check runs first.
+	 *
+	 * @var int
+	 */
+	const DELAY = 5 * MINUTE_IN_SECONDS;
+
+	/**
 	 * The catalog, loaded once per request.
 	 *
 	 * @var array|null
@@ -53,6 +77,23 @@ class Syn_Simple_Icons {
 	 * Hooks the added icons in, and the settings page actions and WP-CLI commands.
 	 */
 	public static function init() {
+		register_setting(
+			'syndication_display',
+			self::AUTO,
+			array(
+				'type'         => 'boolean',
+				'description'  => 'Add matching icons from Simple Icons automatically when links are saved',
+				'show_in_rest' => true,
+				'default'      => false,
+			)
+		);
+		add_action( self::HOOK, array( __CLASS__, 'auto_add' ), 10, 2 );
+		if ( self::auto_enabled() ) {
+			foreach ( array( 'post', 'comment' ) as $type ) {
+				add_action( "added_{$type}_meta", array( __CLASS__, 'meta_saved' ), 10, 4 );
+				add_action( "updated_{$type}_meta", array( __CLASS__, 'meta_saved' ), 10, 4 );
+			}
+		}
 		add_filter( 'syn_icon_file_dirs', array( __CLASS__, 'icon_dirs' ) );
 		add_filter( 'syn_link_title', array( __CLASS__, 'title' ), 5, 2 );
 		add_filter( 'syn_link_icon_color', array( __CLASS__, 'color' ), 5, 2 );
@@ -62,6 +103,106 @@ class Syn_Simple_Icons {
 			WP_CLI::add_command( 'syndication-links icons add', array( __CLASS__, 'cli_add' ) );
 			WP_CLI::add_command( 'syndication-links icons remove', array( __CLASS__, 'cli_remove' ) );
 		}
+	}
+
+	/**
+	 * Adds the setting to the General tab.
+	 */
+	public static function admin_init() {
+		add_settings_field(
+			self::AUTO,
+			__( 'Add Icons Automatically', 'syndication-links' ),
+			array( __CLASS__, 'setting_callback' ),
+			'syndication_display_options',
+			'syndication_display',
+			array(
+				'label_for' => self::AUTO,
+			)
+		);
+	}
+
+	/**
+	 * Displays the setting, with what it does.
+	 *
+	 * @param array $args The field's arguments.
+	 */
+	public static function setting_callback( array $args ) {
+		Syn_Config::checkbox_callback( $args );
+		echo '<p class="description">' . esc_html__( 'When a link to a site without an icon is saved and Simple Icons has one that matches, download it from GitHub in the background, as the Add button on the Icons tab does. A match goes by the site\'s name, so check the Icons tab now and then: an icon that doesn\'t fit can be removed there.', 'syndication-links' ) . '</p>';
+	}
+
+	/**
+	 * Whether matching icons are added automatically.
+	 *
+	 * @return bool
+	 */
+	public static function auto_enabled() {
+		return (bool) get_option( self::AUTO, false );
+	}
+
+	/**
+	 * Queues adding icons for the hosts of newly saved syndication links.
+	 *
+	 * @param int    $meta_id    Meta ID.
+	 * @param int    $object_id  Post or comment ID.
+	 * @param string $meta_key   Meta key.
+	 * @param mixed  $meta_value The links.
+	 */
+	public static function meta_saved( $meta_id, $object_id, $meta_key, $meta_value ) {
+		if ( 'mf2_syndication' !== $meta_key ) {
+			return;
+		}
+		foreach ( (array) $meta_value as $url ) {
+			if ( is_string( $url ) ) {
+				self::maybe_schedule( $url );
+			}
+		}
+	}
+
+	/**
+	 * Schedules adding the icon for a link's host, if it has a generic icon and Simple Icons has a match.
+	 *
+	 * @param string $url The link.
+	 * @return bool Whether it was scheduled.
+	 */
+	public static function maybe_schedule( $url ) {
+		$host = Syn_Fediverse_Detection::host( $url );
+		if ( ! $host || ! self::auto_enabled() ) {
+			return false;
+		}
+		if ( ! Syn_Link_Domain_Icon_Map::is_generic( Syn_Link_Domain_Icon_Map::url_to_name( $url ) ) ) {
+			return false;
+		}
+		$slug = self::match( $host );
+		if ( ! $slug || wp_next_scheduled( self::HOOK, array( $slug, $host ) ) ) {
+			return false;
+		}
+		return (bool) wp_schedule_single_event( time() + self::DELAY, self::HOOK, array( $slug, $host ) );
+	}
+
+	/**
+	 * Adds a matching icon in the background.
+	 *
+	 * Checks again first: the setting may have been turned off, or the host may
+	 * have got an icon since, for example from the Fediverse check.
+	 *
+	 * @param string $slug The Simple Icons slug.
+	 * @param string $host The host.
+	 * @return true|WP_Error|null True or an error from add(), or null if there was nothing to do.
+	 */
+	public static function auto_add( $slug, $host ) {
+		$host = Syn_Fediverse_Detection::host( 'https://' . $host );
+		if ( ! $host || ! self::auto_enabled() || self::match( $host ) !== $slug ) {
+			return null;
+		}
+		Syn_Fediverse_Detection::flush();
+		if ( Syn_Fediverse_Detection::get_icon( $host ) ) {
+			return null;
+		}
+		if ( ! Syn_Link_Domain_Icon_Map::is_generic( Syn_Link_Domain_Icon_Map::url_to_name( 'https://' . $host . '/' ) ) ) {
+			return null;
+		}
+		return self::add( $slug, $host );
 	}
 
 	/**
@@ -241,6 +382,10 @@ class Syn_Simple_Icons {
 			if ( ! $host ) {
 				return new WP_Error( 'syn_simple_icons_bundled', __( 'That icon is already included.', 'syndication-links' ) );
 			}
+			self::record( $slug, $host );
+			return true;
+		}
+		if ( $file && isset( self::added()[ $slug ] ) ) {
 			self::record( $slug, $host );
 			return true;
 		}

@@ -41,7 +41,7 @@ that by installing this plugin, as its intent is to display these links, that yo
 
 To show the right icon for links to Fediverse servers, when a link to a site without a known icon is saved, the plugin asks that site in the background which software it runs (its public NodeInfo, at `/.well-known/nodeinfo`). Only sites your posts and comments already link to are contacted, and what they answer is stored on your site. Turn this off with the "Detect Fediverse Servers" setting.
 
-When an admin adds an icon from the Icons tab, the plugin downloads that icon from GitHub (api.github.com, the Simple Icons repository). That happens only when an admin asks for it.
+When an admin adds an icon from the Icons tab, the plugin downloads that icon from GitHub (api.github.com, the Simple Icons repository). By default that happens only when an admin asks for it. If the "Add Icons Automatically" setting is on (it's off by default), the plugin also downloads a matching icon from GitHub in the background when a link to a site without an icon is saved. Only the icon is requested, not anything about your site or posts.
 
 == Settings ==
 
@@ -57,6 +57,7 @@ The settings include the following options as follows with either a set of butto
 * **Show on Feed** - If checked the icons will show in your RSS feed as well
 * **Text Before Links** - This is the text that appears before the Display Text/Icons (as indicated above). The default text is "Syndicated to:" but can be modified if desired.
 * **Detect Fediverse Servers** - On by default. When a link to a site without a known icon is saved, the plugin asks that site in the background which Fediverse software it runs, such as Mastodon or Pixelfed, to show its icon. See the privacy section.
+* **Add Icons Automatically** - Off by default. When a link to a site without an icon is saved and Simple Icons has an icon matching the site's name, the plugin downloads it from GitHub in the background, as the Add button on the Icons tab does. Matching goes by name, so it can pick the wrong icon now and then: the Icons tab lists added icons, with a Remove button. See the privacy section.
 
 
 **Note**: The particular CSS of your theme may change the display and output of the text and some of the icons.
@@ -140,7 +141,7 @@ It combines with WordPress's other query parameters, so `?syndication=mastodon.s
 
 The plugin bundles icons for about 80 services: the common social networks, the Fediverse, the sites it can syndicate to, and the networks other cross-posting plugins post to, plus icons for retired services such as Google+ that old posts still link to. A link to any other site shows the generic website icon.
 
-The Icons tab of the settings page lists the sites your posts and comments link to that show the generic icon, with how many links each has (or run `wp syndication-links icons missing`). From there you can check them for Fediverse software, which links saved before 5.0.0 haven't had, and report any of them: Report opens a GitHub issue with the domain filled in, for you to send. If Simple Icons has a site's icon, Add next to it downloads it. The icon comes from the same Simple Icons release as the bundled ones and is stored in your uploads folder (`wp syndication-links icons add <name>` does the same). You can also [open an issue](https://github.com/dshanske/syndication-links/issues) yourself with the domain and, if it has one, its [Simple Icons](https://simpleicons.org/) name.
+The Icons tab of the settings page lists the sites your posts and comments link to that show the generic icon, with how many links each has (or run `wp syndication-links icons missing`). From there you can check them for Fediverse software, which links saved before 5.0.0 haven't had, and report any of them: Report opens a GitHub issue with the domain filled in, for you to send. If Simple Icons has a site's icon, Add next to it downloads it. The icon comes from the same Simple Icons release as the bundled ones and is stored in your uploads folder (`wp syndication-links icons add <name>` does the same). To have matching icons added as links are saved, turn on the "Add Icons Automatically" setting. You can also [open an issue](https://github.com/dshanske/syndication-links/issues) yourself with the domain and, if it has one, its [Simple Icons](https://simpleicons.org/) name.
 
 To add an icon on your own site, put an SVG named after the domain (`example.svg` for `example.com`) in a directory and add it to the search list:
 
@@ -269,6 +270,7 @@ In no particular order...
 * When sending to Bridgy or another webmention target fails, its link is removed from the post's links again, instead of staying there.
 * Fixed: the provider settings markup, a fatal error in the Micro.blog lookup when Micro.blog doesn't return JSON, and warnings when refreshing the Micro.blog feed or sending an untagged post to Pinboard.
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
+* New "Add Icons Automatically" setting, off by default: when a link to a site without an icon is saved and Simple Icons has a match, a background job adds it, five minutes later so the Fediverse check runs first. See the privacy section.
 * Add icons the plugin doesn't bundle from Simple Icons: from the Icons tab, where linked sites are matched against a bundled list of every Simple Icon, or with `wp syndication-links icons add <name>` and `icons remove`. They're stored in `uploads/syndication-links/icons/`, pinned to the bundled Simple Icons release.
 * New Icons tab, and `wp syndication-links icons missing`: the linked sites that show the generic icon, with link counts, a Fediverse check for links saved before, and a Report link that opens a prefilled icon request on GitHub.
 * Links to Fediverse servers on any domain get their software's icon. When a link to a site without a known icon is saved, a background job reads the site's NodeInfo and caches the result. On by default; see the "Detect Fediverse Servers" setting and the privacy section. New `syn_link_fediverse_software` filter.

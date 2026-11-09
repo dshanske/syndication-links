@@ -37,6 +37,8 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 		);
 		add_filter( 'pre_http_request', array( $this, 'mock_http' ), 10, 3 );
 		delete_option( Syn_Simple_Icons::ADDED );
+		delete_option( Syn_Simple_Icons::AUTO );
+		_set_cron_array( array() );
 	}
 
 	public function tear_down() {
@@ -44,6 +46,10 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 			Syn_Simple_Icons::remove( $slug );
 		}
 		delete_option( Syn_Simple_Icons::ADDED );
+		delete_option( Syn_Simple_Icons::AUTO );
+		delete_option( Syn_Fediverse_Detection::CACHE );
+		Syn_Fediverse_Detection::flush();
+		_set_cron_array( array() );
 		parent::tear_down();
 	}
 
@@ -276,5 +282,94 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 		$this->assertStringContainsString( '<td>untappd.example</td>', $added, 'Listed as added for it.' );
 		$this->assertStringContainsString( 'name="do" value="remove"', $added );
 		delete_transient( Syn_Missing_Icons::CACHE );
+	}
+
+	/**
+	 * An icon that was added already isn't downloaded again for another host.
+	 */
+	public function test_added_icon_is_not_downloaded_again() {
+		$this->assertTrue( Syn_Simple_Icons::add( 'imdb' ) );
+		$this->assertTrue( Syn_Simple_Icons::add( 'imdb', 'second.imdb-site.example' ) );
+
+		$this->assertCount( 1, $this->requests );
+		$this->assertSame( array( 'second.imdb-site.example' ), Syn_Simple_Icons::added()['imdb']['hosts'] );
+	}
+
+	public function test_automatic_adding_is_off_by_default() {
+		$this->assertFalse( Syn_Simple_Icons::auto_enabled() );
+		$this->assertFalse( Syn_Simple_Icons::maybe_schedule( 'https://off.imdb.example/title/1' ) );
+		$this->assertNull( Syn_Simple_Icons::auto_add( 'imdb', 'off.imdb.example' ) );
+		$this->assertSame( array(), $this->requests );
+	}
+
+	/**
+	 * Saving a link to a generic host with a match queues adding its icon, after the Fediverse check.
+	 */
+	public function test_saving_a_link_queues_the_icon() {
+		update_option( Syn_Simple_Icons::AUTO, '1' );
+		$now = time();
+
+		Syn_Simple_Icons::meta_saved( 1, 1, 'mf2_syndication', array( 'https://queue.imdb.example/title/1', 'https://nothing-like-it-q.example/', 'https://www.facebook.com/someone/posts/1', 'mailto:someone@example.com' ) );
+
+		$next = wp_next_scheduled( Syn_Simple_Icons::HOOK, array( 'imdb', 'queue.imdb.example' ) );
+		$this->assertGreaterThanOrEqual( $now + Syn_Simple_Icons::DELAY, $next );
+		$this->assertCount( 1, _get_cron_array()[ $next ][ Syn_Simple_Icons::HOOK ], 'Only the host with a match.' );
+		$this->assertFalse( Syn_Simple_Icons::maybe_schedule( 'https://queue.imdb.example/title/2' ), 'Already queued.' );
+		$this->assertSame( array(), $this->requests, 'Nothing is downloaded while saving.' );
+	}
+
+	public function test_other_meta_is_ignored() {
+		update_option( Syn_Simple_Icons::AUTO, '1' );
+
+		Syn_Simple_Icons::meta_saved( 1, 1, 'something_else', array( 'https://other-meta.imdb.example/' ) );
+
+		$this->assertFalse( wp_next_scheduled( Syn_Simple_Icons::HOOK, array( 'imdb', 'other-meta.imdb.example' ) ) );
+	}
+
+	public function test_background_job_adds_the_icon() {
+		update_option( Syn_Simple_Icons::AUTO, '1' );
+
+		$this->assertTrue( Syn_Simple_Icons::auto_add( 'imdb', 'job.imdb.example' ) );
+
+		$this->assertFileExists( Syn_Simple_Icons::dir() . '/imdb.svg' );
+		$this->assertSame( array( 'job.imdb.example' ), Syn_Simple_Icons::added()['imdb']['hosts'] );
+		$this->assertSame( $this->source( 'imdb' ), $this->requests[0][0] );
+	}
+
+	/**
+	 * The job checks again when it runs.
+	 */
+	public function test_background_job_skips_what_changed() {
+		update_option( Syn_Simple_Icons::AUTO, '1' );
+		update_option(
+			Syn_Fediverse_Detection::CACHE,
+			array(
+				'fedi.imdb.example' => array(
+					'software' => 'mastodon',
+					'icon'     => 'mastodon',
+					'checked'  => time(),
+				),
+			),
+			false
+		);
+
+		$this->assertNull( Syn_Simple_Icons::auto_add( 'imdb', 'fedi.imdb.example' ), 'The Fediverse check found an icon.' );
+		$this->assertNull( Syn_Simple_Icons::auto_add( 'untappd', 'other.imdb.example' ), 'Not the match for the host.' );
+		$this->assertNull( Syn_Simple_Icons::auto_add( 'imdb', 'bad host' ) );
+		update_option( Syn_Simple_Icons::AUTO, '0' );
+		$this->assertNull( Syn_Simple_Icons::auto_add( 'imdb', 'turned-off.imdb.example' ), 'Turned off since.' );
+		$this->assertSame( array(), $this->requests );
+	}
+
+	public function test_setting_is_on_the_general_tab() {
+		global $wp_settings_fields;
+		Syn_Simple_Icons::admin_init();
+
+		$this->assertArrayHasKey( Syn_Simple_Icons::AUTO, $wp_settings_fields['syndication_display_options']['syndication_display'] );
+		ob_start();
+		Syn_Simple_Icons::setting_callback( array( 'label_for' => Syn_Simple_Icons::AUTO ) );
+		$html = ob_get_clean();
+		$this->assertStringContainsString( 'name=\'' . Syn_Simple_Icons::AUTO . '\'', $html );
+		$this->assertStringNotContainsString( 'checked', $html );
 	}
 }
