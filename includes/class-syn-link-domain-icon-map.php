@@ -21,6 +21,18 @@ add_action( 'deleted_user', array( 'Syn_Link_Domain_Icon_Map', 'flush_mastodon_u
 class Syn_Link_Domain_Icon_Map {
 
 	/**
+	 * Icon names for domains whose subdomains are all the same service.
+	 *
+	 * For example `someone.bsky.social`, a Bluesky handle.
+	 *
+	 * @since 5.0.0
+	 * @var string[]
+	 */
+	private static $subdomain_map = array(
+		'bsky.social' => 'bluesky',
+	);
+
+	/**
 	 * Icon names for domains whose name doesn't match their icon.
 	 *
 	 * Also caches, for the request, the names already worked out for other domains.
@@ -341,6 +353,23 @@ class Syn_Link_Domain_Icon_Map {
 	}
 
 	/**
+	 * Returns the icon for a subdomain of a domain in $subdomain_map.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $domain The domain, lowercase and without `www.`.
+	 * @return string|null The icon name, or null if it isn't one.
+	 */
+	private static function subdomain_icon( $domain ) {
+		foreach ( self::$subdomain_map as $parent => $icon ) {
+			if ( str_ends_with( $domain, '.' . $parent ) ) {
+				return $icon;
+			}
+		}
+		return null;
+	}
+
+	/**
 	 * Returns the icon name for a link.
 	 *
 	 * Web links are matched by domain, falling back to 'website'. `mailto:` links are
@@ -363,6 +392,8 @@ class Syn_Link_Domain_Icon_Map {
 			// If the domain is already on the pre-loaded list then use that.
 			if ( array_key_exists( $domain, self::$map ) ) {
 				$return = self::$map[ $domain ];
+			} elseif ( self::subdomain_icon( $domain ) ) {
+				$return = self::subdomain_icon( $domain );
 			} elseif ( class_exists( 'Syn_Fediverse_Detection' ) && Syn_Fediverse_Detection::get_icon( $domain ) ) {
 				// The Fediverse software found on the server (see Syn_Fediverse_Detection).
 				$return = Syn_Fediverse_Detection::get_icon( $domain );

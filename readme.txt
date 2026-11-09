@@ -270,6 +270,7 @@ In no particular order...
 * When sending to Bridgy or another webmention target fails, its link is removed from the post's links again, instead of staying there.
 * Fixed: the provider settings markup, a fatal error in the Micro.blog lookup when Micro.blog doesn't return JSON, and warnings when refreshing the Micro.blog feed or sending an untagged post to Pinboard.
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
+* Links to Bluesky handles on `bsky.social`, such as `someone.bsky.social`, show the Bluesky icon.
 * New "Add Icons Automatically" setting, off by default: when a link to a site without an icon is saved and Simple Icons has a match, a background job adds it, five minutes later so the Fediverse check runs first. See the privacy section.
 * Add icons the plugin doesn't bundle from Simple Icons: from the Icons tab, where linked sites are matched against a bundled list of every Simple Icon, or with `wp syndication-links icons add <name>` and `icons remove`. They're stored in `uploads/syndication-links/icons/`, pinned to the bundled Simple Icons release.
 * New Icons tab, and `wp syndication-links icons missing`: the linked sites that show the generic icon, with link counts, a Fediverse check for links saved before, and a Report link that opens a prefilled icon request on GitHub.
