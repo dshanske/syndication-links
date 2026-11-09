@@ -229,7 +229,7 @@ In no particular order...
 3. Justin Tadlock for the initial [Social Icons](http://justintadlock.com/archives/2013/08/14/social-nav-menus-part-2) design.
 4. Jihaisse and Peter Molnar for the [SNAP](https://wordpress.org/plugins/social-networks-auto-poster-facebook-twitter-g/), courtesy of [WordPress Syndication](https://github.com/jihaisse/wordpress-syndication)
 5. [Simple-Icons](https://https://simpleicons.org/) for their icon packs for logos. Simple Icons is licensed under CC0 v1.0 Universal.
-6. [Genericons Neue](http://genericons.com/) for their generic icon packs. Genericons Neue is licensed under the GPLv2.
+6. [Genericons Neue](http://genericons.com/) for the generic icons (website, mail, phone and others). Genericons Neue is licensed under the GPLv2.
 7. [Chris Aldrich](http://stream.boffosocko.com) for many suggestions on improving the display and for screenshots.
 8. [PHPCS](https://github.com/PHPCSStandards/PHP_CodeSniffer) is used with the [WordPress](https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards) and [PHP Compatibility](https://github.com/wimg/PHPCompatibility) Standards in order to ensure compatibility with supported versions of PHP and enact WordPress Coding Standards.
 9. GitHub Actions is used to actively test against various PHP versions
@@ -271,6 +271,7 @@ In no particular order...
 * When sending to Bridgy or another webmention target fails, its link is removed from the post's links again, instead of staying there.
 * Fixed: the provider settings markup, a fatal error in the Micro.blog lookup when Micro.blog doesn't return JSON, and warnings when refreshing the Micro.blog feed or sending an untagged post to Pinboard.
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
+* A link without a matching icon shows the generic website icon, with an `svg-{name}` class for styling, instead of its name as text. The generic icons were missing from the WordPress.org release, so icons-only mode showed "website" as text. Only the Genericons Neue icons in use (website, notice, book, summary, mail, phone, info) are bundled now.
 * The plugin bundles a curated set of 79 Simple Icons instead of all 3,469, starting from the IndieWeb plugin's list (see the FAQ for adding or requesting others). Links to other services show the generic website icon. The plugin's download and its icon titles file are much smaller.
 * Feeds leave out Bridgy targets, which aren't copies, and the Micro.blog feed leaves out the links, so Micro.blog doesn't post them. The new `syndication_links_feed_display` filter can turn them off in any feed.
 * One small front-end stylesheet (under 1 KB) instead of a 143 KB one: each icon's brand colour is now set on the icon, and the icon size and black-and-white options are added as inline styles. Historic icons no longer need a stylesheet of their own. The `syn-medium`, `syn-large`, `syn-bw*` and `syn-minimal` stylesheets are removed. New `syn_link_icon_color` filter.
