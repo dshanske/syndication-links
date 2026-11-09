@@ -18,3 +18,5 @@ phpcs.xml
 .travis.yml
 .distignore
 .gitignore
+.editorconfig
+.gitattributes
