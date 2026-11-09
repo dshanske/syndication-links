@@ -204,7 +204,7 @@ class Test_Domain_Icon_Map extends WP_UnitTestCase {
 		$base = untrailingslashit( dirname( __DIR__ ) ) . '/svgs';
 
 		$this->assertContains( $base . '/simple-icons', $dirs );
-		$this->assertContains( $base . '/genericons-neue', $dirs );
+		$this->assertNotContains( $base . '/genericons-neue', $dirs );
 		$this->assertContains( $base, $dirs );
 	}
 
@@ -251,11 +251,41 @@ class Test_Domain_Icon_Map extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Without an icon, the name is returned as escaped text.
+	 * Without an icon, the website icon is shown, with the name's class and title (#220, #117).
 	 */
-	public function test_missing_icon_falls_back_to_escaped_text() {
-		$this->assertSame( 'no-such-icon', Syn_Link_Domain_Icon_Map::get_icon( 'no-such-icon' ) );
+	public function test_missing_icon_falls_back_to_website_icon() {
+		$icon = Syn_Link_Domain_Icon_Map::get_icon( 'no-such-icon' );
+
+		$this->assertStringContainsString( 'class="syndication-link-icon svg-website svg-no-such-icon"', $icon );
+		$this->assertStringContainsString( 'title="no-such-icon"', $icon );
+		$this->assertStringContainsString( '<svg', $icon );
+	}
+
+	public function test_missing_icon_name_is_escaped() {
+		$icon = Syn_Link_Domain_Icon_Map::get_icon( '<b>x</b>"' );
+
+		$this->assertStringNotContainsString( '<b>', $icon );
+		$this->assertStringContainsString( 'svg-bx', $icon );
+		$this->assertStringContainsString( 'title="&lt;b&gt;x&lt;/b&gt;&quot;"', $icon );
+	}
+
+	/**
+	 * Only when not even the website icon can be found is the name shown as text.
+	 */
+	public function test_missing_website_icon_falls_back_to_escaped_text() {
+		add_filter( 'syn_icon_file_dirs', '__return_empty_array' );
+
 		$this->assertSame( '&lt;b&gt;x&lt;/b&gt;', Syn_Link_Domain_Icon_Map::get_icon( '<b>x</b>' ) );
+	}
+
+	/**
+	 * The utility icons are bundled in svgs/ (Genericons Neue is no longer bundled whole).
+	 */
+	public function test_utility_icons_are_bundled() {
+		foreach ( array( 'website', 'notice', 'book', 'summary', 'mail', 'phone', 'info' ) as $name ) {
+			$this->assertSame( untrailingslashit( dirname( __DIR__ ) ) . "/svgs/$name.svg", Syn_Link_Domain_Icon_Map::get_icon_filename( $name ) );
+		}
+		$this->assertDirectoryDoesNotExist( dirname( __DIR__ ) . '/svgs/genericons-neue' );
 	}
 
 	public function test_fallback_icons_exist() {

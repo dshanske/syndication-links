@@ -88,7 +88,6 @@ class Syn_Link_Domain_Icon_Map {
 		$dir  = sprintf( '%1$ssvgs/', plugin_dir_path( __DIR__ ) );
 		$dirs = array(
 			$dir . 'simple-icons',
-			$dir . 'genericons-neue',
 			$dir,
 			self::get_historic_icon_dir(),
 		);
@@ -184,8 +183,11 @@ class Syn_Link_Domain_Icon_Map {
 	 * The icon's brand colour, if it has one, is set as the `--syn-icon-color`
 	 * custom property, which the stylesheet uses as the icon's colour.
 	 *
+	 * A name without an icon gets the generic website icon, still with its own
+	 * `svg-{name}` class so themes can style it (#117).
+	 *
 	 * @param string $name The icon name.
-	 * @return string The icon in a span, or the escaped name if there's no such icon.
+	 * @return string The icon in a span, or the escaped name if not even the website icon can be found.
 	 */
 	public static function get_icon( $name ) {
 		$icon  = self::get_icon_svg( $name );
@@ -195,7 +197,12 @@ class Syn_Link_Domain_Icon_Map {
 			$style = $color ? sprintf( ' style="--syn-icon-color: %s;"', esc_attr( $color ) ) : '';
 			return sprintf( '<span class="syndication-link-icon svg-%1$s"%4$s aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $title ), $icon, $style );
 		}
-		// No icon: fall back to the name as text.
+
+		// No icon: use the website icon, keeping the name's class and title.
+		$icon = self::get_icon_svg( 'website' );
+		if ( $icon ) {
+			return sprintf( '<span class="syndication-link-icon svg-website svg-%1$s" aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( sanitize_html_class( $name ) ), esc_attr( $title ), $icon );
+		}
 		return esc_html( $name );
 	}
 
