@@ -34,6 +34,7 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 			add_action( 'admin_init', array( $this, 'admin_init' ), 11 );
 			add_filter( 'user_contactmethods', array( $this, 'user_contactmethods' ) );
 			add_action( 'microdotblog_get_ids', array( $this, 'get_microblog_post' ), 10 );
+			add_filter( 'syndication_links_feed_display', array( $this, 'feed_display' ) );
 		}
 		// Parent Constructor.
 		parent::__construct( $args );
@@ -100,6 +101,18 @@ class Syndication_Provider_MicroDotBlog extends Syndication_Provider {
 		if ( ! array_key_exists( 'feed', $query->query_vars ) || empty( $query->query_vars['feed'] ) ) {
 			$query->set( 'feed', 'rss2' );
 		}
+	}
+
+	/**
+	 * Leaves the links out of the Micro.blog feed, so Micro.blog doesn't post them.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param bool $display Whether the feed shows the post's links.
+	 * @return bool
+	 */
+	public static function feed_display( $display ) {
+		return get_query_var( 'microdotblog' ) ? false : $display;
 	}
 
 	/**

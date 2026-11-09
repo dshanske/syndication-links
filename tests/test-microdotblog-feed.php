@@ -104,6 +104,7 @@ class Test_Microdotblog_Feed extends WP_UnitTestCase {
 		$this->assertSame( 10, has_action( 'init', array( $enabled, 'rewrite' ) ) );
 		$this->assertSame( 10, has_filter( 'user_contactmethods', array( $enabled, 'user_contactmethods' ) ) );
 		$this->assertSame( 10, has_action( 'microdotblog_get_ids', array( $enabled, 'get_microblog_post' ) ) );
+		$this->assertSame( 10, has_filter( 'syndication_links_feed_display', array( $enabled, 'feed_display' ) ) );
 
 		remove_action( 'pre_get_posts', array( $enabled, 'create_feed' ) );
 		remove_filter( 'query_vars', array( $enabled, 'query_var' ) );
@@ -111,6 +112,7 @@ class Test_Microdotblog_Feed extends WP_UnitTestCase {
 		remove_action( 'admin_init', array( $enabled, 'admin_init' ), 11 );
 		remove_filter( 'user_contactmethods', array( $enabled, 'user_contactmethods' ) );
 		remove_action( 'microdotblog_get_ids', array( $enabled, 'get_microblog_post' ) );
+		remove_filter( 'syndication_links_feed_display', array( $enabled, 'feed_display' ) );
 	}
 
 	public function test_profiles_get_a_username_field() {
@@ -237,6 +239,17 @@ class Test_Microdotblog_Feed extends WP_UnitTestCase {
 
 		$this->assertWPError( $result );
 		$this->assertSame( 500, $result->get_error_data()['status'] );
+	}
+
+	/**
+	 * Micro.blog posts from its feed, so the feed leaves the links out.
+	 */
+	public function test_the_micro_blog_feed_has_no_links() {
+		$this->assertTrue( Syndication_Provider_MicroDotBlog::feed_display( true ) );
+
+		set_query_var( 'microdotblog', '1' );
+		$this->assertFalse( Syndication_Provider_MicroDotBlog::feed_display( true ) );
+		set_query_var( 'microdotblog', '' );
 	}
 
 	public function test_the_rewrite_rule() {

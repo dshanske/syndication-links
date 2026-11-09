@@ -706,25 +706,69 @@ class Syn_Config {
 		if ( ( is_admin() ) && ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
 			return $content;
 		}
+		if ( ! self::feed_display( $feed_type, $post_ID ) ) {
+			return $content;
+		}
 		$args = array(
-			'style' => 'p',
-			'icons' => false,
-			'text'  => true,
+			'style'   => 'p',
+			'icons'   => false,
+			'text'    => true,
+			// Bridgy finds its targets on the post's page, not in feeds.
+			'targets' => false,
 		);
 		return $content . get_post_syndication_links( $post_ID, $args );
 	}
 
 	/**
+	 * Whether a feed shows the post's links.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $feed_type The feed type, e.g. 'rss2', 'atom' or 'json'.
+	 * @param int    $post_id   Post ID.
+	 * @return bool
+	 */
+	public static function feed_display( $feed_type, $post_id ) {
+		/**
+		 * Filters whether a feed shows the post's links.
+		 *
+		 * The Micro.blog provider turns them off in its feed, which Micro.blog posts from.
+		 *
+		 * @since 5.0.0
+		 *
+		 * @param bool   $display   Whether to show them. Default true.
+		 * @param string $feed_type The feed type, e.g. 'rss2', 'atom' or 'json'.
+		 * @param int    $post_id   Post ID.
+		 */
+		return (bool) apply_filters( 'syndication_links_feed_display', true, $feed_type, $post_id );
+	}
+
+	/**
 	 * Adds the post's links to its JSON Feed item, as `syndication`.
+	 *
+	 * Bridgy targets aren't copies, so they're left out.
+	 *
+	 * @since 5.0.0 Leaves out Bridgy targets, and checks syndication_links_feed_display.
 	 *
 	 * @param array   $feed_item The feed item.
 	 * @param WP_Post $post      The post.
 	 * @return array The feed item.
 	 */
 	public static function json_feed_item( $feed_item, $post ) {
-		$syn = get_post_syndication_links_data( $post );
+		$post = get_post( $post );
+		if ( ! $post || ! self::feed_display( 'json', $post->ID ) ) {
+			return $feed_item;
+		}
+		$syn = array_values(
+			array_filter(
+				(array) get_post_syndication_links_data( $post ),
+				function ( $url ) {
+					return ! Syn_Meta::is_bridgy_target( $url );
+				}
+			)
+		);
 		if ( $syn ) {
-			$feed_item['syndication'] = get_post_syndication_links_data( $post );
+			$feed_item['syndication'] = $syn;
 		}
 		return $feed_item;
 	}
