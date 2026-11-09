@@ -48,6 +48,8 @@ that by installing this plugin, as its intent is to display these links, that yo
 
 To show the right icon for links to Fediverse servers, when a link to a site without a known icon is saved, the plugin asks that site in the background which software it runs (its public NodeInfo, at `/.well-known/nodeinfo`). Only sites your posts and comments already link to are contacted, and what they answer is stored on your site. Turn this off with the "Detect Fediverse Servers" setting.
 
+When an admin looks up the linked sites in Simple Icons or adds an icon from the Icons tab, the plugin downloads the Simple Icons list and that icon from cdn.jsdelivr.net. That happens only when an admin asks for it.
+
 ## Settings
 
 Settings for the Syndication Links plugin can be found in the main WordPress "Settings" tab in the
@@ -145,7 +147,7 @@ It combines with WordPress's other query parameters, so `?syndication=mastodon.s
 
 The plugin bundles icons for about 80 services: the common social networks, the Fediverse, the sites it can syndicate to, and the networks other cross-posting plugins post to, plus icons for retired services such as Google+ that old posts still link to. A link to any other site shows the generic website icon.
 
-The Icons tab of the settings page lists the sites your posts and comments link to that show the generic icon, with how many links each has (or run `wp syndication-links icons missing`). From there you can check them for Fediverse software, which links saved before 5.0.0 haven't had, and report any of them: Report opens a GitHub issue with the domain filled in, for you to send. You can also [open an issue](https://github.com/dshanske/syndication-links/issues) yourself with the domain and, if it has one, its [Simple Icons](https://simpleicons.org/) name.
+The Icons tab of the settings page lists the sites your posts and comments link to that show the generic icon, with how many links each has (or run `wp syndication-links icons missing`). From there you can check them for Fediverse software, which links saved before 5.0.0 haven't had, and report any of them: Report opens a GitHub issue with the domain filled in, for you to send. If Simple Icons has a site's icon, you can add it there too: Look up these sites in Simple Icons, then Add next to a match. The icon comes from the same Simple Icons release as the bundled ones and is stored in your uploads folder (`wp syndication-links icons add <name>` does the same). You can also [open an issue](https://github.com/dshanske/syndication-links/issues) yourself with the domain and, if it has one, its [Simple Icons](https://simpleicons.org/) name.
 
 To add an icon on your own site, put an SVG named after the domain (`example.svg` for `example.com`) in a directory and add it to the search list:
 
@@ -275,6 +277,7 @@ In no particular order...
 * When sending to Bridgy or another webmention target fails, its link is removed from the post's links again, instead of staying there.
 * Fixed: the provider settings markup, a fatal error in the Micro.blog lookup when Micro.blog doesn't return JSON, and warnings when refreshing the Micro.blog feed or sending an untagged post to Pinboard.
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
+* Add icons the plugin doesn't bundle from Simple Icons: from the Icons tab, after looking up the linked sites, or with `wp syndication-links icons add <name>` and `icons remove`. They're stored in `uploads/syndication-links/icons/`, pinned to the bundled Simple Icons release.
 * New Icons tab, and `wp syndication-links icons missing`: the linked sites that show the generic icon, with link counts, a Fediverse check for links saved before, and a Report link that opens a prefilled icon request on GitHub.
 * Links to Fediverse servers on any domain get their software's icon. When a link to a site without a known icon is saved, a background job reads the site's NodeInfo and caches the result. On by default; see the "Detect Fediverse Servers" setting and the privacy section. New `syn_link_fediverse_software` filter.
 * A link without a matching icon shows the generic website icon, with an `svg-{name}` class for styling, instead of its name as text. The generic icons were missing from the WordPress.org release, so icons-only mode showed "website" as text. Only the Genericons Neue icons in use (website, notice, book, summary, mail, phone) are bundled now.

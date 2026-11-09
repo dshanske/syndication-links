@@ -224,6 +224,13 @@ if ( ! class_exists( 'Normalizer' ) ) {
 	exit( 1 );
 }
 
+$package_json = json_decode( (string) file_get_contents( $package . '/package.json' ), true );
+$version      = isset( $package_json['version'] ) ? (string) $package_json['version'] : '';
+if ( ! preg_match( '/^\d+\.\d+\.\d+$/', $version ) ) {
+	fwrite( STDERR, "Can't read the simple-icons version from $package/package.json.\n" );
+	exit( 1 );
+}
+
 $data = json_decode( file_get_contents( $data_file ), true );
 // Simple Icons 16 stores a list of icons; older releases wrapped it in "icons".
 if ( is_array( $data ) && isset( $data['icons'] ) ) {
@@ -393,6 +400,9 @@ foreach ( $named as $icon ) {
 	);
 }
 $php .= "\n\t);\n}\n";
+
+$php .= "\n/**\n * Returns the version of Simple Icons the bundled icons come from.\n *\n * Icons added later are fetched from the same version, so they match.\n *\n * @since 5.0.0\n *\n * @return string The version, such as `16.36.0`.\n */\n";
+$php .= "function simpleicons_syn_version() {\n\treturn '" . $version . "';\n}\n";
 
 file_put_contents( $root . '/includes/simple-icons.php', $php );
 
