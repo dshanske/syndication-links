@@ -292,7 +292,7 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 		remove_all_actions( 'added_post_meta' );
 		remove_all_actions( 'updated_post_meta' );
 		delete_transient( Syn_Missing_Icons::CACHE );
-		update_post_meta( self::factory()->post->create(), 'mf2_syndication', array( 'https://untappd.com/a/', 'https://nomatch-site.example/' ) );
+		update_post_meta( self::factory()->post->create(), 'mf2_syndication', array( 'https://untappd.example/a/', 'https://nomatch-site.example/' ) );
 
 		ob_start();
 		Syn_Missing_Icons::render();
@@ -309,11 +309,11 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'Add the Untappd icon', $after );
 		$this->assertStringContainsString( 'No match', $after );
 
-		Syn_Simple_Icons::add( 'untappd', 'untappd.com' );
+		Syn_Simple_Icons::add( 'untappd', 'untappd.example' );
 		ob_start();
 		Syn_Missing_Icons::render();
 		$added = ob_get_clean();
-		$this->assertStringNotContainsString( '<td>untappd.com</td>', $added );
+		$this->assertStringNotContainsString( '<td>untappd.example</td>', $added );
 		$this->assertStringContainsString( 'name="do" value="remove"', $added );
 		delete_transient( Syn_Missing_Icons::CACHE );
 	}
