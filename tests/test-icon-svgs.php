@@ -36,13 +36,13 @@ class Test_Icon_Svgs extends WP_UnitTestCase {
 	}
 
 	/**
-	 * The custom icons have titles, and Nostr keeps its colour.
+	 * The custom icons have titles and colours: Nostr purple, BookWyrm black as before.
 	 */
 	public function test_custom_icons_have_titles() {
 		$this->assertSame( 'BookWyrm', Syn_Link_Domain_Icon_Map::get_title( 'bookwyrm' ) );
 		$this->assertSame( 'Nostr', Syn_Link_Domain_Icon_Map::get_title( 'nostr' ) );
 		$this->assertSame( '#662482', Syn_Link_Domain_Icon_Map::get_color( 'nostr' ) );
-		$this->assertNull( Syn_Link_Domain_Icon_Map::get_color( 'bookwyrm' ) );
+		$this->assertSame( '#000000', Syn_Link_Domain_Icon_Map::get_color( 'bookwyrm' ) );
 	}
 
 	/**

@@ -3885,6 +3885,7 @@ function simpleicons_syn_get_colors() {
 		'bookbub'                      => '#F44336',
 		'bookmyshow'                   => '#C4242B',
 		'bookstack'                    => '#0288D1',
+		'bookwyrm'                     => '#000000',
 		'bookalope'                    => '#DC2829',
 		'bookingdotcom'                => '#003A9A',
 		'bookmeter'                    => '#64BC4B',

@@ -100,7 +100,7 @@ $historic_icons = array(
 $custom_icons = array(
 	'bookwyrm' => array(
 		'title' => 'BookWyrm',
-		'hex'   => '',
+		'hex'   => '000000',
 	),
 	'nostr'    => array(
 		'title' => 'Nostr',
