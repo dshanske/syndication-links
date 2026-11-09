@@ -5,8 +5,8 @@
  * Replaces js/simpleicons.js and the cp-based copy-simple-icons script, so the
  * icon build needs no Node. Run it with `composer build-icons`. It:
  *
- * - syncs svgs/simple-icons/ with the package: copies new and changed SVGs,
- *   and removes SVGs that are no longer part of the set
+ * - syncs svgs/simple-icons/ with the curated set ($curated_icons): copies
+ *   new and changed SVGs, and removes SVGs that aren't in the set
  * - cleans the SVGs in svgs/, svgs/simple-icons/ and svgs/historic/: removes the XML
  *   declaration, comments and <title> (the icon's span has its own title and
  *   label), and warns about any SVG in svgs/ that still has a <style> element
@@ -30,6 +30,113 @@ $package   = $root . '/vendor/simple-icons/simple-icons';
 $data_file = $package . '/data/simple-icons.json';
 $svg_dir   = $root . '/svgs/simple-icons';
 $hist_dir  = $root . '/svgs/historic';
+
+/*
+ * The curated set: the Simple Icons bundled with the plugin. Other brands show
+ * the generic website icon unless a site adds them (see the readme FAQ).
+ *
+ * The first part is the IndieWeb plugin's list (indieweb/wordpress-indieweb
+ * PR #300, static/js/simpleicons.js), in the same order so the two can be
+ * diffed. The second part is what this plugin needs as well. To ask for an
+ * icon, open an issue; adding one is a line here.
+ */
+$curated_icons = array(
+	// IndieWeb: explicitly mapped domains.
+	'blogger',
+	'facebook',
+	'swarm',
+	'instagram',
+	'googleplay',
+	'applepodcasts',
+	'flipboard',
+	'microdotblog',
+	'wordpress', // phpcs:ignore WordPress.WP.CapitalPDangit
+	'bluesky',
+	'mastodon',
+	// IndieWeb: profile fields.
+	'github',
+	'flickr',
+	'reddit',
+	// IndieWeb: common social networks.
+	'medium',
+	'tumblr',
+	'youtube',
+	'linkedin',
+	'pinterest',
+	'snapchat',
+	'tiktok',
+	'whatsapp',
+	'telegram',
+	'discord',
+	'threads',
+	'x',
+	// IndieWeb: Fediverse and IndieWeb.
+	'activitypub',
+	'pixelfed',
+	'peertube',
+	'lemmy',
+	'diaspora',
+	'pleroma',
+	'misskey',
+	'matrix',
+	// IndieWeb: developer platforms.
+	'gitlab',
+	'codeberg',
+	'gitea',
+	'codepen',
+	'stackoverflow',
+	'npm',
+	'ycombinator',
+	'orcid',
+	'gravatar',
+	// IndieWeb: content and creator platforms.
+	'substack',
+	'patreon',
+	'kofi',
+	'buymeacoffee',
+	'gumroad',
+	'etsy',
+	'bandcamp',
+	'soundcloud',
+	// IndieWeb: media and entertainment.
+	'spotify',
+	'lastdotfm',
+	'letterboxd',
+	'goodreads',
+	'vimeo',
+	'twitch',
+	'500px',
+	'strava',
+	// IndieWeb: design.
+	'dribbble',
+	'behance',
+	'figma',
+	// IndieWeb: messaging.
+	'signal',
+	'element',
+	// IndieWeb: other.
+	'paypal',
+	'rss',
+
+	// Syndication Links: domains mapped in Syn_Link_Domain_Icon_Map.
+	'applemusic',
+	'indieweb',
+	// Syndication Links: syndication providers.
+	'pinboard',
+	// Syndication Links: networks the cross-posting plugins in Social_Plugins
+	// post to (Jetpack Social, NextScripts, Keyring), whose links are imported.
+	'nextdoor',
+	'vk',
+	'xing',
+	'livejournal',
+	'plurk',
+	'line',
+	'instapaper',
+	'foursquare',
+	// Syndication Links: Fediverse software, for the NodeInfo detection (#361).
+	'firefish',
+	'forgejo',
+);
 
 /*
  * Icons that Simple Icons has removed at the brand's request but this plugin
@@ -160,7 +267,7 @@ foreach ( $data as $icon ) {
 		continue;
 	}
 	$slug = ! empty( $icon['slug'] ) ? $icon['slug'] : syn_build_title_to_slug( $icon['title'] );
-	if ( '' === $slug ) {
+	if ( '' === $slug || ! in_array( $slug, $curated_icons, true ) ) {
 		continue;
 	}
 	$icons[ $slug ] = array(
@@ -171,7 +278,7 @@ foreach ( $data as $icon ) {
 }
 
 foreach ( $retained_icons as $slug => $icon ) {
-	if ( ! isset( $icons[ $slug ] ) ) {
+	if ( ! isset( $icons[ $slug ] ) && in_array( $slug, $curated_icons, true ) ) {
 		$icons[ $slug ] = array(
 			'slug'     => $slug,
 			'title'    => $icon['title'],
@@ -179,6 +286,10 @@ foreach ( $retained_icons as $slug => $icon ) {
 			'retained' => true,
 		);
 	}
+}
+
+foreach ( array_diff( $curated_icons, array_keys( $icons ) ) as $slug ) {
+	fwrite( STDERR, "Warning: curated icon $slug isn't in Simple Icons or \$retained_icons.\n" );
 }
 
 $historic = array();

@@ -138,6 +138,18 @@ Add `?syndication=` and a domain, such as `?syndication=mastodon.social`, to you
 
 It combines with WordPress's other query parameters, so `?syndication=mastodon.social&s=widgets` searches those posts for "widgets".
 
+### Why does a link show a generic icon instead of the site's?
+
+The plugin bundles icons for about 80 services: the common social networks, the Fediverse, the sites it can syndicate to, and the networks other cross-posting plugins post to, plus icons for retired services such as Google+ that old posts still link to. A link to any other site shows the generic website icon.
+
+To ask for a service's icon to be included, [open an issue](https://github.com/dshanske/syndication-links/issues) with its domain and, if it has one, its [Simple Icons](https://simpleicons.org/) name.
+
+To add an icon on your own site, put an SVG named after the domain (`example.svg` for `example.com`) in a directory and add it to the search list:
+
+`add_filter( 'syn_icon_file_dirs', function ( $dirs ) { $dirs[] = get_stylesheet_directory() . '/icons'; return $dirs; } );`
+
+Use the `syn_link_title` filter for its name and `syn_link_icon_color` for its colour, or `syn_link_mapping` to point a domain at an icon with a different name.
+
 ### Why do links to my Mastodon server show a generic icon?
 
 There are too many Mastodon servers to recognize them all, so the plugin uses the Mastodon icon for:
@@ -176,7 +188,7 @@ Development and bug reports on this plugin is on Github at https://github.com/ds
 
 ### Version 5.0.0
 
-Requires PHP 7.4 and WordPress 6.2 or later, or ClassicPress. Private posts are never syndicated, and trashing a post deletes its Bridgy copies. HTML from the syn_link_title filter is escaped. Medium links are shown only once imported, from the new Import tab.
+Requires PHP 7.4 and WordPress 6.2 or later, or ClassicPress. Private posts are never syndicated, and trashing a post deletes its Bridgy copies. HTML from the syn_link_title filter is escaped. Medium links are shown only once imported, from the new Import tab. Only about 80 brand icons are bundled.
 
 ### Version 4.4.0
 
@@ -259,6 +271,7 @@ In no particular order...
 * When sending to Bridgy or another webmention target fails, its link is removed from the post's links again, instead of staying there.
 * Fixed: the provider settings markup, a fatal error in the Micro.blog lookup when Micro.blog doesn't return JSON, and warnings when refreshing the Micro.blog feed or sending an untagged post to Pinboard.
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
+* The plugin bundles a curated set of 79 Simple Icons instead of all 3,469, starting from the IndieWeb plugin's list (see the FAQ for adding or requesting others). Links to other services show the generic website icon. The plugin's download and its icon titles file are much smaller.
 * Feeds leave out Bridgy targets, which aren't copies, and the Micro.blog feed leaves out the links, so Micro.blog doesn't post them. The new `syndication_links_feed_display` filter can turn them off in any feed.
 * One small front-end stylesheet (under 1 KB) instead of a 143 KB one: each icon's brand colour is now set on the icon, and the icon size and black-and-white options are added as inline styles. Historic icons no longer need a stylesheet of their own. The `syn-medium`, `syn-large`, `syn-bw*` and `syn-minimal` stylesheets are removed. New `syn_link_icon_color` filter.
 * The medium and large icon sizes work again: an inline `max-width` held every icon at the small size. Icon size and spacing now come from the stylesheet only. Icons no longer carry a `<title>`, which showed a second tooltip, and the BookWyrm icon is no longer cut off.
