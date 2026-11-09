@@ -126,6 +126,18 @@ class Syn_Link_Domain_Icon_Map {
 	}
 
 	/**
+	 * Whether an icon name is a generic one, shown for a site without an icon of its own.
+	 *
+	 * @since 5.0.0
+	 *
+	 * @param string $name The icon name, from url_to_name().
+	 * @return bool True for the website icon and the generic book and summary icons.
+	 */
+	public static function is_generic( $name ) {
+		return in_array( $name, array( 'website', 'book', 'summary' ), true );
+	}
+
+	/**
 	 * Returns the path of an icon's SVG file.
 	 *
 	 * @param string $name The icon name. Only letters, numbers, dots, dashes and underscores.
