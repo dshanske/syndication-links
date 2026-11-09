@@ -255,10 +255,12 @@ class Syn_Missing_Icons {
 			/* translators: %s: number of sites */
 			printf( '<div class="notice notice-success"><p>%s</p></div>', esc_html( sprintf( _n( 'Queued a Fediverse check for %s site. The checks run in the background; reload this page to see what they find.', 'Queued Fediverse checks for %s sites. The checks run in the background; reload this page to see what they find.', absint( $_GET['syn_detect'] ), 'syndication-links' ), number_format_i18n( absint( $_GET['syn_detect'] ) ) ) ) );
 		}
-		$list = self::get();
+		Syn_Simple_Icons::notices();
+		$list    = self::get();
+		$catalog = Syn_Simple_Icons::catalog();
 		?>
 		<h2><?php esc_html_e( 'Sites without an icon', 'syndication-links' ); ?></h2>
-		<p><?php esc_html_e( 'Your posts and comments link to these sites, but they show the generic website icon. Ask for an icon to be included with the Report link, which opens a GitHub issue for you to send, or add one yourself (see the FAQ).', 'syndication-links' ); ?></p>
+		<p><?php esc_html_e( 'Your posts and comments link to these sites, but they show the generic website icon. If Simple Icons has a site\'s icon, Add downloads it into your uploads folder. Otherwise, ask for an icon to be included with the Report link, which opens a GitHub issue for you to send, or add one yourself (see the FAQ).', 'syndication-links' ); ?></p>
 		<p>
 			<?php
 			self::button( 'refresh', __( 'Refresh the list', 'syndication-links' ) );
@@ -272,6 +274,7 @@ class Syn_Missing_Icons {
 		<?php
 		if ( ! $list['hosts'] ) {
 			echo '<p>' . esc_html__( 'Every linked site has an icon.', 'syndication-links' ) . '</p>';
+			Syn_Simple_Icons::render();
 			return;
 		}
 		?>
@@ -281,6 +284,7 @@ class Syn_Missing_Icons {
 					<th><?php esc_html_e( 'Site', 'syndication-links' ); ?></th>
 					<th><?php esc_html_e( 'Links', 'syndication-links' ); ?></th>
 					<th><?php esc_html_e( 'Fediverse check', 'syndication-links' ); ?></th>
+					<th><?php esc_html_e( 'Simple Icons', 'syndication-links' ); ?></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -288,10 +292,22 @@ class Syn_Missing_Icons {
 			<?php
 			foreach ( $list['hosts'] as $host => $data ) {
 				printf(
-					'<tr><td>%1$s</td><td>%2$s</td><td>%3$s</td><td><a href="%4$s" target="_blank" rel="noopener noreferrer">%5$s</a></td></tr>',
+					'<tr><td>%1$s</td><td>%2$s</td><td>%3$s</td>',
 					esc_html( $host ),
 					esc_html( number_format_i18n( $data['links'] ) ),
-					esc_html( self::status( $host ) ),
+					esc_html( self::status( $host ) )
+				);
+				echo '<td>';
+				$slug = Syn_Simple_Icons::match( $host );
+				if ( $slug ) {
+					/* translators: %s: brand name */
+					Syn_Simple_Icons::button( 'add', sprintf( __( 'Add the %s icon', 'syndication-links' ), $catalog['icons'][ $slug ][0] ), $slug, $host );
+				} else {
+					esc_html_e( 'No match', 'syndication-links' );
+				}
+				echo '</td>';
+				printf(
+					'<td><a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a></td></tr>',
 					esc_url( self::report_url( $host ) ),
 					esc_html__( 'Report', 'syndication-links' )
 				);
@@ -301,6 +317,7 @@ class Syn_Missing_Icons {
 		</table>
 		<p><?php esc_html_e( 'With WP-CLI: wp syndication-links icons missing, with --refresh to rebuild the list and --detect to check the sites for Fediverse software.', 'syndication-links' ); ?></p>
 		<?php
+		Syn_Simple_Icons::render();
 	}
 
 	/**
@@ -345,10 +362,11 @@ class Syn_Missing_Icons {
 		$items = array();
 		foreach ( $list['hosts'] as $host => $data ) {
 			$items[] = array(
-				'site'   => $host,
-				'links'  => $data['links'],
-				'status' => self::status( $host ),
-				'report' => self::report_url( $host ),
+				'site'         => $host,
+				'links'        => $data['links'],
+				'status'       => self::status( $host ),
+				'simple-icons' => (string) Syn_Simple_Icons::match( $host ),
+				'report'       => self::report_url( $host ),
 			);
 		}
 		if ( ! $items ) {
@@ -356,6 +374,6 @@ class Syn_Missing_Icons {
 			return;
 		}
 		$format = isset( $assoc_args['format'] ) ? $assoc_args['format'] : 'table';
-		WP_CLI\Utils\format_items( $format, $items, array( 'site', 'links', 'status', 'report' ) );
+		WP_CLI\Utils\format_items( $format, $items, array( 'site', 'links', 'status', 'simple-icons', 'report' ) );
 	}
 }

@@ -210,3 +210,16 @@ function simpleicons_syn_get_colors() {
 		'npm'                 => '#CB3837',
 	);
 }
+
+/**
+ * Returns the version of Simple Icons the bundled icons come from.
+ *
+ * Icons added later are fetched from the same version, so they match.
+ *
+ * @since 5.0.0
+ *
+ * @return string The version, such as `16.36.0`.
+ */
+function simpleicons_syn_version() {
+	return '16.36.0';
+}
