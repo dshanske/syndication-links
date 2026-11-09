@@ -272,7 +272,8 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 		ob_start();
 		Syn_Missing_Icons::render();
 		$added = ob_get_clean();
-		$this->assertStringNotContainsString( '<td>untappd.example</td>', $added );
+		$this->assertStringNotContainsString( '<tr><td>untappd.example</td>', $added, 'No longer missing.' );
+		$this->assertStringContainsString( '<td>untappd.example</td>', $added, 'Listed as added for it.' );
 		$this->assertStringContainsString( 'name="do" value="remove"', $added );
 		delete_transient( Syn_Missing_Icons::CACHE );
 	}
