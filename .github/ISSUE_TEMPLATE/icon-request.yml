@@ -1,0 +1,30 @@
+name: Icon request
+description: Ask for a site's icon to be included with the plugin.
+title: "Icon request: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Links to sites without an icon of their own show the generic website icon. The plugin bundles a curated set of icons, mostly from [Simple Icons](https://simpleicons.org/), so it stays small. Tell us which site you link to, and we'll consider adding it.
+
+        Links to Fediverse servers (Mastodon, Pixelfed, PeerTube and others) on any domain get their software's icon automatically, unless the "Detect Fediverse Servers" setting is off.
+  - type: input
+    id: domain
+    attributes:
+      label: Domain
+      description: The domain your syndication links point to.
+      placeholder: example.com
+    validations:
+      required: true
+  - type: input
+    id: simple-icons
+    attributes:
+      label: Simple Icons name
+      description: If the service is on simpleicons.org, its name there (the slug, as in simpleicons.org/?q=...). Leave empty if it isn't.
+      placeholder: letterboxd
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: For example, what the site is, or other domains it uses.

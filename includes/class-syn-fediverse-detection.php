@@ -169,10 +169,11 @@ class Syn_Fediverse_Detection {
 	/**
 	 * Schedules a check of a link's host, if it has no icon and isn't freshly cached.
 	 *
-	 * @param string $url The link.
+	 * @param string $url   The link.
+	 * @param int    $delay Optional. Seconds from now to run the check. Default 0.
 	 * @return bool Whether a check was scheduled.
 	 */
-	public static function maybe_schedule( $url ) {
+	public static function maybe_schedule( $url, $delay = 0 ) {
 		$host = self::host( $url );
 		if ( ! $host || ! self::enabled() ) {
 			return false;
@@ -182,13 +183,13 @@ class Syn_Fediverse_Detection {
 			return false;
 		}
 		// Only hosts that would otherwise get a generic icon.
-		if ( ! in_array( Syn_Link_Domain_Icon_Map::url_to_name( $url ), array( 'website', 'book', 'summary' ), true ) ) {
+		if ( ! Syn_Link_Domain_Icon_Map::is_generic( Syn_Link_Domain_Icon_Map::url_to_name( $url ) ) ) {
 			return false;
 		}
 		if ( wp_next_scheduled( self::HOOK, array( $host ) ) ) {
 			return false;
 		}
-		return (bool) wp_schedule_single_event( time(), self::HOOK, array( $host ) );
+		return (bool) wp_schedule_single_event( time() + max( 0, (int) $delay ), self::HOOK, array( $host ) );
 	}
 
 	/**
