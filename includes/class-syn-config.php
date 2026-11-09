@@ -146,7 +146,7 @@ class Syn_Config {
 	 * Enqueues the front-end stylesheet, with the chosen icon size and colours.
 	 *
 	 * There's one stylesheet. The icon size and black-and-white mode are added
-	 * to it as an inline style: the size as the `--syn-icon-size` custom
+	 * to it as an inline style: the size as the icons' `--syn-icon-size` custom
 	 * property, and black-and-white mode by overriding each icon's brand colour.
 	 */
 	public static function enqueue_scripts() {
@@ -159,7 +159,7 @@ class Syn_Config {
 		);
 		$size  = get_option( 'syndication-links_size' );
 		if ( isset( $sizes[ $size ] ) ) {
-			$css .= sprintf( 'ul.relsyn{--syn-icon-size:%s}', $sizes[ $size ] );
+			$css .= sprintf( '.syndication-link-icon{--syn-icon-size:%s}', $sizes[ $size ] );
 		}
 		if ( '1' === get_option( 'syndication-links_bw' ) ) {
 			$css .= '.relsyn li a{color:white;mix-blend-mode:difference}.relsyn li a .syndication-link-icon{color:inherit}';

@@ -102,6 +102,6 @@ class Test_Historic_Icons extends WP_UnitTestCase {
 
 		$this->assertCount( 1, $links );
 		$this->assertStringContainsString( 'svg-googleplus', $links[0] );
-		$this->assertStringContainsString( '--syn-icon-color: #DC4E41; ', $links[0] );
+		$this->assertStringContainsString( 'style="--syn-icon-color: #DC4E41;"', $links[0] );
 	}
 }

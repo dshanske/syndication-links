@@ -261,6 +261,7 @@ In no particular order...
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
 * Feeds leave out Bridgy targets, which aren't copies, and the Micro.blog feed leaves out the links, so Micro.blog doesn't post them. The new `syndication_links_feed_display` filter can turn them off in any feed.
 * One small front-end stylesheet (under 1 KB) instead of a 143 KB one: each icon's brand colour is now set on the icon, and the icon size and black-and-white options are added as inline styles. Historic icons no longer need a stylesheet of their own. The `syn-medium`, `syn-large`, `syn-bw*` and `syn-minimal` stylesheets are removed. New `syn_link_icon_color` filter.
+* The medium and large icon sizes work again: an inline `max-width` held every icon at the small size. Icon size and spacing now come from the stylesheet only. Icons no longer carry a `<title>`, which showed a second tooltip, and the BookWyrm icon is no longer cut off.
 * Micropub providers (Bridgy) return an error when the endpoint answers with an error status, using its description if it gives one, instead of logging it as a success.
 * Saving a queued post again adds the newly checked providers to the queue.
 * The syndication links box is no longer added to the content sent to other sites.
