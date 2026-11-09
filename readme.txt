@@ -4,7 +4,7 @@ Tags: syndication, indieweb, POSSE, sharing
 Requires at least: 6.2
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.5.3
+Stable tag: 5.0.0
 License: GPLv2 or later
 
 Link to copies of your [cross-posted](https://indieweb.org/cross-posting) content in other social networks or websites.
@@ -19,7 +19,7 @@ manually or with supported plugins. Also contains a generic UI for syndicating t
 == Screenshots ==
 
 1. The Syndication Links box in the post editor, with links filled in
-2. Example of output display on website
+2. Links to a post's copies shown after it as brand-coloured icons
 
 == Installation ==
 
@@ -236,7 +236,7 @@ In no particular order...
 
 == Changelog ==
 
-= Version 5.0.0 ( unreleased ) =
+= Version 5.0.0 ( 2026-11-09 ) =
 * Requires PHP 7.4 and WordPress 6.2 or later, or the latest ClassicPress. On older versions, WordPress won't activate or update the plugin.
 * Security: output in the link markup, the metabox and the Original Of widget is escaped, submitted links are sanitized, and saving a comment's links checks the user can edit it.
 * Behaviour change: a `syn_link_title` filter that returns HTML now has it escaped. Text before the links still allows formatting such as `<em>`.
@@ -249,6 +249,7 @@ In no particular order...
 * New setting, off by default: store the syndication links of comments received by webmention, from the reply's microformats, and show them with the comment. Needs the Webmention plugin.
 * XPoster: links to its Mastodon and Bluesky posts are added, and its X links are also shown for posts saved before they were recorded.
 * Fixed the Mastodon Autopost and Autopost for X integrations.
+* The Mastodon icon for servers listed in users' `mastodon` profile field works again, and the list is refreshed daily and when a profile changes.
 * Bridgy targets are output as empty links, as Bridgy's docs describe, not as syndicated copies.
 * Deleting a link in the Syndication Links box now sticks. Links other plugins add are listed read-only instead of being saved with the post, and adding a link no longer stores them.
 * Saving from the editor applies only the box's own changes, so links added by syndication in the meantime are kept. Before, publishing from the block editor could wipe them.
@@ -259,7 +260,7 @@ In no particular order...
 * `mailto:`, `sms:` and `tel:` links get mail and phone icons.
 * Syndication links are `rel="nofollow"`. The new `syn_link_rel` filter can remove it.
 * New template tags for themes: `the_syndication_links()`, `the_comment_syndication_links()` and `syndication_links_display_mode()`.
-* Icons for retired services (Google+, Google Podcasts, Pocket and others) are kept in a separate pack, loaded only when one is shown. The icons are built with PHP; the Node build is gone.
+* Icons for retired services (Google+, Google Podcasts, Pocket and others) are kept in a separate pack, so old links keep their icons. The icons are built with PHP; the Node build is gone.
 * Old `syndication_urls` links are moved to `mf2_syndication` in the background instead of when a post is read.
 * Links are always returned as a list, so the JSON Feed `syndication` field is never an object.
 * Fixed: the privacy exporter, a fatal error in Micropub syndication, the settings page's Add and Remove buttons outside the IndieWeb menu, and adding the first custom webmention provider.
