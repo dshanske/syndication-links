@@ -46,6 +46,8 @@ is that site owners should take down information on request.
 For comments initiated on the site, there is built-in way to add these links. For posts, they are typically added by retrieving information stored by other plugins for display. It is assumed
 that by installing this plugin, as its intent is to display these links, that you wish to display them.
 
+To show the right icon for links to Fediverse servers, when a link to a site without a known icon is saved, the plugin asks that site in the background which software it runs (its public NodeInfo, at `/.well-known/nodeinfo`). Only sites your posts and comments already link to are contacted, and what they answer is stored on your site. Turn this off with the "Detect Fediverse Servers" setting.
+
 ## Settings
 
 Settings for the Syndication Links plugin can be found in the main WordPress "Settings" tab in the
@@ -59,6 +61,7 @@ The settings include the following options as follows with either a set of butto
 * **Show on Front Page, Archive Page, and Search Results** - If checked the icons will show on pages other than a single view. If not checked, the icons will be hidden by the links will remain.
 * **Show on Feed** - If checked the icons will show in your RSS feed as well
 * **Text Before Links** - This is the text that appears before the Display Text/Icons (as indicated above). The default text is "Syndicated to:" but can be modified if desired.
+* **Detect Fediverse Servers** - On by default. When a link to a site without a known icon is saved, the plugin asks that site in the background which Fediverse software it runs, such as Mastodon or Pixelfed, to show its icon. See the privacy section.
 
 
 **Note**: The particular CSS of your theme may change the display and output of the text and some of the icons.
@@ -152,7 +155,7 @@ Use the `syn_link_title` filter for its name and `syn_link_icon_color` for its c
 
 ### Why do links to my Mastodon server show a generic icon?
 
-There are too many Mastodon servers to recognize them all, so the plugin uses the Mastodon icon for:
+Fediverse servers run on any domain. When a link to a site without a known icon is saved, the plugin asks that site in the background which software it runs, and shows its icon: Mastodon, Pixelfed, PeerTube, Lemmy, Misskey and others, or the ActivityPub icon for software without one. Until that check has run, or if it's turned off with the "Detect Fediverse Servers" setting, the plugin also uses the Mastodon icon for:
 
 * the servers in your users' profiles: the `mastodon` user field, which the [IndieWeb plugin](https://wordpress.org/plugins/indieweb/) adds as "Mastodon Server (URL)". Enter your profile URL, such as `https://masto.ai/@username`.
 * the server set in XPoster or Mastodon Autopost, if you use them.
@@ -174,6 +177,7 @@ You can also use the `syn_link_mapping` filter to return `mastodon` for any URL.
 * `syn_link_mapping( $icon, $url )` - Allows you to override or set the mapping from URL to icon name.
 * `syn_link_rel( $rels, $url )` - The rel values of a syndication link: `nofollow`, plus `syndication` on a single post's page. Remove `nofollow` to let search engines follow the links.
 * `pre_syn_link_icon( $icon, $name )` - Allows you to provide a custom icon. Icons by default are SVG, not URL or filenames.
+* `syn_link_fediverse_software( $map )` - The icons for Fediverse software, keyed by the lowercase software name a server reports in its NodeInfo, such as `'akkoma' => 'pleroma'`. Software that isn't listed gets the ActivityPub icon if it speaks ActivityPub.
 * `syn_link_icon_color( $color, $name )` - An icon's brand colour as a hex value such as `#1185FE`, or null for none (the icon then takes the link's colour). Use it to colour an icon you've added. Output as the `--syn-icon-color` CSS custom property.
 * `syndication_links_display( true )` - Adds Syndication Links to content display. Set to false if the theme supports this, or declare `add_theme_support( 'syndication-links' )`.
 * `syndication_links_comment_display( true )` - Adds Syndication Links after each comment. Set to false if the theme places them.
@@ -271,6 +275,7 @@ In no particular order...
 * When sending to Bridgy or another webmention target fails, its link is removed from the post's links again, instead of staying there.
 * Fixed: the provider settings markup, a fatal error in the Micro.blog lookup when Micro.blog doesn't return JSON, and warnings when refreshing the Micro.blog feed or sending an untagged post to Pinboard.
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
+* Links to Fediverse servers on any domain get their software's icon. When a link to a site without a known icon is saved, a background job reads the site's NodeInfo and caches the result. On by default; see the "Detect Fediverse Servers" setting and the privacy section. New `syn_link_fediverse_software` filter.
 * A link without a matching icon shows the generic website icon, with an `svg-{name}` class for styling, instead of its name as text. The generic icons were missing from the WordPress.org release, so icons-only mode showed "website" as text. Only the Genericons Neue icons in use (website, notice, book, summary, mail, phone) are bundled now.
 * Links to indieweb.xyz, now a parked domain, show the generic website icon instead of the info icon, which is removed.
 * The plugin bundles a curated set of 79 Simple Icons instead of all 3,469, starting from the IndieWeb plugin's list (see the FAQ for adding or requesting others). Links to other services show the generic website icon. The plugin's download and its icon titles file are much smaller.

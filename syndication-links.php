@@ -108,6 +108,7 @@ function syndication_links_init() {
 		array(
 			'simple-icons.php', // Icon Information.
 			'class-syn-link-domain-icon-map.php', // Mapping domains to icon names.
+			'class-syn-fediverse-detection.php', // Detecting the Fediverse software of linked servers.
 			'class-syn-meta.php', // Information on Metadata.
 			'class-syn-config.php', // Configuration Options.
 			'class-social-plugins.php', // Social Plugin Add-Ons.

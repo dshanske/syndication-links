@@ -351,6 +351,9 @@ class Syn_Link_Domain_Icon_Map {
 			// If the domain is already on the pre-loaded list then use that.
 			if ( array_key_exists( $domain, self::$map ) ) {
 				$return = self::$map[ $domain ];
+			} elseif ( class_exists( 'Syn_Fediverse_Detection' ) && Syn_Fediverse_Detection::get_icon( $domain ) ) {
+				// The Fediverse software found on the server (see Syn_Fediverse_Detection).
+				$return = Syn_Fediverse_Detection::get_icon( $domain );
 			} elseif ( in_array( $domain, self::mastodon_urls(), true ) ) {
 				$return = 'mastodon';
 			} else {
