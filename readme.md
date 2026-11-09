@@ -244,6 +244,7 @@ In no particular order...
 * Pinboard: needs Post Kinds 4.0.1 or later, and adds the bookmark to the post's links instead of replacing them.
 * Webmention providers count any 2xx response as a success, as the Webmention spec says.
 * Trashing or deleting a post deletes its copies on Mastodon and Bluesky (through Bridgy) and on Bridgy Fed, and tells custom webmention targets. A trashed post waits five minutes first, so restoring it keeps them. Turn this off on the Providers tab, or filter `syndication_links_delete_copies`.
+* When sending to Bridgy or another webmention target fails, its link is removed from the post's links again, instead of staying there.
 * Fixed: the provider settings markup, a fatal error in the Micro.blog lookup when Micro.blog doesn't return JSON, and warnings when refreshing the Micro.blog feed or sending an untagged post to Pinboard.
 * With `WP_DEBUG` on, syndication logs a one-line summary instead of the full response.
 * Micropub providers (Bridgy) return an error when the endpoint answers with an error status, using its description if it gives one, instead of logging it as a success.
