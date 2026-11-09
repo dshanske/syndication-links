@@ -279,10 +279,26 @@ class Test_Domain_Icon_Map extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Indieweb.xyz is a parked domain now; its links get the generic website icon (#368).
+	 */
+	public function test_indieweb_xyz_is_a_plain_website() {
+		$this->assertSame( 'website', Syn_Link_Domain_Icon_Map::url_to_name( 'https://indieweb.xyz/en/indieweb/1' ) );
+		$this->assertNull( Syn_Link_Domain_Icon_Map::get_icon_filename( 'info' ) );
+	}
+
+	/**
+	 * Links to Nostr clients that have shut down keep the Nostr icon, like the historic icons.
+	 */
+	public function test_retired_nostr_clients_keep_their_icon() {
+		$this->assertSame( 'nostr', Syn_Link_Domain_Icon_Map::url_to_name( 'https://astral.ninja/note1abc' ) );
+		$this->assertSame( 'nostr', Syn_Link_Domain_Icon_Map::url_to_name( 'https://habla.news/a/naddr1abc' ) );
+	}
+
+	/**
 	 * The utility icons are bundled in svgs/ (Genericons Neue is no longer bundled whole).
 	 */
 	public function test_utility_icons_are_bundled() {
-		foreach ( array( 'website', 'notice', 'book', 'summary', 'mail', 'phone', 'info' ) as $name ) {
+		foreach ( array( 'website', 'notice', 'book', 'summary', 'mail', 'phone' ) as $name ) {
 			$this->assertSame( untrailingslashit( dirname( __DIR__ ) ) . "/svgs/$name.svg", Syn_Link_Domain_Icon_Map::get_icon_filename( $name ) );
 		}
 		$this->assertDirectoryDoesNotExist( dirname( __DIR__ ) . '/svgs/genericons-neue' );

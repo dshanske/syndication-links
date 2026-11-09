@@ -36,7 +36,6 @@ class Syn_Link_Domain_Icon_Map {
 		'plus.google.com'     => 'googleplus',
 		'podcasts.google.com' => 'googlepodcasts',
 		'podcasts.apple.com'  => 'applepodcasts',
-		'indieweb.xyz'        => 'info',
 		'getpocket.com'       => 'pocket',
 		'flip.it'             => 'flipboard',
 		'micro.blog'          => 'microdotblog',
