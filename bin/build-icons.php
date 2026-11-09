@@ -7,9 +7,13 @@
  *
  * - syncs svgs/simple-icons/ with the package: copies new and changed SVGs,
  *   and removes SVGs that are no longer part of the set
+ * - cleans the SVGs in svgs/, svgs/simple-icons/ and svgs/historic/: removes the XML
+ *   declaration, comments and <title> (the icon's span has its own title and
+ *   label), and warns about any SVG in svgs/ that still has a <style> element
  * - writes includes/simple-icons.php, the icon titles and brand colours keyed
- *   by slug, for these and for the historic icons in svgs/historic/ (retired
- *   services). Colours are output with each icon, so the stylesheet holds none.
+ *   by slug, for these, the historic icons in svgs/historic/ (retired
+ *   services) and the custom icons in svgs/. Colours are output with each
+ *   icon, so the stylesheet holds none.
  *
  * Slugs follow Simple Icons' own getIconSlug(): the icon's `slug` if it has
  * one, otherwise titleToSlug() of its title. That needs the intl extension.
@@ -85,6 +89,22 @@ $historic_icons = array(
 	'stitcher'            => array(
 		'title' => 'Stitcher',
 		'hex'   => '000000',
+	),
+);
+
+/*
+ * Custom icons: SVGs kept by hand in svgs/ for services Simple Icons doesn't
+ * have. Their titles and colours go into the generated map like the others.
+ * Leave out the colour (empty) for an icon that should take the link's colour.
+ */
+$custom_icons = array(
+	'bookwyrm' => array(
+		'title' => 'BookWyrm',
+		'hex'   => '',
+	),
+	'nostr'    => array(
+		'title' => 'Nostr',
+		'hex'   => '662482',
 	),
 );
 
@@ -178,6 +198,24 @@ foreach ( $historic_icons as $slug => $icon ) {
 }
 
 /**
+ * Cleans an SVG for inline use.
+ *
+ * Removes the XML declaration, comments and the <title> element. The icon's
+ * span already has a title and label, and a <title> inside an inline SVG adds
+ * a second tooltip; core's SVG sanitizing keeps its text. <style> isn't
+ * removed, because the shapes may depend on it: those SVGs are fixed by hand.
+ *
+ * @param string $svg SVG markup.
+ * @return string Cleaned SVG markup.
+ */
+function syn_build_clean_svg( $svg ) {
+	$svg = preg_replace( '/<\?xml.*?\?>/s', '', $svg );
+	$svg = preg_replace( '/<!--.*?-->/s', '', $svg );
+	$svg = preg_replace( '#<title\b[^>]*>.*?</title>#s', '', $svg );
+	return trim( $svg ) . "\n";
+}
+
+/**
  * Sorts icons alphabetically by title, then by slug for brands that share a title.
  *
  * @param array $list Icons.
@@ -193,9 +231,25 @@ function syn_build_sort_icons( $list ) {
 	return $list;
 }
 
+$custom = array();
+foreach ( $custom_icons as $slug => $icon ) {
+	if ( isset( $icons[ $slug ] ) ) {
+		fwrite( STDERR, "Warning: $slug is a custom icon but Simple Icons has it; using the Simple Icons title and colour.\n" );
+		continue;
+	}
+	if ( ! file_exists( $root . '/svgs/' . $slug . '.svg' ) ) {
+		fwrite( STDERR, "Warning: custom icon svgs/$slug.svg is missing.\n" );
+	}
+	$custom[ $slug ] = array(
+		'slug'  => $slug,
+		'title' => $icon['title'],
+		'hex'   => strtoupper( $icon['hex'] ),
+	);
+}
+
 $icons    = syn_build_sort_icons( $icons );
 $historic = syn_build_sort_icons( $historic );
-$named    = syn_build_sort_icons( array_merge( $icons, $historic ) );
+$named    = syn_build_sort_icons( array_merge( $icons, $historic, $custom ) );
 
 $width = max( array_map( 'strlen', array_column( $named, 'slug' ) ) );
 
@@ -217,6 +271,9 @@ $php .= "\n\t);\n}\n\n";
 $php .= "/**\n * Returns the icons' brand colours.\n *\n * @since 5.0.0\n *\n * @return string[] Hex colours, such as `#1185FE`, keyed by icon slug.\n */\n";
 $php .= "function simpleicons_syn_get_colors() {\n\treturn array(";
 foreach ( $named as $icon ) {
+	if ( '' === $icon['hex'] ) {
+		continue;
+	}
 	$php .= sprintf(
 		"\n\t\t'%s'%s => '#%s',",
 		$icon['slug'],
@@ -251,8 +308,9 @@ foreach ( $icons as $icon ) {
 		continue;
 	}
 	$wanted[ $file ] = true;
-	if ( ! file_exists( $to ) || file_get_contents( $from ) !== file_get_contents( $to ) ) {
-		copy( $from, $to );
+	$svg             = syn_build_clean_svg( file_get_contents( $from ) );
+	if ( ! file_exists( $to ) || file_get_contents( $to ) !== $svg ) {
+		file_put_contents( $to, $svg );
 		++$copied;
 	}
 }
@@ -261,6 +319,22 @@ foreach ( glob( $svg_dir . '/*.svg' ) as $existing ) {
 	if ( ! isset( $wanted[ basename( $existing ) ] ) ) {
 		unlink( $existing );
 		++$removed;
+	}
+}
+
+// Clean every SVG in place, including the custom and historic ones kept by hand.
+foreach ( array_merge( glob( $root . '/svgs/*.svg' ), glob( $hist_dir . '/*.svg' ), glob( $svg_dir . '/*.svg' ) ) as $file ) {
+	$svg   = file_get_contents( $file );
+	$clean = syn_build_clean_svg( $svg );
+	if ( $clean !== $svg ) {
+		file_put_contents( $file, $clean );
+	}
+}
+
+// A <style> element styles the whole page, not only its SVG: warn about any that are left.
+foreach ( array_merge( glob( $root . '/svgs/*.svg' ), glob( $root . '/svgs/*/*.svg' ) ) as $file ) {
+	if ( false !== stripos( file_get_contents( $file ), '<style' ) ) {
+		fwrite( STDERR, 'Warning: ' . substr( $file, strlen( $root ) + 1 ) . " has a <style> element. Replace it with attributes.\n" );
 	}
 }
 

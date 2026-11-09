@@ -446,11 +446,11 @@ class Test_Link_Rendering extends WP_UnitTestCase {
 		$bw = '.relsyn li a{color:white;mix-blend-mode:difference}.relsyn li a .syndication-link-icon{color:inherit}';
 		return array(
 			'colour, small'  => array( '0', 'small', '' ),
-			'colour, medium' => array( '0', 'medium', 'ul.relsyn{--syn-icon-size:1.5rem}' ),
-			'colour, large'  => array( '0', 'large', 'ul.relsyn{--syn-icon-size:2rem}' ),
+			'colour, medium' => array( '0', 'medium', '.syndication-link-icon{--syn-icon-size:1.5rem}' ),
+			'colour, large'  => array( '0', 'large', '.syndication-link-icon{--syn-icon-size:2rem}' ),
 			'bw, small'      => array( '1', 'small', $bw ),
-			'bw, medium'     => array( '1', 'medium', 'ul.relsyn{--syn-icon-size:1.5rem}' . $bw ),
-			'bw, large'      => array( '1', 'large', 'ul.relsyn{--syn-icon-size:2rem}' . $bw ),
+			'bw, medium'     => array( '1', 'medium', '.syndication-link-icon{--syn-icon-size:1.5rem}' . $bw ),
+			'bw, large'      => array( '1', 'large', '.syndication-link-icon{--syn-icon-size:2rem}' . $bw ),
 		);
 	}
 
@@ -467,7 +467,7 @@ class Test_Link_Rendering extends WP_UnitTestCase {
 	public function test_icon_carries_its_brand_colour() {
 		$icon = Syn_Link_Domain_Icon_Map::get_icon( 'bluesky' );
 
-		$this->assertStringContainsString( 'style="--syn-icon-color: #1185FE; ', $icon );
+		$this->assertStringContainsString( 'style="--syn-icon-color: #1185FE;"', $icon );
 		$this->assertSame( '#1185FE', Syn_Link_Domain_Icon_Map::get_color( 'bluesky' ) );
 	}
 
@@ -486,6 +486,18 @@ class Test_Link_Rendering extends WP_UnitTestCase {
 		$this->assertNull( Syn_Link_Domain_Icon_Map::get_color( 'custom-thing' ) );
 		$this->assertStringContainsString( '<svg></svg>', $icon );
 		$this->assertStringNotContainsString( '--syn-icon-color', $icon );
+		$this->assertStringNotContainsString( 'style=', $icon );
+	}
+
+	/**
+	 * The icon's size and spacing come from the stylesheet, not the markup (#359).
+	 */
+	public function test_icon_markup_has_no_sizing() {
+		$icon = Syn_Link_Domain_Icon_Map::get_icon( 'bluesky' );
+
+		$this->assertStringNotContainsString( 'max-width', $icon );
+		$this->assertStringNotContainsString( 'margin', $icon );
+		$this->assertStringContainsString( '.syndication-link-icon svg{', file_get_contents( dirname( __DIR__ ) . '/css/syn.min.css' ) );
 	}
 
 	public function test_colour_filter_sets_a_colour() {
@@ -495,7 +507,7 @@ class Test_Link_Rendering extends WP_UnitTestCase {
 		add_filter( 'syn_link_icon_color', $filter, 10, 2 );
 
 		$this->assertSame( '#abc', Syn_Link_Domain_Icon_Map::get_color( 'bluesky' ) );
-		$this->assertStringContainsString( '--syn-icon-color: #abc; ', Syn_Link_Domain_Icon_Map::get_icon( 'bluesky' ) );
+		$this->assertStringContainsString( 'style="--syn-icon-color: #abc;"', Syn_Link_Domain_Icon_Map::get_icon( 'bluesky' ) );
 
 		remove_filter( 'syn_link_icon_color', $filter, 10 );
 	}

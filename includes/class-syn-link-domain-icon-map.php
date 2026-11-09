@@ -192,8 +192,8 @@ class Syn_Link_Domain_Icon_Map {
 		$title = self::get_title( $name );
 		if ( $icon ) {
 			$color = self::get_color( $name );
-			$style = $color ? sprintf( '--syn-icon-color: %s; ', $color ) : '';
-			return sprintf( '<span class="syndication-link-icon svg-%1$s" style="%4$sdisplay: inline-block; max-width: 1rem; margin: 2px;" aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $title ), $icon, esc_attr( $style ) );
+			$style = $color ? sprintf( ' style="--syn-icon-color: %s;"', esc_attr( $color ) ) : '';
+			return sprintf( '<span class="syndication-link-icon svg-%1$s"%4$s aria-hidden="true" aria-label="%2$s" title="%2$s" >%3$s</span>', esc_attr( $name ), esc_attr( $title ), $icon, $style );
 		}
 		// No icon: fall back to the name as text.
 		return esc_html( $name );

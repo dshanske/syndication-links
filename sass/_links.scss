@@ -2,7 +2,6 @@
 // icon's --syn-icon-color (see Syn_Config::enqueue_scripts() and
 // Syn_Link_Domain_Icon_Map::get_icon()).
 ul.relsyn {
-	--syn-icon-size: 1rem;
 	display: inline-block;
 	list-style-type: none;
 	margin: 0;
@@ -14,16 +13,17 @@ ul.relsyn {
 		a {
 			text-decoration: none;
 		}
-		svg {
-			height: var(--syn-icon-size);
-			width: var(--syn-icon-size);
-		}
 	}
 }
 
 .syndication-link-icon {
+	--syn-icon-size: 1rem;
+	display: inline-block;
+	margin: 2px;
 	color: var(--syn-icon-color, currentColor);
 	svg {
+		height: var(--syn-icon-size);
+		width: var(--syn-icon-size);
 		fill: currentColor;
 		vertical-align: middle;
 		top: -0.0625em;
