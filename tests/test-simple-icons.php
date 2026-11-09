@@ -32,41 +32,10 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 		parent::set_up();
 		$this->requests  = array();
 		$this->responses = array(
-			$this->cdn( 'data/simple-icons.json' ) => array(
-				200,
-				wp_json_encode(
-					array(
-						array(
-							'title'  => 'Untappd',
-							'hex'    => 'FFC000',
-							'source' => 'https://untappd.com/about/brand/',
-						),
-						array(
-							'title'  => 'Dotted.io',
-							'hex'    => 'D51007',
-							'source' => 'https://dotted.example/',
-						),
-						array(
-							'title'   => 'Example Brand',
-							'hex'     => '123456',
-							'source'  => 'https://brand.example/',
-							'aliases' => array( 'aka' => array( 'Old Name' ) ),
-						),
-						array(
-							'title'  => 'Has Slug',
-							'slug'   => 'custom_slug',
-							'hex'    => 'ABCDEF',
-							'source' => 'https://slug.example/',
-						),
-						array( 'title' => 'No colour' ),
-					)
-				),
-			),
-			$this->cdn( 'icons/untappd.svg' )      => array( 200, self::SVG ),
-			$this->cdn( 'icons/dotteddotio.svg' )  => array( 200, self::SVG ),
+			$this->source( 'untappd' ) => array( 200, self::SVG ),
+			$this->source( 'imdb' )    => array( 200, self::SVG ),
 		);
 		add_filter( 'pre_http_request', array( $this, 'mock_http' ), 10, 3 );
-		delete_option( Syn_Simple_Icons::INDEX );
 		delete_option( Syn_Simple_Icons::ADDED );
 	}
 
@@ -74,19 +43,18 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 		foreach ( array_keys( Syn_Simple_Icons::added() ) as $slug ) {
 			Syn_Simple_Icons::remove( $slug );
 		}
-		delete_option( Syn_Simple_Icons::INDEX );
 		delete_option( Syn_Simple_Icons::ADDED );
 		parent::tear_down();
 	}
 
 	/**
-	 * The pinned jsDelivr URL of a file in the Simple Icons package.
+	 * The pinned GitHub API URL of a Simple Icons SVG.
 	 *
-	 * @param string $file The file.
+	 * @param string $slug The slug.
 	 * @return string
 	 */
-	private function cdn( $file ) {
-		return 'https://cdn.jsdelivr.net/npm/simple-icons@' . simpleicons_syn_version() . '/' . $file;
+	private function source( $slug ) {
+		return 'https://api.github.com/repos/simple-icons/simple-icons/contents/icons/' . $slug . '.svg?ref=' . simpleicons_syn_version();
 	}
 
 	/**
@@ -117,26 +85,20 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 		$this->assertMatchesRegularExpression( '/^\d+\.\d+\.\d+$/', simpleicons_syn_version() );
 	}
 
-	public function test_nothing_is_fetched_until_asked() {
-		$this->assertNull( Syn_Simple_Icons::index() );
-		$this->assertNull( Syn_Simple_Icons::match( 'untappd.com' ) );
-		$this->assertSame( array(), $this->requests );
-	}
+	/**
+	 * The catalog has every Simple Icon, with its title and colour, and is bundled.
+	 */
+	public function test_catalog() {
+		$catalog = Syn_Simple_Icons::catalog();
 
-	public function test_fetch_index() {
-		$index = Syn_Simple_Icons::fetch_index();
-
-		$this->assertSame( array( 'Untappd', '#FFC000' ), $index['icons']['untappd'] );
-		$this->assertSame( array( 'Dotted.io', '#D51007' ), $index['icons']['dotteddotio'] );
-		$this->assertArrayHasKey( 'custom_slug', $index['icons'] );
-		$this->assertArrayNotHasKey( 'nocolour', $index['icons'] );
-		$this->assertSame( $this->cdn( 'data/simple-icons.json' ), $this->requests[0][0] );
-		$this->assertTrue( $this->requests[0][1]['reject_unsafe_urls'] );
-		$this->assertSame( $index, Syn_Simple_Icons::index() );
+		$this->assertGreaterThan( 3000, count( $catalog['icons'] ) );
+		$this->assertSame( array( 'Untappd', '#FFC000' ), $catalog['icons']['untappd'] );
+		$this->assertSame( array( 'Last.fm', '#D51007' ), $catalog['icons']['lastdotfm'] );
+		$this->assertSame( 'eleventy', $catalog['keys']['11ty'] );
 	}
 
 	/**
-	 * Matching tries the domain's name, the domain with dots spelled out, and aliases.
+	 * Matching tries the domain's name, the domain with dots spelled out, and other names. It makes no requests.
 	 *
 	 * @dataProvider data_matches
 	 *
@@ -144,42 +106,18 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 	 * @param string|null $slug Expected slug.
 	 */
 	public function test_match( $host, $slug ) {
-		Syn_Simple_Icons::fetch_index();
-
 		$this->assertSame( $slug, Syn_Simple_Icons::match( $host ) );
+		$this->assertSame( array(), $this->requests );
 	}
 
 	public function data_matches() {
 		return array(
-			'name'      => array( 'untappd.com', 'untappd' ),
-			'dotted'    => array( 'dotted.io', 'dotteddotio' ),
-			'title'     => array( 'examplebrand.com', 'examplebrand' ),
-			'alias'     => array( 'oldname.net', 'examplebrand' ),
-			'subdomain' => array( 'www2.untappd.com', 'untappd' ),
-			'no match'  => array( 'nothing.example', null ),
+			'name'       => array( 'untappd.com', 'untappd' ),
+			'subdomain'  => array( 'www2.untappd.com', 'untappd' ),
+			'dotted'     => array( 'last.fm', 'lastdotfm' ),
+			'other name' => array( '11ty.dev', 'eleventy' ),
+			'no match'   => array( 'nothing-like-it.example', null ),
 		);
-	}
-
-	public function test_index_for_another_version_is_ignored() {
-		$index            = Syn_Simple_Icons::fetch_index();
-		$index['version'] = '1.0.0';
-		update_option( Syn_Simple_Icons::INDEX, $index, false );
-
-		$this->assertNull( Syn_Simple_Icons::index() );
-	}
-
-	public function test_failed_download_is_an_error() {
-		$this->responses = array();
-
-		$this->assertWPError( Syn_Simple_Icons::fetch_index() );
-		$this->assertNull( Syn_Simple_Icons::index() );
-	}
-
-	public function test_title_to_slug() {
-		$this->assertSame( 'lastdotfm', Syn_Simple_Icons::title_to_slug( 'Last.fm' ) );
-		$this->assertSame( 'googleplus', Syn_Simple_Icons::title_to_slug( 'Google+' ) );
-		$this->assertSame( 'cafe', Syn_Simple_Icons::title_to_slug( 'Café' ) );
-		$this->assertSame( 'atandt', Syn_Simple_Icons::title_to_slug( 'AT&T' ) );
 	}
 
 	/**
@@ -219,7 +157,10 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 		$this->assertSame( 'Untappd', $added['untappd']['title'] );
 		$this->assertSame( '#FFC000', $added['untappd']['hex'] );
 		$this->assertSame( simpleicons_syn_version(), $added['untappd']['version'] );
-		$this->assertSame( $this->cdn( 'icons/untappd.svg' ), end( $this->requests )[0] );
+		$request = end( $this->requests );
+		$this->assertSame( $this->source( 'untappd' ), $request[0] );
+		$this->assertSame( 'application/vnd.github.raw', $request[1]['headers']['Accept'] );
+		$this->assertTrue( $request[1]['reject_unsafe_urls'] );
 	}
 
 	/**
@@ -238,23 +179,47 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 	}
 
 	/**
-	 * A host whose name doesn't match the icon's is mapped to it.
+	 * A bundled icon isn't downloaded; the host whose name doesn't match it is mapped to it.
 	 */
-	public function test_added_icon_is_mapped_to_its_host() {
-		Syn_Simple_Icons::add( 'dotteddotio', 'www.dotted.io' );
+	public function test_bundled_icon_is_only_mapped() {
+		$this->assertSame( 'website', Syn_Link_Domain_Icon_Map::url_to_name( 'https://www.last.fm/user/someone' ) );
 
-		$this->assertSame( array( 'dotted.io' ), Syn_Simple_Icons::added()['dotteddotio']['hosts'] );
-		$this->assertSame( 'dotteddotio', Syn_Link_Domain_Icon_Map::url_to_name( 'https://www.dotted.io/user/someone' ) );
+		$this->assertTrue( Syn_Simple_Icons::add( 'lastdotfm', 'www.last.fm' ) );
+
+		$this->assertSame( array(), $this->requests );
+		$this->assertFileDoesNotExist( Syn_Simple_Icons::dir() . '/lastdotfm.svg' );
+		$this->assertSame( array( 'last.fm' ), Syn_Simple_Icons::added()['lastdotfm']['hosts'] );
+		$this->assertSame( 'lastdotfm', Syn_Link_Domain_Icon_Map::url_to_name( 'https://www.last.fm/user/someone' ) );
+		$this->assertWPError( Syn_Simple_Icons::add( 'lastdotfm' ), 'Nothing to do without a host.' );
 	}
 
 	public function test_add_errors() {
 		$this->assertWPError( Syn_Simple_Icons::add( '../evil' ) );
 		$this->assertWPError( Syn_Simple_Icons::add( 'notinsimpleicons' ) );
 
-		$this->responses[ $this->cdn( 'icons/examplebrand.svg' ) ] = array( 200, '<html>' );
-		$this->assertWPError( Syn_Simple_Icons::add( 'examplebrand' ) );
-		$this->assertFileDoesNotExist( Syn_Simple_Icons::dir() . '/examplebrand.svg' );
-		$this->assertArrayNotHasKey( 'examplebrand', Syn_Simple_Icons::added() );
+		$this->responses[ $this->source( 'trakt' ) ] = array( 200, '<html>' );
+		$this->assertWPError( Syn_Simple_Icons::add( 'trakt' ) );
+		$this->assertFileDoesNotExist( Syn_Simple_Icons::dir() . '/trakt.svg' );
+		$this->assertArrayNotHasKey( 'trakt', Syn_Simple_Icons::added() );
+	}
+
+	/**
+	 * Error notices come from a fixed list, so the URL can't put text on the page.
+	 */
+	public function test_error_notice_is_from_a_fixed_list() {
+		$_GET['syn_icon_error'] = 'syn_simple_icons_svg';
+		ob_start();
+		Syn_Simple_Icons::notices();
+		$known = ob_get_clean();
+
+		$_GET['syn_icon_error'] = '<b>made up</b>';
+		ob_start();
+		Syn_Simple_Icons::notices();
+		$unknown = ob_get_clean();
+		unset( $_GET['syn_icon_error'] );
+
+		$this->assertStringContainsString( 'The icon could not be downloaded.', $known );
+		$this->assertSame( '', $unknown );
 	}
 
 	public function test_remove() {
@@ -286,7 +251,7 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 	}
 
 	/**
-	 * The Icons tab offers the look-up first, then an Add button for each match.
+	 * The Icons tab offers an Add button for each site that matches, and lists added icons.
 	 */
 	public function test_icons_tab() {
 		remove_all_actions( 'added_post_meta' );
@@ -296,18 +261,12 @@ class Test_Simple_Icons extends WP_UnitTestCase {
 
 		ob_start();
 		Syn_Missing_Icons::render();
-		$before = ob_get_clean();
-		$this->assertStringContainsString( 'name="do" value="lookup"', $before );
-		$this->assertStringNotContainsString( 'name="do" value="add"', $before );
-
-		Syn_Simple_Icons::fetch_index();
-		ob_start();
-		Syn_Missing_Icons::render();
 		$after = ob_get_clean();
 		$this->assertStringContainsString( 'name="do" value="add"', $after );
 		$this->assertStringContainsString( 'name="slug" value="untappd"', $after );
 		$this->assertStringContainsString( 'Add the Untappd icon', $after );
 		$this->assertStringContainsString( 'No match', $after );
+		$this->assertSame( array(), $this->requests, 'Showing matches downloads nothing.' );
 
 		Syn_Simple_Icons::add( 'untappd', 'untappd.example' );
 		ob_start();

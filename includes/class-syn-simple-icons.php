@@ -14,14 +14,15 @@ add_action( 'init', array( 'Syn_Simple_Icons', 'init' ) );
  *
  * The plugin bundles a curated set. For a linked site that Simple Icons has but
  * the set leaves out, an admin can add its icon: from the Icons tab of the
- * settings page, or with `wp syndication-links icons add`. The icon, title and
- * colour come from the jsDelivr copy of the same Simple Icons release the
- * bundled icons were built from (simpleicons_syn_version()). The SVG is rebuilt
- * from its viewBox and path data only, and stored in
+ * settings page, or with `wp syndication-links icons add`. Sites are matched
+ * against a catalog of every Simple Icon, bundled with the plugin
+ * (includes/simple-icons-catalog.php), which also has their titles and colours.
+ * Only the SVG is downloaded, from the same Simple Icons release the bundled
+ * icons were built from (simpleicons_syn_version()), through GitHub's API. It's
+ * rebuilt from its viewBox and path data only, and stored in
  * `uploads/syndication-links/icons/`, which is added to the icon directories.
  *
- * Nothing is fetched without an admin asking for it: looking up the linked
- * sites in Simple Icons and adding an icon are both explicit actions.
+ * Nothing is downloaded without an admin asking for it.
  *
  * @since 5.0.0
  */
@@ -35,18 +36,18 @@ class Syn_Simple_Icons {
 	const ADDED = 'syndication_links_added_icons';
 
 	/**
-	 * The option caching the Simple Icons lookup index. Not autoloaded; only read in the admin.
+	 * Where an SVG is downloaded from: GitHub's API for the Simple Icons repository; `%1$s` is the slug, `%2$s` the release.
 	 *
 	 * @var string
 	 */
-	const INDEX = 'syndication_links_simple_icons_index';
+	const SOURCE = 'https://api.github.com/repos/simple-icons/simple-icons/contents/icons/%1$s.svg?ref=%2$s';
 
 	/**
-	 * Where the Simple Icons package is fetched from; `%1$s` is the version, `%2$s` the file.
+	 * The catalog, loaded once per request.
 	 *
-	 * @var string
+	 * @var array|null
 	 */
-	const CDN = 'https://cdn.jsdelivr.net/npm/simple-icons@%1$s/%2$s';
+	private static $catalog = null;
 
 	/**
 	 * Hooks the added icons in, and the settings page actions and WP-CLI commands.
@@ -143,37 +144,22 @@ class Syn_Simple_Icons {
 	}
 
 	/**
-	 * Converts a brand title into a Simple Icons slug, like its titleToSlug().
+	 * Returns the catalog of every Simple Icon in the bundled release.
 	 *
-	 * @param string $title The title.
-	 * @return string The slug.
+	 * @return array `icons` (slug => title, colour) and `keys` (other name => slug).
 	 */
-	public static function title_to_slug( $title ) {
-		$title = strtr(
-			mb_strtolower( $title, 'UTF-8' ),
-			array(
-				'+' => 'plus',
-				'.' => 'dot',
-				'&' => 'and',
-				'đ' => 'd',
-				'ħ' => 'h',
-				'ı' => 'i',
-				'ĸ' => 'k',
-				'ŀ' => 'l',
-				'ł' => 'l',
-				'ß' => 'ss',
-				'ŧ' => 't',
-				'ø' => 'o',
-			)
-		);
-		return preg_replace( '/[^a-z0-9]/', '', remove_accents( $title ) );
+	public static function catalog() {
+		if ( null === self::$catalog ) {
+			self::$catalog = require __DIR__ . '/simple-icons-catalog.php';
+		}
+		return self::$catalog;
 	}
 
 	/**
 	 * Returns the names a host might have in Simple Icons.
 	 *
 	 * @param string $host The host.
-	 * @return string[] Candidate slugs.
+	 * @return string[] Candidate names.
 	 */
 	public static function host_keys( $host ) {
 		$keys = array(
@@ -185,91 +171,22 @@ class Syn_Simple_Icons {
 	}
 
 	/**
-	 * Returns the cached lookup index, if it's for the bundled Simple Icons version.
+	 * Finds the Simple Icon that matches a host.
 	 *
-	 * @return array|null `keys` (candidate slug => slug), `icons` (slug => title, hex) and `time`, or null.
-	 */
-	public static function index() {
-		$index = get_option( self::INDEX );
-		if ( ! is_array( $index ) || ! isset( $index['version'], $index['keys'], $index['icons'] ) || simpleicons_syn_version() !== $index['version'] ) {
-			return null;
-		}
-		return $index;
-	}
-
-	/**
-	 * Fetches the Simple Icons data and caches a lookup index.
-	 *
-	 * @return array|WP_Error The index, or an error.
-	 */
-	public static function fetch_index() {
-		$response = wp_safe_remote_get(
-			sprintf( self::CDN, simpleicons_syn_version(), 'data/simple-icons.json' ),
-			array(
-				'timeout'             => 15,
-				'limit_response_size' => 4 * MB_IN_BYTES,
-			)
-		);
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		}
-		$data = json_decode( wp_remote_retrieve_body( $response ), true );
-		if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) || ! is_array( $data ) ) {
-			return new WP_Error( 'syn_simple_icons_data', __( 'The Simple Icons list could not be downloaded.', 'syndication-links' ) );
-		}
-		if ( isset( $data['icons'] ) ) {
-			$data = $data['icons'];
-		}
-		$index = array(
-			'version' => simpleicons_syn_version(),
-			'time'    => time(),
-			'keys'    => array(),
-			'icons'   => array(),
-		);
-		foreach ( $data as $icon ) {
-			if ( ! is_array( $icon ) || empty( $icon['title'] ) || empty( $icon['hex'] ) || ! is_string( $icon['title'] ) || ! preg_match( '/^[0-9a-f]{6}$/iD', (string) $icon['hex'] ) ) {
-				continue;
-			}
-			$slug = ! empty( $icon['slug'] ) && is_string( $icon['slug'] ) ? $icon['slug'] : self::title_to_slug( $icon['title'] );
-			if ( ! preg_match( '/^[a-z0-9_]+$/D', $slug ) ) {
-				continue;
-			}
-			$index['icons'][ $slug ] = array( sanitize_text_field( str_replace( '&amp;', '&', $icon['title'] ) ), '#' . strtoupper( $icon['hex'] ) );
-			$keys                    = array( $slug, self::title_to_slug( $icon['title'] ) );
-			if ( isset( $icon['aliases']['aka'] ) && is_array( $icon['aliases']['aka'] ) ) {
-				foreach ( $icon['aliases']['aka'] as $alias ) {
-					if ( is_string( $alias ) ) {
-						$keys[] = self::title_to_slug( $alias );
-					}
-				}
-			}
-			foreach ( array_filter( $keys ) as $key ) {
-				if ( ! isset( $index['keys'][ $key ] ) ) {
-					$index['keys'][ $key ] = $slug;
-				}
-			}
-		}
-		if ( ! $index['icons'] ) {
-			return new WP_Error( 'syn_simple_icons_data', __( 'The Simple Icons list could not be downloaded.', 'syndication-links' ) );
-		}
-		update_option( self::INDEX, $index, false );
-		return $index;
-	}
-
-	/**
-	 * Finds the Simple Icon that matches a host, in the cached index.
+	 * Tries the domain's name, the domain with its dots spelled out (`last.fm`
+	 * is `lastdotfm`) and without them, against each icon's slug, title and aliases.
 	 *
 	 * @param string $host The host.
-	 * @return string|null The slug, or null if there's no match or no index.
+	 * @return string|null The slug, or null if there's no match.
 	 */
 	public static function match( $host ) {
-		$index = self::index();
-		if ( ! $index ) {
-			return null;
-		}
+		$catalog = self::catalog();
 		foreach ( self::host_keys( $host ) as $key ) {
-			if ( isset( $index['keys'][ $key ] ) ) {
-				return $index['keys'][ $key ];
+			if ( isset( $catalog['icons'][ $key ] ) ) {
+				return $key;
+			}
+			if ( isset( $catalog['keys'][ $key ] ) ) {
+				return $catalog['keys'][ $key ];
 			}
 		}
 		return null;
@@ -301,6 +218,9 @@ class Syn_Simple_Icons {
 	/**
 	 * Adds a Simple Icon.
 	 *
+	 * If the icon is bundled already, nothing is downloaded: the host is only
+	 * mapped to it (for a domain like `last.fm` whose name doesn't match `lastdotfm`).
+	 *
 	 * @param string $slug The Simple Icons slug.
 	 * @param string $host Optional. The host it's for, mapped to it if its name doesn't match. Default empty.
 	 * @return true|WP_Error True, or an error.
@@ -310,21 +230,27 @@ class Syn_Simple_Icons {
 		if ( ! preg_match( '/^[a-z0-9_]+$/D', $slug ) ) {
 			return new WP_Error( 'syn_simple_icons_slug', __( 'That isn\'t a Simple Icons name.', 'syndication-links' ) );
 		}
-		$index = self::index();
-		if ( ! $index ) {
-			$index = self::fetch_index();
-			if ( is_wp_error( $index ) ) {
-				return $index;
-			}
-		}
-		if ( ! isset( $index['icons'][ $slug ] ) ) {
+		$catalog = self::catalog();
+		if ( ! isset( $catalog['icons'][ $slug ] ) ) {
 			return new WP_Error( 'syn_simple_icons_unknown', __( 'Simple Icons has no icon by that name.', 'syndication-links' ) );
 		}
+		$host = $host ? Syn_Fediverse_Detection::host( 'https://' . $host ) : null;
+
+		$file = Syn_Link_Domain_Icon_Map::get_icon_filename( $slug );
+		if ( $file && dirname( $file ) !== self::dir() ) {
+			if ( ! $host ) {
+				return new WP_Error( 'syn_simple_icons_bundled', __( 'That icon is already included.', 'syndication-links' ) );
+			}
+			self::record( $slug, $host );
+			return true;
+		}
+
 		$response = wp_safe_remote_get(
-			sprintf( self::CDN, simpleicons_syn_version(), 'icons/' . $slug . '.svg' ),
+			sprintf( self::SOURCE, $slug, simpleicons_syn_version() ),
 			array(
 				'timeout'             => 10,
 				'limit_response_size' => 256 * KB_IN_BYTES,
+				'headers'             => array( 'Accept' => 'application/vnd.github.raw' ),
 			)
 		);
 		$svg      = ( ! is_wp_error( $response ) && 200 === (int) wp_remote_retrieve_response_code( $response ) ) ? self::sanitize_svg( wp_remote_retrieve_body( $response ) ) : null;
@@ -343,21 +269,31 @@ class Syn_Simple_Icons {
 			return new WP_Error( 'syn_simple_icons_write', __( 'The icon could not be saved in uploads.', 'syndication-links' ) );
 		}
 
-		$added          = self::added();
-		$hosts          = isset( $added[ $slug ]['hosts'] ) ? (array) $added[ $slug ]['hosts'] : array();
-		$host           = $host ? Syn_Fediverse_Detection::host( 'https://' . $host ) : null;
-		$added[ $slug ] = array(
-			'title'   => $index['icons'][ $slug ][0],
-			'hex'     => $index['icons'][ $slug ][1],
-			'hosts'   => array_values( array_unique( array_filter( array_merge( $hosts, array( $host ) ) ) ) ),
-			'version' => simpleicons_syn_version(),
-		);
-		update_option( self::ADDED, $added, true );
+		self::record( $slug, $host );
 		return true;
 	}
 
 	/**
-	 * Removes an added icon.
+	 * Records an added icon, and the host it was added for.
+	 *
+	 * @param string      $slug The slug.
+	 * @param string|null $host The host, or null.
+	 */
+	private static function record( $slug, $host ) {
+		$catalog        = self::catalog();
+		$added          = self::added();
+		$hosts          = isset( $added[ $slug ]['hosts'] ) ? (array) $added[ $slug ]['hosts'] : array();
+		$added[ $slug ] = array(
+			'title'   => $catalog['icons'][ $slug ][0],
+			'hex'     => $catalog['icons'][ $slug ][1],
+			'hosts'   => array_values( array_unique( array_filter( array_merge( $hosts, array( $host ) ) ) ) ),
+			'version' => simpleicons_syn_version(),
+		);
+		update_option( self::ADDED, $added, true );
+	}
+
+	/**
+	 * Removes an added icon, and its file if it was downloaded.
 	 *
 	 * @param string $slug The slug.
 	 * @return bool Whether it was an added icon.
@@ -369,12 +305,15 @@ class Syn_Simple_Icons {
 		}
 		unset( $added[ $slug ] );
 		update_option( self::ADDED, $added, true );
-		wp_delete_file( self::dir() . '/' . $slug . '.svg' );
+		$file = self::dir() . '/' . $slug . '.svg';
+		if ( file_exists( $file ) ) {
+			wp_delete_file( $file );
+		}
 		return true;
 	}
 
 	/**
-	 * Handles the Look up, Add and Remove buttons on the Icons tab.
+	 * Handles the Add and Remove buttons on the Icons tab.
 	 */
 	public static function handle_request() {
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -385,14 +324,12 @@ class Syn_Simple_Icons {
 		$slug   = isset( $_POST['slug'] ) ? sanitize_key( wp_unslash( $_POST['slug'] ) ) : '';
 		$host   = isset( $_POST['host'] ) ? sanitize_text_field( wp_unslash( $_POST['host'] ) ) : '';
 		$result = true;
-		if ( 'lookup' === $do ) {
-			$result = self::fetch_index();
-		} elseif ( 'add' === $do ) {
+		if ( 'add' === $do ) {
 			$result = self::add( $slug, $host );
 		} elseif ( 'remove' === $do ) {
 			self::remove( $slug );
 		}
-		$args = is_wp_error( $result ) ? array( 'syn_icon_error' => rawurlencode( $result->get_error_message() ) ) : array( 'syn_icon_done' => $do );
+		$args = is_wp_error( $result ) ? array( 'syn_icon_error' => $result->get_error_code() ) : array( 'syn_icon_done' => $do );
 		wp_safe_redirect( add_query_arg( $args, admin_url( 'options-general.php?page=syndication_links&tab=icons' ) ) );
 		exit;
 	}
@@ -400,12 +337,12 @@ class Syn_Simple_Icons {
 	/**
 	 * Prints a button that posts to handle_request().
 	 *
-	 * @param string $do    The action: `lookup`, `add` or `remove`.
+	 * @param string $do    The action: `add` or `remove`.
 	 * @param string $label The button label.
-	 * @param string $slug  Optional. The icon. Default empty.
+	 * @param string $slug  The icon.
 	 * @param string $host  Optional. The host. Default empty.
 	 */
-	public static function button( $do, $label, $slug = '', $host = '' ) {
+	public static function button( $do, $label, $slug, $host = '' ) {
 		?>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline-block;margin-right:8px">
 			<input type="hidden" name="action" value="syn_simple_icons" />
@@ -420,47 +357,42 @@ class Syn_Simple_Icons {
 
 	/**
 	 * Prints the notices for the Icons tab's actions.
+	 *
+	 * The error is passed as a code and its message looked up here, so the URL can't put text on the page.
 	 */
 	public static function notices() {
-		if ( isset( $_GET['syn_icon_error'] ) ) {
-			printf( '<div class="notice notice-error"><p>%s</p></div>', esc_html( sanitize_text_field( rawurldecode( wp_unslash( $_GET['syn_icon_error'] ) ) ) ) );
-		} elseif ( isset( $_GET['syn_icon_done'] ) && 'add' === $_GET['syn_icon_done'] ) {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Only picks which notice to show after a redirect.
+		$messages = array(
+			'syn_simple_icons_slug'    => __( 'That isn\'t a Simple Icons name.', 'syndication-links' ),
+			'syn_simple_icons_unknown' => __( 'Simple Icons has no icon by that name.', 'syndication-links' ),
+			'syn_simple_icons_bundled' => __( 'That icon is already included.', 'syndication-links' ),
+			'syn_simple_icons_svg'     => __( 'The icon could not be downloaded.', 'syndication-links' ),
+			'syn_simple_icons_dir'     => __( 'The icons folder in uploads could not be created.', 'syndication-links' ),
+			'syn_simple_icons_write'   => __( 'The icon could not be saved in uploads.', 'syndication-links' ),
+		);
+		$error    = isset( $_GET['syn_icon_error'] ) ? sanitize_key( wp_unslash( $_GET['syn_icon_error'] ) ) : '';
+		if ( isset( $messages[ $error ] ) ) {
+			printf( '<div class="notice notice-error"><p>%s</p></div>', esc_html( $messages[ $error ] ) );
+		} elseif ( isset( $_GET['syn_icon_done'] ) && 'add' === sanitize_key( wp_unslash( $_GET['syn_icon_done'] ) ) ) {
 			printf( '<div class="notice notice-success"><p>%s</p></div>', esc_html__( 'The icon was added.', 'syndication-links' ) );
 		}
+		// phpcs:enable
 	}
 
 	/**
-	 * Prints the Simple Icons part of the Icons tab: the look-up button and the added icons.
+	 * Prints the added icons on the Icons tab.
 	 */
 	public static function render() {
-		$index = self::index();
-		?>
-		<h2><?php esc_html_e( 'Icons from Simple Icons', 'syndication-links' ); ?></h2>
-		<p>
-			<?php
-			/* translators: %s: Simple Icons version */
-			echo esc_html( sprintf( __( 'Simple Icons has icons for thousands of brands, but the plugin bundles only a few, to stay small. You can add others: look up the sites above in Simple Icons, then add the icons that match. This downloads the Simple Icons list (version %s, about 450 KB) and the icons you add from cdn.jsdelivr.net.', 'syndication-links' ), simpleicons_syn_version() ) );
-			?>
-		</p>
-		<p>
-			<?php
-			self::button( 'lookup', $index ? __( 'Look up again', 'syndication-links' ) : __( 'Look up these sites in Simple Icons', 'syndication-links' ) );
-			if ( $index ) {
-				/* translators: %s: date and time */
-				printf( '<span class="description">%s</span>', esc_html( sprintf( __( 'Looked up on %s.', 'syndication-links' ), wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $index['time'] ) ) ) );
-			}
-			?>
-		</p>
-		<?php
 		$added = self::added();
 		if ( ! $added ) {
 			return;
 		}
 		?>
+		<h2><?php esc_html_e( 'Added icons', 'syndication-links' ); ?></h2>
 		<table class="widefat striped">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Added icon', 'syndication-links' ); ?></th>
+					<th><?php esc_html_e( 'Icon', 'syndication-links' ); ?></th>
 					<th><?php esc_html_e( 'For', 'syndication-links' ); ?></th>
 					<th></th>
 				</tr>
@@ -468,7 +400,7 @@ class Syn_Simple_Icons {
 			<tbody>
 			<?php
 			foreach ( $added as $slug => $icon ) {
-				echo '<tr><td>' . Syn_Link_Domain_Icon_Map::get_icon( $slug ) . ' ' . esc_html( $icon['title'] ) . '</td><td>' . esc_html( implode( ', ', (array) $icon['hosts'] ) ) . '</td><td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_icon() escapes its parts, and the SVG was sanitized when it was added.
+				echo '<tr><td>' . Syn_Link_Domain_Icon_Map::get_icon( $slug ) . ' ' . esc_html( $icon['title'] ) . '</td><td>' . esc_html( implode( ', ', (array) $icon['hosts'] ) ) . '</td><td>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_icon() escapes its parts, and the SVG was rebuilt from path data when it was added.
 				self::button( 'remove', __( 'Remove', 'syndication-links' ), $slug );
 				echo '</td></tr>';
 			}
@@ -486,14 +418,14 @@ class Syn_Simple_Icons {
 	 * ## OPTIONS
 	 *
 	 * <slug>
-	 * : The icon's Simple Icons name, such as `letterboxd`.
+	 * : The icon's Simple Icons name, such as `untappd`.
 	 *
 	 * [--domain=<domain>]
 	 * : A domain to show the icon for, when its name doesn't match the icon's (such as `last.fm` for `lastdotfm`).
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp syndication-links icons add letterboxd
+	 *     wp syndication-links icons add untappd
 	 *     wp syndication-links icons add lastdotfm --domain=last.fm
 	 *
 	 * @param string[] $args       The slug.

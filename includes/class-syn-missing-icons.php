@@ -256,11 +256,11 @@ class Syn_Missing_Icons {
 			printf( '<div class="notice notice-success"><p>%s</p></div>', esc_html( sprintf( _n( 'Queued a Fediverse check for %s site. The checks run in the background; reload this page to see what they find.', 'Queued Fediverse checks for %s sites. The checks run in the background; reload this page to see what they find.', absint( $_GET['syn_detect'] ), 'syndication-links' ), number_format_i18n( absint( $_GET['syn_detect'] ) ) ) ) );
 		}
 		Syn_Simple_Icons::notices();
-		$list  = self::get();
-		$index = Syn_Simple_Icons::index();
+		$list    = self::get();
+		$catalog = Syn_Simple_Icons::catalog();
 		?>
 		<h2><?php esc_html_e( 'Sites without an icon', 'syndication-links' ); ?></h2>
-		<p><?php esc_html_e( 'Your posts and comments link to these sites, but they show the generic website icon. Ask for an icon to be included with the Report link, which opens a GitHub issue for you to send, or add one yourself (see the FAQ).', 'syndication-links' ); ?></p>
+		<p><?php esc_html_e( 'Your posts and comments link to these sites, but they show the generic website icon. If Simple Icons has a site\'s icon, Add downloads it into your uploads folder. Otherwise, ask for an icon to be included with the Report link, which opens a GitHub issue for you to send, or add one yourself (see the FAQ).', 'syndication-links' ); ?></p>
 		<p>
 			<?php
 			self::button( 'refresh', __( 'Refresh the list', 'syndication-links' ) );
@@ -284,9 +284,7 @@ class Syn_Missing_Icons {
 					<th><?php esc_html_e( 'Site', 'syndication-links' ); ?></th>
 					<th><?php esc_html_e( 'Links', 'syndication-links' ); ?></th>
 					<th><?php esc_html_e( 'Fediverse check', 'syndication-links' ); ?></th>
-					<?php if ( $index ) : ?>
-						<th><?php esc_html_e( 'Simple Icons', 'syndication-links' ); ?></th>
-					<?php endif; ?>
+					<th><?php esc_html_e( 'Simple Icons', 'syndication-links' ); ?></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -299,17 +297,15 @@ class Syn_Missing_Icons {
 					esc_html( number_format_i18n( $data['links'] ) ),
 					esc_html( self::status( $host ) )
 				);
-				if ( $index ) {
-					echo '<td>';
-					$slug = Syn_Simple_Icons::match( $host );
-					if ( $slug ) {
-						/* translators: %s: brand name */
-						Syn_Simple_Icons::button( 'add', sprintf( __( 'Add the %s icon', 'syndication-links' ), $index['icons'][ $slug ][0] ), $slug, $host );
-					} else {
-						esc_html_e( 'No match', 'syndication-links' );
-					}
-					echo '</td>';
+				echo '<td>';
+				$slug = Syn_Simple_Icons::match( $host );
+				if ( $slug ) {
+					/* translators: %s: brand name */
+					Syn_Simple_Icons::button( 'add', sprintf( __( 'Add the %s icon', 'syndication-links' ), $catalog['icons'][ $slug ][0] ), $slug, $host );
+				} else {
+					esc_html_e( 'No match', 'syndication-links' );
 				}
+				echo '</td>';
 				printf(
 					'<td><a href="%1$s" target="_blank" rel="noopener noreferrer">%2$s</a></td></tr>',
 					esc_url( self::report_url( $host ) ),
@@ -378,7 +374,6 @@ class Syn_Missing_Icons {
 			return;
 		}
 		$format = isset( $assoc_args['format'] ) ? $assoc_args['format'] : 'table';
-		$fields = Syn_Simple_Icons::index() ? array( 'site', 'links', 'status', 'simple-icons', 'report' ) : array( 'site', 'links', 'status', 'report' );
-		WP_CLI\Utils\format_items( $format, $items, $fields );
+		WP_CLI\Utils\format_items( $format, $items, array( 'site', 'links', 'status', 'simple-icons', 'report' ) );
 	}
 }
