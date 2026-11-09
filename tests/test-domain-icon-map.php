@@ -279,7 +279,7 @@ class Test_Domain_Icon_Map extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Indieweb.xyz is a parked domain now; its links get the generic website icon (#368).
+	 * Indieweb.xyz is a parked domain now, and wasn't IndieWeb.org: its links get the generic website icon, not the IndieWeb one its name would match (#368).
 	 */
 	public function test_indieweb_xyz_is_a_plain_website() {
 		$this->assertSame( 'website', Syn_Link_Domain_Icon_Map::url_to_name( 'https://indieweb.xyz/en/indieweb/1' ) );

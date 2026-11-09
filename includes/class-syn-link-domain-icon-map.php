@@ -36,6 +36,7 @@ class Syn_Link_Domain_Icon_Map {
 		'plus.google.com'     => 'googleplus',
 		'podcasts.google.com' => 'googlepodcasts',
 		'podcasts.apple.com'  => 'applepodcasts',
+		'indieweb.xyz'        => 'website', // Not IndieWeb.org, so not its icon; the domain is parked.
 		'getpocket.com'       => 'pocket',
 		'flip.it'             => 'flipboard',
 		'micro.blog'          => 'microdotblog',
