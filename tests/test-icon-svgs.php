@@ -23,7 +23,7 @@ class Test_Icon_Svgs extends WP_UnitTestCase {
 	 */
 	public function test_bundled_svgs_are_clean() {
 		$svgs = $this->svgs();
-		$this->assertGreaterThan( 100, count( $svgs ) );
+		$this->assertGreaterThan( 50, count( $svgs ) );
 
 		$dirty = array();
 		foreach ( $svgs as $file ) {
@@ -33,6 +33,28 @@ class Test_Icon_Svgs extends WP_UnitTestCase {
 			}
 		}
 		$this->assertSame( array(), $dirty );
+	}
+
+	/**
+	 * Only the curated set is bundled, and each icon in it has a title and a colour (#360).
+	 */
+	public function test_curated_set_is_bundled() {
+		$svgs = glob( dirname( __DIR__ ) . '/svgs/simple-icons/*.svg' );
+		$this->assertGreaterThan( 50, count( $svgs ) );
+		$this->assertLessThan( 200, count( $svgs ) );
+
+		$names  = simpleicons_syn_get_names();
+		$colors = simpleicons_syn_get_colors();
+		foreach ( $svgs as $file ) {
+			$slug = basename( $file, '.svg' );
+			$this->assertArrayHasKey( $slug, $names, $slug );
+			$this->assertArrayHasKey( $slug, $colors, $slug );
+		}
+
+		// The syndication targets and mapped services are in the set.
+		foreach ( array( 'bluesky', 'mastodon', 'github', 'flickr', 'microdotblog', 'pinboard', 'applemusic', 'indieweb', 'x' ) as $slug ) {
+			$this->assertFileExists( dirname( __DIR__ ) . "/svgs/simple-icons/$slug.svg" );
+		}
 	}
 
 	/**
